@@ -28,7 +28,7 @@ trans_box <- function(x,dep,arr){
 
 # ------- Rat 11 : émanent des statistiques sur la segmentation ADC. ------- #
 
-base_donnes_11 <- {
+base_donnees_11 <- {
   coeff_aff_succ_11 <- {
     liste_succ_ADC_11 <- list("00"=list("dep"=c(500,700,725,800,1100),"arr"=c(500,750,850,1000,1400)),
                               "03"=list("dep"=c(500,750,850,1000,1400),"arr"=c(450,1000,1200,1450,2100)),
@@ -263,7 +263,7 @@ base_donnes_11 <- {
 
 # ------- Rat 19 ------- #
 
-base_donnes_19 <- {
+base_donnees_19 <- {
   coeff_aff_succ_19 <- {
     liste_succ_ADC_19 <- list("00"=list("dep"=c(500,700,750,800,1000),"arr"=c(550,750,800,950,1150)),
                               "03"=list("dep"=c(550,750,800,950,1150),"arr"=c(800,1050,1300,1550,2300)),
@@ -1304,7 +1304,7 @@ affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt_1,opt_2
 ## - Coefficients pour les équations - ##
 
 tau_cont <- function(delta_ini,var_seuil,n_jours){
-  return(1/n_jours*log(var_seuil/(delta_ini)))
+  return(n_jours/log(delta_ini/var_seuil))
 }
 
 q_dis <- function(delta_ini,var_seuil,n_jours){
@@ -1930,16 +1930,26 @@ carre_dyn <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt){
   
   ## Coefficients multiplicateurs
   qqdis <- {
+    q_cbf_trans <- q_dis(120,40,3)
     q_cbf_asy1 <- q_dis(50,40,7)#rnorm(l,50,50)
     q_cmro2_asy1 <- q_dis(8,1.5,7)#rnorm(l,5,5.5)
-    q_so2_asy1 <- q_dis(35,25,7)#rnorm(l,75,35)
+    q_so2_asy1 <- q_dis(35,25,10)#rnorm(l,75,35)
     q_vsi_asy1 <- q_dis(3,2,7)#rnorm(l,4,2.8)
     q_cbf_trans2 <- q_dis(50,40,7)#rnorm(l,120,50)
     q_vsi_asy2 <- q_dis(3,2,7)#rnorm(l,5,4.3)
     q_so2_asy2 <- q_dis(20,15,7)#rnorm(l,75,30)
     q_so2_sain <- q_dis(30,10,7)#rnorm(l,75,25)
+    q_cbf_trans1 <- q_dis(60,20,5)
     
     q_cbf_sain <- q_dis(50,30,5)#rnorm(l,130,30)
+    ## Avec les formules du rapport.
+    # l1
+    q_cmro2_trans1 <- 0.1#q_dis(,5)
+    # l2
+    q_cbf_trans2 <- 0.3
+    q_cbf_trans3 <- -15
+    #q_vsi_asy3 <- ...
+    
   }
   
   # Boucle de simulations
@@ -1949,19 +1959,26 @@ carre_dyn <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt){
     # Conversion : jours
     c_inc$Jour <- rep(num_jour,lp)
     # Accroissement des modalités, en un jour
-    c_t <- data.frame(matrix(ncol = 6, nrow = l))
+    c_t <- data.frame(matrix(ncol = 5, nrow = lp))
     colnames(c_t) <- c('BVf','CBF','CMRO2','SO2map','VSI')
+    # On initialise c_t à 2, il st systématiquement modifié d'après l'option zone.
+    for (fonc in colnames(c_t)){
+      c_t[[fonc]] <- rep(0,lp)
+    }
     
     # Calcul, vectorisé et conditionnel, des composantes des vecteurs de cerveau_temp.
     # On commence par l'état d'équilibre sain, perturbé non lésé, lésé 1 début, lésé 1 fin etc.
     # Il existe des niveaux de priorités entre les modalités
     ## SO2
     # Lésion 1
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_deb',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$SO2map,c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_1',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_2',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_3',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
+    
     # Lésion 2
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_deb',(1-q_so2_sain)*(so2_sain-c_inc$SO2map),c_t$SO2map)
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_ifin',(1-q_so2_asy2)*(so2_asy2-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_1',(1-q_so2_sain)*(so2_sain-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_2',(1-q_so2_asy2)*(so2_asy2-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_3',(1-q_so2_asy2)*(so2_asy2-c_inc$SO2map),c_t$SO2map)
     
     ## CBF
     # Lésion 1
