@@ -397,10 +397,23 @@ record_seg_cl(num_rat,liste_clust,fr_hemi)
 
 #------------ Etape 4 : ------------#
 
+liste_suivi_clust <- list('ADC'=list(9),
+                          'BVf'=list(8,9,10),
+                          'CBF'=list(9,10),
+                          'CMRO2'=list(9,10),
+                          'SO2map'=list(10),
+                          'T1map'=list(10),
+                          'VSI'=list()
+                          )
+
+#liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
+liste_fonc <- list('T1map')# on peut tester avec une liste des fonctionnalités restreinte
 
 dgris_temp_fonc(num_rat,'cer',"")
-dgris_temp_fonc(num_rat,'cer',"ADC")
+dgris_temp_fonc(num_rat,'cer',"T1map")
 
+dgris_temp_fonc(num_rat,liste_suivi_clust[['T1map']],"")
+dgris_temp_fonc(num_rat,,"T1map")
 
 #------------ Etape 5 : ------------#
 
