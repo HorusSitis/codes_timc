@@ -1,0 +1,70 @@
+\section{Mod\g{e}les pour la pression partielle en $O_2$}\label{smod}
+
+Les soussections suivantes r\'esument les informations obtenues par une recherche bibliographique, concernant le transport d'esp\g{e}ces ioniques et chimiques, %
+au sein des milieux vasculaire et c\'er\'ebral, et ses cons\'equences sur le fonctionnement des cellules nerveuses : propagation de signaux \'electriques ou chimiques, apoptoses.
+
+\ligneinter
+Important : param\g{e}tre $\alpha$ pour la perm\'eabilit\'e.
+
+\subsection{Ondes de d\'epression cellulaire envahissante}
+
+Onde plane qui se propage dans un milieu tridimensionnel et inhomog\g{e}ne. Voir l'expos\'e d'Emmanuel Grenier \cite{gredp}.
+
+Il existe, pour ce ph\'enom\g{e}ne comme, sans doute, pour d'autres affectant le cerveau -concentrations ioniques etc-, trois niveaux de mod\'elisation imbriqu\'es :
+
+\begin{enumerate}
+\item Un mod\g{e}le qualitatif \og{} \g{a} la biologiste\fg{}, avec une simple \'equation aux d\'eriv\'ees partielles en une variable qualitative $\Phi$ :
+\[\frac{\partial{\Phi}}{\partial{t}}-\nu\Delta\Phi=f(\Phi)+g\]
+o\g{u} $g$ mod\'lise la r\'ecup\'eration du milieu -plasticit\'e \'electrique-, et $f$ est une fonction analytique construite pour avoir certaines propri\'et\'es %
+-stabilit\'e locale en $0$, asymptotique en $1$, points d\'equilibre. Dans le pamier : $f(\Phi)=-\alpha\Phi(\Phi-\Phi_0)(\Phi-1)$.
+
+\par
+Un tel mod\g{e}le donne l'allure de l'\'evolution du silence \'electrique, une fois choisie la fonction $f$, mais ne d\'ecrit pas les causes de changement ; %
+on ne peut en particulier nullement pr\'edire les effets d'un changement dans le milueu de propagation -action d'un m\'edicament par exemple- %
+en gardant la structure du mod\g{e}le.
+\item Description de l'\'evolution d'un petit nombre de variables dans le milieu de propagation : ici les \'ecarts, par rapport \g{a} la normale, %
+des concentrations d'un petit nombre d'esp\g{e}ces ioniques dans les diff\'erentes cellules comme les neurones, cellules gliales, cellules \'epith\'eliales.
+
+\par
+R\'esultats calcul\'es, compte tenu de la g\'eom\'etrie du milieu de propagation, diff\'erences rat/Homme.
+
+\item Un mod\g{e}le complet qui tient compte de tous les param\g{e}tres-variables du milieu, non d\'etaill\'e dans \cite{grexp1}. %
+Un tel mod\g{e}le aboutit \g{a} un grand syst\g{e}me d'EDO non lin\'eaires, comprtant un grand nombre de param\g{e}tres : %
+aucun probl\g{e}me pour la r\'esolution num\'erique, gros probl\g{e}me pour l'estimation.
+
+\par
+R\^oles respectifs des ions : $[Ca^{2+}]$ : tr\g{e}s actif, donc tr\g{e}s toxique, \g{a} l'ext\'erieur des cellules. Potassium : intracellulaire, sodium : intracellulaire.
+
+\end{enumerate}
+
+
+\subsection{Article \cite{grdr1} : mod\g{e}le math\'ematique pour le transport et la filtration de macromol\'ecules \g{a} travers la paroi des capillaires.}
+
+\subsubsection{Hypoth\g{e}ses biologiques}
+
+\begin{itemize}
+\item Importance du glycocalyx, selon \cite{levst}
+\end{itemize}
+
+\subsubsection{Hypoth\g{e}ses pour la mod\g{e}le math\'ematique : g\'eom\'etrie etc}
+
+Mod\g{e}le cylindrique pour les capillaires, on r\'esoud les EDP avec les \'el\'ements de sym\'etrie correspondants.
+
+\subsubsection{Hypoth\g{e}ses physiques}
+
+\begin{itemize}
+\item Couplage entre pressions osmotique et hydrodynamique, selon Katchalsky et Curran (1965).
+
+\end{itemize}
+
+\subsection{Recherche : auteurs de l'article \cite{bufr97} sur bibcnrs, articles r\'ecents concernant les cerveaux de rats}
+
+\subsubsection{Richard Buxton}
+
+\begin{description}
+\item[Nitropropionic acid-induced ischemia in the rat brain \cite{nibr}] : utile pour la section \ref{s1}.
+\end{description}
+
+\subsubsection{Lawrence Frank}
+
+Moins de choses : L Frank utilise les rats pour ldes recherches sur la maladie d'Alzheimer.

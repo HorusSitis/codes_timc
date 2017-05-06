@@ -1,0 +1,90 @@
+\section{Analyse d'images : AVC sur des cerveaux de rats}\label{sani}
+
+\subsection{Recherches bibiographiques : avec bibcnrs}
+
+\begin{description}
+\item[Ischemia brain ADC] un article :
+\begin{itemize}
+\item \cite{mej} Analyse statistique pour \'etablir la pertinence de l'utilisation clinique de l'ADC chez l'humain. Utilise : analyse de variance, intervalles de confiance. Cet article cite \dots
+
+\end{itemize}
+
+
+\item[ischaemia rat stepwise model selection] : Rien qui concerne la mod\'elisation statistique avec les r\'egresseurs ADC, BVf etc.
+\item[ischaemia rat brain adc cbf] Selon \cite{leeliu}, le rapport ADC/CBF permet de pr\'edire la susceptibilit\'e du tissu c\'er\'ebral %
+\g{a} une \'eveltuelle isch\'emie.
+\item[ischaemia rat brain imaging] : rien d'int\'eressant pour nous.
+\end{description}
+
+\subsection{Recherche dans le Journal of Cerebral Blood Flow and Metabolism}
+
+Des r\'esultats de recherche sur la biologie du cerveau, notamment chez l\^etre humain, sont publi\'es dans ce journal, %
+ainsi que des applications pour l'imagerie m\'edicale. %
+La ligne \'editoriale semble \^etre la recherche fondamentale en biologie et en imagerie m\'edicale, %
+plut\^ot que celle d'applications cliniques.
+
+\subsubsection{A Model for the Coupling between Cerebral Blood Flow and Oxygen Metabolism during Neural Stimulation \cite{bufr97}}
+
+Les auteurs :
+\begin{description}
+\item[Lawrence Frank] : Universit\'e de Californie, Sans Diego. Dirige le Center for Scientific Computation in imaging, qui publie depuis 2009 %
+et effectue des recherches concernant l'imagerie m\'edicale tridimensionnelle entre autres. %
+Dans des articles r\'ecents -2013 \g{a} 2015, L. R. Frank explore le fonctionnement de la mati\g{e}re blanche, dont il interpr\g{e}te les cons\'equences sur la cognition et la psychologie, %
+\g{a} la lumi\g{e}tre -si je puis dire- des techniques qu'il d\'eveloppe concernant l'imagerie m\'edicale. %
+Il publie ainsi dans le Journal of Head Trauma Rehabilitation et Psychology Addict Behavior.
+\item[Richard Buxton] : professor of Radiology, University of San Diego, Department of Radiology. Recievd his PhD in Physics from M.I.T in 1980. %
+Post doc in biomedical imaging (P.E.T and M.R.I) at the Massachusetts General Hospital. Author of the book : Introduction to fMRI.
+\end{description}
+
+\ligneinter
+
+C'est un article de mod\'elisation. Les auteurs \'etudient la relation entre le taux d'extraction d'$O_2$(OEF) dans le milieu intraenc\'ephalique, %
+et le flux sanguin c\'er\'ebral (CBf), en vue d'applications \g{a} l'IRM fonctionnelle.
+
+\par
+A l'aide d'un mod\g{e}le simple, qui demande la r\'esolution d'une \'equation diff\'erentielle ordinaire et une \'equation int\'egrale, %
+ils expriment (OEF) comme une fonction non lin\'eaire de (CBf), %
+puis \'etendent qualitativement leur r\'esultat \g{a} des mod\g{e}les plus complexes, %
+prenant en compte par exemple l'irriguation des vaisseaux capillaires. %
+Ils utilisent pour cela des r\'esolutions num\'eriques.
+\begin{enumerate}[label=(H\arabic*)]
+\item Irriguation
+\item $\epsilon=1$
+\item RQS pour l'\'echange d'$O_2$ entre le plasma et le sang
+\item Chaque mol\'ecule d'$O_2$ du plasma a la m\^eme probabilit\'e $k$ d'\^etre m\'etabolis\'ee.
+\end{enumerate}
+
+\par
+Ensuite, les auteurs calculent la sensibilit\'e de l'IRM au flux (CBf) \g{a} l'aide de la relation quantitative obtenue avec leur mod\g{e}le simplifi\'e. %
+Ils utilisent une relation polyn\^omiale entre le volume vasculaire c\'er\'ebral $V$ et (CBf) \'etablie par %\cite{}grubb
+et d\'efendent la th\g{e}se du couplage, \textit{via} leur mod\g{e}le simplifi\'e, entre (CBf) et (OEF), le dernier \'etant proportionnel \g{a} la CMR$O_2$.
+
+\par
+Enfin, les auteurs commentent les hypoth\g{e}ses principales du mod\g{e}le simplifi\'e :
+\begin{enumerate}
+\item La constante et totale irriguation des vaisseaux capillaires. %
+Ils mentionnent d'ailleurs que la question de l'influence de l'activit\'e nerveuse sur le recrutement des capillaires n'est pas \'elucid\'ee -en 1997.
+\item La constance de la proportion, proche de $1$, du dioxyg\g{e}ne du milieu c\'er\'ebral qui est m\'etabolis\'e. %
+La variable d'ajustement entre les CMR$O_2$ et CMR${}_{\text{glc}}$, dont la diff\'erence explique la relation entre (CBf) et (OEF) est donc le taux de m\'etabolisation a\'erobie du glucose.
+\end{enumerate}
+
+\subsubsection{Articles r\'ecents du m\^eme journal}
+
+
+
+\subsection{Automated Segmentation and Shape Characterization of Volumetric Data \cite{frsph}}
+
+Cet article pr\'esente une m\'ethode de calcul num\'erique, justifi\'ee sur la plan math\'ematique, %
+pour l'imagerie m\'edicale tridimensionnelle, plus efficace que celles d\'ej\g{a} connnues et impl\'ement\'ees.
+
+\par
+Ainsi, les auteurs V. L. Galinsky et L. R. Frank proposent la m\'ethode dite SWD, am\'elioration d'une autre m\'ethode dite \og{} SPHARM\fg{}, %
+fond\'ee sur la d\'ecomposition dans une base hilbertienne de fonctions  repr\'esentant des ondes sph\'eriques.
+
+\ligneinter
+Plus pr\'ecis\'ement, concernant le mod\g{e}le math\'ematique des ondes sph\'eriques :
+
+
+\subsection{Analyse d'images avec R}
+
+%\input{4_rats.tex}

@@ -1,0 +1,171 @@
+%\documentclass[a4paper,12pt]{article}
+%\usepackage[utf8]{inputenc}
+
+\usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}% On peut changer en cours de route avec la commande \newgeometry
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,french]{babel}
+\usepackage{amsmath,amsfonts,amssymb,graphicx}
+%\usepackage{amsthm}
+\usepackage{framed}
+\usepackage[amsthm,thmmarks,framed]{ntheorem}
+\usepackage[dvipsnames]{pstricks}
+%\usepackage{pstricks-add,pst-plot,pst-node}
+\usepackage{pstricks,pst-plot,pst-text,pst-tree}%,pst-eps,pst-fill,pst-node,pst-math,pstricks-add,pst-xkey}
+\usepackage{epic,eepic}
+% Versions propos\'ees par Frédéric Junier
+%\usepackage[inline]{asymptote}
+
+
+%\usepackage{color} %(black, white, red, green, blue, yellow, magenta et cyan)
+\usepackage[dvipsnames]{xcolor}
+\usepackage{colortbl}
+
+\usepackage{verbatim}
+
+\usepackage{enumitem}
+\frenchbsetup{StandardLists=true}
+
+\usepackage[all]{xy}
+
+\usepackage{multicol}				%%%	Jusqu' \`a nouvel ordre pas de multicol, pour cause de compatibilit\'e avec des fonctions graphiques de TeX.
+%\begin{multicols}[titre]{nb colonnes}
+%\setlength{\columnseprule}{0.25pt}
+
+\usepackage{parskip}
+\setlength{\parindent}{0cm}
+
+%Je veux une mise en page pour les théorèmes lemmes preuves, définitions etc, suffisamment aérée. Est-il possible de commander un encadrement systématique ?
+
+\newcommand{\g}[1]{\`#1}%\g{lettre}
+
+\providecommand{\abs}[1]{\lvert#1\rvert}
+
+%Pour tout le m\'emoire !
+
+
+
+%Annotations d'un m\'emoire en cours de r\'edaction :
+\newcommand{\tr}{\textbf{\textcolor{red}{D\'emonstration \g{a} trouver }}}
+\newcommand{\re}{\textbf{\textcolor{NavyBlue}{D\'emonstration \g{a} recopier }}}
+\newcommand{\es}{\textbf{\textcolor{OliveGreen}{Esquisse de d\'emonstration }}}
+
+%Pour les formules alg\'ebriques casse-pieds :
+
+
+%Pour les formules concernant les \dots :
+
+
+%Autres formules pour le m\'emoire :
+\newcommand{\tc}[1]{\text{#1}}
+
+
+\newcommand*{\etoile}
+{
+\begin{center}
+\hspace{1pt}\par
+*\hspace{5pt}*\hspace{5pt}*
+\end{center}
+}
+
+
+\newcommand*{\ligneinter}
+{
+\begin{center}
+\vspace{2pt}
+\hfill\rule{0.5\linewidth}{0.1pt}\hfill\null
+\end{center}
+\vspace{7pt}
+}
+
+{
+\theoremstyle{break}
+\theoremprework{\vspace{0.2cm}\begin{minipage}{\textwidth}} %Pris en compte uniquement pour le premier newtheorem
+\theorempostwork{\ligneinter\end{minipage}} %Même chose
+\theoremheaderfont{\scshape}
+\theorembodyfont{\itshape}
+\theoremseparator{ :\newline\vspace{0.2cm}}
+\newtheorem{defi}{D\'efinition}%[section]
+%\newtheorem{prop}{Proposition}[section]
+%\newtheorem{lemm}{Lemme}[section]
+} 
+
+{%
+\theoremstyle{break}
+\theoremprework{\vspace{0.2cm}\begin{minipage}{\textwidth}} %Pris en compte uniquement pour le premier newtheorem
+\theorempostwork{\ligneinter\end{minipage}} %Même chose
+\theoremheaderfont{\bfseries}
+\theorembodyfont{\itshape}
+\theoremseparator{ :\newline\vspace{0.2cm}}
+%\newtheorem{lemm}{Lemme}[section]
+\newtheorem{prop}{Proposition}[section]
+}
+
+{%
+\theoremstyle{break}
+\theoremprework{\vspace{0.2cm}\begin{minipage}{\textwidth}} %Pris en compte uniquement pour le premier newtheorem
+\theorempostwork{\etoile\end{minipage}} %Même chose
+\theoremheaderfont{\bfseries}
+\theorembodyfont{\itshape}
+\theoremseparator{ :\newline\vspace{0.2cm}}
+%\newtheorem{lemm}{Lemme}[section]
+\newtheorem{pref}{Proposition-d\'efinition}[section]
+}
+
+{%
+\theoremstyle{break}
+%\theoremprework{\begin{tabular}{|p{\textwidth}|}\hline}
+%\theorempostwork{\\ \hline\end{tabular}}
+\theoremheaderfont{\scshape}
+\theorembodyfont{\normalfont}
+\theoremseparator{ :\newline\vspace{0.2cm}}
+%\newtheorem{lemm}{Lemme}[section]
+\newframedtheorem{theo}{Théor\`eme}[section]
+}
+
+{%
+\theoremstyle{break}
+\theoremprework{\vspace{0.2cm}\begin{minipage}{\textwidth}}
+\theorempostwork{\ligneinter\end{minipage}}
+\theoremheaderfont{\scshape}
+\theorembodyfont{\itshape}
+\theoremseparator{ :\newline\vspace{0.2cm}}
+\newtheorem{lemm}{Lemme}[theo]
+}
+  
+{%
+\theoremstyle{break}
+%\theoremprework{\begin{tabular}{|p{\textwidth}|}\hline}
+%\theorempostwork{\\ \hline\end{tabular}}
+\theoremheaderfont{\scshape}
+\theorembodyfont{\itshape}
+\theoremseparator{ :\newline\vspace{0.2cm}}
+%\newtheorem{lemm}{Lemme}[section]
+\newframedtheorem{coro}{Corollaire}[theo]
+}
+
+
+
+{
+\theoremstyle{break}
+\theoremprework{\vspace{0.5cm}}
+\theorempostwork{\vspace{0.5cm}\ligneinter}
+\theoremheaderfont{\scshape}
+\theorembodyfont{\normalfont\small}
+\theoremseparator{ :\newline\vspace{0.2cm}}
+\newtheorem{exem}{Exemple}[section]
+} 
+
+{
+\theoremstyle{break}
+\theoremprework{\vspace{0.5cm}\begin{minipage}{\textwidth}}
+\theorempostwork{\end{minipage}\ligneinter}
+\theoremheaderfont{\scshape}
+\theorembodyfont{\small}
+\theoremseparator{ :\newline\vspace{0.2cm}}
+\newtheorem{rema}{Remarque}[section]
+} 
+  
+%\setcounter{section}{-1}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Roman{section}-\Alph{subsection}}
