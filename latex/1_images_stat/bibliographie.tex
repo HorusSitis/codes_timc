@@ -85,6 +85,27 @@ fond\'ee sur la d\'ecomposition dans une base hilbertienne de fonctions  repr\'e
 Plus pr\'ecis\'ement, concernant le mod\g{e}le math\'ematique des ondes sph\'eriques :
 
 
-\subsection{Analyse d'images avec R}
+\subsection{Analyse d'images}% avec R}
 
+%\subsubsection{R}
 %\input{4_rats.tex}
+
+Concernant les coupes de cerveaux de rats du GIN :
+
+\begin{enumerate}[label=(Objectif\arabic*)]
+\item Etudier les corr\'elations, et \'etablir une hi\'erarchie entre les grandeurs ADC, BVf, etc mesur\'ees directement par IRM ;
+\item D\'elimiter, manuellement ou syst\'ematiquement, les zones isch\'emi\'ees.
+\end{enumerate}
+
+\subsubsection{Outils statistiques pour la reconnaissance d'objets : Objectif num\'ero $2$}
+
+M\'ethodologie : clustering avec R, \'eventuellement interfac\'e avec un langage de bas niveau pour augmenter les performances, %
+segmentation avec ImageJ, utilisation de Matlab sur des images en niveaux de gris cod\'ees sous forme matricielle.
+
+\etoile
+\cite{dol_cmi_16} propose, dans le cadre du diagnostic du cancer du cerveau chez l'Homme, une m\'ethode de lab\'elisation des voxels d'une image tridimensionnelle %
+correspondant \g{a} une tumeur. %
+L'utilisation de machines \g{a} vecteurs de support (SVM) est pr\'econis\'ee, et des composantes comme la position spatiale du voxel, %
+les niveaux de gris relatifs de ses plus proches voisins ou une transformation utilisant une distance g\'eod\'esique p\'enalis\'ee par les gradients de niveaux de gris, %
+-voir \cite{wei_geo_08} pour plus de d\'etails sur le mod\g{e}le de graphe pond\'er\'e ; sont retenues pour les vecteurs de repr\'esentation.
+
