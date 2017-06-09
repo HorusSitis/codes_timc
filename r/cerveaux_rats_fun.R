@@ -15,56 +15,74 @@ graph_gauss <- function(valeurs,Nclust,Col){# valeurs est le tableau contenant i
     lines(yy,type="l",color=Col[i])
   }
 }
-# Difficile ? partir de 4 clusters : trop de tentatives
 
-# Série d'histogrammes : jours et slices
 
-hist_slice_essai <- function(Nclust,vars,slice){
-  dir=paste("essai",vars,slice,sep='_')
-  J<-read.table(paste(dir,slash,"jours.txt",sep=''))
-  #J_num<-read.table(paste(dir,slash,"jours.txt",sep=''))
-  l<-dim(J)[1]-1
-  #J_char<-read.table(paste(dir,slash,"jours.txt",sep=''),as.is=rbind(rep(TRUE,length(J_num))))
-  slice_corr<-matrix(nrow=l,ncol=l)
-  for (j in 1:l){#J_char_2){# boucle sur les jours
-    ngr_file_name=paste(dir,slash,"26-J",J[j,],"-",vars,"-","seg","-",slice,".txt",sep='')
-    data=read.table(ngr_file_name)
-    names(data)[1]<-"x"
-    names(data)[2]<-"y"
-    names(data)[3]<-"v"
-    ### ? ###
-    # On trace et on sauvegarde
-    sous_dir<-paste(slash,"stat_pos",sep='')
-    png(file = paste(dir,sous_dir,slash,"26-J",J[j,],"-hist-",toString(Nclust),".png",sep=''), width = 800, height = 700)
-    par(mfrow=c(2,1))#, bg='white')
-    hist(data$v, xlim=c(0,3000), freq = FALSE, main = paste("Histogramme",vars,"J",toString(J[j,]),sep=' '), xlab=vars, col="red", nclass=30)
-    boxplot(data$v,Range=0,ylab=vars)
-    dev.off()
+
+#---------------------------- Une fonction : segmentation d'un cerveau, une fonctionnalité, un rat ----------------------------#
+
+cerveau_jfr <- function(day,fonc,rat){
+  d.slices.day <- read.csv(paste('liste_R',rat,'_',fonc,'_J',day,'.csv',sep=''),check.names=F,header=T)
+  d <- data.frame(matrix(ncol = 4, nrow = 0))
+  colnames(d) <- c("x","y","z",fonc)
+  for (slice.select in 1:length(d.slices.day[,1])){
+    d.filename <- sprintf("%s-J%s-%s-bg-slice%i.txt",rat,day,fonc,d.slices.day[slice.select,1])
+    d.increment <- read.table(d.filename,header=F,sep='\t')
+    d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*d.slices.day[slice.select,1], d.increment[,3]))
+    colnames(d.increment) <- c("x","y","z",fonc)
+    write.table(d.increment, sprintf("%s-J%s-%s-bg-slice%i.dat",rat,day,fonc,d.slices.day[slice.select,1]), row.names=F, quote=F, sep='\t')
+    d<-as.data.frame(rbind(d,d.increment))
+  }
+  return(d)
+}
+
+
+# Fonction à utiliser après avoir sélectionné le bon répertoire de travail.
+# Ne pas oublier les .csv pour les slices !
+adc_3d_rat <- function(rat){
+  jours <- liste_jours_ADC[[rat]]
+  for (j in 1:length(jours)){
+    day=jours[j]
+    d <- cerveau_jfr(day, 'ADC', rat)
+    write.table(d, sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc), row.names=F, quote=F, sep='\t')
+  }
+}
+
+# Fonction pour clusteriser un cerveau, pour une fonctionnalité quelconque. Utilise la librairie 'mclust'.
+# Il faut décider du nombre de clusters voulus.
+# Suppose que l'on exclut les fonctionnalités trop basses -inférieures à 10.
+
+cluster_jfr_f10 <- function(data,cl_min,cl_max){
+  #d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T) # A l'avenir : chargement depuis le dossier fonctionnel_gris complet
+  data.fonc <- data[,4]
+  data <- data[data.fonc>10,] # cutoff à 10 de diffusion
+  d.clust <- Mclust(data.fonc, G=cl_min:cl_max, modelNames="V")
+  #plot(d.clust, what="classification")
+  return(d.clust)
+}
+
+### Pour un suivi temporel des données tridimensionnelles : une représentation graphique par jour. Mêmes précautions à prendre aue pour adc_3d_rat.
+
+suivi_adc_3d <- function(rat,cl_min,cl_max){
+  jours <- liste_jours_ADC[[rat]]
+  for (j in 1:length(jours)){
+    day=jours[j]
+    d <- read.table(sprintf("%s-J%s-ADC-bg-all.dat",rat,day),header=T)
+    d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
+    # On passe aux représentations graphiques
+    
+    #plot(d.clust, what="classification")
+    
+    par(mfrow = c(2,2))
+    plot(d.clust, what="BIC")
+    plot(d.clust, what="classification", col=color.vector)
+    
+    ADC.breaks <- seq(min(d$ADC)-0.1*min(d$ADC), max(d$ADC)+0.1*max(d$ADC), length.out=100)
+    d.hist <- hist(d$ADC,breaks=ADC.breaks, col='grey50')
+    plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, cex=2*(1-d.clust$uncertainty)^4, xlab='x', ylab='y')
   }
 }
 
 
-## Clusters avec Mclust
-# Représentation graphique de clusters sur un jour et une slice
 
-clust_slice <- function(Nclust,vars,slice){
-  dir=paste("essai",vars,slice,sep='_')
-  J<-read.table(paste(dir,slash,"jours.txt",sep=''))
-  for (j in J){# boucle sur les jours
-    ngr_file_name=paste(dir,slash,"26-J",j,"-",vars,"-","seg","-",slice,".txt",sep='')
-    data=read.table(ngr_file_name)
-    names(data)[1]<-"x"
-    names(data)[2]<-"y"
-    names(data)[3]<-"v"
-    data.clust<-Mclust(data=data$v,G=Nclust,modelNames='V')
-    # On trace et on sauvegarde
-    png(file = paste(dir,slash,"26-J",j,"-clust-",toString(Nclust),".png",sep=''), width = 800, height = 700)
-    par(mfrow=c(1,2))#, bg='white')
-    plot(data$x,data$y,col=color.vector[data.clust$classification],pch=20,cex=(1-data.clust$uncertainty)^3,main=paste("Brain map of",vars,"data classification",sep=' '),xlab="x",ylab="y")
-    rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "black")
-    points(data$x,data$y,col=color.vector[data.clust$classification], pch=20, cex=(1-data.clust$uncertainty)^3)
-    plot(data.clust, what="classification", colors=color.vector, xlab=vars)
-    dev.off()
-  }
-}
 
+##########################################################################################
