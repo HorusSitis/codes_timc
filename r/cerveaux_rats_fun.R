@@ -18,38 +18,45 @@ graph_gauss <- function(valeurs,Nclust,Col){# valeurs est le tableau contenant i
 
 
 
-#---------------------------- Une fonction : segmentation d'un cerveau, une fonctionnalité, un rat ----------------------------#
+# ---------------------------- Une fonction : segmentation d'un cerveau, une fonctionnalité, un rat ---------------------------- #
 
-cerveau_jfr <- function(day,fonc,rat){
-  d.slices.day <- read.csv(paste('liste_R',rat,'_',fonc,'_J',day,'.csv',sep=''),check.names=F,header=T)
+cerveau_jfr <- function(jour,fonc,rat){
+  
+  d.filename <- sprintf("liste_R%s_%s_J%s.csv",rat,fonc,jour) #paste('liste_R',rat,'_',fonc,'_J',day,'.csv',sep='')
+  day.slices <- read.csv(d.filename,check.names=F,header=T)
   d <- data.frame(matrix(ncol = 4, nrow = 0))
   colnames(d) <- c("x","y","z",fonc)
-  for (slice.select in 1:length(d.slices.day[,1])){
-    d.filename <- sprintf("%s-J%s-%s-bg-slice%i.txt",rat,day,fonc,d.slices.day[slice.select,1])
+  
+  for (slice.select in 1:length(day.slices[,1])){
+    d.filename <- sprintf("%s-J%s-%s-bg-slice%i.txt",rat,jour,fonc,day.slices[slice.select,1])
     d.increment <- read.table(d.filename,header=F,sep='\t')
-    d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*d.slices.day[slice.select,1], d.increment[,3]))
+    d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*day.slices[slice.select,1], d.increment[,3]))
     colnames(d.increment) <- c("x","y","z",fonc)
-    write.table(d.increment, sprintf("%s-J%s-%s-bg-slice%i.dat",rat,day,fonc,d.slices.day[slice.select,1]), row.names=F, quote=F, sep='\t')
-    d<-as.data.frame(rbind(d,d.increment))
+    write.table(d.increment, sprintf("%s-J%s-%s-bg-slice%i.dat",rat,jour,fonc,day.slices[slice.select,1]), row.names=F, quote=F, sep='\t')
+    d <- as.data.frame(rbind(d,d.increment))
   }
+  
   return(d)
 }
 
-
-# Fonction à utiliser après avoir sélectionné le bon répertoire de travail.
+# Fonction à utiliser après avoir sélectionné le bon répertoire de travail : fonctionnel_gris/ADC
 # Ne pas oublier les .csv pour les slices !
-adc_3d_rat <- function(rat){
-  jours <- liste_jours_ADC[[rat]]
+
+FONC_3d_rat <- function(fonc,rat){
+  jours_fonc <- liste_jfr[[fonc]] # étape intermédiaire
+  jours <- jours_fonc[[rat]] # liste_jours_ADC[[rat]]
+  
   for (j in 1:length(jours)){
     day=jours[j]
-    d <- cerveau_jfr(day, 'ADC', rat)
+    d <- cerveau_jfr(day, fonc, rat)
     write.table(d, sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc), row.names=F, quote=F, sep='\t')
   }
 }
 
-# Fonction pour clusteriser un cerveau, pour une fonctionnalité quelconque. Utilise la librairie 'mclust'.
+# ------------------- Clusterise un cerveau, pour une fonctionnalité quelconque. Utilise la librairie 'mclust'. ------------------- #
+
 # Il faut décider du nombre de clusters voulus.
-# Suppose que l'on exclut les fonctionnalités trop basses -inférieures à 10.
+# Exclut les fonctionnalités trop basses -inférieures à 10.
 
 cluster_jfr_f10 <- function(data,cl_min,cl_max){
   #d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T) # A l'avenir : chargement depuis le dossier fonctionnel_gris complet
@@ -60,28 +67,31 @@ cluster_jfr_f10 <- function(data,cl_min,cl_max){
   return(d.clust)
 }
 
-### Pour un suivi temporel des données tridimensionnelles : une représentation graphique par jour. Mêmes précautions à prendre aue pour adc_3d_rat.
+# ------------------- Pour un affichage systématique des données tridimensionnelles : une représentation graphique par jour. ------------------- #
 
-suivi_adc_3d <- function(rat,cl_min,cl_max){
-  jours <- liste_jours_ADC[[rat]]
+rg_FONC_3d <- function(fonc,rat,cl_min,cl_max){
+  jours_fonc <- liste_jfr[[fonc]] # étape intermédiaire
+  jours <- jours_fonc[[rat]] # liste_jours_ADC[[rat]]
   for (j in 1:length(jours)){
     day=jours[j]
     d <- read.table(sprintf("%s-J%s-ADC-bg-all.dat",rat,day),header=T)
     d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
-    # On passe aux représentations graphiques
+    d.fonc <- d[,4]
     
+    # On passe aux représentations graphiques
     #plot(d.clust, what="classification")
     
     par(mfrow = c(2,2))
     plot(d.clust, what="BIC")
     plot(d.clust, what="classification", col=color.vector)
     
-    ADC.breaks <- seq(min(d$ADC)-0.1*min(d$ADC), max(d$ADC)+0.1*max(d$ADC), length.out=100)
-    d.hist <- hist(d$ADC,breaks=ADC.breaks, col='grey50')
+    FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
+    d.hist <- hist(d.fonc,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
     plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, cex=2*(1-d.clust$uncertainty)^4, xlab='x', ylab='y')
   }
 }
 
+# ------------------- Pour un suivi temporel des données bidimensionnelles : une représentation graphique par jour. ------------------- #
 
 
 
