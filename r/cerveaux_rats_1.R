@@ -74,10 +74,10 @@ liste_jfr <- list("ADC"=liste_jours_ADC, "BVF"='',"CBF"='',"CMRO2"='',"T1map"=''
 
 # Etape 2 :
 
-#rg_FONC_3d('ADC',"11",3,5)
-#rg_FONC_3d('ADC',"19",2,5)
-#rg_FONC_3d('ADC',"26",3,5)
-#rg_FONC_3d('ADC',"30",2,5)
+rg_FONC_3d('ADC',"11",3,5)
+rg_FONC_3d('ADC',"19",3,4)
+rg_FONC_3d('ADC',"26",3,5)
+rg_FONC_3d('ADC',"30",2,5)
 
 # Etape 3 :
 

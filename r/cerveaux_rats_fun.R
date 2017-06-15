@@ -96,7 +96,7 @@ rg_FONC_3d <- function(fonc,rat,cl_min,cl_max){
   jours <- jours_fonc[[rat]] # liste_jours_ADC[[rat]]
   for (j in 1:length(jours)){
     day=jours[j]
-    d <- read.table(sprintf("%s-J%s-ADC-bg-all.dat",rat,day),header=T)
+    d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T)
     d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
     d.fonc <- d[,4]
     
@@ -109,7 +109,7 @@ rg_FONC_3d <- function(fonc,rat,cl_min,cl_max){
     
     FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
     d.hist <- hist(d.fonc,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
-    plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, cex=2*(1-d.clust$uncertainty)^4, xlab='x', ylab='y')
+    plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, cex=2*(1-d.clust$uncertainty)^4, xlab='x', ylab='y',main=paste("Cerveau J",day))
   }
 }
 
