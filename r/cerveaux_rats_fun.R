@@ -32,7 +32,7 @@ cerveau_jfr <- function(jour,fonc,rat){
     d.increment <- read.table(d.filename,header=F,sep='\t')
     d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*day.slices[slice.select,1], d.increment[,3]))
     colnames(d.increment) <- c("x","y","z",fonc)
-    write.table(d.increment, sprintf("%s-J%s-%s-bg-slice%i.dat",rat,jour,fonc,day.slices[slice.select,1]), row.names=F, quote=F, sep='\t')
+    #write.table(d.increment, sprintf("%s-J%s-%s-bg-slice%i.dat",rat,jour,fonc,day.slices[slice.select,1]), row.names=F, quote=F, sep='\t')
     d <- as.data.frame(rbind(d,d.increment))
   }
   
@@ -109,7 +109,7 @@ rg_FONC_3d <- function(fonc,rat,cl_min,cl_max){
     
     FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
     d.hist <- hist(d.fonc,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
-    plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, cex=2*(1-d.clust$uncertainty)^4, xlab='x', ylab='y',main=paste("Cerveau J",day))
+    plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, cex=2*(1-d.clust$uncertainty)^4, xlab='x', ylab='y',main=paste("Cerveau ",rat,", J",day))
   }
 }
 

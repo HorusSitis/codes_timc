@@ -31,24 +31,55 @@ liste_jours_ADC <- list("11"=jours_R11_ADC,"19"=jours_R19_ADC,"26"=jours_R26_ADC
 
 #---------------------------- Base de données : BVf ----------------------------#
 
-#jours_R11_BVf <- 
-#liste_jours_BVf <- 
+jours_R11_BVf <- c("00","03","08","15","22") # .csv OK, attention au jour 00 où il faudra peut-être éliminer des slices.
+jours_R19_BVf <- c("00","08","15","22")
+jours_R26_BVf <- c("00","03","08","15","22")
+jours_R30_BVf <- c("00","08","15")
+
+liste_jours_BVf <- list("11"=jours_R11_BVf,"19"=jours_R19_BVf,"26"=jours_R26_BVf,"30"=jours_R30_BVf)
 
 #---------------------------- Base de données : CBF ----------------------------#
+
+jours_R11_CBF <- c("00","03","08","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
+jours_R19_CBF <- c("00","03","08","15","22")
+jours_R26_CBF <- c("00","03","08","15","22")
+jours_R30_CBF <- c("00","08","15")
+
+liste_jours_CBF <- list("11"=jours_R11_CBF,"19"=jours_R19_CBF,"26"=jours_R26_CBF,"30"=jours_R30_CBF)
+
 #---------------------------- Base de données : CMRO2 ----------------------------#
 #---------------------------- Base de données : SO2map ----------------------------#
 #---------------------------- Base de données : T1map ----------------------------#
 #---------------------------- Base de données : VSI ----------------------------#
 
-liste_jfr <- list("ADC"=liste_jours_ADC, "BVF"='',"CBF"='',"CMRO2"='',"T1map"='',"VSI"='') # liste des jours par fonctionnalité et par rat
+liste_jfr <- list("Anat"=liste_jours_Anat, "ADC"=liste_jours_ADC, "BVf"=liste_jours_BVf,"CBF"=liste_jours_CBF,"CMRO2"='',"T1map"='',"VSI"='') # liste des jours par fonctionnalité et par rat
 
 #################################### Instructions : traitement systématique des images, anatomique ####################################
 
-# Histogrammes
-# Angélique veut un mélange de Gaussiennes
-# On sépare la partie ischémiée et ...
+## Histogrammes
+## Angélique veut un mélange de Gaussiennes
+## On sépare la partie ischémiée et ...
+
+# Comme pour les autres modalités :
+
+
+
+
+
+jours_R11_ADC <- c("00","03","08","15","22")
+jours_R19_ADC <- c("00","03","08","15","22")
+jours_R26_ADC <- c("00","03","08","15","22")
+jours_R30_ADC <- c("00","08","15")
+
+liste_jours_ADC <- list("11"=jours_R11_ADC,"19"=jours_R19_ADC,"26"=jours_R26_ADC,"30"=jours_R30_ADC)
 
 # Etape 1 :
+
+
+
+
+
+
 # Etape 2 :
 
 
@@ -76,8 +107,69 @@ liste_jfr <- list("ADC"=liste_jours_ADC, "BVF"='',"CBF"='',"CMRO2"='',"T1map"=''
 
 rg_FONC_3d('ADC',"11",3,5)
 rg_FONC_3d('ADC',"19",3,4)
-rg_FONC_3d('ADC',"26",3,5)
+rg_FONC_3d('ADC',"26",3,4)
 rg_FONC_3d('ADC',"30",2,5)
+
+# Etape 3 :
+
+
+
+
+
+# Etape 4 :
+
+
+
+
+
+
+
+
+# ----------------- La fonctionnalité BVf ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+
+#FONC_3d_rat('BVf',"11")
+#FONC_3d_rat('BVf',"19")
+#FONC_3d_rat('BVf',"26")
+#FONC_3d_rat('BVf',"30")
+
+# Etape 2 :
+
+rg_FONC_3d('BVf',"11",3,5)
+rg_FONC_3d('BVf',"19",3,4)
+rg_FONC_3d('BVf',"26",3,4)
+rg_FONC_3d('BVf',"30",2,5)
+
+# Etape 3 :
+
+
+
+
+
+# Etape 4 :
+
+
+
+
+
+
+
+# ----------------- La fonctionnalité CBF ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+
+#FONC_3d_rat('CBF',"11")
+#FONC_3d_rat('CBF',"19")
+#FONC_3d_rat('CBF',"26")
+#FONC_3d_rat('CBF',"30")
+
+# Etape 2 :
+
+rg_FONC_3d('CBF',"11",3,5)
+rg_FONC_3d('CBF',"19",3,4)
+rg_FONC_3d('CBF',"26",3,5)
+rg_FONC_3d('CBF',"30",2,5)
 
 # Etape 3 :
 
