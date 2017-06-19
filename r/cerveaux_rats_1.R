@@ -5,6 +5,7 @@ rm(list=ls())
 #install.packages("mclust", dependencies=T)
 #install.packages('mixtools', dependencies=T)
 #install.packages('ggplot2')
+#install.packages("plot3D",dependencies=T)
 
 # Pour le boot linux de Grenoble
 library('mclust')
@@ -53,6 +54,7 @@ liste_jours_CBF <- list("11"=jours_R11_CBF,"19"=jours_R19_CBF,"26"=jours_R26_CBF
 #---------------------------- Base de données : VSI ----------------------------#
 
 liste_jfr <- list("Anat"=liste_jours_Anat, "ADC"=liste_jours_ADC, "BVf"=liste_jours_BVf,"CBF"=liste_jours_CBF,"CMRO2"='',"T1map"='',"VSI"='') # liste des jours par fonctionnalité et par rat
+suivi_temp <- list("Anat"=suivi_temp_Anat,"ADC"='',"BVf"='',"CBF"='',"CMRO2"='',"SO2map"='',"T1map"='',"VSI"='')
 
 #################################### Instructions : traitement systématique des images, anatomique ####################################
 
@@ -66,21 +68,43 @@ liste_jfr <- list("Anat"=liste_jours_Anat, "ADC"=liste_jours_ADC, "BVf"=liste_jo
 
 
 
-jours_R11_ADC <- c("00","03","08","15","22")
-jours_R19_ADC <- c("00","03","08","15","22")
-jours_R26_ADC <- c("00","03","08","15","22")
-jours_R30_ADC <- c("00","08","15")
+jours_R11_Anat <- c("00","03","08","15","22")
+jours_R19_Anat <- c("00","03","08","15","22")
+jours_R26_Anat <- c("00","03","08","15","22")
+jours_R30_Anat <- c("00","08","15")
 
-liste_jours_ADC <- list("11"=jours_R11_ADC,"19"=jours_R19_ADC,"26"=jours_R26_ADC,"30"=jours_R30_ADC)
+liste_jours_Anat <- list("11"=jours_R11_Anat,"19"=jours_R19_Anat,"26"=jours_R26_Anat,"30"=jours_R30_Anat)
+
+suivi_temp_Anat <- list("11"=c(4,12),"19"=c(6,12),"26"=c(4,11),"30"=c(4,13))
 
 # Etape 1 :
 
-
-
-
-
+#FONC_3d_rat('Anat',"11")
+#FONC_3d_rat('Anat',"19")
+#FONC_3d_rat('Anat',"26")
+#FONC_3d_rat('Anat',"30")
 
 # Etape 2 :
+
+rg_FONC_3d('Anat',"11",2,4)
+rg_FONC_3d('Anat',"19",3,4)
+rg_FONC_3d('Anat',"26",3,4)
+rg_FONC_3d('Anat',"30",2,5)
+
+# Etape 3 :
+
+ddd <- read.table("11-J00-Anat-bg-all.dat",header=T)
+
+ddf <- cluster_jfr_10(ddd,3,4)
+ddg <- as.data.frame(cbind(ddd$x,ddd$y,ddd$z,ddf$data,ddf$classification))
+
+
+
+
+ddh <- ddg[ddd$z>3*d.slice.size & ddd$z<13*d.slice.size,]
+
+ddh <- ddg[ddd$z>=3*d.slice.size-0.001 & ddd$z<=13*d.slice.size+0.001,]
+View(ddh)
 
 
 

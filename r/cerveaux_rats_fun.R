@@ -39,25 +39,6 @@ cerveau_jfr <- function(jour,fonc,rat){
   return(d)
 }
 
-# ------------------- Une fonction qui s'applique aux données tridimensionnelles sur un cerveau pour retirer les NaN ------------------- #
-
-retire_NaN <- function(data){
-  i=1
-  l=length(data[,4])
-  while (i<=l){
-    if (is.na(data[i,4])){
-      data <- data[-i,]
-      #data[-is.na(data[,4]),]
-    }
-    else{
-      i <- i+1
-    }
-    l <- length(data[,4])
-    #i<-i+1
-  }
-  return(data)
-}
-
 # Fonction à utiliser après avoir sélectionné le bon répertoire de travail : fonctionnel_gris/ADC
 # Ne pas oublier les .csv pour les slices !
 
@@ -68,7 +49,8 @@ FONC_3d_rat <- function(fonc,rat){
   for (j in 1:length(jours)){
     day=jours[j]
     d <- cerveau_jfr(day, fonc, rat)
-    d <- retire_NaN(d)
+    liste.nan <- is.na(d[,4])
+    d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe
     write.table(d, sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc), row.names=F, quote=F, sep='\t')
   }
 }
@@ -82,7 +64,6 @@ FONC_3d_rat <- function(fonc,rat){
 cluster_jfr_f10 <- function(data,cl_min,cl_max){
   #d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T) # A l'avenir : chargement depuis le dossier fonctionnel_gris complet
   data.fonc <- data[,4]
-  #na.omit(data)# <- data[data.fonc,] # on retire les valeurs manquantes
   data <- data[data.fonc>10,] # cutoff à 10 de diffusion
   d.clust <- Mclust(data.fonc, G=cl_min:cl_max, modelNames="V")
   #plot(d.clust, what="classification")
