@@ -98,4 +98,21 @@ rg_FONC_3d <- function(fonc,rat,cl_min,cl_max){
 
 
 
+# ------------------- Extraction de clusters pour une segmentation. Ouvrir dans le répertoire correspondant à la fonctionnalité concernée ------------------- #
+
+seg_cl_FONC <- function(day,fonc,rat,clust){
+  d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T)
+  d.clust <- cluster_jfr_f10(d,3,5)
+  d.seg <- d[d.clust$classification==clust,]
+  #write.table(d.seg, sprintf("%s-J%s-%s-isch.dat",rat,day,fonc), row.names=F, quote=F, sep='\t')
+  return(d.seg)
+}
+  
+  
+  
+  
+  
+
+
+
 ##########################################################################################

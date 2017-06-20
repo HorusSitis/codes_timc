@@ -30,6 +30,8 @@ jours_R30_ADC <- c("00","08","15")
 
 liste_jours_ADC <- list("11"=jours_R11_ADC,"19"=jours_R19_ADC,"26"=jours_R26_ADC,"30"=jours_R30_ADC)
 
+suivi_temp_ADC <- list("11"=c(10,10),"19"=c(0,0),"26"=c(0,0),"30"=c(0,0))
+
 #---------------------------- Base de données : BVf ----------------------------#
 
 jours_R11_BVf <- c("00","03","08","15","22") # .csv OK, attention au jour 00 où il faudra peut-être éliminer des slices.
@@ -130,15 +132,55 @@ View(ddh)
 # Etape 2 :
 
 rg_FONC_3d('ADC',"11",3,5)
-rg_FONC_3d('ADC',"19",3,4)
-rg_FONC_3d('ADC',"26",3,4)
-rg_FONC_3d('ADC',"30",2,5)
+rg_FONC_3d('ADC',"19",3,5)
+rg_FONC_3d('ADC',"26",3,5)
+rg_FONC_3d('ADC',"30",3,5)
 
-# Etape 3 :
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+
+seg_cl_FONC("00",'ADC',"11",1)
+seg_cl_FONC("00",'ADC',"19",1)
+#26
+#30
 
 
 
+##day <- "00"
+fonc <- "ADC"
+rat <- "11"
 
+
+
+d <- read.table('11-J00-ADC-bg-all.dat',header=T)
+cl_test <- cluster_jfr_f10(d,3,5)
+d_seg_isch <- d[cl_test$classification==1,]
+d_hem_sain <- d[d$x>60,]
+
+adc_entier <- d[,"ADC"]
+adc_isch <- d_seg_isch[,"ADC"]
+adc_sain <- d_hem_sain[,"ADC"]
+
+taille <- length(d[,4])
+taille_isch <- length(adc_isch)
+
+breaks <- seq(min(d[,4])-0.1*min(d[,4]), max(d[,4])+0.1*max(d[,4]), length.out=100)
+
+par(mfrow = c(2,2))
+#plot(cl_test, what="classification", col=color.vector)
+plot(d$x,d$y,col=color.vector[cl_test$classification], pch=20, cex=2*(1-cl_test$uncertainty)^4, xlab='x', ylab='y',main=paste("Cerveau ","11",", J","00"))
+hist_entier <- hist(adc_entier,breaks=breaks, col='grey50',main="Cerveau entier")
+
+data <- adc_isch*(taille_isch/taille)
+breaks <- seq(min(data)-0.1*min(data), max(data)+0.1*max(data), length.out=100)
+hist_isch <- hist(data,breaks=breaks, col='red',main="Zone ischémiée")
+
+hist_sain <- hist(adc_sain,breaks=breaks, col='blue',main="Hémisphère sain")
+
+write.table(d_seg_isch, sprintf("%s-J%s-%s-isch.dat",rat,"00",fonc), row.names=F, quote=F, sep='\t')
+
+aa <- read.table(sprintf("%s-J%s-%s-isch.dat",rat,"00",fonc),header=T)
+
+hist_aa <- hist(aa[,'ADC'],breaks=breaks, col='red',main="Zone ischémiée aa")
 
 # Etape 4 :
 
@@ -160,13 +202,17 @@ rg_FONC_3d('ADC',"30",2,5)
 
 # Etape 2 :
 
-rg_FONC_3d('BVf',"11",3,5)
-rg_FONC_3d('BVf',"19",3,4)
-rg_FONC_3d('BVf',"26",3,4)
+rg_FONC_3d('BVf',"11",3,4)
+rg_FONC_3d('BVf',"19",3,3)
+rg_FONC_3d('BVf',"26",3,5)
 rg_FONC_3d('BVf',"30",2,5)
 
-# Etape 3 :
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
 
+#seg_cl_FONC('BVf',"11",1) refaire les représentations graphiques
+#19
+#26
+#30
 
 
 
@@ -190,14 +236,14 @@ rg_FONC_3d('BVf',"30",2,5)
 
 # Etape 2 :
 
-rg_FONC_3d('CBF',"11",3,5)
+rg_FONC_3d('CBF',"11",3,4)
 rg_FONC_3d('CBF',"19",3,4)
-rg_FONC_3d('CBF',"26",3,5)
+rg_FONC_3d('CBF',"26",3,3)
 rg_FONC_3d('CBF',"30",2,5)
 
 # Etape 3 :
 
-
+d.seg <- seg_cl_FONC("22",'CBF',"26",3)
 
 
 
