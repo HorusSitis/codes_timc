@@ -95,23 +95,66 @@ rg_FONC_3d <- function(fonc,rat,cl_min,cl_max){
   }
 }
 
-# ------------------- Pour un suivi temporel des données bidimensionnelles : une représentation graphique par jour. ------------------- #
-
 
 
 # ------------------- Extraction de clusters pour une segmentation. Ouvrir dans le répertoire correspondant à la fonctionnalité concernée ------------------- #
 
-seg_cl_FONC <- function(day,fonc,rat,clust){
+seg_cl_FONC <- function(day,fonc,rat,clust,hemi){
   d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T)
-  d.clust <- cluster_jfr_f10(d,3,5)
-  d.seg <- d[d.clust$classification==clust,]
-  #write.table(d.seg, sprintf("%s-J%s-%s-isch.dat",rat,day,fonc), row.names=F, quote=F, sep='\t')
+  d.clust <- cluster_jfr_f10(d,2,5)
+  
+  l <- length(d[,4])
+  d.label <- rep(0,l)
+  d.label <- ifelse(d.clust$classification==1,1,d.label)
+  d.label <- ifelse(d$x>hemi,2,d.label)
+  
+  d.seg <- as.data.frame(cbind(d$x,d$y,d$z,d.label),header=T)#d[d.clust$classification==clust,]
+  colnames(d.seg) <- c("x","y","z","Label")
   return(d.seg)
 }
+
+# ------------------- Représente les niveaux de gris pour chaque fonctionnalité, sur un cerveau segmenté ------------------- #
+
+gr_ngris_seg <- function(rat,jour){
+  cerveau_seg <- read.table(sprintf("isch3d-fonc-%s-J%s.dat",rat,jour),header=T)
   
-  
-  
-  
+  for (ind_fonc in 1:7){
+    fonc <- liste_fonc[[ind_fonc]]
+    cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
+    
+    cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
+    cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
+    
+    entier <- cerveau_fonc[,4]
+    isch <- cerveau_isch[,4]
+    hem_sain <- cerveau_hem[,4]
+    n <- length(entier)
+    ni <- length(isch)
+    ns <- length(hem_sain)
+    
+    dst <- density(entier)
+    dsti <- density(isch)
+    dsts <- density(hem_sain)
+    
+    plot.new()
+    par(lend="butt")
+    plot(dst$x,dst$y,type="n",main=sprintf("Rat %s jour %s %s",rat,jour,fonc))
+    lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
+    lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
+    lines(dst$x, dst$y, lwd = 3, col="gray70")
+    
+    legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain","Cerveau entier"),
+           col = c("darkred","darkblue","gray70"),
+           lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
+  }
+}
+
+
+
+
+# ------------------- Pour un suivi temporel des données bidimensionnelles : une représentation graphique par jour. ------------------- #
+
+
   
 
 

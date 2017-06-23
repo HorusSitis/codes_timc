@@ -99,6 +99,8 @@ suivi_temp_Anat <- list("11"=c(4,12),"19"=c(6,12),"26"=c(4,11),"30"=c(4,13))
 
 #---------------------------- Toutes les fonctionnalités et anatomique : accès aux bases de données ----------------------------#
 
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
+
 liste_jfr <- list("Anat"=liste_jours_Anat, "ADC"=liste_jours_ADC, "BVf"=liste_jours_BVf,"CBF"=liste_jours_CBF,"CMRO2"=liste_jours_CMRO2,"SO2map"=liste_jours_SO2map,"T1map"=liste_jours_T1map,"VSI"=liste_jours_VSI) # liste des jours par fonctionnalité et par rat
 
 suivi_temp <- list("Anat"=suivi_temp_Anat,"ADC"='',"BVf"='',"CBF"='',"CMRO2"='',"SO2map"='',"T1map"='',"VSI"=liste_jours_VSI)
@@ -110,12 +112,6 @@ suivi_temp <- list("Anat"=suivi_temp_Anat,"ADC"='',"BVf"='',"CBF"='',"CMRO2"='',
 ## On sépare la partie ischémiée et ...
 
 # Comme pour les autres modalités :
-
-
-
-
-
-
 
 # Etape 1 :
 
@@ -150,50 +146,419 @@ View(ddh)
 
 #################################### Instructions : traitement systématique des images, fonctionnalités ####################################
 
-# Une fonctionnalité, un rat. On boucle sur les jours d'examens. On se place dans le répertoire correspondant : rat/fonctionnel_gris_fonctionnalité.
+# Un rat, une fonctionnalité. On boucle sur les jours d'examens. On se place dans le répertoire correspondant : rat/fonctionnel_gris_fonctionnalité.
 # Il faut retirer les valeurs NaN présentes sur plusieurs fichiers .txt.
 
 # 1- Génération de fichiers .dat avec la fonction cerveau_jfr, fichiers .dat par tranche et pour le cerveau entier générées.
 # 2- Représentation graphique systématique des résultats d'examen. Utilise la boucle rg_FONC_3d.
-# 3- Extraction de données ... INCOMPLET.
+# 3- Extraction de données. Non disponible pour toutes les fonctionnalités ou rats.
 # 4- Effectuer le suivi temporel sur les slices dont les images sont disponibles sur toute la durée des examens. Intervient nécessairement après appel de la fonctions cluster_jrf_f10.
+# 5- Comparer la distribution des niveaux de gris entre zone ischémiée, hémisphère sain et cerveau entier pour toutes les fonctionnalités, après segmentation de la zone ischémiée à l'aide d'une fonctionnalité.
+
+####################################### Rat numéro 11 #######################################
 
 # ----------------- La fonctionnalité ADC ----------------- #
 
 # Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-
 #FONC_3d_rat('ADC',"11")
-#FONC_3d_rat('ADC',"19")
-#FONC_3d_rat('ADC',"26")
-#FONC_3d_rat('ADC',"30")
-
 # Etape 2 :
-
 rg_FONC_3d('ADC',"11",3,5)
-rg_FONC_3d('ADC',"19",3,5)
-rg_FONC_3d('ADC',"26",3,5)
-rg_FONC_3d('ADC',"30",3,5)
 
 # Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
 
-d_seg <- seg_cl_FONC("00",'ADC',"11",1) # compatible avec les jours 15 et 22.
-#seg_sain_00_R11 <- [$x > 55,]
-di <- d_seg[d_seg$x<50,]
-write.table(di, sprintf("isch3d-fonc-%s-J%s.dat","11","00"), row.names=F, quote=F, sep='\t')
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
 
-d_seg <- seg_cl_FONC("00",'ADC',"19",1)
-di <- seg_clust[seg_clust$x<50,] # pour éliminer les pixels du cluster 1 qui sont dans l'hémisphère sain
+# ------ Jour 00 ------ #
+
+d_seg <- seg_cl_FONC("00",'ADC',"11",1,60)
+write.table(d_seg, sprintf("isch3d-fonc-%s-J%s.dat","11","00"), row.names=F, quote=F, sep='\t')
+
+# ------ Jour 15 ------ #
+
+d_seg <- seg_cl_FONC("15",'ADC',"11",3,60)
+write.table(d_seg, sprintf("isch3d-fonc-%s-J%s.dat","11","15"), row.names=F, quote=F, sep='\t')
+
+# ------ Jour 22 ------ #
+
+d_seg <- seg_cl_FONC("22",'ADC',"11",4,60)
+write.table(d_seg, sprintf("isch3d-fonc-%s-J%s.dat","11","22"), row.names=F, quote=F, sep='\t')
+
+
+
+
+# Etape 4 : suivi temporel.
+
+# Slice 10, tous les jours.
+# On utilise la clusterisation aux jours 00, 15 ou 22.
+
+# Slices 9 et 10 : jours 00 et 03.
+# On utilise la segmentation au jour 00.
+
+# Slices 10 à 12 : jours 08 à 22.
+# On utilise la segmentation aux jours 15 ou 22.  
+
+
+
+
+
+
+
+
+# ----------------- La fonctionnalité BVf ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('BVf',"11")
+# Etape 2 :
+rg_FONC_3d('BVf',"11",3,3)
+
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
+
+#seg_cl_FONC("00",'BVf',"11",1) pas terrible
+
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité CBF ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('CBF',"11")
+# Etape 2 :
+rg_FONC_3d('CBF',"11",3,4)
+
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
+
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité CMRO2 ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat . Attention : pas de jour 08.
+#FONC_3d_rat('CMRO2',"11")
+# Etape 2 :
+rg_FONC_3d('CMRO2',"11",3,3)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité SO2map ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat . Attention : pas de jour 08.
+#FONC_3d_rat('SO2map',"11")
+# Etape 2 :
+rg_FONC_3d('SO2map',"11",3,3)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité T1map ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('T1map',"11")
+# Etape 2 :
+rg_FONC_3d('T1map',"11",3,3)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité VSI ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('VSI',"11")
+# Etape 2 :
+rg_FONC_3d('VSI',"11",3,3)
+
+# Etape 4 : suivi temporel.
+
+####################################### Rat numéro 19 #######################################
+
+# ----------------- La fonctionnalité ADC ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('ADC',"11")
+# Etape 2 :
+rg_FONC_3d('ADC',"11",3,5)
+
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
+
+d_seg <- seg_cl_FONC("00",'ADC',"19",1,60)
 write.table(di, sprintf("isch3d-fonc-%s-J%s.dat","19","00"), row.names=F, quote=F, sep='\t')
 
 
-#26
-#30
+
+
+# Etape 4 : suivi temporel.
+
+# Slice 10, tous les jours.
+# On utilise la clusterisation aux jours 00, 15 ou 22.
+
+# Slices 9 et 10 : jours 00 et 03.
+# On utilise la segmentation au jour 00.
+
+# Slices 10 à 12 : jours 08 à 22.
+# On utilise la segmentation aux jours 15 ou 22.  
 
 
 
 
 
 
+
+
+# ----------------- La fonctionnalité BVf ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('BVf',"19")
+# Etape 2 :
+rg_FONC_3d('BVf',"19",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité CBF ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('CBF',"19")
+# Etape 2 :
+rg_FONC_3d('CBF',"19",3,3)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité CMRO2 ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('CMRO2',"19")
+# Etape 2 :
+rg_FONC_3d('CMRO2',"19",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité SO2map ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('SO2map',"19")
+# Etape 2 :
+rg_FONC_3d('SO2map',"19",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité T1map ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('T1map',"19")
+# Etape 2 :
+rg_FONC_3d('T1map',"19",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité VSI ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('VSI',"19")
+# Etape 2 :
+rg_FONC_3d('VSI',"19",3,5)
+
+# Etape 4 : suivi temporel.
+
+####################################### Rat numéro 26 #######################################
+
+# ----------------- La fonctionnalité ADC ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('ADC',"26")
+# Etape 2 :
+rg_FONC_3d('ADC',"26",3,5)
+
+
+# Etape 4 : suivi temporel.
+
+# Slice 10, tous les jours.
+# On utilise la clusterisation aux jours 00, 15 ou 22.
+
+# Slices 9 et 10 : jours 00 et 03.
+# On utilise la segmentation au jour 00.
+
+# Slices 10 à 12 : jours 08 à 22.
+# On utilise la segmentation aux jours 15 ou 22.  
+
+
+
+
+
+
+
+
+# ----------------- La fonctionnalité BVf ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('BVf',"26")
+# Etape 2 :
+rg_FONC_3d('BVf',"26",3,5)
+
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité CBF ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('CBF',"26")
+# Etape 2 :
+rg_FONC_3d('CBF',"26",3,3)
+
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
+
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
+
+# ------ Jour 00 ------ #
+
+
+# ------ Jour 22 ------ #
+
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité CMRO2 ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+FONC_3d_rat('CMRO2',"26")
+# Etape 2 :
+rg_FONC_3d('CMRO2',"26",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité SO2map ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+FONC_3d_rat('SO2map',"26")
+# Etape 2 :
+rg_FONC_3d('SO2map',"26",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité T1map ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+FONC_3d_rat('T1map',"26")
+# Etape 2 :
+rg_FONC_3d('T1map',"26",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité VSI ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+FONC_3d_rat('VSI',"26")
+# Etape 2 :
+rg_FONC_3d('VSI',"26",3,5)
+
+# Etape 4 : suivi temporel.
+
+####################################### Rat numéro 30 : pas d'étape 3 #######################################
+
+# ----------------- La fonctionnalité ADC ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('ADC',"30")
+# Etape 2 :
+rg_FONC_3d('ADC',"30",3,5)
+
+# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
+
+
+
+
+
+
+# Etape 4 : suivi temporel.
+
+# Slice 10, tous les jours.
+# On utilise la clusterisation aux jours 00, 15 ou 22.
+
+# Slices 9 et 10 : jours 00 et 03.
+# On utilise la segmentation au jour 00.
+
+# Slices 10 à 12 : jours 08 à 22.
+# On utilise la segmentation aux jours 15 ou 22.  
+
+
+
+
+
+
+
+
+# ----------------- La fonctionnalité BVf ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('BVf',"30")
+# Etape 2 :
+rg_FONC_3d('BVf',"30",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité CBF ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+#FONC_3d_rat('CBF',"30")
+# Etape 2 :
+rg_FONC_3d('CBF',"30",3,3)
+
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité CMRO2 ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+FONC_3d_rat('CMRO2',"30")
+# Etape 2 :
+rg_FONC_3d('CMRO2',"30",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité SO2map ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+FONC_3d_rat('SO2map',"30")
+# Etape 2 :
+rg_FONC_3d('SO2map',"30",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité T1map ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+FONC_3d_rat('T1map',"30")
+# Etape 2 :
+rg_FONC_3d('T1map',"30",3,5)
+
+# Etape 4 : suivi temporel.
+
+# ----------------- La fonctionnalité VSI ----------------- #
+
+# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
+FONC_3d_rat('VSI',"30")
+# Etape 2 :
+rg_FONC_3d('VSI',"30",3,5)
+
+# Etape 4 : suivi temporel.
+
+#################################### Traitement systématique des images, fonctionnalités, suite ####################################
+
+# Etape 5 : densités de niveaux de gris pour la fonctionnalité courante.
+# On utilise des segmentations créées avec un fonctionnalité fixée : ADC ou CBF par exemple.
+# Jusqu'à nouvel ordre : rats 11, 19 et 26.
+
+# read.table... rat et jour. Trois dimensions.
+# boucle sur la liste des fonctionnalités.
+
+####################################### Rat numéro 11 #######################################
+
+rr <- read.table("fonctionnel_gris/isch3d-fonc-11-J00.dat")
 
 
 
@@ -239,13 +604,23 @@ hist_aa <- hist(aa[,'ADC'],breaks=breaks, col='red',main="Zone ischémiée aa")
 
 # ------------ Densités : diagrammes superposés
 
+
+
+fonc <- "CMRO2"
+rat <- "11"
+
+d <- read.table(sprintf('%s/%s-J%s-%s-bg-all.dat',fonc,rat,"00",fonc),header=T)
+cl_test <- cluster_jfr_f10(d,3,5)
+d_seg_isch <- d[cl_test$classification==1,]
+d_hem_sain <- d[d$x>60,]
+
+adc_entier <- d[,4]#"ADC"]
+adc_isch <- d_seg_isch[,4]#"ADC"]
+adc_sain <- d_hem_sain[,4]#"ADC"]
+
 dst <- density(adc_entier)
 dsti <- density(adc_isch)
 dsts <- density(adc_sain)
-
-#dst <- density(survey$Height, na.rm = TRUE)
-#dstg <- density(survey$Height[survey$Sex == "Male"], na.rm = TRUE)
-#dstf <- density(survey$Height[survey$Sex == "Female"], na.rm = TRUE)
 
 n <- length(adc_entier)
 ni <- length(adc_isch)
@@ -253,11 +628,6 @@ ns <- length(adc_sain)
 
 plot.new()
 par(lend="butt")
-
-breaks <- seq(min(d[,4])-0.1*min(d[,4]), max(d[,4])+0.1*max(d[,4]), length.out=100)
-hist(adc_entier,breaks=breaks, col='grey50',main="Cerveau entier")
-
-plot.new()
 plot(dst$x,dst$y,type="n")
 lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
 lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
@@ -271,143 +641,16 @@ legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sa
 
 
 
-# Etape 4 :
 
 
+gr_ngris_seg("11","00")
 
 
+####################################### Rat numéro 19 #######################################
 
+gr_ngris_seg("19","00")
 
-
-
-# ----------------- La fonctionnalité BVf ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-
-#FONC_3d_rat('BVf',"11")
-#FONC_3d_rat('BVf',"19")
-#FONC_3d_rat('BVf',"26")
-#FONC_3d_rat('BVf',"30")
-
-# Etape 2 :
-
-rg_FONC_3d('BVf',"11",3,4)
-rg_FONC_3d('BVf',"19",3,3)
-rg_FONC_3d('BVf',"26",3,5)
-rg_FONC_3d('BVf',"30",2,5)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-
-#seg_cl_FONC("00",'BVf',"11",1) pas terrible
-#19
-#26
-#30
-
-
-
-
-# Etape 4 :
-
-
-
-
-
-
-
-# ----------------- La fonctionnalité CBF ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-
-#FONC_3d_rat('CBF',"11")
-#FONC_3d_rat('CBF',"19")
-#FONC_3d_rat('CBF',"26")
-#FONC_3d_rat('CBF',"30")
-
-# Etape 2 :
-
-rg_FONC_3d('CBF',"11",3,4)
-rg_FONC_3d('CBF',"19",3,4)
-rg_FONC_3d('CBF',"26",3,3)
-rg_FONC_3d('CBF',"30",2,5)
-
-# Etape 3 : attention au répertoire
-
-d_seg <- seg_cl_FONC("00",'CBF',"26",1)
-di <- d_seg[d_seg$x<50,]
-write.table(di, sprintf("isch3d-fonc-%s-J%s.dat","26","00"), row.names=F, quote=F, sep='\t')
-
-d_seg <- seg_cl_FONC("22",'CBF',"26",3)
-di <- d_seg[d_seg$x<50,]
-write.table(di, sprintf("isch3d-fonc-%s-J%s.dat","26","22"), row.names=F, quote=F, sep='\t')
-
-# Etape 4 :
-
-
-
-
-# ----------------- La fonctionnalité CMRO2 ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-
-FONC_3d_rat('CMRO2',"11")
-FONC_3d_rat('CMRO2',"19")
-FONC_3d_rat('CMRO2',"26")
-#FONC_3d_rat('CMRO2',"30")
-
-# Etape 2 :
-
-rg_FONC_3d('CMRO2',"11",3,4)
-rg_FONC_3d('CMRO2',"19",3,3)
-rg_FONC_3d('CMRO2',"26",3,5)
-rg_FONC_3d('CMRO2',"30",2,5)
-
-# ----------------- La fonctionnalité SO2map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-
-FONC_3d_rat('SO2map',"11")
-FONC_3d_rat('SO2map',"19")
-FONC_3d_rat('SO2map',"26")
-#FONC_3d_rat('SO2map',"30")
-
-# Etape 2 :
-
-rg_FONC_3d('SO2map',"11",3,4)
-rg_FONC_3d('SO2map',"19",3,3)
-rg_FONC_3d('SO2map',"26",3,5)
-rg_FONC_3d('SO2map',"30",2,5)
-
-# ----------------- La fonctionnalité T1map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-
-FONC_3d_rat('T1map',"11")
-FONC_3d_rat('T1map',"19")
-FONC_3d_rat('T1map',"26")
-#FONC_3d_rat('T1map',"30")
-
-# Etape 2 :
-
-rg_FONC_3d('T1map',"11",3,4)
-rg_FONC_3d('T1map',"19",3,3)
-rg_FONC_3d('T1map',"26",3,5)
-rg_FONC_3d('T1map',"30",3,5)
-
-# ----------------- La fonctionnalité VSI ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-
-FONC_3d_rat('VSI',"11")
-FONC_3d_rat('VSI',"19")
-FONC_3d_rat('VSI',"26")
-FONC_3d_rat('VSI',"30")
-
-# Etape 2 :
-
-rg_FONC_3d('VSI',"11",3,4)
-rg_FONC_3d('VSI',"19",3,3)
-rg_FONC_3d('VSI',"26",3,5)
-rg_FONC_3d('VSI',"30",2,5)
+####################################### Rat numéro 26 #######################################
 
 
 
