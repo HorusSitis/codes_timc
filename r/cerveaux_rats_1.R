@@ -271,35 +271,23 @@ rg_FONC_3d(2,'VSI',"11",3,3)
 # Etape 2 :
 rg_FONC_3d(3,'ADC',"19",3,5)
 
-
-
-
-
-
 # Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+
+cl <- c(3,5)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
+cl_se <- list("00"=1,"03"=c(3,5),"08"=c(3,4,5),"15"=c(4,5),"22"=3)
+seg_clust_3d('ADC',"19",cl,cl_se,c(4,-170))
+jours_ADC_seg <- c("00","08","15","22")
+
 # On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-# 
-
-d_seg <- seg_cl_FONC("00",'ADC',"19",1,50)
-write.table(d_seg, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","00"), row.names=F, quote=F, sep='\t')
-
-d_seg <- seg_cl_FONC("08",'ADC',"19",c(3,4,5),50)
-write.table(d_seg, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","08"), row.names=F, quote=F, sep='\t')
-
-
-d_seg_15 <- seg_cl_FONC("15",'ADC',"19",c(3,4,5),50)
-d_seg_22 <- seg_cl_FONC("22",'ADC',"19",3,50)
-
+d_seg_00 <- seg_cl_FONC("00",'ADC',"19",1,c(4,-170))
+d_seg_08 <- seg_cl_FONC("08",'ADC',"19",c(3,4,5),c(4,-170))
+d_seg_15 <- seg_cl_FONC("15",'ADC',"19",c(4,5),c(4,-170))
+d_seg_22 <- seg_cl_FONC("22",'ADC',"19",3,c(4,-170))
 # Retour au répertoire fonctionnel_gris
+write.table(d_seg_00, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","00"), row.names=F, quote=F, sep='\t')
+write.table(d_seg_08, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","08"), row.names=F, quote=F, sep='\t')
 write.table(d_seg_15, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","15"), row.names=F, quote=F, sep='\t')
 write.table(d_seg_22, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","22"), row.names=F, quote=F, sep='\t')
-
-
-
-
-
-
 
 # Etape 4 : suivi temporel.
 
@@ -308,11 +296,8 @@ write.table(d_seg_22, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","22"), row.names
 # On peut utiliser la segmentation aux jours 00, 08, 15, et 22.
 
 liste.fonc.19 <- list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
-
-#suivi_t_fonc("19","ADC","clust")
-suivi_t_fonc("19","ADC","seg")
-
-
+suivi_temp_fonc("19","ADC","seg")
+suivi_temp_fonc("19","ADC","clust")
 
 # ----------------- La fonctionnalité BVf ----------------- #
 
@@ -368,8 +353,8 @@ rg_FONC_3d(3,'T1map',"19",3,5)
 # Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
 # On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
 
-d_seg_03 <- seg_cl_FONC("03",'T1map',"19",3,50)
-write.table(d_seg, sprintf("isch3d-%s-%s-J%s.dat",'T1map',"19","03"), row.names=F, quote=F, sep='\t')
+d_seg_03 <- seg_cl_FONC("03",'T1map',"19",3,c(4,-170))
+write.table(d_seg_03, sprintf("isch3d-%s-%s-J%s.dat",'T1map',"19","03"), row.names=F, quote=F, sep='\t')
 
 
 
@@ -398,14 +383,6 @@ rg_FONC_3d(2,'ADC',"26",3,5)
 
 # Etape 4 : suivi temporel.
 
-# Slice 10, tous les jours.
-# On utilise la clusterisation aux jours 00, 15 ou 22.
-
-# Slices 9 et 10 : jours 00 et 03.
-# On utilise la segmentation au jour 00.
-
-# Slices 10 à 12 : jours 08 à 22.
-# On utilise la segmentation aux jours 15 ou 22.  
 
 
 
@@ -432,9 +409,6 @@ rg_FONC_3d(2,'BVf',"26",3,5)
 #FONC_3d_rat('CBF',"26")
 # Etape 2 :
 rg_FONC_3d(2,'CBF',"26",3,3)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
 
 # Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
 # On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
@@ -490,7 +464,7 @@ rg_FONC_3d(2,'VSI',"26",3,5)
 # Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
 #FONC_3d_rat('ADC',"30")
 # Etape 2 :
-rg_FONC_3d('2,ADC',"30",3,5)
+rg_FONC_3d(2,'ADC',"30",3,5)
 
 # Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
 # On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
@@ -579,93 +553,12 @@ rg_FONC_3d(2,'VSI',"30",3,5)
 
 ####################################### Rat numéro 11 #######################################
 
-rr <- read.table("fonctionnel_gris/isch3d-fonc-11-J00.dat")
 
 
 
-##day <- "00"
-fonc <- "ADC"
-rat <- "11"
-
-
-
-d <- read.table('11-J00-ADC-bg-all.dat',header=T)
-cl_test <- cluster_jfr_f10(d,3,5)
-d_seg_isch <- d[cl_test$classification==1,]
-d_hem_sain <- d[d$x>60,]
-
-adc_entier <- d[,"ADC"]
-adc_isch <- d_seg_isch[,"ADC"]
-adc_sain <- d_hem_sain[,"ADC"]
-
-taille <- length(d[,4])
-taille_isch <- length(adc_isch)
-taille_safe <- length(d_hem_sain[,4])
-
-# ------------ Exemple pour des histogrammes
-
-breaks <- seq(min(d[,4])-0.1*min(d[,4]), max(d[,4])+0.1*max(d[,4]), length.out=100)
-
-par(mfrow = c(2,2))
-#plot(cl_test, what="classification", col=color.vector)
-plot(d$x,d$y,col=color.vector[cl_test$classification], pch=20, cex=2*(1-cl_test$uncertainty)^4, xlab='x', ylab='y',main=paste("Cerveau ","11",", J","00"))
-hist_entier <- hist(adc_entier,breaks=breaks, col='grey50',main="Cerveau entier")
-
-#data <- adc_isch*(taille_isch/taille) non
-breaks <- seq(min(data)-0.1*min(data), max(data)+0.1*max(data), length.out=100)
-hist_isch <- hist(data,breaks=breaks, col='red',main="Zone ischémiée")
-
-hist_sain <- hist(adc_sain,breaks=breaks, col='blue',main="Hémisphère sain")
-
-write.table(d_seg_isch, sprintf("%s-J%s-%s-isch.dat",rat,"00",fonc), row.names=F, quote=F, sep='\t')
-
-aa <- read.table(sprintf("%s-J%s-%s-isch.dat",rat,"00",fonc),header=T)
-
-hist_aa <- hist(aa[,'ADC'],breaks=breaks, col='red',main="Zone ischémiée aa")
-
-# ------------ Densités : diagrammes superposés
-
-
-
-fonc <- "CMRO2"
-rat <- "11"
-
-d <- read.table(sprintf('%s/%s-J%s-%s-bg-all.dat',fonc,rat,"00",fonc),header=T)
-cl_test <- cluster_jfr_f10(d,3,5)
-d_seg_isch <- d[cl_test$classification==1,]
-d_hem_sain <- d[d$x>60,]
-
-adc_entier <- d[,4]#"ADC"]
-adc_isch <- d_seg_isch[,4]#"ADC"]
-adc_sain <- d_hem_sain[,4]#"ADC"]
-
-dst <- density(adc_entier)
-dsti <- density(adc_isch)
-dsts <- density(adc_sain)
-
-n <- length(adc_entier)
-ni <- length(adc_isch)
-ns <- length(adc_sain)
-
-plot.new()
-par(lend="butt")
-plot(dst$x,dst$y,type="n")
-lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
-lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
-lines(dst$x, dst$y, lwd = 3, col="gray70")
-
-legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain","Cerveau entier"),
-       col = c("darkred","darkblue","gray70"),
-       lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
-
-
-
-
-
-
+# Etape 5 : histogrammes ou courbes de niveaux de gris
 
 gr_ngris_seg("11","00")
-
 
 ####################################### Rat numéro 19 #######################################
 
@@ -674,7 +567,7 @@ gr_ngris_seg("11","00")
 
 
 
-# Etape 5 : histogrammes de niveaux de gris
+# Etape 5 : histogrammes ou courbes de niveaux de gris
 
 gr_ngris_seg("00",'ADC',"19")
 gr_ngris_seg("03","T1map","19")
@@ -682,6 +575,11 @@ gr_ngris_seg("08","ADC","19")
 gr_ngris_seg("15","ADC","19")
 gr_ngris_seg("22","ADC","19")
 
+for (j in 1:length(jours_R19_ADC)){
+  jour <- jours_R19_ADC[j]
+  fonc <- liste.fonc.19[[jour]]
+  gr_ngris_seg(jour,fonc,"19")
+}
 
 
 

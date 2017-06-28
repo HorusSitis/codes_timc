@@ -22,17 +22,16 @@ graph_gauss <- function(valeurs,Nclust,Col){# valeurs est le tableau contenant i
 
 cerveau_jfr <- function(jour,fonc,rat){
   
-  d.filename <- sprintf("liste_R%s_%s_J%s.csv",rat,fonc,jour) #paste('liste_R',rat,'_',fonc,'_J',day,'.csv',sep='')
+  d.filename <- sprintf("liste_R%s_%s_J%s.csv",rat,fonc,jour)
   day.slices <- read.csv(d.filename,check.names=F,header=T)
-  d <- data.frame(matrix(ncol = 4, nrow = 0))
-  colnames(d) <- c("x","y","z",fonc)
+  d <- data.frame(matrix(ncol = 5, nrow = 0))
+  colnames(d) <- c("x","y","z",fonc,"Slice")
   
   for (slice.select in 1:length(day.slices[,1])){
     d.filename <- sprintf("%s-J%s-%s-bg-slice%i.txt",rat,jour,fonc,day.slices[slice.select,1])
     d.increment <- read.table(d.filename,header=F,sep='\t')
-    d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*day.slices[slice.select,1], d.increment[,3]))
-    colnames(d.increment) <- c("x","y","z",fonc)
-    #write.table(d.increment, sprintf("%s-J%s-%s-bg-slice%i.dat",rat,jour,fonc,day.slices[slice.select,1]), row.names=F, quote=F, sep='\t')
+    d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*day.slices[slice.select,1], d.increment[,3], day.slices[slice.select,1]))
+    colnames(d.increment) <- c("x","y","z",fonc,"Slice")
     d <- as.data.frame(rbind(d,d.increment))
   }
   
@@ -92,13 +91,16 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_min,cl_max){
     FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
     d.hist <- hist(d.fonc,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
     
-    if (dim==2){
-      plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, cex=2*(1-d.clust$uncertainty)^4, xlab='x', ylab='y',main=paste("Cerveau ",rat,", J",day))
+    if (dim==2){ # Cerveaux en deux ou trois dimensions
+      plot(d$x, d$y, col=color.vector[d.clust$classification],
+           pch=20, cex=2*(1-d.clust$uncertainty)^4,
+           xlab='x', ylab='y',
+           main=paste("Cerveau ",rat,", J",day))
       #plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, xlab='x', ylab='y',main=paste("Cerveau ",rat,", J",day))
     }
     else{
       cerveau.clust <- cbind(d,d.clust$classification)
-      colnames(cerveau.clust) <- c("x","y","z",'ADC',"clust")
+      colnames(cerveau.clust) <- c("x","y","z",'ADC',"Slice","clust")
       scatterplot3d(cerveau.clust$x,
                     cerveau.clust$y,
                     cerveau.clust$z, 
@@ -107,11 +109,87 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_min,cl_max){
                     #cex=2*(1-d.clust$uncertainty)^4,
                     xlab='x',
                     ylab='y',
-                    zlab='slice',
+                    zlab='z',
                     main=paste("Cerveau ",rat,", J",day)
       )
     }
     # Fin de la représentation graphique du jour
+  }
+}
+
+# ------------------- Comparaison graphique entre clusterisation et segmentation ------------------- #
+
+seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
+  
+  jours_fonc <- liste_jfr[[fonc]]
+  jours <- jours_fonc[[rat]]
+  
+  cl_min <- cl_bounds[1]
+  cl_max <- cl_bounds[2]
+  
+  for (j in 1:length(jours)){
+    jour=jours[j]
+    
+    # Clusterisation
+    d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,jour,fonc),header=T)
+    d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
+    d.fonc <- d[,4]
+    
+    # Segmentation
+    clusters <- cl_seg[[jour]]
+    l <- length(d[,4])
+    d.label <- rep(0,l)
+    for (cl in clusters){
+      d.label <- ifelse(d.clust$classification==cl,1,d.label)
+    }
+    #d.label <- ifelse(d.clust$classification==1,1,d.label)
+    d.label <- ifelse(hemi[1]*d$x+hemi[2]>d$y,2,d.label)
+    d.seg <- as.data.frame(cbind(d$x,d$y,d$z,d.label,d$Slice),header=T)
+    colnames(d.seg) <- c("x","y","z","Label","Slice")
+    
+    # On passe aux représentations graphiques
+
+    #get( getOption( "device" ) )()
+    split.screen( figs = c( 2, 1 ) )
+    split.screen( figs = c( 1, 3 ), screen = 1 )
+    split.screen( figs = c( 1, 2 ), screen = 2 )
+
+    screen( 3 )
+    plot(d.clust, what="BIC")
+    screen( 4 )
+    plot(d.clust, what="classification", col=color.vector)
+    
+    FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
+    screen( 5 )
+    d.hist <- hist(d.fonc,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
+    
+    screen( 6 )
+    cerveau.clust <- cbind(d,d.clust$classification)
+    colnames(cerveau.clust) <- c("x","y","z",'ADC',"Slice","clust")
+    scatterplot3d(cerveau.clust$x,
+                  cerveau.clust$y,
+                  cerveau.clust$z, 
+                  color= color.vector[cerveau.clust$clust],
+                  pch=20,
+                  #cex=2*(1-d.clust$uncertainty)^4,
+                  xlab='x',
+                  ylab='y',
+                  zlab='z',
+                  main=paste("Cerveau ",rat,", J",jour)
+    )
+    screen( 7 )
+    scatterplot3d(d.seg$x,
+                  d.seg$y,
+                  d.seg$z,
+                  color=color_seg[1+d.seg$Label],
+                  pch=20,
+                  # cex=2*(1-d.clust$uncertainty)^4, 
+                  xlab='x',
+                  ylab='y',
+                  zlab='z',
+                  main="Segmentation"
+    )
+    close.screen( all = TRUE )
   }
 }
 
@@ -127,53 +205,12 @@ seg_cl_FONC <- function(day,fonc,rat,clust,hemi){# clust : vecteur des clusters 
   for (cl in clust){
     d.label <- ifelse(d.clust$classification==cl,1,d.label)
   }
-  d.label <- ifelse(d.clust$classification==1,1,d.label)
-  d.label <- ifelse(d$x>hemi,2,d.label)
+  #d.label <- ifelse(d.clust$classification==1,1,d.label)
+  d.label <- ifelse(hemi[1]*d$x+hemi[2]>d$y,2,d.label)
   
-  d.seg <- as.data.frame(cbind(d$x,d$y,d$z,d.label),header=T)#d[d.clust$classification==clust,]
-  colnames(d.seg) <- c("x","y","z","Label")
+  d.seg <- as.data.frame(cbind(d$x,d$y,d$z,d.label,d$Slice),header=T)#d[d.clust$classification==clust,]
+  colnames(d.seg) <- c("x","y","z","Label","Slice")
   return(d.seg)
-}
-
-# ------------------- Suivi temporel de tranches clusterisées ou segmentées. Répertoire fonctionnel_gris ------------------- #
-
-suivi_t_fonc <- function(rat, fonc, class){# représentations graphiques tridimensionnelles
-  filename <- sprintf("%s/suivi_temp_R%s_%s.csv",fonc,rat,fonc)
-  slices <- read.csv(filename,check.names=F,header=T)
-  
-  
-  for (slice in slices){
-    if (class == "clust"){
-      #for
-      d <- read.table()
-      d.clust <- cluster_jfr_f10(d,3,5)
-
-      
-      
-    }
-    else{
-        par(mfrow=c(2,3))
-        days.name <- sprintf("jours_R%s_%s",rat,fonc)
-        
-        for (day in days.name){# on représente graphiquement, jour après jour, les images de la tranche courante.
-          
-          name <- "isch3d-ADC-19-J00.dat"#%s-19-J%s.dat",liste.fonc.19$day,day)
-            #sprintf("isch3d-%s-%s-J%s.dat",liste.fonc.19$day,rat,day) # On va extraire les tranches correspondantes des piles segmentées avec avec seg_cl_FONC
-          d <- read.table(name, header=T, check.names = F)
-          
-          # Représentation graphique
-          #par(mfrow=c(2,3))
-          
-          plot(d$x, d$y,
-               col=color_seg[d$Label],
-               pch=20,
-               # cex=2*(1-d.clust$uncertainty)^4, 
-               xlab='x', ylab='y',
-               main=paste("Cerveau ",rat,", J",day))
-        }# images de la tranche courante toutes faites
-    
-    }# suivi des tranches fait sous la condition 'seg ou clust'
-  }# suivi des tranches fait
 }
 
 # ------------------- Représente les niveaux de gris pour chaque fonctionnalité, sur un cerveau segmenté ------------------- #
@@ -213,14 +250,60 @@ gr_ngris_seg <- function(jour,FONC,rat){
   }
 }
 
+# ------------------- Suivi temporel de tranches clusterisées ou segmentées. Répertoire fonctionnel_gris. Une représentation graphique par jour. ------------------- #
 
-
-
-# ------------------- Pour un suivi temporel des données bidimensionnelles : une représentation graphique par jour. ------------------- #
-
-
+suivi_temp_fonc <- function(rat, fonc, class){# représentations graphiques tridimensionnelles
   
-
-
+  filename <- sprintf("%s/suivi_temp_R%s_%s.csv",fonc,rat,fonc) # tranches du suivi temporel, indices de la première boucle.
+  slices_temp <- read.csv(filename,check.names=F,header=T)
+  slices <- slices_temp[,1]
+  
+  jours_fonc <- liste_jfr[[fonc]]
+  jours <- jours_fonc[[rat]]
+  
+  for (num.slice in slices){
+    plot.new()
+    par(mfrow=c(2,3))
+    if (class == "clust"){
+      for (j in 1:length(jours)){#jours){
+        # On représente graphiquement, jour après jour, les images de la tranche courante.
+        jour <- jours[j]
+        name <- sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc)
+        d <- read.table(name, header=T, check.names = F)
+        # On clusterise avant d'extraire la tranche qui nous intéresse
+        d.clust <- cluster_jfr_f10(d,3,5)
+        d <- as.data.frame(cbind(d,d.clust$classification))
+        d <- d[d$Slice==num.slice,]
+        
+        plot(d$x, d$y,
+             col=color.vector[d[,6]],
+             pch=20,
+             cex=2*(1-d.clust$uncertainty)^4, 
+             xlab='x', ylab='y',
+             main=sprintf("Rat %s, tranche %i J%s",rat,num.slice,jour)
+        )
+      }# images de la tranche courante toutes faites, condition 'seg'
+      #plot(d.clust, what="classification", col=color.vector) # légende commune ... pertinence ?
+    }
+    else{
+        for (j in 1:length(jours)){#jours){
+          # On représente graphiquement, jour après jour, les images de la tranche courante.
+          jour <- jours[j]
+          name <- sprintf("isch3d-%s-%s-J%s.dat",liste.fonc.19[[jour]],rat,jour) # On va extraire les tranches correspondantes des piles segmentées avec avec seg_cl_FONC
+          d <- read.table(name, header=T, check.names = F)
+          d <- d[d$Slice==num.slice,]
+          
+          plot(d$x, d$y,
+              col=color_seg[1+d$Label],
+              pch=20,
+              # cex=2*(1-d.clust$uncertainty)^4, 
+              xlab='x', ylab='y',
+              main=sprintf("Rat %s, tranche %i J%s",rat,num.slice,jour)
+              )
+          
+          }# images de la tranche courante toutes faites, condition 'seg'
+        }# suivi des tranches fait sous la condition 'seg ou clust'
+  }# suivi des tranches fait
+}
 
 ##########################################################################################
