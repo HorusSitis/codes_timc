@@ -55,7 +55,7 @@ liste_jours_CBF <- list("11"=jours_R11_CBF,"19"=jours_R19_CBF,"26"=jours_R26_CBF
 
 #---------------------------- Base de données : CMRO2 ----------------------------#
 
-jours_R11_CMRO2 <- c("00","03","08","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
+jours_R11_CMRO2 <- c("00","03","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
 jours_R19_CMRO2 <- c("00","08","15","22")
 jours_R26_CMRO2 <- c("00","03","08","15","22")
 jours_R30_CMRO2 <- c("00","08","15")
@@ -64,7 +64,7 @@ liste_jours_CMRO2 <- list("11"=jours_R11_CMRO2,"19"=jours_R19_CMRO2,"26"=jours_R
 
 #---------------------------- Base de données : SO2map ----------------------------#
 
-jours_R11_SO2map <- c("00","03","08","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
+jours_R11_SO2map <- c("00","03","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
 jours_R19_SO2map <- c("00","08","15","22")
 jours_R26_SO2map <- c("00","03","08","15","22")
 jours_R30_SO2map <- c("00","08","15")
@@ -106,7 +106,9 @@ liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
 
 liste_jfr <- list("Anat"=liste_jours_Anat, "ADC"=liste_jours_ADC, "BVf"=liste_jours_BVf,"CBF"=liste_jours_CBF,"CMRO2"=liste_jours_CMRO2,"SO2map"=liste_jours_SO2map,"T1map"=liste_jours_T1map,"VSI"=liste_jours_VSI) # liste des jours par fonctionnalité et par rat
 
-suivi_temp <- list("Anat"=suivi_temp_Anat,"ADC"='',"BVf"='',"CBF"='',"CMRO2"='',"SO2map"='',"T1map"='',"VSI"=liste_jours_VSI)
+suivi_temp <- list("Anat"=suivi_temp_Anat,"ADC"='',"BVf"='',"CBF"='',"CMRO2"='',"SO2map"='',"T1map"='',"VSI"='')
+
+liste_sfr <- list("11"=liste_R11_seg_FONC, "19"=liste_R19_seg_FONC, "26"=liste_R26_seg_FONC, "30"=liste_R30_seg_FONC)
 
 #################################### Instructions : traitement systématique des images, anatomique ####################################
 
@@ -157,25 +159,18 @@ rg_FONC_3d(2,'Anat',"30",2,5)
 rg_FONC_3d(2,'ADC',"11",3,5)
 
 # Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
+liste_R11_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
 # On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
 
 # ------ Jour 00 ------ #
-
-d_seg <- seg_cl_FONC("00",'ADC',"11",1,60)
-write.table(d_seg, sprintf("isch3d-fonc-%s-J%s.dat","11","00"), row.names=F, quote=F, sep='\t')
-
+d_seg_00 <- seg_cl_FONC("00",'ADC',"11",1,c(4,-170))
+write.table(d_seg_00, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"11","00"), row.names=F, quote=F, sep='\t')
 # ------ Jour 15 ------ #
-
-d_seg <- seg_cl_FONC("15",'ADC',"11",3,60)
-write.table(d_seg, sprintf("isch3d-fonc-%s-J%s.dat","11","15"), row.names=F, quote=F, sep='\t')
-
+d_seg_15 <- seg_cl_FONC("15",'ADC',"11",3,c(4,-170))
+write.table(d_seg_15, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"11","15"), row.names=F, quote=F, sep='\t')
 # ------ Jour 22 ------ #
-
-d_seg <- seg_cl_FONC("22",'ADC',"11",4,60)
-write.table(d_seg, sprintf("isch3d-fonc-%s-J%s.dat","11","22"), row.names=F, quote=F, sep='\t')
+d_seg_22 <- seg_cl_FONC("22",'ADC',"11",4,c(4,-170))
+write.table(d_seg_22, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"11","22"), row.names=F, quote=F, sep='\t')
 
 
 
@@ -273,10 +268,14 @@ rg_FONC_3d(3,'ADC',"19",3,5)
 
 # Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
 
-cl <- c(3,5)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
-cl_se <- list("00"=1,"03"=c(3,5),"08"=c(3,4,5),"15"=c(4,5),"22"=3)
+cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
+cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
 seg_clust_3d('ADC',"19",cl,cl_se,c(4,-170))
+
 jours_ADC_seg <- c("00","08","15","22")
+
+
+liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
 
 # On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
 d_seg_00 <- seg_cl_FONC("00",'ADC',"19",1,c(4,-170))
@@ -295,7 +294,7 @@ write.table(d_seg_22, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","22"), row.names
 # On utilise la clusterisation aux jours ...
 # On peut utiliser la segmentation aux jours 00, 08, 15, et 22.
 
-liste.fonc.19 <- list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
+#liste.fonc.19 <- list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
 suivi_temp_fonc("19","ADC","seg")
 suivi_temp_fonc("19","ADC","clust")
 
@@ -525,7 +524,7 @@ rg_FONC_3d(2,'SO2map',"30",3,5)
 # ----------------- La fonctionnalité T1map ----------------- #
 
 # Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-FONC_3d_rat(2,'T1map',"30")
+#FONC_3d_rat('T1map',"30")
 # Etape 2 :
 rg_FONC_3d('T1map',"30",3,5)
 
@@ -534,7 +533,7 @@ rg_FONC_3d('T1map',"30",3,5)
 # ----------------- La fonctionnalité VSI ----------------- #
 
 # Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-FONC_3d_rat('VSI',"30")
+#FONC_3d_rat('VSI',"30")
 # Etape 2 :
 rg_FONC_3d(2,'VSI',"30",3,5)
 
@@ -553,31 +552,50 @@ rg_FONC_3d(2,'VSI',"30",3,5)
 
 ####################################### Rat numéro 11 #######################################
 
+jour <- "03"
+rat <- "19"
+
+liste_F <- list()
+
+#liste_F 
+
+
+for (fonc in liste_fonc){# On parcourt en largeur d'abord l'arborescence de la base de données pour savoir quelles fonctionnalités sont disponibles pour le jour courant.
+  liste_jf <- liste_jfr[[fonc]]
+  liste_j <- liste_jf[[rat]]
+  if (any(liste_j==jour)){
+    print("ok")
+    liste_F <- cbind(liste_F,list(fonc))# Liste des fonctionnalités disponibles
+  }
+  else{print("non")}
+}
+
+
+liste_jf <- liste_jfr[["ADC"]]
 
 
 
 # Etape 5 : histogrammes ou courbes de niveaux de gris
+liste_R11_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
 
-gr_ngris_seg("11","00")
+gr_ngris_seg("00",'ADC',"11")
 
 ####################################### Rat numéro 19 #######################################
 
 # Etape 7/2 : segmentation automatique, méthode de Nicolas.
 
+# Etape 5 : histogrammes ou courbes de niveaux de gris, cerveau entier à une date donnée puis suivi temporel.
+liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
 
-
-
-# Etape 5 : histogrammes ou courbes de niveaux de gris
-
-gr_ngris_seg("00",'ADC',"19")
-gr_ngris_seg("03","T1map","19")
-gr_ngris_seg("08","ADC","19")
+ll <- gr_ngris_seg("00",'ADC',"19")
+ll <- gr_ngris_seg("03","T1map","19")
+ll <- gr_ngris_seg("08","ADC","19")
 gr_ngris_seg("15","ADC","19")
 gr_ngris_seg("22","ADC","19")
 
 for (j in 1:length(jours_R19_ADC)){
   jour <- jours_R19_ADC[j]
-  fonc <- liste.fonc.19[[jour]]
+  fonc <- liste_R19_seg_FONC[[jour]]
   gr_ngris_seg(jour,fonc,"19")
 }
 
@@ -586,6 +604,10 @@ for (j in 1:length(jours_R19_ADC)){
 
 ####################################### Rat numéro 26 #######################################
 
+# Etape 5 : histogrammes ou courbes de niveaux de gris, cerveau entier à une date donnée puis suivi temporel.
+liste_R26_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
 
+####################################### Rat numéro 30 #######################################
 
+liste_R30_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
 

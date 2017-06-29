@@ -142,7 +142,6 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
     for (cl in clusters){
       d.label <- ifelse(d.clust$classification==cl,1,d.label)
     }
-    #d.label <- ifelse(d.clust$classification==1,1,d.label)
     d.label <- ifelse(hemi[1]*d$x+hemi[2]>d$y,2,d.label)
     d.seg <- as.data.frame(cbind(d$x,d$y,d$z,d.label,d$Slice),header=T)
     colnames(d.seg) <- c("x","y","z","Label","Slice")
@@ -183,7 +182,6 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
                   d.seg$z,
                   color=color_seg[1+d.seg$Label],
                   pch=20,
-                  # cex=2*(1-d.clust$uncertainty)^4, 
                   xlab='x',
                   ylab='y',
                   zlab='z',
@@ -213,14 +211,25 @@ seg_cl_FONC <- function(day,fonc,rat,clust,hemi){# clust : vecteur des clusters 
   return(d.seg)
 }
 
-# ------------------- Représente les niveaux de gris pour chaque fonctionnalité, sur un cerveau segmenté ------------------- #
+# ------------------- Représente les niveaux de gris pour chaque fonctionnalité, sur un cerveau segmenté avec FONC ------------------- #
 
 gr_ngris_seg <- function(jour,FONC,rat){
+  
   cerveau_seg <- read.table(sprintf("isch3d-%s-%s-J%s.dat",FONC,rat,jour),header=T)
   
-  for (ind_fonc in 1:7){
-    par(mfrow=c(1,1))
-    fonc <- liste_fonc[[ind_fonc]]
+  liste_F <- list()
+  for (fonc in liste_fonc){# On parcourt en largeur d'abord l'arborescence de la base de données pour savoir quelles fonctionnalités sont disponibles pour le jour courant.
+    liste_jf <- liste_jfr[[fonc]]
+    liste_j <- liste_jf[[rat]]
+    if (any(liste_j==jour)){
+      liste_F <- cbind(liste_F,list(fonc))# Liste des fonctionnalités disponibles
+    }
+  }
+  
+  plot.new()
+  par(mfrow=c(4,2))
+  
+  for (fonc in liste_F){# Boucle pour représenter conjointement les densités pour toutes les fonctionnalités
     cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
     
     cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
@@ -237,8 +246,8 @@ gr_ngris_seg <- function(jour,FONC,rat){
     dsti <- density(isch)
     dsts <- density(hem_sain)
     
-    plot.new()
-    par(lend="butt")
+    #plot.new()
+    #par(lend="butt")
     plot(dst$x,dst$y,type="n",main=sprintf("Rat %s jour %s %s",rat,jour,fonc))
     lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
     lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
@@ -248,6 +257,7 @@ gr_ngris_seg <- function(jour,FONC,rat){
            col = c("darkred","darkblue","gray70"),
            lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
   }
+  return(liste_F)# vérification
 }
 
 # ------------------- Suivi temporel de tranches clusterisées ou segmentées. Répertoire fonctionnel_gris. Une représentation graphique par jour. ------------------- #
@@ -286,10 +296,10 @@ suivi_temp_fonc <- function(rat, fonc, class){# représentations graphiques trid
       #plot(d.clust, what="classification", col=color.vector) # légende commune ... pertinence ?
     }
     else{
-        for (j in 1:length(jours)){#jours){
+        for (j in 1:length(jours)){
           # On représente graphiquement, jour après jour, les images de la tranche courante.
           jour <- jours[j]
-          name <- sprintf("isch3d-%s-%s-J%s.dat",liste.fonc.19[[jour]],rat,jour) # On va extraire les tranches correspondantes des piles segmentées avec avec seg_cl_FONC
+          name <- sprintf("isch3d-%s-%s-J%s.dat",liste_R19_seg_FONC[[jour]],rat,jour) # On va extraire les tranches correspondantes des piles segmentées avec avec seg_cl_FONC
           d <- read.table(name, header=T, check.names = F)
           d <- d[d$Slice==num.slice,]
           
