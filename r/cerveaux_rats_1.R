@@ -108,6 +108,13 @@ liste_jfr <- list("Anat"=liste_jours_Anat, "ADC"=liste_jours_ADC, "BVf"=liste_jo
 
 suivi_temp <- list("Anat"=suivi_temp_Anat,"ADC"='',"BVf"='',"CBF"='',"CMRO2"='',"SO2map"='',"T1map"='',"VSI"='')
 
+# ++++++++++++++++++++++++++++++++++ Approche inverse : fonctionnalités utilisables par rat, pour la segmentation ++++++++++++++++++++++++++++++++++ #
+
+liste_R11_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
+liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
+liste_R26_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
+liste_R30_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
+
 liste_sfr <- list("11"=liste_R11_seg_FONC, "19"=liste_R19_seg_FONC, "26"=liste_R26_seg_FONC, "30"=liste_R30_seg_FONC)
 
 #################################### Instructions : traitement systématique des images, anatomique ####################################
@@ -275,7 +282,7 @@ seg_clust_3d('ADC',"19",cl,cl_se,c(4,-170))
 jours_ADC_seg <- c("00","08","15","22")
 
 
-liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
+#liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
 
 # On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
 d_seg_00 <- seg_cl_FONC("00",'ADC',"19",1,c(4,-170))
@@ -295,8 +302,8 @@ write.table(d_seg_22, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","22"), row.names
 # On peut utiliser la segmentation aux jours 00, 08, 15, et 22.
 
 #liste.fonc.19 <- list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
-suivi_temp_fonc("19","ADC","seg")
-suivi_temp_fonc("19","ADC","clust")
+#suivi_temp_fonc("19","ADC","seg") --> pas d'intérêt.
+suivi_temp_fonc("19","ADC")#,"clust")
 
 # ----------------- La fonctionnalité BVf ----------------- #
 
@@ -585,7 +592,7 @@ gr_ngris_seg("00",'ADC',"11")
 # Etape 7/2 : segmentation automatique, méthode de Nicolas.
 
 # Etape 5 : histogrammes ou courbes de niveaux de gris, cerveau entier à une date donnée puis suivi temporel.
-liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
+#liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
 
 ll <- gr_ngris_seg("00",'ADC',"19")
 ll <- gr_ngris_seg("03","T1map","19")
@@ -600,14 +607,229 @@ for (j in 1:length(jours_R19_ADC)){
 }
 
 
-
+dgris_temp_fonc("19",'cer','ADC')
 
 ####################################### Rat numéro 26 #######################################
 
 # Etape 5 : histogrammes ou courbes de niveaux de gris, cerveau entier à une date donnée puis suivi temporel.
-liste_R26_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
+#liste_R26_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
 
 ####################################### Rat numéro 30 #######################################
 
-liste_R30_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
+#liste_R30_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
+
+
+
+
+
+
+####################################### Protocole pour réaliser la présentation. IRM fonctionnelle #######################################
+
+# 1- Génération de fichiers .dat avec la fonction cerveau_jfr, fichiers .dat par tranche et pour le cerveau entier générées.
+## --> FONC_3d, répertoires fonctionnel_gris/fonc. fichiers all.dat avec z et slices.
+
+# 2- Représentation graphique systématique des résultats d'examen, Utilisation de clusters pour la segmentation.
+## --> rg_FONC_3d, figure tridimentionnelle ou projeté sur le plan frontal.
+## --> seg_clust_3d.
+
+# 3- Extraction de données. On s'appuie sur l'étude graphique de l'étape précédente.
+## --> seg_cl_FONC.
+
+# 4- Suivi des densités de niveaux de gris, par fonctionnalité, en utilisant des segmentations : commune à toutes les fonctionnalités ou respectivement réalisées avec les foctionnalités étudiées.
+# Pour chaque jour, on évalue les niveaux de gris sur la zone segmentée pour l'ischémie, l'hémisphère sain au jour 00 et le cerveau entier.
+## --> dgris_temp_fonc. Alterner avec les cerveaux - tranches pour les représentations graphiques ?
+
+# 5- On représente l'évolution de l'aire ou volume de la zone ischémiée sur des tranches bien choisies ou le cerveau entier.
+# Les nuages de points représentant l'évolution des différentes fonctionnalités figurent sur un même graphique.
+
+## --> suivi_etendue_fonc.
+
+####################################### Rat numéro 11 #######################################
+
+# Etape 1 : répertoires des fonctionnalités.
+
+FONC_3d_rat('ADC',"11")
+FONC_3d_rat('BVf',"11")
+FONC_3d_rat('CBF',"11")
+FONC_3d_rat('CMRO2',"11")
+FONC_3d_rat('SO2map',"11")
+FONC_3d_rat('T1map',"11")
+FONC_3d_rat('VSI',"11")
+
+# Etape 2 : répertoires des fonctionnalités.
+
+rg_FONC_3d(2,'ADC',"11",3,5)
+rg_FONC_3d(3,'ADC',"11",3,5)
+
+cl <- c()
+cl_se <- list()
+seg_clust_3d('ADC',"11",c(3,5),cl,cl_se,c(4,-170))
+
+rg_FONC_3d(2,'BVf',"11",3,5)
+rg_FONC_3d(3,'BVf',"11",3,5)
+
+rg_FONC_3d(2,'CBF',"11",3,5)
+rg_FONC_3d(3,'CBF',"11",3,5)
+
+rg_FONC_3d(2,'CMRO2',"11",3,5)
+rg_FONC_3d(3,'CMRO2',"11",3,5)
+
+rg_FONC_3d(2,'SO2map',"11",3,5)
+rg_FONC_3d(3,'So2map',"11",3,5)
+
+rg_FONC_3d(2,'T1map',"11",3,5)
+rg_FONC_3d(3,'T1map',"11",3,5)
+
+rg_FONC_3d(2,'VSI',"11",3,5)
+rg_FONC_3d(3,'VSI',"11",3,5)
+
+# Etape 3 :
+
+cl_se <- list("00"=c(1),"03"=c(3,5))# etc #c(1) 
+seg_cl_FONC("00",'ADC',"19",cl,c(4,-170))
+
+liste_fr <- liste_jfr[[19]]
+for (fonc in liste_fonc){
+  liste_jour_fonc <- liste_fr[[fonc]]
+  for (jour in liste_jours_fonc){
+    seg_cl_FONC("00",'ADC',"19",cl$jour,c(4,-170))
+    
+  }
+  
+  
+  
+}
+
+# Etape 4 :
+# Etape 5 :
+
+####################################### Rat numéro 19 #######################################
+
+# Etape 1 : répertoires des fonctionnalités.
+
+FONC_3d_rat('ADC',"19")
+FONC_3d_rat('BVf',"19")
+FONC_3d_rat('CBF',"19")
+FONC_3d_rat('CMRO2',"19")
+FONC_3d_rat('SO2map',"19")
+FONC_3d_rat('T1map',"19")
+FONC_3d_rat('VSI',"19")
+
+# Etape 2 :répertoires des fonctionnalités.
+
+rg_FONC_3d(2,'ADC',"19",3,5)
+rg_FONC_3d(3,'ADC',"19",3,5)
+
+cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
+cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
+seg_clust_3d('ADC',"19",c(3,5),cl,cl_se,c(4,-170))
+
+rg_FONC_3d(2,'BVf',"19",3,5)
+rg_FONC_3d(3,'BVf',"19",3,5)
+
+rg_FONC_3d(2,'CBF',"19",3,5)
+rg_FONC_3d(3,'CBF',"19",3,5)
+
+rg_FONC_3d(2,'CMRO2',"19",3,5)
+rg_FONC_3d(3,'CMRO2',"19",3,5)
+
+rg_FONC_3d(2,'SO2map',"19",3,5)
+rg_FONC_3d(3,'So2map',"19",3,5)
+
+rg_FONC_3d(2,'T1map',"19",3,5)
+rg_FONC_3d(3,'T1map',"19",3,5)
+
+rg_FONC_3d(2,'VSI',"19",3,5)
+rg_FONC_3d(3,'VSI',"19",3,5)
+
+# Etape 3 :
+# Etape 4 :
+# Etape 5 :
+
+####################################### Rat numéro 26 #######################################
+
+# Etape 1 : répertoires des fonctionnalités.
+
+FONC_3d_rat('ADC',"26")
+FONC_3d_rat('BVf',"26")
+FONC_3d_rat('CBF',"26")
+FONC_3d_rat('CMRO2',"26")
+FONC_3d_rat('SO2map',"26")
+FONC_3d_rat('T1map',"26")
+FONC_3d_rat('VSI',"26")
+
+# Etape 2 :répertoires des fonctionnalités.
+
+rg_FONC_3d(2,'ADC',"26",3,5)
+rg_FONC_3d(3,'ADC',"26",3,5)
+
+cl <- c()
+cl_se <- list()
+seg_clust_3d('ADC',"26",c(3,5),cl,cl_se,c(4,-170))
+
+rg_FONC_3d(2,'BVf',"26",3,5)
+rg_FONC_3d(3,'BVf',"26",3,5)
+
+rg_FONC_3d(2,'CBF',"26",3,5)
+rg_FONC_3d(3,'CBF',"26",3,5)
+
+rg_FONC_3d(2,'CMRO2',"26",3,5)
+rg_FONC_3d(3,'CMRO2',"26",3,5)
+
+rg_FONC_3d(2,'SO2map',"26",3,5)
+rg_FONC_3d(3,'So2map',"26",3,5)
+
+rg_FONC_3d(2,'T1map',"26",3,5)
+rg_FONC_3d(3,'T1map',"26",3,5)
+
+rg_FONC_3d(2,'VSI',"26",3,5)
+rg_FONC_3d(3,'VSI',"26",3,5)
+
+# Etape 3 :
+# Etape 4 :
+# Etape 5 :
+
+####################################### Rat numéro 30 #######################################
+
+# Etape 1 : répertoires des fonctionnalités.
+
+FONC_3d_rat('ADC',"30")
+FONC_3d_rat('BVf',"30")
+FONC_3d_rat('CBF',"30")
+FONC_3d_rat('CMRO2',"30")
+FONC_3d_rat('SO2map',"30")
+FONC_3d_rat('T1map',"30")
+FONC_3d_rat('VSI',"30")
+
+# Etape 2 :répertoires des fonctionnalités.
+
+rg_FONC_3d(2,'ADC',"30",3,5)
+rg_FONC_3d(3,'ADC',"30",3,5)
+
+cl <- c()
+cl_se <- list()
+seg_clust_3d('ADC',"30",c(3,5),cl,cl_se,c(4,-170))
+
+rg_FONC_3d(2,'BVf',"30",3,5)
+rg_FONC_3d(3,'BVf',"30",3,5)
+
+rg_FONC_3d(2,'CBF',"30",3,5)
+rg_FONC_3d(3,'CBF',"30",3,5)
+
+rg_FONC_3d(2,'CMRO2',"30",3,5)
+rg_FONC_3d(3,'CMRO2',"30",3,5)
+
+rg_FONC_3d(2,'SO2map',"30",3,5)
+rg_FONC_3d(3,'So2map',"30",3,5)
+
+rg_FONC_3d(2,'T1map',"30",3,5)
+rg_FONC_3d(3,'T1map',"30",3,5)
+
+rg_FONC_3d(2,'VSI',"30",3,5)
+rg_FONC_3d(3,'VSI',"30",3,5)
+
+# Etape 3 :
+# Etape 4 :
+# Etape 5 :
+
 
