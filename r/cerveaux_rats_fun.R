@@ -20,13 +20,13 @@ graph_gauss <- function(valeurs,Nclust,Col){# valeurs est le tableau contenant i
 
 cerveau_jfr <- function(jour,fonc,rat){
   
-  d.filename <- sprintf("liste_R%s_%s_J%s.csv",rat,fonc,jour)
+  d.filename <- sprintf("%s/liste_R%s_%s_J%s.csv",fonc,rat,fonc,jour)
   day.slices <- read.csv(d.filename,check.names=F,header=T)
   d <- data.frame(matrix(ncol = 5, nrow = 0))
   colnames(d) <- c("x","y","z",fonc,"Slice")
   
   for (slice.select in 1:length(day.slices[,1])){
-    d.filename <- sprintf("%s-J%s-%s-bg-slice%i.txt",rat,jour,fonc,day.slices[slice.select,1])
+    d.filename <- sprintf("%s/%s-J%s-%s-bg-slice%i.txt",fonc,rat,jour,fonc,day.slices[slice.select,1])
     d.increment <- read.table(d.filename,header=F,sep='\t')
     d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*day.slices[slice.select,1], d.increment[,3], day.slices[slice.select,1]))
     colnames(d.increment) <- c("x","y","z",fonc,"Slice")
@@ -40,17 +40,17 @@ cerveau_jfr <- function(jour,fonc,rat){
 # Ne pas oublier les .csv pour les slices !
 
 FONC_3d_rat <- function(fonc,rat,val){
-  jours_fonc <- liste_jfr[[fonc]] # étape intermédiaire
-  jours <- jours_fonc[[rat]] # liste_jours_ADC[[rat]]
+  jours_fonc <- liste_jfr[[fonc]]
+  jours <- jours_fonc[[rat]]
   
   for (j in 1:length(jours)){
     day=jours[j]
     d <- cerveau_jfr(day, fonc, rat)
     if (val=='sans'){
       liste.nan <- is.na(d[,4])
-      d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe
+      d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe si demandé
     }
-    write.table(d, sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc), row.names=F, quote=F, sep='\t')
+    write.table(d, sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,day,fonc), row.names=F, quote=F, sep='\t')
   }
 }
 
@@ -70,12 +70,17 @@ cluster_jfr_f10 <- function(data,cl_min,cl_max){
 
 # ------------------- Pour un affichage systématique des données tridimensionnelles : une représentation graphique par jour. ------------------- #
 
-rg_FONC_3d <- function(dim,fonc,rat,cl_min,cl_max){
+rg_FONC_3d <- function(dim,fonc,rat,cl_bounds){
+  
   jours_fonc <- liste_jfr[[fonc]]
   jours <- jours_fonc[[rat]]
+  
+  cl_min <- cl_bounds[1]
+  cl_max <- cl_bounds[2]
+  
   for (j in 1:length(jours)){
     day=jours[j]
-    d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T)
+    d <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,day,fonc),header=T)
     
     #print(d[3,4])
     liste.nan <- is.na(d[,4])
@@ -126,29 +131,34 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_min,cl_max){
 # ------------------- Comparaison graphique entre clusterisation et segmentation ------------------- #
 
 seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
-  
-  jours_fonc <- liste_jfr[[fonc]]
-  jours <- jours_fonc[[rat]]
+
+  liste_jr <- liste_jfr[[fonc]]
+  liste_j <- liste_jr[[rat]]
   
   cl_min <- cl_bounds[1]
   cl_max <- cl_bounds[2]
-  
-  for (j in 1:length(jours)){
-    jour=jours[j]
-    
-    # Importation des données : cerveau tridimensionnel et niveaux de gris de la fonctionnalité, tranches indexées.
-    d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,jour,fonc),header=T)
-    
-    # Retrait des valeurs manquantes.
 
-    liste.nan <- is.na(d[,4])
-    d <- d[!liste.nan,]
+  for (jour in liste_j){
+
+    # Importation des données : cerveau tridimensionnel et niveaux de gris de la fonctionnalité, tranches indexées.
+    t <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
+    
+    # Mise à part des valeurs manquantes.
+    liste.nan <- is.na(t[,4])
+    d <- t[!liste.nan,]
+    e <- t[liste.nan,]
     
     # Clusterisation
     d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
     d.fonc <- d[,4]
+
+    # Etiquetage des valeurs manquantes : pour utiliser color_seg.
+    m <- length(e[,4])
+    e.label <- rep(3,m)
+    e.seg <- as.data.frame(cbind(e$x,e$y,e$z,e.label,e$Slice))#,header=T)
+    colnames(e.seg) <- c("x","y","z","Label","Slice")
     
-    # Segmentation
+    # Segmentation à l'aide des clusters sur lesquels on effectue le test.
     clusters <- cl_seg[[jour]]
     l <- length(d[,4])
     d.label <- rep(0,l)
@@ -158,6 +168,10 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
     d.label <- ifelse(hemi[1]*d$x+hemi[2]>d$y,2,d.label)
     d.seg <- as.data.frame(cbind(d$x,d$y,d$z,d.label,d$Slice),header=T)
     colnames(d.seg) <- c("x","y","z","Label","Slice")
+    
+    # Réassemblage de la dataframe : étiquetage et inclusion des valeurs manquantes
+    d.seg <- as.data.frame(rbind(d.seg,e.seg))
+    # Seulement utilisé dans la dernière fen^etre graphique
     
     # On passe aux représentations graphiques
 
@@ -205,15 +219,15 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
   }
 }
 
-# ------------------- Extraction de clusters pour une segmentation. Ouvrir dans le répertoire correspondant à la fonctionnalité concernée ------------------- #
+# ------------------- Extraction de clusters pour une segmentation. Ouvrir dans le répertoire fonctionnel_gris ------------------- #
 
-seg_cl_FONC <- function(day,fonc,rat,clust,hemi){# clust : vecteur des clusters utilisables pour la segmentation, estimés à l'oeil à partir de la fonction rg_FONC_3d.
+seg_cl_FONC <- function(jour,fonc,rat,clusters,hemi){# clust : vecteur des clusters utilisables pour la segmentation, estimés à l'oeil à partir de la fonction rg_FONC_3d.
 
-  # Impotation des données : cerveau tridimensionnel, tranches indexées
-  t <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,jour,fonc),header=T)
+  # Importation des données : cerveau tridimensionnel, tranches indexées
+  t <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
     
   # Extraction des valeurs manquantes
-  liste.nan <- is.na(d[,4])
+  liste.nan <- is.na(t[,4])
   d <- t[!liste.nan,]
   e <- t[liste.nan,]
   
@@ -223,7 +237,7 @@ seg_cl_FONC <- function(day,fonc,rat,clust,hemi){# clust : vecteur des clusters 
   # Etiquetage pour la zone ischémiée : on utilise les clusters repérés à l'étape 2.
   l <- length(d[,4])
   d.label <- rep(0,l)
-  for (cl in clust){
+  for (cl in clusters){
     d.label <- ifelse(d.clust$classification==cl,1,d.label)
   }
   d.label <- ifelse(hemi[1]*d$x+hemi[2]>d$y,2,d.label)
@@ -232,7 +246,7 @@ seg_cl_FONC <- function(day,fonc,rat,clust,hemi){# clust : vecteur des clusters 
   
   # Etiquetage des valeurs manquantes
   m <- length(e[,4])
-  e.label <- rep(-1,l)
+  e.label <- rep(-1,m)
   e.seg <- as.data.frame(cbind(e$x,e$y,e$z,e.label,e$Slice))#,header=T)
   colnames(e.seg) <- c("x","y","z","Label","Slice")
   
@@ -241,13 +255,33 @@ seg_cl_FONC <- function(day,fonc,rat,clust,hemi){# clust : vecteur des clusters 
   return(d.seg)
 }
 
+# ------------------- Enregistrement systématique des segmentations produites avec seg_cl_FONC. Utilise une liste de clusters établie à l'étape 2. ------------------- #
+
+record_seg_cl <- function(rat, liste_clust, hemi){
+  
+  for (fonc in liste_fonc){
+    liste_jr <- liste_jfr[[fonc]]
+    liste_j <- liste_jr[[rat]]
+    
+    liste_clust_fonc <- liste_clust[[fonc]] # liste des familles de clusters permettant la segmentation, par jour.
+    
+    for (jour in liste_j){
+      d_seg <- seg_cl_FONC(jour,fonc,rat,liste_clust_fonc[[jour]],hemi)
+      write.table(d_seg, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,rat,jour), row.names=F, quote=F, sep='\t')
+    }
+    
+  }
+  
+}
+
 # ------------------- Représente les niveaux de gris pour chaque fonctionnalité, sur un cerveau segmenté avec FONC ------------------- #
 
 gr_ngris_seg <- function(jour,FONC,rat){
   
-  cerveau_seg <- read.table(sprintf("isch3d-%s-%s-J%s.dat",FONC,rat,jour),header=T)
+  cerveau_seg <- read.table(sprintf("%s/isch3d-%s-%s-J%s.dat",FONC,FONC,rat,jour),header=T)
   
   liste_F <- list()
+
   for (fonc in liste_fonc){# On parcourt en largeur d'abord l'arborescence de la base de données pour savoir quelles fonctionnalités sont disponibles pour le jour courant.
     liste_jf <- liste_jfr[[fonc]]
     liste_j <- liste_jf[[rat]]
@@ -255,7 +289,7 @@ gr_ngris_seg <- function(jour,FONC,rat){
       liste_F <- cbind(liste_F,list(fonc))# Liste des fonctionnalités disponibles
     }
   }
-  
+
   plot.new()
   par(mfrow=c(4,2))
   
@@ -266,11 +300,15 @@ gr_ngris_seg <- function(jour,FONC,rat){
     cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
     
     entier <- cerveau_fonc[,4]
+    liste.nan <- is.na(entier)
+    entier <- entier[!liste.nan,] # on retire les valeurs manquantes de la fonctionnalité pour évaluer sa densité
+    
     isch <- cerveau_isch[,4]
     hem_sain <- cerveau_hem[,4]
-    n <- length(entier)
-    ni <- length(isch)
-    ns <- length(hem_sain)
+    
+    n <- 1#length(entier)
+    ni <- 1#length(isch)
+    ns <- 1#length(hem_sain)
     
     dst <- density(entier)
     dsti <- density(isch)
@@ -349,20 +387,32 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
       }
       jours <- c("00","08","15","22")# pour commencer, rat 19, opt_2='ADC' #-------- liste_jf[[fonc]] plus tard --------#
       
+      # Représentation graphique : fonctionnalité courante
       plot.new()
       par(mfrow=c(2,3))
+      
       for (jour in jours){# une fenêtre pour la fonctionnalité courante
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
         cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
         
         cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
-        cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
+        if (jour=="00"){
+          cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
+          hem_sain <- cerveau_hem[,4]
+          liste.nan <- is.na(hem_sain)
+          hem_sain <- hem_sain[!liste.nan] # on retire les valeurs manquantes de la fonctionnalité pour évaluer sa densité
+        }
+        # on définit hem_sain au jour 00, on ne le modifie plus par la suite
         
         entier <- cerveau_fonc[,4]
-        isch <- cerveau_isch[,4]
-        hem_sain <- cerveau_hem[,4]
+        liste.nan <- is.na(entier)
+        entier <- entier[!liste.nan] # on retire les valeurs manquantes
         
-        # Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
+        isch <- cerveau_isch[,4]
+        liste.nan <- is.na(isch)
+        isch <- isch[!liste.nan] # on retire les valeurs manquantes
+
+        ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
         n <- 1#length(entier)
         ni <- 1#length(isch)
         ns <- 1#length(hem_sain)

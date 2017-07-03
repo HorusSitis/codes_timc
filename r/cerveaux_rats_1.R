@@ -18,7 +18,7 @@ library('scatterplot3d')
 #################################### En tête : base de données constantes ####################################
 
 color.vector <- c('darkblue','red','green','purple', 'orange')
-color_seg <- c('grey50','red','blue')
+color_seg <- c('grey50','red','blue','black')
 d.slice.size <- 1/14*10000
 source(file="cerveaux_rats_fun.R", encoding ="UTF-8")
 
@@ -141,430 +141,8 @@ rg_FONC_3d(2,'Anat',"30",2,5)
 
 # Etape 3 : pas de sementation possible avec des clusters
 
-
-
-
-
-#################################### Instructions : traitement systématique des images, fonctionnalités ####################################
-
-# Un rat, une fonctionnalité. On boucle sur les jours d'examens. On se place dans le répertoire correspondant : rat/fonctionnel_gris_fonctionnalité.
-# Il faut retirer les valeurs NaN présentes sur plusieurs fichiers .txt.
-
-# 1- Génération de fichiers .dat avec la fonction cerveau_jfr, fichiers .dat par tranche et pour le cerveau entier générées.
-# 2- Représentation graphique systématique des résultats d'examen. Utilise la boucle rg_FONC_3d.
-# 3- Extraction de données. Non disponible pour toutes les fonctionnalités ou rats.
-# 4- Effectuer le suivi temporel sur les slices dont les images sont disponibles sur toute la durée des examens. Intervient nécessairement après appel de la fonctions cluster_jrf_f10.
-# 5- Comparer la distribution des niveaux de gris entre zone ischémiée, hémisphère sain et cerveau entier pour toutes les fonctionnalités, après segmentation de la zone ischémiée à l'aide d'une fonctionnalité.
-
 ####################################### Rat numéro 11 #######################################
 
-# ----------------- La fonctionnalité ADC ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('ADC',"11")
-# Etape 2 :
-rg_FONC_3d(2,'ADC',"11",3,5)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-liste_R11_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-# ------ Jour 00 ------ #
-d_seg_00 <- seg_cl_FONC("00",'ADC',"11",1,c(4,-170))
-write.table(d_seg_00, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"11","00"), row.names=F, quote=F, sep='\t')
-# ------ Jour 15 ------ #
-d_seg_15 <- seg_cl_FONC("15",'ADC',"11",3,c(4,-170))
-write.table(d_seg_15, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"11","15"), row.names=F, quote=F, sep='\t')
-# ------ Jour 22 ------ #
-d_seg_22 <- seg_cl_FONC("22",'ADC',"11",4,c(4,-170))
-write.table(d_seg_22, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"11","22"), row.names=F, quote=F, sep='\t')
-
-
-
-
-# Etape 4 : suivi temporel.
-
-# Slice 10, tous les jours.
-# On utilise la clusterisation aux jours 00, 15 ou 22.
-
-# Slices 9 et 10 : jours 00 et 03.
-# On utilise la segmentation au jour 00.
-
-# Slices 10 à 12 : jours 08 à 22.
-# On utilise la segmentation aux jours 15 ou 22.  
-
-
-
-
-
-
-
-
-# ----------------- La fonctionnalité BVf ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('BVf',"11")
-# Etape 2 :
-rg_FONC_3d(2,'BVf',"11",3,3)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-#seg_cl_FONC("00",'BVf',"11",1) pas terrible
-
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité CBF ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('CBF',"11")
-# Etape 2 :
-rg_FONC_3d(2,'CBF',"11",3,4)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité CMRO2 ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat . Attention : pas de jour 08.
-#FONC_3d_rat('CMRO2',"11")
-# Etape 2 :
-rg_FONC_3d(2,'CMRO2',"11",3,3)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité SO2map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat . Attention : pas de jour 08.
-#FONC_3d_rat('SO2map',"11")
-# Etape 2 :
-rg_FONC_3d(2,'SO2map',"11",3,3)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité T1map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('T1map',"11")
-# Etape 2 :
-rg_FONC_3d(2,'T1map',"11",3,3)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité VSI ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('VSI',"11")
-# Etape 2 :
-rg_FONC_3d(2,'VSI',"11",3,3)
-
-# Etape 4 : suivi temporel.
-
-####################################### Rat numéro 19 #######################################
-
-# ----------------- La fonctionnalité ADC ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('ADC',"19")
-# Etape 2 :
-rg_FONC_3d(3,'ADC',"19",3,5)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-
-cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
-cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
-seg_clust_3d('ADC',"19",cl,cl_se,c(4,-170))
-
-jours_ADC_seg <- c("00","08","15","22")
-
-
-#liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
-
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-d_seg_00 <- seg_cl_FONC("00",'ADC',"19",1,c(4,-170))
-d_seg_08 <- seg_cl_FONC("08",'ADC',"19",c(3,4,5),c(4,-170))
-d_seg_15 <- seg_cl_FONC("15",'ADC',"19",c(4,5),c(4,-170))
-d_seg_22 <- seg_cl_FONC("22",'ADC',"19",3,c(4,-170))
-# Retour au répertoire fonctionnel_gris
-write.table(d_seg_00, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","00"), row.names=F, quote=F, sep='\t')
-write.table(d_seg_08, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","08"), row.names=F, quote=F, sep='\t')
-write.table(d_seg_15, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","15"), row.names=F, quote=F, sep='\t')
-write.table(d_seg_22, sprintf("isch3d-%s-%s-J%s.dat",'ADC',"19","22"), row.names=F, quote=F, sep='\t')
-
-# Etape 4 : suivi temporel.
-
-# Slices 9 et 10, tous les jours.
-# On utilise la clusterisation aux jours ...
-# On peut utiliser la segmentation aux jours 00, 08, 15, et 22.
-
-#liste.fonc.19 <- list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
-#suivi_temp_fonc("19","ADC","seg") --> pas d'intérêt.
-suivi_temp_fonc("19","ADC")#,"clust")
-
-# ----------------- La fonctionnalité BVf ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('BVf',"19")
-# Etape 2 :
-rg_FONC_3d(2,'BVf',"19",3,5)
-rg_FONC_3d(3,'BVf',"19",3,5)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-
-
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité CBF ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('CBF',"19")
-# Etape 2 :
-rg_FONC_3d(3,'CBF',"19",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité CMRO2 ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('CMRO2',"19")
-# Etape 2 :
-rg_FONC_3d(2,'CMRO2',"19",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité SO2map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('SO2map',"19")
-# Etape 2 :
-rg_FONC_3d(2,'SO2map',"19",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité T1map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('T1map',"19")
-# Etape 2 :
-rg_FONC_3d(2,'T1map',"19",3,5)
-rg_FONC_3d(3,'T1map',"19",3,5)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-d_seg_03 <- seg_cl_FONC("03",'T1map',"19",3,c(4,-170))
-write.table(d_seg_03, sprintf("isch3d-%s-%s-J%s.dat",'T1map',"19","03"), row.names=F, quote=F, sep='\t')
-
-
-
-
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité VSI ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('VSI',"19")
-# Etape 2 :
-rg_FONC_3d(2,'VSI',"19",3,5)
-
-# Etape 4 : suivi temporel.
-
-####################################### Rat numéro 26 #######################################
-
-# ----------------- La fonctionnalité ADC ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('ADC',"26")
-# Etape 2 :
-rg_FONC_3d(2,'ADC',"26",3,5)
-
-
-# Etape 4 : suivi temporel.
-
-
-
-
-
-
-
-
-
-# ----------------- La fonctionnalité BVf ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('BVf',"26")
-# Etape 2 :
-rg_FONC_3d(2,'BVf',"26",3,5)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité CBF ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('CBF',"26")
-# Etape 2 :
-rg_FONC_3d(2,'CBF',"26",3,3)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-# ------ Jour 00 ------ #
-
-
-# ------ Jour 22 ------ #
-
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité CMRO2 ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('CMRO2',"26")
-# Etape 2 :
-rg_FONC_3d(2,'CMRO2',"26",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité SO2map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('SO2map',"26")
-# Etape 2 :
-rg_FONC_3d(2,'SO2map',"26",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité T1map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('T1map',"26")
-# Etape 2 :
-rg_FONC_3d(2,'T1map',"26",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité VSI ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('VSI',"26")
-# Etape 2 :
-rg_FONC_3d(2,'VSI',"26",3,5)
-
-# Etape 4 : suivi temporel.
-
-####################################### Rat numéro 30 : pas d'étape 3 #######################################
-
-# ----------------- La fonctionnalité ADC ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('ADC',"30")
-# Etape 2 :
-rg_FONC_3d(2,'ADC',"30",3,5)
-
-# Etape 3 : on segmente la zone ischémiée aux jours où cela est possible, avec les clusters choisis manuellement cf étape 2.
-# On enregistre les cerveaux en étiquetant ses pixels à 0, ceux de la zone ischémiée à 1 et enfin ceux de l'hémisphère sain à 2.
-
-
-
-
-
-
-# Etape 4 : suivi temporel.
-
-# Slices 11 et 12 : tous les jours. 
-
-
-
-
-
-
-
-
-# ----------------- La fonctionnalité BVf ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('BVf',"30")
-# Etape 2 :
-rg_FONC_3d(2,'BVf',"30",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité CBF ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('CBF',"30")
-# Etape 2 :
-rg_FONC_3d(2,'CBF',"30",3,3)
-
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité CMRO2 ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('CMRO2',"30")
-# Etape 2 :
-rg_FONC_3d(2,'CMRO2',"30",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité SO2map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('SO2map',"30")
-# Etape 2 :
-rg_FONC_3d(2,'SO2map',"30",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité T1map ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('T1map',"30")
-# Etape 2 :
-rg_FONC_3d('T1map',"30",3,5)
-
-# Etape 4 : suivi temporel.
-
-# ----------------- La fonctionnalité VSI ----------------- #
-
-# Etape 1 : .csv complète la base de données. Retire les NaN des fichiers all.dat .
-#FONC_3d_rat('VSI',"30")
-# Etape 2 :
-rg_FONC_3d(2,'VSI',"30",3,5)
-
-# Etape 4 : suivi temporel.
-
-#################################### Traitement systématique des images, fonctionnalités, suite ####################################
-
-# Etape 7/2 : on représente graphiquement les cerveaux segmentés, afin d'évaluer la pertinence de leur utilisation en statistiques -étape 5.
-
-# Etape 5 : densités de niveaux de gris pour la fonctionnalité courante.
-# On utilise des segmentations créées avec un fonctionnalité fixée : ADC ou CBF par exemple.
-# Jusqu'à nouvel ordre : rats 11, 19 et 26.
-
-# read.table... rat et jour. Trois dimensions.
-# boucle sur la liste des fonctionnalités.
-
-####################################### Rat numéro 11 #######################################
-
-jour <- "03"
-rat <- "19"
-
-liste_F <- list()
-
-#liste_F 
 
 
 for (fonc in liste_fonc){# On parcourt en largeur d'abord l'arborescence de la base de données pour savoir quelles fonctionnalités sont disponibles pour le jour courant.
@@ -589,10 +167,6 @@ gr_ngris_seg("00",'ADC',"11")
 
 ####################################### Rat numéro 19 #######################################
 
-# Etape 7/2 : segmentation automatique, méthode de Nicolas.
-
-# Etape 5 : histogrammes ou courbes de niveaux de gris, cerveau entier à une date donnée puis suivi temporel.
-#liste_R19_seg_FONC <-list("00"='ADC',"03"='T1map',"08"='ADC',"15"='ADC',"22"='ADC')
 
 ll <- gr_ngris_seg("00",'ADC',"19")
 ll <- gr_ngris_seg("03","T1map","19")
@@ -608,18 +182,6 @@ for (j in 1:length(jours_R19_ADC)){
 
 
 dgris_temp_fonc("19",'cer','ADC')
-
-####################################### Rat numéro 26 #######################################
-
-# Etape 5 : histogrammes ou courbes de niveaux de gris, cerveau entier à une date donnée puis suivi temporel.
-#liste_R26_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
-
-####################################### Rat numéro 30 #######################################
-
-#liste_R30_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
-
-
-
 
 
 
@@ -644,249 +206,391 @@ dgris_temp_fonc("19",'cer','ADC')
 
 ## --> suivi_etendue_fonc.
 
-####################################### Rat numéro 11 #######################################
+###################################################### Rat numéro 11 ######################################################
 
 num_rat <- "11"
 
-# Etape 1 : répertoires des fonctionnalités. Jusque là : 'sans' les valsurs manquantes NaN.
+#------------ Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. ------------#
 
-FONC_3d_rat('ADC',num_rat,'avec')
-FONC_3d_rat('BVf',num_rat,'avec')
-FONC_3d_rat('CBF',num_rat,'avec')
-FONC_3d_rat('CMRO2',num_rat,'avec')
-FONC_3d_rat('SO2map',num_rat,'avec')
-FONC_3d_rat('T1map',num_rat,'avec')
-FONC_3d_rat('VSI',num_rat,'avec')
-
-# Etape 2 :répertoires des fonctionnalités.
-
-rg_FONC_3d(2,'ADC',num_rat,3,5)
-rg_FONC_3d(3,'ADC',num_rat,3,5)
-
-cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
-cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
-seg_clust_3d('ADC',"19",c(3,5),cl,cl_se,c(4,-170))
-
-rg_FONC_3d(2,'BVf',num_rat,3,5)
-rg_FONC_3d(3,'BVf',num_rat,3,5)
-
-rg_FONC_3d(2,'CBF',num_rat,3,5)
-rg_FONC_3d(3,'CBF',num_rat,3,5)
-
-rg_FONC_3d(2,'CMRO2',num_rat,3,5)
-rg_FONC_3d(3,'CMRO2',num_rat,3,5)
-
-rg_FONC_3d(2,'SO2map',num_rat,3,5)
-rg_FONC_3d(3,'So2map',num_rat,3,5)
-
-rg_FONC_3d(2,'T1map',num_rat,3,5)
-rg_FONC_3d(3,'T1map',num_rat,3,5)
-
-rg_FONC_3d(2,'VSI',num_rat,3,5)
-rg_FONC_3d(3,'VSI',num_rat,3,5)
-
-# Etape 3 :
-
-fonc <- 'ADC'
-fr_hemi <- c(4,-170)
-clust_seg <- # à compléter avec l'étape 2
-  liste_jr <- liste_jfr[[fonc]]
-liste_j <- liste_jr[[num_rat]]
-
-for (jour in liste_j){#jours_R19_ADC éventuellement amputé d'un jours où la clusterisation est inutilisable
-  d_seg <- seg_cl_FONC(jour,fonc,num_rat,clust_seg,fr_hemi)
-  write.table(d_seg_00, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,num_rat,jour), row.names=F, quote=F, sep='\t')
+for (fonc in liste_fonc){
+  FONC_3d_rat(fonc,num_rat,'avec')
 }
 
-# Etape 4 :
-# Etape 5 :
+#------------ Etape 2 : répertoires des fonctionnalités. ------------#
 
-####################################### Rat numéro 19 #######################################
+fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
+
+cl <- c(3,5)# encadrement du nombre de clusters
+
+rg_FONC_3d(2,'ADC',num_rat,cl)
+rg_FONC_3d(3,'ADC',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')#1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('ADC',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'BVf',num_rat,cl)
+rg_FONC_3d(3,'BVf',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('BVF',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'CBF',num_rat,cl)
+rg_FONC_3d(3,'CBF',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('CBF',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'CMRO2',num_rat,cl)
+rg_FONC_3d(3,'CMRO2',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('CMRO2',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'SO2map',num_rat,cl)
+rg_FONC_3d(3,'SO2map',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('SO2map',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'T1map',num_rat,cl)
+rg_FONC_3d(3,'T1map',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('T1map',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'VSI',num_rat,cl)
+rg_FONC_3d(3,'VSI',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('VSI',num_rat,cl,cl_se,fr_hemi)
+
+#------------ Etape 3 : ------------#
+
+liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"=c(3)), # clusters utilisables, cf étape 2
+                    'BVf'=list(),
+                    'CBF'=list(),
+                    'CMRO2'=list(),
+                    'SO2map'=list(),
+                    'T1map'=list(),
+                    'VSI'=list()
+)
+
+record_seg_cl(num_rat,liste_clust,fr_hemi)
+
+#------------ Etape 4 : ------------#
+#------------ Etape 5 : ------------#
+
+###################################################### Rat numéro 19 ######################################################
 
 num_rat <- "19"
 
-# Etape 1 : répertoires des fonctionnalités. Jusque là : 'sans' les valsurs manquantes NaN.
+#------------ Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. ------------#
 
-FONC_3d_rat('ADC',num_rat,'avec')
-FONC_3d_rat('BVf',num_rat,'avec')
-FONC_3d_rat('CBF',num_rat,'avec')
-FONC_3d_rat('CMRO2',num_rat,'avec')
-FONC_3d_rat('SO2map',num_rat,'avec')
-FONC_3d_rat('T1map',num_rat,'avec')
-FONC_3d_rat('VSI',num_rat,'avec')
-
-# Etape 2 :répertoires des fonctionnalités.
-
-rg_FONC_3d(2,'ADC',num_rat,3,5)
-rg_FONC_3d(3,'ADC',num_rat,3,5)
-
-cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
-cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
-seg_clust_3d('ADC',"19",c(3,5),cl,cl_se,c(4,-170))
-
-rg_FONC_3d(2,'BVf',num_rat,3,5)
-rg_FONC_3d(3,'BVf',num_rat,3,5)
-
-rg_FONC_3d(2,'CBF',num_rat,3,5)
-rg_FONC_3d(3,'CBF',num_rat,3,5)
-
-rg_FONC_3d(2,'CMRO2',num_rat,3,5)
-rg_FONC_3d(3,'CMRO2',num_rat,3,5)
-
-rg_FONC_3d(2,'SO2map',num_rat,3,5)
-rg_FONC_3d(3,'So2map',num_rat,3,5)
-
-rg_FONC_3d(2,'T1map',num_rat,3,5)
-rg_FONC_3d(3,'T1map',num_rat,3,5)
-
-rg_FONC_3d(2,'VSI',num_rat,3,5)
-rg_FONC_3d(3,'VSI',num_rat,3,5)
-
-# Etape 3 :
-
-fonc <- 'ADC'
-fr_hemi <- c(4,-170)
-clust_seg <- list("00"=1,"03"='',"08"=c(3,4,5),"15"=c(4,5),"22"=3)
-liste_jr <- liste_jfr[[fonc]]
-liste_j <- liste_jr[[num_rat]]
-
-for (jour in liste_j){#jours_R19_ADC éventuellement amputé d'un jours où la clusterisation est inutilisable
-  d_seg <- seg_cl_FONC(jour,fonc,num_rat,clust_seg,fr_hemi)
-  write.table(d_seg_00, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,num_rat,jour), row.names=F, quote=F, sep='\t')
+for (fonc in liste_fonc){
+  FONC_3d_rat(fonc,num_rat,'avec')
 }
 
-# Etape 4 :
-# Etape 5 :
+#------------ Etape 2 : répertoires des fonctionnalités. ------------#
 
-####################################### Rat numéro 26 #######################################
+fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
+
+cl <- c(3,5)# encadrement du nombre de clusters
+cl <- c(4,4)
+cl <- c(3,3)
+
+rg_FONC_3d(2,'ADC',num_rat,cl)
+rg_FONC_3d(3,'ADC',num_rat,cl)
+##
+
+# ---> bornes pour le nombre de clusters
+cl_se <- liste_clust[['ADC']]
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('ADC',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'BVf',num_rat,cl)
+rg_FONC_3d(3,'BVf',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- liste_clust[['BVf']]
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('BVf',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'CBF',num_rat,cl)
+rg_FONC_3d(3,'CBF',num_rat,cl)
+##
+cl <- c(3,3)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- liste_clust[['CBF']]
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('CBF',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'CMRO2',num_rat,cl)
+rg_FONC_3d(3,'CMRO2',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- liste_clust[['CMRO2']]
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('CMRO2',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'SO2map',num_rat,cl)
+rg_FONC_3d(3,'SO2map',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- liste_clust[['SO2map']]
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('SO2map',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'T1map',num_rat,cl)
+rg_FONC_3d(3,'T1map',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- liste_clust[['T1map']]
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('T1map',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'VSI',num_rat,cl)
+rg_FONC_3d(3,'VSI',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- liste_clust[['VSI']]
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('VSI',num_rat,cl,cl_se,fr_hemi)
+
+#------------ Etape 3 :
+
+liste_clust <- list('ADC'=list("00"=c(1),"03"=c(1),"08"=c(3,4),"15"=c(4),"22"=c(4)), # clusters utilisables, cf étape 2
+                    'BVf'=list("00"=c(1),"08"=c(3,4),"15"=c(),"22"=c()),
+                    'CBF'=list("00"=c(1),"03"=c(),"08"=c(4),"15"=c(2),"22"=c(1,3)), # 3 clusters
+                    'CMRO2'=list("00"=c(1),"08"=c(3),"15"=c(1),"22"=c(3)),
+                    'SO2map'=list("00"=c(0),"08"=c(1),"15"=c(4),"22"=c()),
+                    'T1map'=list("00"=c(3),"03"=c(3),"08"=c(3,4,5),"15"=c(4,5),"22"=c(4)),
+                    'VSI'=list("00"=c(1),"08"=c(2,3),"15"=c(3),"22"=c(3))
+                    )
+
+record_seg_cl(num_rat,liste_clust,fr_hemi)
+
+#------------ Etape 4 : ------------#
+
+
+dgris_temp_fonc(num_rat,'cer',"")
+dgris_temp_fonc(num_rat,'cer',"ADC")
+
+
+#------------ Etape 5 : ------------#
+
+###################################################### Rat numéro 26 ######################################################
 
 num_rat <- "26"
 
-# Etape 1 : répertoires des fonctionnalités. Jusque là : 'sans' les valsurs manquantes NaN.
+#------------ Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. ------------#
 
-FONC_3d_rat('ADC',num_rat,'avec')
-FONC_3d_rat('BVf',num_rat,'avec')
-FONC_3d_rat('CBF',num_rat,'avec')
-FONC_3d_rat('CMRO2',num_rat,'avec')
-FONC_3d_rat('SO2map',num_rat,'avec')
-FONC_3d_rat('T1map',num_rat,'avec')
-FONC_3d_rat('VSI',num_rat,'avec')
-
-# Etape 2 : répertoires des fonctionnalités.
-
-rg_FONC_3d(2,'ADC',num_rat,3,5)
-rg_FONC_3d(3,'ADC',num_rat,3,5)
-
-fr_hemi <- c(4,-170)
-cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
-cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
-
-seg_clust_3d('ADC',"19",cl,cl_se,fr_hemi)
-
-rg_FONC_3d(2,'BVf',num_rat,3,5)
-rg_FONC_3d(3,'BVf',num_rat,3,5)
-
-
-#seg_clust_3d
-                           
-                           
-                           
-rg_FONC_3d(2,'CBF',num_rat,3,5)
-rg_FONC_3d(3,'CBF',num_rat,3,5)
-
-rg_FONC_3d(2,'CMRO2',num_rat,3,5)
-rg_FONC_3d(3,'CMRO2',num_rat,3,5)
-
-rg_FONC_3d(2,'SO2map',num_rat,3,5)
-rg_FONC_3d(3,'So2map',num_rat,3,5)
-
-rg_FONC_3d(2,'T1map',num_rat,3,5)
-rg_FONC_3d(3,'T1map',num_rat,3,5)
-
-rg_FONC_3d(2,'VSI',num_rat,3,5)
-rg_FONC_3d(3,'VSI',num_rat,3,5)
-
-# Etape 3 :
-
-fonc <- 'ADC'
-fr_hemi <- c(4,-170)
-clust_seg <- list("00"=1,"03"=1,"08"=4,"15"=4,"22"=3)#"08"=c(3,4,5),"15"=c(4,5),"22"=3)
-liste_jr <- liste_jfr[[fonc]]
-liste_j <- liste_jr[[num_rat]]
-
-for (jour in liste_j){#jours_R19_ADC éventuellement amputé d'un jours où la clusterisation est inutilisable
-  d_seg <- seg_cl_FONC(jour,fonc,num_rat,clust_seg,fr_hemi)
-  #write.table(d_seg, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,num_rat,jour), row.names=F, quote=F, sep='\t')
+for (fonc in liste_fonc){
+  FONC_3d_rat(fonc,num_rat,'avec')
 }
 
+#------------ Etape 2 : répertoires des fonctionnalités. ------------#
 
+fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
 
-dd <- read.table(sprintf("%s-J%s-%s-bg-all.dat","19","00",'BVf'),header=T)
+cl <- c(3,5)# encadrement du nombre de clusters
 
-liste.nan <- is.na(dd[,4])
-d.seg <- d[!liste.nan,]
+rg_FONC_3d(2,'ADC',num_rat,cl)
+rg_FONC_3d(3,'ADC',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')#1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('ADC',num_rat,cl,cl_se,fr_hemi)
 
-dd <- d.seg$x
+rg_FONC_3d(2,'BVf',num_rat,cl)
+rg_FONC_3d(3,'BVf',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('BVF',num_rat,cl,cl_se,fr_hemi)
 
-ee <- dd[liste.nan,]
+rg_FONC_3d(2,'CBF',num_rat,cl)
+rg_FONC_3d(3,'CBF',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('CBF',num_rat,cl,cl_se,fr_hemi)
 
+rg_FONC_3d(2,'CMRO2',num_rat,cl)
+rg_FONC_3d(3,'CMRO2',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('CMRO2',num_rat,cl,cl_se,fr_hemi)
 
-# Etape 4 :
-# Etape 5 :
+rg_FONC_3d(2,'SO2map',num_rat,cl)
+rg_FONC_3d(3,'SO2map',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('SO2map',num_rat,cl,cl_se,fr_hemi)
 
-####################################### Rat numéro 30 #######################################
+rg_FONC_3d(2,'T1map',num_rat,cl)
+rg_FONC_3d(3,'T1map',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('T1map',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'VSI',num_rat,cl)
+rg_FONC_3d(3,'VSI',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('VSI',num_rat,cl,cl_se,fr_hemi)
+
+#------------ Etape 3 : ------------#
+
+liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"=c(3)), # clusters utilisables, cf étape 2
+                    'BVf'=list(),
+                    'CBF'=list(),
+                    'CMRO2'=list(),
+                    'SO2map'=list(),
+                    'T1map'=list(),
+                    'VSI'=list()
+)
+
+record_seg_cl(num_rat,liste_clust,fr_hemi)
+
+#------------ Etape 4 : ------------#
+
+#------------ Etape 5 : ------------#
+
+###################################################### Rat numéro 30 ######################################################
 
 num_rat <- "30"
 
-# Etape 1 : répertoires des fonctionnalités. Jusque là : 'sans' les valsurs manquantes NaN.
+#------------ Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. ------------#
 
-FONC_3d_rat('ADC',num_rat,'avec')
-FONC_3d_rat('BVf',num_rat,'avec')
-FONC_3d_rat('CBF',num_rat,'avec')
-FONC_3d_rat('CMRO2',num_rat,'avec')
-FONC_3d_rat('SO2map',num_rat,'avec')
-FONC_3d_rat('T1map',num_rat,'avec')
-FONC_3d_rat('VSI',num_rat,'avec')
-
-# Etape 2 :répertoires des fonctionnalités.
-
-rg_FONC_3d(2,'ADC',num_rat,3,5)
-rg_FONC_3d(3,'ADC',num_rat,3,5)
-
-cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
-cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
-seg_clust_3d('ADC',"19",c(3,5),cl,cl_se,c(4,-170))
-
-rg_FONC_3d(2,'BVf',num_rat,3,5)
-rg_FONC_3d(3,'BVf',num_rat,3,5)
-
-rg_FONC_3d(2,'CBF',num_rat,3,5)
-rg_FONC_3d(3,'CBF',num_rat,3,5)
-
-rg_FONC_3d(2,'CMRO2',num_rat,3,5)
-rg_FONC_3d(3,'CMRO2',num_rat,3,5)
-
-rg_FONC_3d(2,'SO2map',num_rat,3,5)
-rg_FONC_3d(3,'So2map',num_rat,3,5)
-
-rg_FONC_3d(2,'T1map',num_rat,3,5)
-rg_FONC_3d(3,'T1map',num_rat,3,5)
-
-rg_FONC_3d(2,'VSI',num_rat,3,5)
-rg_FONC_3d(3,'VSI',num_rat,3,5)
-
-# Etape 3 :
-
-fonc <- 'ADC'
-fr_hemi <- c(4,-170)
-clust_seg <- # à compléter avec l'étape 2
-liste_jr <- liste_jfr[[fonc]]
-liste_j <- liste_jr[[num_rat]]
-
-for (jour in liste_j){#jours_R19_ADC éventuellement amputé d'un jours où la clusterisation est inutilisable
-  d_seg <- seg_cl_FONC(jour,fonc,num_rat,clust_seg,fr_hemi)
-  write.table(d_seg_00, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,num_rat,jour), row.names=F, quote=F, sep='\t')
+for (fonc in liste_fonc){
+  FONC_3d_rat(fonc,num_rat,'avec')
 }
 
-# Etape 4 :
-# Etape 5 :
+#------------ Etape 2 : répertoires des fonctionnalités. ------------#
+
+fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
+
+cl <- c(3,5)# encadrement du nombre de clusters
+
+rg_FONC_3d(2,'ADC',num_rat,cl)
+rg_FONC_3d(3,'ADC',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')#1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('ADC',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'BVf',num_rat,cl)
+rg_FONC_3d(3,'BVf',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('BVF',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'CBF',num_rat,cl)
+rg_FONC_3d(3,'CBF',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('CBF',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'CMRO2',num_rat,cl)
+rg_FONC_3d(3,'CMRO2',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('CMRO2',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'SO2map',num_rat,cl)
+rg_FONC_3d(3,'SO2map',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('SO2map',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'T1map',num_rat,cl)
+rg_FONC_3d(3,'T1map',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('T1map',num_rat,cl,cl_se,fr_hemi)
+
+rg_FONC_3d(2,'VSI',num_rat,cl)
+rg_FONC_3d(3,'VSI',num_rat,cl)
+##
+cl <- c(4,4)#c(3,5)
+# ---> bornes pour le nombre de clusters
+cl_se <- list("00"='')
+# ---> choix possible de CLusters pour la SEgmentation
+seg_clust_3d('VSI',num_rat,cl,cl_se,fr_hemi)
+
+#------------ Etape 3 : ------------#
+
+liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"=c(3)), # clusters utilisables, cf étape 2
+                    'BVf'=list(),
+                    'CBF'=list(),
+                    'CMRO2'=list(),
+                    'SO2map'=list(),
+                    'T1map'=list(),
+                    'VSI'=list()
+)
+
+record_seg_cl(num_rat,liste_clust,fr_hemi)
+
+#------------ Etape 4 : ------------#
+#------------ Etape 5 : ------------#
