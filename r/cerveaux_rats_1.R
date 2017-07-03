@@ -646,58 +646,56 @@ dgris_temp_fonc("19",'cer','ADC')
 
 ####################################### Rat numéro 11 #######################################
 
-# Etape 1 : répertoires des fonctionnalités.
+num_rat <- "11"
 
-FONC_3d_rat('ADC',"11")
-FONC_3d_rat('BVf',"11")
-FONC_3d_rat('CBF',"11")
-FONC_3d_rat('CMRO2',"11")
-FONC_3d_rat('SO2map',"11")
-FONC_3d_rat('T1map',"11")
-FONC_3d_rat('VSI',"11")
+# Etape 1 : répertoires des fonctionnalités. Jusque là : 'sans' les valsurs manquantes NaN.
 
-# Etape 2 : répertoires des fonctionnalités.
+FONC_3d_rat('ADC',num_rat,'avec')
+FONC_3d_rat('BVf',num_rat,'avec')
+FONC_3d_rat('CBF',num_rat,'avec')
+FONC_3d_rat('CMRO2',num_rat,'avec')
+FONC_3d_rat('SO2map',num_rat,'avec')
+FONC_3d_rat('T1map',num_rat,'avec')
+FONC_3d_rat('VSI',num_rat,'avec')
 
-rg_FONC_3d(2,'ADC',"11",3,5)
-rg_FONC_3d(3,'ADC',"11",3,5)
+# Etape 2 :répertoires des fonctionnalités.
 
-cl <- c()
-cl_se <- list()
-seg_clust_3d('ADC',"11",c(3,5),cl,cl_se,c(4,-170))
+rg_FONC_3d(2,'ADC',num_rat,3,5)
+rg_FONC_3d(3,'ADC',num_rat,3,5)
 
-rg_FONC_3d(2,'BVf',"11",3,5)
-rg_FONC_3d(3,'BVf',"11",3,5)
+cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
+cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
+seg_clust_3d('ADC',"19",c(3,5),cl,cl_se,c(4,-170))
 
-rg_FONC_3d(2,'CBF',"11",3,5)
-rg_FONC_3d(3,'CBF',"11",3,5)
+rg_FONC_3d(2,'BVf',num_rat,3,5)
+rg_FONC_3d(3,'BVf',num_rat,3,5)
 
-rg_FONC_3d(2,'CMRO2',"11",3,5)
-rg_FONC_3d(3,'CMRO2',"11",3,5)
+rg_FONC_3d(2,'CBF',num_rat,3,5)
+rg_FONC_3d(3,'CBF',num_rat,3,5)
 
-rg_FONC_3d(2,'SO2map',"11",3,5)
-rg_FONC_3d(3,'So2map',"11",3,5)
+rg_FONC_3d(2,'CMRO2',num_rat,3,5)
+rg_FONC_3d(3,'CMRO2',num_rat,3,5)
 
-rg_FONC_3d(2,'T1map',"11",3,5)
-rg_FONC_3d(3,'T1map',"11",3,5)
+rg_FONC_3d(2,'SO2map',num_rat,3,5)
+rg_FONC_3d(3,'So2map',num_rat,3,5)
 
-rg_FONC_3d(2,'VSI',"11",3,5)
-rg_FONC_3d(3,'VSI',"11",3,5)
+rg_FONC_3d(2,'T1map',num_rat,3,5)
+rg_FONC_3d(3,'T1map',num_rat,3,5)
+
+rg_FONC_3d(2,'VSI',num_rat,3,5)
+rg_FONC_3d(3,'VSI',num_rat,3,5)
 
 # Etape 3 :
 
-cl_se <- list("00"=c(1),"03"=c(3,5))# etc #c(1) 
-seg_cl_FONC("00",'ADC',"19",cl,c(4,-170))
+fonc <- 'ADC'
+fr_hemi <- c(4,-170)
+clust_seg <- # à compléter avec l'étape 2
+  liste_jr <- liste_jfr[[fonc]]
+liste_j <- liste_jr[[num_rat]]
 
-liste_fr <- liste_jfr[[19]]
-for (fonc in liste_fonc){
-  liste_jour_fonc <- liste_fr[[fonc]]
-  for (jour in liste_jours_fonc){
-    seg_cl_FONC("00",'ADC',"19",cl$jour,c(4,-170))
-    
-  }
-  
-  
-  
+for (jour in liste_j){#jours_R19_ADC éventuellement amputé d'un jours où la clusterisation est inutilisable
+  d_seg <- seg_cl_FONC(jour,fonc,num_rat,clust_seg,fr_hemi)
+  write.table(d_seg_00, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,num_rat,jour), row.names=F, quote=F, sep='\t')
 }
 
 # Etape 4 :
@@ -705,131 +703,190 @@ for (fonc in liste_fonc){
 
 ####################################### Rat numéro 19 #######################################
 
-# Etape 1 : répertoires des fonctionnalités.
+num_rat <- "19"
 
-FONC_3d_rat('ADC',"19")
-FONC_3d_rat('BVf',"19")
-FONC_3d_rat('CBF',"19")
-FONC_3d_rat('CMRO2',"19")
-FONC_3d_rat('SO2map',"19")
-FONC_3d_rat('T1map',"19")
-FONC_3d_rat('VSI',"19")
+# Etape 1 : répertoires des fonctionnalités. Jusque là : 'sans' les valsurs manquantes NaN.
+
+FONC_3d_rat('ADC',num_rat,'avec')
+FONC_3d_rat('BVf',num_rat,'avec')
+FONC_3d_rat('CBF',num_rat,'avec')
+FONC_3d_rat('CMRO2',num_rat,'avec')
+FONC_3d_rat('SO2map',num_rat,'avec')
+FONC_3d_rat('T1map',num_rat,'avec')
+FONC_3d_rat('VSI',num_rat,'avec')
 
 # Etape 2 :répertoires des fonctionnalités.
 
-rg_FONC_3d(2,'ADC',"19",3,5)
-rg_FONC_3d(3,'ADC',"19",3,5)
+rg_FONC_3d(2,'ADC',num_rat,3,5)
+rg_FONC_3d(3,'ADC',num_rat,3,5)
 
 cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
 cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
 seg_clust_3d('ADC',"19",c(3,5),cl,cl_se,c(4,-170))
 
-rg_FONC_3d(2,'BVf',"19",3,5)
-rg_FONC_3d(3,'BVf',"19",3,5)
+rg_FONC_3d(2,'BVf',num_rat,3,5)
+rg_FONC_3d(3,'BVf',num_rat,3,5)
 
-rg_FONC_3d(2,'CBF',"19",3,5)
-rg_FONC_3d(3,'CBF',"19",3,5)
+rg_FONC_3d(2,'CBF',num_rat,3,5)
+rg_FONC_3d(3,'CBF',num_rat,3,5)
 
-rg_FONC_3d(2,'CMRO2',"19",3,5)
-rg_FONC_3d(3,'CMRO2',"19",3,5)
+rg_FONC_3d(2,'CMRO2',num_rat,3,5)
+rg_FONC_3d(3,'CMRO2',num_rat,3,5)
 
-rg_FONC_3d(2,'SO2map',"19",3,5)
-rg_FONC_3d(3,'So2map',"19",3,5)
+rg_FONC_3d(2,'SO2map',num_rat,3,5)
+rg_FONC_3d(3,'So2map',num_rat,3,5)
 
-rg_FONC_3d(2,'T1map',"19",3,5)
-rg_FONC_3d(3,'T1map',"19",3,5)
+rg_FONC_3d(2,'T1map',num_rat,3,5)
+rg_FONC_3d(3,'T1map',num_rat,3,5)
 
-rg_FONC_3d(2,'VSI',"19",3,5)
-rg_FONC_3d(3,'VSI',"19",3,5)
+rg_FONC_3d(2,'VSI',num_rat,3,5)
+rg_FONC_3d(3,'VSI',num_rat,3,5)
 
 # Etape 3 :
+
+fonc <- 'ADC'
+fr_hemi <- c(4,-170)
+clust_seg <- list("00"=1,"03"='',"08"=c(3,4,5),"15"=c(4,5),"22"=3)
+liste_jr <- liste_jfr[[fonc]]
+liste_j <- liste_jr[[num_rat]]
+
+for (jour in liste_j){#jours_R19_ADC éventuellement amputé d'un jours où la clusterisation est inutilisable
+  d_seg <- seg_cl_FONC(jour,fonc,num_rat,clust_seg,fr_hemi)
+  write.table(d_seg_00, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,num_rat,jour), row.names=F, quote=F, sep='\t')
+}
+
 # Etape 4 :
 # Etape 5 :
 
 ####################################### Rat numéro 26 #######################################
 
-# Etape 1 : répertoires des fonctionnalités.
+num_rat <- "26"
 
-FONC_3d_rat('ADC',"26")
-FONC_3d_rat('BVf',"26")
-FONC_3d_rat('CBF',"26")
-FONC_3d_rat('CMRO2',"26")
-FONC_3d_rat('SO2map',"26")
-FONC_3d_rat('T1map',"26")
-FONC_3d_rat('VSI',"26")
+# Etape 1 : répertoires des fonctionnalités. Jusque là : 'sans' les valsurs manquantes NaN.
 
-# Etape 2 :répertoires des fonctionnalités.
+FONC_3d_rat('ADC',num_rat,'avec')
+FONC_3d_rat('BVf',num_rat,'avec')
+FONC_3d_rat('CBF',num_rat,'avec')
+FONC_3d_rat('CMRO2',num_rat,'avec')
+FONC_3d_rat('SO2map',num_rat,'avec')
+FONC_3d_rat('T1map',num_rat,'avec')
+FONC_3d_rat('VSI',num_rat,'avec')
 
-rg_FONC_3d(2,'ADC',"26",3,5)
-rg_FONC_3d(3,'ADC',"26",3,5)
+# Etape 2 : répertoires des fonctionnalités.
 
-cl <- c()
-cl_se <- list()
-seg_clust_3d('ADC',"26",c(3,5),cl,cl_se,c(4,-170))
+rg_FONC_3d(2,'ADC',num_rat,3,5)
+rg_FONC_3d(3,'ADC',num_rat,3,5)
 
-rg_FONC_3d(2,'BVf',"26",3,5)
-rg_FONC_3d(3,'BVf',"26",3,5)
+fr_hemi <- c(4,-170)
+cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
+cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
 
-rg_FONC_3d(2,'CBF',"26",3,5)
-rg_FONC_3d(3,'CBF',"26",3,5)
+seg_clust_3d('ADC',"19",cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'CMRO2',"26",3,5)
-rg_FONC_3d(3,'CMRO2',"26",3,5)
+rg_FONC_3d(2,'BVf',num_rat,3,5)
+rg_FONC_3d(3,'BVf',num_rat,3,5)
 
-rg_FONC_3d(2,'SO2map',"26",3,5)
-rg_FONC_3d(3,'So2map',"26",3,5)
 
-rg_FONC_3d(2,'T1map',"26",3,5)
-rg_FONC_3d(3,'T1map',"26",3,5)
+#seg_clust_3d
+                           
+                           
+                           
+rg_FONC_3d(2,'CBF',num_rat,3,5)
+rg_FONC_3d(3,'CBF',num_rat,3,5)
 
-rg_FONC_3d(2,'VSI',"26",3,5)
-rg_FONC_3d(3,'VSI',"26",3,5)
+rg_FONC_3d(2,'CMRO2',num_rat,3,5)
+rg_FONC_3d(3,'CMRO2',num_rat,3,5)
+
+rg_FONC_3d(2,'SO2map',num_rat,3,5)
+rg_FONC_3d(3,'So2map',num_rat,3,5)
+
+rg_FONC_3d(2,'T1map',num_rat,3,5)
+rg_FONC_3d(3,'T1map',num_rat,3,5)
+
+rg_FONC_3d(2,'VSI',num_rat,3,5)
+rg_FONC_3d(3,'VSI',num_rat,3,5)
 
 # Etape 3 :
+
+fonc <- 'ADC'
+fr_hemi <- c(4,-170)
+clust_seg <- list("00"=1,"03"=1,"08"=4,"15"=4,"22"=3)#"08"=c(3,4,5),"15"=c(4,5),"22"=3)
+liste_jr <- liste_jfr[[fonc]]
+liste_j <- liste_jr[[num_rat]]
+
+for (jour in liste_j){#jours_R19_ADC éventuellement amputé d'un jours où la clusterisation est inutilisable
+  d_seg <- seg_cl_FONC(jour,fonc,num_rat,clust_seg,fr_hemi)
+  #write.table(d_seg, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,num_rat,jour), row.names=F, quote=F, sep='\t')
+}
+
+
+
+dd <- read.table(sprintf("%s-J%s-%s-bg-all.dat","19","00",'BVf'),header=T)
+
+liste.nan <- is.na(dd[,4])
+d.seg <- d[!liste.nan,]
+
+dd <- d.seg$x
+
+ee <- dd[liste.nan,]
+
+
 # Etape 4 :
 # Etape 5 :
 
 ####################################### Rat numéro 30 #######################################
 
-# Etape 1 : répertoires des fonctionnalités.
+num_rat <- "30"
 
-FONC_3d_rat('ADC',"30")
-FONC_3d_rat('BVf',"30")
-FONC_3d_rat('CBF',"30")
-FONC_3d_rat('CMRO2',"30")
-FONC_3d_rat('SO2map',"30")
-FONC_3d_rat('T1map',"30")
-FONC_3d_rat('VSI',"30")
+# Etape 1 : répertoires des fonctionnalités. Jusque là : 'sans' les valsurs manquantes NaN.
+
+FONC_3d_rat('ADC',num_rat,'avec')
+FONC_3d_rat('BVf',num_rat,'avec')
+FONC_3d_rat('CBF',num_rat,'avec')
+FONC_3d_rat('CMRO2',num_rat,'avec')
+FONC_3d_rat('SO2map',num_rat,'avec')
+FONC_3d_rat('T1map',num_rat,'avec')
+FONC_3d_rat('VSI',num_rat,'avec')
 
 # Etape 2 :répertoires des fonctionnalités.
 
-rg_FONC_3d(2,'ADC',"30",3,5)
-rg_FONC_3d(3,'ADC',"30",3,5)
+rg_FONC_3d(2,'ADC',num_rat,3,5)
+rg_FONC_3d(3,'ADC',num_rat,3,5)
 
-cl <- c()
-cl_se <- list()
-seg_clust_3d('ADC',"30",c(3,5),cl,cl_se,c(4,-170))
+cl <- c(4,4)#list("00"=c(3,5),"03"=c(3,5),"08"=c(3,5),"15"=c(3,5),"22"=c(3,5))
+cl_se <- list("00"=1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
+seg_clust_3d('ADC',"19",c(3,5),cl,cl_se,c(4,-170))
 
-rg_FONC_3d(2,'BVf',"30",3,5)
-rg_FONC_3d(3,'BVf',"30",3,5)
+rg_FONC_3d(2,'BVf',num_rat,3,5)
+rg_FONC_3d(3,'BVf',num_rat,3,5)
 
-rg_FONC_3d(2,'CBF',"30",3,5)
-rg_FONC_3d(3,'CBF',"30",3,5)
+rg_FONC_3d(2,'CBF',num_rat,3,5)
+rg_FONC_3d(3,'CBF',num_rat,3,5)
 
-rg_FONC_3d(2,'CMRO2',"30",3,5)
-rg_FONC_3d(3,'CMRO2',"30",3,5)
+rg_FONC_3d(2,'CMRO2',num_rat,3,5)
+rg_FONC_3d(3,'CMRO2',num_rat,3,5)
 
-rg_FONC_3d(2,'SO2map',"30",3,5)
-rg_FONC_3d(3,'So2map',"30",3,5)
+rg_FONC_3d(2,'SO2map',num_rat,3,5)
+rg_FONC_3d(3,'So2map',num_rat,3,5)
 
-rg_FONC_3d(2,'T1map',"30",3,5)
-rg_FONC_3d(3,'T1map',"30",3,5)
+rg_FONC_3d(2,'T1map',num_rat,3,5)
+rg_FONC_3d(3,'T1map',num_rat,3,5)
 
-rg_FONC_3d(2,'VSI',"30",3,5)
-rg_FONC_3d(3,'VSI',"30",3,5)
+rg_FONC_3d(2,'VSI',num_rat,3,5)
+rg_FONC_3d(3,'VSI',num_rat,3,5)
 
 # Etape 3 :
+
+fonc <- 'ADC'
+fr_hemi <- c(4,-170)
+clust_seg <- # à compléter avec l'étape 2
+liste_jr <- liste_jfr[[fonc]]
+liste_j <- liste_jr[[num_rat]]
+
+for (jour in liste_j){#jours_R19_ADC éventuellement amputé d'un jours où la clusterisation est inutilisable
+  d_seg <- seg_cl_FONC(jour,fonc,num_rat,clust_seg,fr_hemi)
+  write.table(d_seg_00, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,num_rat,jour), row.names=F, quote=F, sep='\t')
+}
+
 # Etape 4 :
 # Etape 5 :
-
-

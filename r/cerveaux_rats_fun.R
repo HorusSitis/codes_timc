@@ -39,15 +39,17 @@ cerveau_jfr <- function(jour,fonc,rat){
 # Fonction à utiliser après avoir sélectionné le bon répertoire de travail : fonctionnel_gris/ADC
 # Ne pas oublier les .csv pour les slices !
 
-FONC_3d_rat <- function(fonc,rat){
+FONC_3d_rat <- function(fonc,rat,val){
   jours_fonc <- liste_jfr[[fonc]] # étape intermédiaire
   jours <- jours_fonc[[rat]] # liste_jours_ADC[[rat]]
   
   for (j in 1:length(jours)){
     day=jours[j]
     d <- cerveau_jfr(day, fonc, rat)
-    liste.nan <- is.na(d[,4])
-    d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe
+    if (val=='sans'){
+      liste.nan <- is.na(d[,4])
+      d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe
+    }
     write.table(d, sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc), row.names=F, quote=F, sep='\t')
   }
 }
@@ -74,6 +76,12 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_min,cl_max){
   for (j in 1:length(jours)){
     day=jours[j]
     d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T)
+    
+    #print(d[3,4])
+    liste.nan <- is.na(d[,4])
+    d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe, pas besoin de réassembler ensuite
+    #print(d[3,4])
+    
     d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
     d.fonc <- d[,4]
     
@@ -128,8 +136,15 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
   for (j in 1:length(jours)){
     jour=jours[j]
     
-    # Clusterisation
+    # Importation des données : cerveau tridimensionnel et niveaux de gris de la fonctionnalité, tranches indexées.
     d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,jour,fonc),header=T)
+    
+    # Retrait des valeurs manquantes.
+
+    liste.nan <- is.na(d[,4])
+    d <- d[!liste.nan,]
+    
+    # Clusterisation
     d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
     d.fonc <- d[,4]
     
@@ -193,20 +208,36 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
 # ------------------- Extraction de clusters pour une segmentation. Ouvrir dans le répertoire correspondant à la fonctionnalité concernée ------------------- #
 
 seg_cl_FONC <- function(day,fonc,rat,clust,hemi){# clust : vecteur des clusters utilisables pour la segmentation, estimés à l'oeil à partir de la fonction rg_FONC_3d.
+
+  # Impotation des données : cerveau tridimensionnel, tranches indexées
+  t <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,jour,fonc),header=T)
+    
+  # Extraction des valeurs manquantes
+  liste.nan <- is.na(d[,4])
+  d <- t[!liste.nan,]
+  e <- t[liste.nan,]
   
-  d <- read.table(sprintf("%s-J%s-%s-bg-all.dat",rat,day,fonc),header=T)
+  # Clusterisation
   d.clust <- cluster_jfr_f10(d,2,5)
   
+  # Etiquetage pour la zone ischémiée : on utilise les clusters repérés à l'étape 2.
   l <- length(d[,4])
   d.label <- rep(0,l)
   for (cl in clust){
     d.label <- ifelse(d.clust$classification==cl,1,d.label)
   }
-  #d.label <- ifelse(d.clust$classification==1,1,d.label)
   d.label <- ifelse(hemi[1]*d$x+hemi[2]>d$y,2,d.label)
-  
-  d.seg <- as.data.frame(cbind(d$x,d$y,d$z,d.label,d$Slice),header=T)#d[d.clust$classification==clust,]
+  d.seg <- as.data.frame(cbind(d$x,d$y,d$z,d.label,d$Slice))#,header=T)#d[d.clust$classification==clust,]
   colnames(d.seg) <- c("x","y","z","Label","Slice")
+  
+  # Etiquetage des valeurs manquantes
+  m <- length(e[,4])
+  e.label <- rep(-1,l)
+  e.seg <- as.data.frame(cbind(e$x,e$y,e$z,e.label,e$Slice))#,header=T)
+  colnames(e.seg) <- c("x","y","z","Label","Slice")
+  
+  # Réassemblage de la dataframe : étiquetage et inclusion des valeurs manquantes
+  d.seg <- as.data.frame(rbind(d.seg,e.seg))
   return(d.seg)
 }
 
