@@ -60,9 +60,9 @@ FONC_3d_rat <- function(fonc,rat,val){
 # Exclut les fonctionnalités trop basses -inférieures à 10.
 # data contient la fonctionnalité
 
-cluster_jfr_f10 <- function(data,cl_min,cl_max){
+cluster_jfr_fmin <- function(data,cl_min,cl_max,min){# on adapte le rabotage à la fonctionnalité
   data.fonc <- data[,4]
-  data <- data[data.fonc>10,] # cutoff à 10 de diffusion
+  data <- data[data.fonc>min,] # cutoff à 10 de diffusion
   d.clust <- Mclust(data.fonc, G=cl_min:cl_max, modelNames="V")
   #plot(d.clust, what="classification")
   return(d.clust)
@@ -74,6 +74,7 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_bounds){
   
   jours_fonc <- liste_jfr[[fonc]]
   jours <- jours_fonc[[rat]]
+  min_fonc <- liste_min_fonc[[fonc]]
   
   cl_min <- cl_bounds[1]
   cl_max <- cl_bounds[2]
@@ -82,12 +83,13 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_bounds){
     day=jours[j]
     d <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,day,fonc),header=T)
     
-    #print(d[3,4])
+    #print(d[1:50,4])
     liste.nan <- is.na(d[,4])
+    #print(liste.nan[1:50])
     d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe, pas besoin de réassembler ensuite
-    #print(d[3,4])
+    #print(d[1:50,4])
     
-    d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
+    d.clust <- cluster_jfr_fmin(d,cl_min,cl_max,min_fonc)
     d.fonc <- d[,4]
     
     # On passe aux représentations graphiques
@@ -134,6 +136,7 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
 
   liste_jr <- liste_jfr[[fonc]]
   liste_j <- liste_jr[[rat]]
+  min_fonc <- liste_min_fonc[[fonc]]
   
   cl_min <- cl_bounds[1]
   cl_max <- cl_bounds[2]
@@ -142,20 +145,20 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
 
     # Importation des données : cerveau tridimensionnel et niveaux de gris de la fonctionnalité, tranches indexées.
     t <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
-    
+
     # Mise à part des valeurs manquantes.
     liste.nan <- is.na(t[,4])
     d <- t[!liste.nan,]
     e <- t[liste.nan,]
     
     # Clusterisation
-    d.clust <- cluster_jfr_f10(d,cl_min,cl_max)
+    d.clust <- cluster_jfr_fmin(d,cl_min,cl_max,min_fonc)
     d.fonc <- d[,4]
 
     # Etiquetage des valeurs manquantes : pour utiliser color_seg.
     m <- length(e[,4])
     e.label <- rep(3,m)
-    e.seg <- as.data.frame(cbind(e$x,e$y,e$z,e.label,e$Slice))#,header=T)
+    e.seg <- as.data.frame(cbind(e$x,e$y,e$z,e.label,e$Slice),header=T)
     colnames(e.seg) <- c("x","y","z","Label","Slice")
     
     # Segmentation à l'aide des clusters sur lesquels on effectue le test.
@@ -171,11 +174,12 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
     
     # Réassemblage de la dataframe : étiquetage et inclusion des valeurs manquantes
     d.seg <- as.data.frame(rbind(d.seg,e.seg))
-    # Seulement utilisé dans la dernière fen^etre graphique
+    # Seulement utilisé dans la dernière fenêtre graphique
     
     # On passe aux représentations graphiques
 
     #get( getOption( "device" ) )()
+    plot.new()
     split.screen( figs = c( 2, 1 ) )
     split.screen( figs = c( 1, 3 ), screen = 1 )
     split.screen( figs = c( 1, 2 ), screen = 2 )
@@ -191,7 +195,7 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
     
     screen( 6 )
     cerveau.clust <- cbind(d,d.clust$classification)
-    colnames(cerveau.clust) <- c("x","y","z",'ADC',"Slice","clust")
+    colnames(cerveau.clust) <- c("x","y","z",fonc,"Slice","clust")
     scatterplot3d(cerveau.clust$x,
                   cerveau.clust$y,
                   cerveau.clust$Slice, 
@@ -215,7 +219,7 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
                   zlab='z',
                   main="Segmentation"
     )
-    close.screen( all = TRUE )
+    #close.screen( all = TRUE )
   }
 }
 
@@ -232,7 +236,8 @@ seg_cl_FONC <- function(jour,fonc,rat,clusters,hemi){# clust : vecteur des clust
   e <- t[liste.nan,]
   
   # Clusterisation
-  d.clust <- cluster_jfr_f10(d,2,5)
+  min_fonc <- liste_min_fonc[[fonc]]
+  d.clust <- cluster_jfr_fmin(d,2,5,min_fonc)
   
   # Etiquetage pour la zone ischémiée : on utilise les clusters repérés à l'étape 2.
   l <- length(d[,4])
@@ -421,7 +426,9 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
         ns <- 1#length(hem_sain)
         
         dst <- density(entier)
-        dsti <- density(isch)
+        if (length(isch)!=0){
+          dsti <- density(isch)
+        }
         dsts <- density(hem_sain)
         
         #plot.new()
@@ -429,14 +436,16 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
         title <- sprintf("Rat %s jour %s %s",rat,jour,fonc)
         #title <- paste(title,segtitle)
         
-        plot(dst$x,dst$y,type="n",main=title,sub=segtitle)
-        lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
-        lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
-        lines(dst$x, dst$y, lwd = 3, col="gray70")
-        
-        legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain","Cerveau entier"),
-               col = c("darkred","darkblue","gray70"),
-               lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
+        if (length(isch)!=0){
+          plot(dst$x,dst$y,type="n",main=title,sub=segtitle)
+          lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
+          lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
+          lines(dst$x, dst$y, lwd = 3, col="gray70")
+          
+          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain","Cerveau entier"),
+                 col = c("darkred","darkblue","gray70"),
+                 lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
+        }
       }
       # sub-plot fait
     }
