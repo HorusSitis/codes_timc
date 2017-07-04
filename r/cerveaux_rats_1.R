@@ -139,51 +139,7 @@ rg_FONC_3d(2,'Anat',"19",3,5)
 rg_FONC_3d(2,'Anat',"26",3,5)
 rg_FONC_3d(2,'Anat',"30",2,5)
 
-# Etape 3 : pas de sementation possible avec des clusters
-
-####################################### Rat numéro 11 #######################################
-
-
-
-for (fonc in liste_fonc){# On parcourt en largeur d'abord l'arborescence de la base de données pour savoir quelles fonctionnalités sont disponibles pour le jour courant.
-  liste_jf <- liste_jfr[[fonc]]
-  liste_j <- liste_jf[[rat]]
-  if (any(liste_j==jour)){
-    print("ok")
-    liste_F <- cbind(liste_F,list(fonc))# Liste des fonctionnalités disponibles
-  }
-  else{print("non")}
-}
-
-
-liste_jf <- liste_jfr[["ADC"]]
-
-
-
-# Etape 5 : histogrammes ou courbes de niveaux de gris
-liste_R11_seg_FONC <- list("00"='',"03"='',"08"='',"15"='',"22"='')
-
-gr_ngris_seg("00",'ADC',"11")
-
-####################################### Rat numéro 19 #######################################
-
-
-ll <- gr_ngris_seg("00",'ADC',"19")
-ll <- gr_ngris_seg("03","T1map","19")
-ll <- gr_ngris_seg("08","ADC","19")
-gr_ngris_seg("15","ADC","19")
-gr_ngris_seg("22","ADC","19")
-
-for (j in 1:length(jours_R19_ADC)){
-  jour <- jours_R19_ADC[j]
-  fonc <- liste_R19_seg_FONC[[jour]]
-  gr_ngris_seg(jour,fonc,"19")
-}
-
-
-dgris_temp_fonc("19",'cer','ADC')
-
-
+# Etape 3 : pas de segmentation possible avec des clusters
 
 ####################################### Protocole pour réaliser la présentation. IRM fonctionnelle #######################################
 
@@ -210,108 +166,119 @@ dgris_temp_fonc("19",'cer','ADC')
 
 num_rat <- "11"
 
-#------------ Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. ------------#
+#-------------------------------- Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. --------------------------------#
 
 for (fonc in liste_fonc){
   FONC_3d_rat(fonc,num_rat,'avec')
 }
 
-#------------ Etape 2 : répertoires des fonctionnalités. ------------#
+#-------------------------------- Etape 2 : répertoires des fonctionnalités. Attention au BVf, J00, slice8. --------------------------------#
 
+liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI')
 fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
+#cl <- c(3,5)# encadrement du nombre de clusters
+liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
 
-cl <- c(3,5)# encadrement du nombre de clusters
+cl <- c(4,4)
+for (fonc in liste_fonc){
+  #rg_FONC_3d(2,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl)
+}
 
-rg_FONC_3d(2,'ADC',num_rat,cl)
-rg_FONC_3d(3,'ADC',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')#1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('ADC',num_rat,cl,cl_se,fr_hemi)
+# Remplir liste_fonc en observant les représentations graphiques obtenues
 
-rg_FONC_3d(2,'BVf',num_rat,cl)
-rg_FONC_3d(3,'BVf',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('BVF',num_rat,cl,cl_se,fr_hemi)
+# Vérification : aprè savoir rempli liste_fonc
 
-rg_FONC_3d(2,'CBF',num_rat,cl)
-rg_FONC_3d(3,'CBF',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('CBF',num_rat,cl,cl_se,fr_hemi)
+cl <- c(4,4)
 
-rg_FONC_3d(2,'CMRO2',num_rat,cl)
-rg_FONC_3d(3,'CMRO2',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('CMRO2',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'ADC'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'SO2map',num_rat,cl)
-rg_FONC_3d(3,'SO2map',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('SO2map',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'BVf'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'T1map',num_rat,cl)
-rg_FONC_3d(3,'T1map',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('T1map',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'CBF'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'VSI',num_rat,cl)
-rg_FONC_3d(3,'VSI',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('VSI',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'CMRO2'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-#------------ Etape 3 : ------------#
+fonc <- 'SO2map'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"=c(3)), # clusters utilisables, cf étape 2
-                    'BVf'=list(),
-                    'CBF'=list(),
-                    'CMRO2'=list(),
-                    'SO2map'=list(),
-                    'T1map'=list(),
-                    'VSI'=list()
+fonc <- 'T1map'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'VSI'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+# trop lente
+for (fonc in liste_fonc){
+  cl_se <- liste_clust[[fonc]]
+  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+}
+
+#-------------------------------- Etape 3 : --------------------------------#
+
+liste_clust <- list('ADC'=list("00"=c(1),"03"=c(3,4),"08"=c(3,4),"15"=c(4),"22"=c(4)), # clusters utilisables, cf étape 2
+                    'BVf'=list("00"=c(1),"03"=c(1),"08"=c(4),"15"=c(3,4),"22"=c(3)),
+                    'CBF'=list("00"=c(1),"03"=c(1),"08"=c(2,3),"15"=c(3,4),"22"=c()),
+                    'CMRO2'=list("00"=c(3,4),"03"=c(3),"15"=c(3),"22"=c()),
+                    'SO2map'=list("00"=c(),"03"=c(1),"15"=c(4),"22"=c()),# ? pour J15
+                    'T1map'=list("00"=c(3),"03"=c(3),"08"=c(3,4),"15"=c(4),"22"=c(4)),
+                    'VSI'=list("00"=c(3),"03"=c(4),"08"=c(3),"15"=c(3),"22"=c(3))
 )
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
-#------------ Etape 4 : ------------#
-#------------ Etape 5 : ------------#
+#-------------------------------- Etape 4 : --------------------------------#
+
+liste_suivi_slice <- list('ADC'=list(9),
+                          'BVf'=list(8,9,10),
+                          'CBF'=list(9,10),
+                          'CMRO2'=list(9,10),
+                          'SO2map'=list(10),
+                          'T1map'=list(9),
+                          'VSI'=list()
+)
+
+#liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
+liste_fonc <- list('T1map','ADC','BVf','CBF','CMRO2','SO2map','VSI')# on peut tester avec une liste des fonctionnalités restreinte
+
+# Je choisis les fonctionnalités ADC et T1map comme références
+
+dgris_temp_fonc(num_rat,list('cer'),"")
+dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
+dgris_temp_fonc(num_rat,list('cer'),"ADC")
+
+dgris_temp_fonc(num_rat,liste_suivi_slice,"")
+dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
+dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+
+#-------------------------------- Etape 5 : --------------------------------#
+
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
+suivi_etendue_fonc(num_rat,list('cer'))
+suivi_etendue_fonc(num_rat,liste_suivi_slice)
 
 ###################################################### Rat numéro 19 ######################################################
 
 num_rat <- "19"
 
-#------------ Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. ------------#
+#-------------------------------- Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. --------------------------------#
 
 for (fonc in liste_fonc){
   FONC_3d_rat(fonc,num_rat,'avec')
 }
 
-#------------ Etape 2 : répertoires des fonctionnalités. ------------#
+#-------------------------------- Etape 2 : répertoires des fonctionnalités. --------------------------------#
 
 fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
 
@@ -321,68 +288,64 @@ cl <- c(3,3)
 
 rg_FONC_3d(2,'ADC',num_rat,cl)
 rg_FONC_3d(3,'ADC',num_rat,cl)
-##
-
-# ---> bornes pour le nombre de clusters
-cl_se <- liste_clust[['ADC']]
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('ADC',num_rat,cl,cl_se,fr_hemi)
 
 rg_FONC_3d(2,'BVf',num_rat,cl)
 rg_FONC_3d(3,'BVf',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- liste_clust[['BVf']]
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('BVf',num_rat,cl,cl_se,fr_hemi)
 
 rg_FONC_3d(2,'CBF',num_rat,cl)
 rg_FONC_3d(3,'CBF',num_rat,cl)
-##
-cl <- c(3,3)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- liste_clust[['CBF']]
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('CBF',num_rat,cl,cl_se,fr_hemi)
 
 rg_FONC_3d(2,'CMRO2',num_rat,cl)
 rg_FONC_3d(3,'CMRO2',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- liste_clust[['CMRO2']]
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('CMRO2',num_rat,cl,cl_se,fr_hemi)
 
 rg_FONC_3d(2,'SO2map',num_rat,cl)
 rg_FONC_3d(3,'SO2map',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- liste_clust[['SO2map']]
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('SO2map',num_rat,cl,cl_se,fr_hemi)
 
 rg_FONC_3d(2,'T1map',num_rat,cl)
 rg_FONC_3d(3,'T1map',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- liste_clust[['T1map']]
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('T1map',num_rat,cl,cl_se,fr_hemi)
 
 rg_FONC_3d(2,'VSI',num_rat,cl)
 rg_FONC_3d(3,'VSI',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- liste_clust[['VSI']]
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('VSI',num_rat,cl,cl_se,fr_hemi)
 
-#------------ Etape 3 :
+# Vérification : aprè savoir rempli liste_fonc
+
+cl <- c(4,4)
+
+fonc <- 'ADC'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'BVf'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'CBF'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'CMRO2'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'SO2map'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'T1map'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'VSI'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+# trop lente
+for (fonc in liste_fonc){
+  cl_se <- liste_clust[[fonc]]
+  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+}
+
+#-------------------------------- Etape 3 : --------------------------------#
 
 liste_clust <- list('ADC'=list("00"=c(1),"03"=c(1),"08"=c(3,4),"15"=c(4),"22"=c(4)), # clusters utilisables, cf étape 2
                     'BVf'=list("00"=c(1),"08"=c(3,4),"15"=c(),"22"=c()),
@@ -395,108 +358,99 @@ liste_clust <- list('ADC'=list("00"=c(1),"03"=c(1),"08"=c(3,4),"15"=c(4),"22"=c(
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
-#------------ Etape 4 : ------------#
+#-------------------------------- Etape 4 : --------------------------------#
 
-liste_suivi_clust <- list('ADC'=list(9),
+liste_suivi_slice <- list('ADC'=list(9),
                           'BVf'=list(8,9,10),
                           'CBF'=list(9,10),
                           'CMRO2'=list(9,10),
                           'SO2map'=list(10),
-                          'T1map'=list(10),
+                          'T1map'=list(9),
                           'VSI'=list()
                           )
 
 #liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
-liste_fonc <- list('T1map')# on peut tester avec une liste des fonctionnalités restreinte
+liste_fonc <- list('T1map','CMRO2','VSI','SO2map','CBF','ADC','BVf')# on peut tester avec une liste des fonctionnalités restreinte
 
-dgris_temp_fonc(num_rat,'cer',"")
-dgris_temp_fonc(num_rat,'cer',"T1map")
+# Je choisis les fonctionnalités ADC et T1map comme références
 
-dgris_temp_fonc(num_rat,liste_suivi_clust[['T1map']],"")
-dgris_temp_fonc(num_rat,,"T1map")
+dgris_temp_fonc(num_rat,list('cer'),"")
+dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
+dgris_temp_fonc(num_rat,list('cer'),"ADC")
 
-#------------ Etape 5 : ------------#
+dgris_temp_fonc(num_rat,liste_suivi_slice,"")
+dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
+dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+
+#-------------------------------- Etape 5 : --------------------------------#
+
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
+suivi_etendue_fonc(num_rat,list('cer'))
+suivi_etendue_fonc(num_rat,liste_suivi_slice)
 
 ###################################################### Rat numéro 26 ######################################################
 
 num_rat <- "26"
 
-#------------ Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. ------------#
+#-------------------------------- Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. --------------------------------#
 
 for (fonc in liste_fonc){
   FONC_3d_rat(fonc,num_rat,'avec')
 }
 
-#------------ Etape 2 : répertoires des fonctionnalités. ------------#
+#-------------------------------- Etape 2 : répertoires des fonctionnalités. --------------------------------#
 
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
 fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
-
 cl <- c(3,5)# encadrement du nombre de clusters
 
-rg_FONC_3d(2,'ADC',num_rat,cl)
-rg_FONC_3d(3,'ADC',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')#1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('ADC',num_rat,cl,cl_se,fr_hemi)
+#cl <- c(4,4)
+for (fonc in liste_fonc){
+  #rg_FONC_3d(2,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl)
+}
 
-rg_FONC_3d(2,'BVf',num_rat,cl)
-rg_FONC_3d(3,'BVf',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('BVF',num_rat,cl,cl_se,fr_hemi)
+# Remplir liste_fonc en observant les représentations graphiques obtenues
 
-rg_FONC_3d(2,'CBF',num_rat,cl)
-rg_FONC_3d(3,'CBF',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('CBF',num_rat,cl,cl_se,fr_hemi)
+# Vérification : aprè savoir rempli liste_fonc
 
-rg_FONC_3d(2,'CMRO2',num_rat,cl)
-rg_FONC_3d(3,'CMRO2',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('CMRO2',num_rat,cl,cl_se,fr_hemi)
+cl <- c(4,4)
 
-rg_FONC_3d(2,'SO2map',num_rat,cl)
-rg_FONC_3d(3,'SO2map',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('SO2map',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'ADC'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'T1map',num_rat,cl)
-rg_FONC_3d(3,'T1map',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('T1map',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'BVf'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'VSI',num_rat,cl)
-rg_FONC_3d(3,'VSI',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('VSI',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'CBF'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-#------------ Etape 3 : ------------#
+fonc <- 'CMRO2'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'SO2map'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'T1map'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'VSI'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+# trop lente
+for (fonc in liste_fonc){
+  cl_se <- liste_clust[[fonc]]
+  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+}
+
+#-------------------------------- Etape 3 : --------------------------------#
 
 liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"=c(3)), # clusters utilisables, cf étape 2
                     'BVf'=list(),
@@ -509,90 +463,74 @@ liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
-#------------ Etape 4 : ------------#
+#-------------------------------- Etape 4 : --------------------------------#
 
-#------------ Etape 5 : ------------#
+#-------------------------------- Etape 5 : --------------------------------#
 
 ###################################################### Rat numéro 30 ######################################################
 
 num_rat <- "30"
 
-#------------ Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. ------------#
+#-------------------------------- Etape 1 : répertoires fonctionnel_gris. Jusque là : 'sans' les valeurs manquantes NaN. --------------------------------#
 
 for (fonc in liste_fonc){
   FONC_3d_rat(fonc,num_rat,'avec')
 }
 
-#------------ Etape 2 : répertoires des fonctionnalités. ------------#
+#-------------------------------- Etape 2 : répertoires des fonctionnalités. Attention au BVf, J00, slice8. --------------------------------#
 
+liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI')
 fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
+#cl <- c(3,5)# encadrement du nombre de clusters
+liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
 
-cl <- c(3,5)# encadrement du nombre de clusters
+cl <- c(4,4)
+for (fonc in liste_fonc){
+  #rg_FONC_3d(2,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl)
+}
 
-rg_FONC_3d(2,'ADC',num_rat,cl)
-rg_FONC_3d(3,'ADC',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')#1,"03"=c(1,3),"08"=c(3,4),"15"=c(4,5),"22"=4)
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('ADC',num_rat,cl,cl_se,fr_hemi)
+# Remplir liste_fonc en observant les représentations graphiques obtenues
 
-rg_FONC_3d(2,'BVf',num_rat,cl)
-rg_FONC_3d(3,'BVf',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('BVF',num_rat,cl,cl_se,fr_hemi)
+# Vérification : aprè savoir rempli liste_fonc
 
-rg_FONC_3d(2,'CBF',num_rat,cl)
-rg_FONC_3d(3,'CBF',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('CBF',num_rat,cl,cl_se,fr_hemi)
+cl <- c(4,4)
 
-rg_FONC_3d(2,'CMRO2',num_rat,cl)
-rg_FONC_3d(3,'CMRO2',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('CMRO2',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'ADC'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'SO2map',num_rat,cl)
-rg_FONC_3d(3,'SO2map',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('SO2map',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'BVf'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'T1map',num_rat,cl)
-rg_FONC_3d(3,'T1map',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('T1map',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'CBF'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-rg_FONC_3d(2,'VSI',num_rat,cl)
-rg_FONC_3d(3,'VSI',num_rat,cl)
-##
-cl <- c(4,4)#c(3,5)
-# ---> bornes pour le nombre de clusters
-cl_se <- list("00"='')
-# ---> choix possible de CLusters pour la SEgmentation
-seg_clust_3d('VSI',num_rat,cl,cl_se,fr_hemi)
+fonc <- 'CMRO2'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-#------------ Etape 3 : ------------#
+fonc <- 'SO2map'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'T1map'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+fonc <- 'VSI'
+cl_se <- liste_clust[[fonc]]
+seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+# trop lente
+for (fonc in liste_fonc){
+  cl_se <- liste_clust[[fonc]]
+  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+}
+
+#-------------------------------- Etape 3 : --------------------------------#
 
 liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"=c(3)), # clusters utilisables, cf étape 2
                     'BVf'=list(),
@@ -605,5 +543,5 @@ liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
-#------------ Etape 4 : ------------#
-#------------ Etape 5 : ------------#
+#-------------------------------- Etape 4 : --------------------------------#
+#-------------------------------- Etape 5 : --------------------------------#
