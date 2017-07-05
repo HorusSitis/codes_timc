@@ -116,13 +116,15 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_bounds){
       colnames(cerveau.clust) <- c("x","y","z",'ADC',"Slice","clust")
       scatterplot3d(cerveau.clust$x,
                     cerveau.clust$y,
-                    cerveau.clust$z, 
+                    cerveau.clust$Slice,
+                    #cerveau.clust$z, 
                     color= color.vector[cerveau.clust$clust],
                     pch=20,
                     #cex=2*(1-d.clust$uncertainty)^4,
                     xlab='x',
                     ylab='y',
-                    zlab='z',
+                    zlab='Slice',#'z',
+                    lab.z=1+cerveau.clust$Slice[length(cerveau.clust$Slice)]-cerveau.clust$Slice[1],
                     main=paste("Cerveau ",rat,", J",day)
       )
     }
@@ -220,6 +222,56 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
                   main="Segmentation"
     )
     #close.screen( all = TRUE )
+  }
+}
+
+# ------------------- Comparaison graphique : tranches d'intérêt clusterisées au sein, ou non, de cerveaux entiers. ------------------- #
+
+comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche){
+  
+  cl_min <- cl_bounds[1]
+  cl_max <- cl_bounds[2]
+  
+  min_fonc <- liste_min_fonc[[fonc]]
+  
+  liste_jr <- liste_jfr[[fonc]]
+  liste_j <- liste_jr[[rat]]
+
+  for (jour in liste_j){
+    
+    cerveau <- read.table(sprintf('%s/%s-J%s-%s-bg-all.dat',fonc,rat,jour,fonc),header=T)
+    c.nan <- is.na(cerveau[,4])
+    cerveau <- cerveau[!c.nan,]
+
+    tranche <- cerveau[cerveau$Slice==num_tranche,]
+    t.nan <- is.na(tranche[,4])
+    tranche <- tranche[!t.nan,]
+
+    c.clust <- cluster_jfr_fmin(cerveau,cl_min,cl_max,min_fonc)
+    
+    c.lb.clust <- as.data.frame(cbind(cerveau,c.clust$classification),header=T)
+    colnames(c.lb.clust) <- c("x","y","z",fonc,"Slice","ClLabel")
+    tc <- c.lb.clust[c.lb.clust$Slice==num_tranche,] # tranche clusterisée extraite
+    colnames(tc) <- c("x","y","z",fonc,"Slice","ClLabel")
+
+    t.clust <- cluster_jfr_fmin(tranche,cl_min,cl_max,min_fonc) # tranche clusterisée seule
+    
+    #plot.new()
+    par(mfrow=c(2,1))
+    
+    plot(tc$x, tc$y, col=color.vector[tc$ClLabel], # tranche extraite du cerveau entier clusterisé
+         pch=20,
+         #cex=2*(1-d.clust$uncertainty)^4,
+         xlab='x', ylab='y',
+         main=sprintf("%s : Rat%s, J%s, tranche%i extraite du cerveau clusterisé",fonc,rat,jour,num_tranche)
+         )
+    
+    plot(tranche$x, tranche$y, col=color.vector[t.clust$classification], # tranche seule
+         pch=20,
+         #cex=2*(1-t.clust$uncertainty)^4,
+         xlab='x', ylab='y',
+         main=sprintf("%s : Rat%s, J%s, tranche%i clusterisée seule",fonc,rat,jour,num_tranche)
+         )
   }
 }
 
