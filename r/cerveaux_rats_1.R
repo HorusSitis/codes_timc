@@ -149,8 +149,9 @@ rg_FONC_3d(2,'Anat',"30",2,5)
 # 2- Représentation graphique systématique des résultats d'examen, Utilisation de clusters pour la segmentation.
 ## --> rg_FONC_3d, figure tridimentionnelle ou projeté sur le plan frontal.
 ## --> seg_clust_3d.
+## --> comp_2vs3d_clust pour comparer, sur une tranche d'intérêt, la classification induite depuis la 3d d'une classification issue de la clusterisation 2d.
 
-# 3- Extraction de données. On s'appuie sur l'étude graphique de l'étape précédente.
+# 3- Extraction de données. On s'appuie sur l'étude graphique de l'étape précédente..
 ## --> seg_cl_FONC.
 
 # 4- Suivi des densités de niveaux de gris, par fonctionnalité, en utilisant des segmentations : commune à toutes les fonctionnalités ou respectivement réalisées avec les foctionnalités étudiées.
@@ -172,95 +173,133 @@ for (fonc in liste_fonc){
   FONC_3d_rat(fonc,num_rat,'avec')
 }
 
+for (fonc in liste_fonc){
+  dker_3d_rat(fonc,num_rat)
+}
+
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. Attention au BVf, J00, slice8. --------------------------------#
 
-liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI')
-fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
-#cl <- c(3,5)# encadrement du nombre de clusters
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI') # ordre de priorité pour les fonctionnalités.
 liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
 
 cl <- c(4,4)
+
 for (fonc in liste_fonc){
   #rg_FONC_3d(2,fonc,num_rat,cl)
-  rg_FONC_3d(3,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl,'')
 }
 
-# Remplir liste_fonc en observant les représentations graphiques obtenues
+# Remplir liste_clust et liste_suivi_slice en observant les représentations graphiques obtenues
 
-# Vérification : aprè savoir rempli liste_fonc
+# Vérification : aprè savoir rempli liste_clust
 
-cl <- c(4,4)
+fr_hemi <- c(5,-240) # inter-hémisphère, supposé plan
 
 fonc <- 'ADC'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'BVf'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'CBF'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'CMRO2'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'SO2map'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'T1map'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'VSI'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-# trop lente
-for (fonc in liste_fonc){
-  cl_se <- liste_clust[[fonc]]
-  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
 }
+
+# trop lente
+#for (fonc in liste_fonc){
+#  cl_se <- liste_clust[[fonc]]
+#  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+#}
 
 #-------------------------------- Etape 3 : --------------------------------#
 
-liste_clust <- list('ADC'=list("00"=c(1),"03"=c(3,4),"08"=c(3,4),"15"=c(4),"22"=c(4)), # clusters utilisables, cf étape 2
-                    'BVf'=list("00"=c(1),"03"=c(1),"08"=c(4),"15"=c(3,4),"22"=c(3)),
-                    'CBF'=list("00"=c(1),"03"=c(1),"08"=c(2,3),"15"=c(3,4),"22"=c()),
-                    'CMRO2'=list("00"=c(3,4),"03"=c(3),"15"=c(3),"22"=c()),
-                    'SO2map'=list("00"=c(),"03"=c(1),"15"=c(4),"22"=c()),# ? pour J15
-                    'T1map'=list("00"=c(3),"03"=c(3),"08"=c(3,4),"15"=c(4),"22"=c(4)),
-                    'VSI'=list("00"=c(3),"03"=c(4),"08"=c(3),"15"=c(3),"22"=c(3))
+liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3),"15"=c(4),"22"=c(4)), # clusters utilisables, cf étape 2
+                    'BVf'=list("00"=c(1),"03"=c(1),"08"=c(3),"15"=c(3),"22"=c(1)),
+                    'CBF'=list("00"=c(1),"03"=c(1),"08"=c(3),"15"=c(2),"22"=c(1)),
+                    'CMRO2'=list("00"=c(1),"03"=c(3),"08"=c(3),"15"=c(1),"22"=c(1)),
+                    'SO2map'=list("00"=c(0),"08"=c(0,1),"15"=c(1),"22"=c(1)),# ? pour J15
+                    'T1map'=list("00"=c(3),"03"=c(3),"08"=c(4),"15"=c(4),"22"=c(4)),
+                    'VSI'=list("00"=c(4),"03"=c(4),"08"=c(4),"15"=c(4),"22"=c())
 )
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
 #-------------------------------- Etape 4 : --------------------------------#
 
-liste_suivi_slice <- list('ADC'=list(9),
-                          'BVf'=list(8,9,10),
-                          'CBF'=list(9,10),
-                          'CMRO2'=list(9,10),
+liste_suivi_slice <- list('ADC'=list(10),
+                          'BVf'=list(10),
+                          'CBF'=list(10),
+                          'CMRO2'=list(10),
                           'SO2map'=list(10),
-                          'T1map'=list(9),
-                          'VSI'=list()
+                          'T1map'=list(10),
+                          'VSI'=list(10)
 )
 
 #liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
-liste_fonc <- list('T1map','ADC','BVf','CBF','CMRO2','SO2map','VSI')# on peut tester avec une liste des fonctionnalités restreinte
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','T1map','VSI','SO2map')# on peut tester avec une liste des fonctionnalités restreinte
 
 # Je choisis les fonctionnalités ADC et T1map comme références
 
 dgris_temp_fonc(num_rat,list('cer'),"")
-dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
-dgris_temp_fonc(num_rat,list('cer'),"ADC")
+#dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
+#dgris_temp_fonc(num_rat,list('cer'),"ADC")
 
 dgris_temp_fonc(num_rat,liste_suivi_slice,"")
-dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
-dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+#dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
+#dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
 
 #-------------------------------- Etape 5 : --------------------------------#
 
@@ -280,70 +319,64 @@ for (fonc in liste_fonc){
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. --------------------------------#
 
-fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
+liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI') # ordre de priorité pour les fonctionnalités.
+liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
 
 cl <- c(3,5)# encadrement du nombre de clusters
-cl <- c(4,4)
-cl <- c(3,3)
+#cl <- c(4,4)
+for (fonc in liste_fonc){
+  #rg_FONC_3d(2,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl)
+}
 
-rg_FONC_3d(2,'ADC',num_rat,cl)
-rg_FONC_3d(3,'ADC',num_rat,cl)
+# Remplir liste_clust et liste_suivi_slice en observant les représentations graphiques obtenues
 
-rg_FONC_3d(2,'BVf',num_rat,cl)
-rg_FONC_3d(3,'BVf',num_rat,cl)
+# Vérification : aprè savoir rempli liste_clust
 
-rg_FONC_3d(2,'CBF',num_rat,cl)
-rg_FONC_3d(3,'CBF',num_rat,cl)
-
-rg_FONC_3d(2,'CMRO2',num_rat,cl)
-rg_FONC_3d(3,'CMRO2',num_rat,cl)
-
-rg_FONC_3d(2,'SO2map',num_rat,cl)
-rg_FONC_3d(3,'SO2map',num_rat,cl)
-
-rg_FONC_3d(2,'T1map',num_rat,cl)
-rg_FONC_3d(3,'T1map',num_rat,cl)
-
-rg_FONC_3d(2,'VSI',num_rat,cl)
-rg_FONC_3d(3,'VSI',num_rat,cl)
-
-# Vérification : aprè savoir rempli liste_fonc
-
-cl <- c(4,4)
+fr_hemi <- c(5,-240) # inter-hémisphère, supposé plan
 
 fonc <- 'ADC'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'BVf'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'CBF'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'CMRO2'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'SO2map'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'T1map'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'VSI'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+comp_2vs3d_clust(fonc,num_rat,cl,10)
+
 # trop lente
-for (fonc in liste_fonc){
-  cl_se <- liste_clust[[fonc]]
-  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
-}
+#for (fonc in liste_fonc){
+#  cl_se <- liste_clust[[fonc]]
+#  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+#}
 
 #-------------------------------- Etape 3 : --------------------------------#
 
@@ -400,68 +433,113 @@ for (fonc in liste_fonc){
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. --------------------------------#
 
-liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
-fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
-cl <- c(3,5)# encadrement du nombre de clusters
+liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI') # ordre de priorité pour les fonctionnalités.
+liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
 
-#cl <- c(4,4)
+cl <- c(3,5)# encadrement du nombre de clusters
+cl <- c(4,4)
 for (fonc in liste_fonc){
   #rg_FONC_3d(2,fonc,num_rat,cl)
-  rg_FONC_3d(3,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl,'')
 }
 
-# Remplir liste_fonc en observant les représentations graphiques obtenues
+# Remplir liste_clust et liste_suivi_slice en observant les représentations graphiques obtenues
 
-# Vérification : aprè savoir rempli liste_fonc
+# Vérification : aprè savoir rempli liste_clust
 
-cl <- c(4,4)
+fr_hemi <- c(5,-240) # inter-hémisphère, supposé plan
 
 fonc <- 'ADC'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
+
 fonc <- 'BVf'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'CBF'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'CMRO2'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'SO2map'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+comp_2vs3d_clust(fonc,num_rat,cl,10)
 
 fonc <- 'T1map'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+comp_2vs3d_clust(fonc,num_rat,cl,10)
 
 fonc <- 'VSI'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-# trop lente
-for (fonc in liste_fonc){
-  cl_se <- liste_clust[[fonc]]
-  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
 }
+
+
+
+
+
+rr <- read.table(sprintf('%s/%s-J%s-%s-bg-all.dat','VSI','11','03','VSI'),header=T)
+lrr <- is.na(rr[,'VSI'])
+rr <- rr[!lrr,]
+cc <- cluster_jfr_fmin(data = rr,cl_min = 4,cl_max = 4,min = 10)
+
+# trop lente
+#for (fonc in liste_fonc){
+#  cl_se <- liste_clust[[fonc]]
+#  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+#}
 
 #-------------------------------- Etape 3 : --------------------------------#
 
-liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"=c(3)), # clusters utilisables, cf étape 2
-                    'BVf'=list(),
-                    'CBF'=list(),
-                    'CMRO2'=list(),
-                    'SO2map'=list(),
-                    'T1map'=list(),
-                    'VSI'=list()
+liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(),"15"=c(),"22"=c()), # clusters utilisables, cf étape 2
+                    'BVf'=list("00"=c(1),"03"=c(),"08"=c(),"15"=c(),"22"=c()),
+                    'CBF'=list("00"=c(1),"03"=c(4),"08"=c(4),"15"=c(),"22"=c(4)),
+                    'CMRO2'=list("00"=c(1),"03"=c(3),"08"=c(3),"15"=c(3),"22"=c(3)),
+                    'SO2map'=list("00"=c(),"03"=c(),"08"=c(),"15"=c(),"22"=c()),
+                    'T1map'=list("00"=c(),"03"=c(),"08"=c(),"15"=c(),"22"=c()),
+                    'VSI'=list("00"=c(4),"03"=c(3),"08"=c(),"15"=c(),"22"=c(4))
 )
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
+
+liste_suivi_slice <- list('ADC'=list(6,7,8),
+                          'BVf'=list(6,7,8),
+                          'CBF'=list(6,7,8),
+                          'CMRO2'=list(6,7,8),
+                          'SO2map'=list(6,7,8),
+                          'T1map'=list(6,7,8),
+                          'VSI'=list(6,7,8)
+)
 
 #-------------------------------- Etape 4 : --------------------------------#
 
@@ -479,10 +557,15 @@ for (fonc in liste_fonc){
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. Attention au BVf, J00, slice8. --------------------------------#
 
-liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI')
-fr_hemi <- c(4,-170) # inter-hémisphère, supposé plan
-#cl <- c(3,5)# encadrement du nombre de clusters
+liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI') # ordre de priorité pour les fonctionnalités.
 liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
+
+cl <- c(3,5)# encadrement du nombre de clusters
+#cl <- c(4,4)
+for (fonc in liste_fonc){
+  #rg_FONC_3d(2,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl)
+}
 
 cl <- c(4,4)
 for (fonc in liste_fonc){
@@ -490,45 +573,54 @@ for (fonc in liste_fonc){
   rg_FONC_3d(3,fonc,num_rat,cl)
 }
 
-# Remplir liste_fonc en observant les représentations graphiques obtenues
+# Remplir liste_clust et liste_suivi_slice en observant les représentations graphiques obtenues
 
-# Vérification : aprè savoir rempli liste_fonc
+# Vérification : aprè savoir rempli liste_clust
 
-cl <- c(4,4)
+fr_hemi <- c(5,-240) # inter-hémisphère, supposé plan
 
 fonc <- 'ADC'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'BVf'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'CBF'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'CMRO2'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'SO2map'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'T1map'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
 fonc <- 'VSI'
+cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+comp_2vs3d_clust(fonc,num_rat,cl,10)
+
 # trop lente
-for (fonc in liste_fonc){
-  cl_se <- liste_clust[[fonc]]
-  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
-}
+#for (fonc in liste_fonc){
+#  cl_se <- liste_clust[[fonc]]
+#  seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+#}
 
 #-------------------------------- Etape 3 : --------------------------------#
 
