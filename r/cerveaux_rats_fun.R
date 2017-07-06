@@ -109,7 +109,7 @@ cluster_jfr_fmin <- function(data,cl_min,cl_max,min){# on adapte le rabotage à 
 
 # ------------------- Pour un affichage systématique des données tridimensionnelles : une représentation graphique par jour. ------------------- #
 
-rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt){#option : clusterisation sur les tranches dénoyautées suivables temporellement
+rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt){# option : clusterisation sur les tranches dénoyautées suivables temporellement
   
   jours_fonc <- liste_jfr[[fonc]]
   jours <- jours_fonc[[rat]]
