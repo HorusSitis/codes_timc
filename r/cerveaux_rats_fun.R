@@ -99,7 +99,7 @@ dker_3d_rat <- function(fonc,rat,val){# on garde les valeurs manquantes
 # Exclut les fonctionnalités trop basses -inférieures à 10.
 # data contient la fonctionnalité
 
-cluster_jfr_fmin <- function(data,cl_min,cl_max,min){# on adapte le rabotage à la fonctionnalité
+cluster_jfr_fmin <- function(data,cl_min,cl_max,min){# on adapte le rabotage à la fonctionnalité.
   data.fonc <- data[,4]
   data <- data[data.fonc>min,] # cutoff à 10 de diffusion
   d.clust <- Mclust(data.fonc, G=cl_min:cl_max, modelNames="V")
@@ -287,10 +287,15 @@ comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche){
     cerveau <- read.table(sprintf('%s/%s-J%s-%s-bg-all.dat',fonc,rat,jour,fonc),header=T)
     c.nan <- is.na(cerveau[,4])
     cerveau <- cerveau[!c.nan,]
+    
+    #if (rat=="30"){# on retire les structures visibles à l'oeil, pour garder la substance blanche
+    #  c.clust.v0 <- cluster_jfr_fmin(cerveau,cl_min,cl_max,min_fonc)
+    #  cerveau <- cerveau[c.clust.v0$uncertainty>0.3,]
+    #}
 
     tranche <- cerveau[cerveau$Slice==num_tranche,]
-    t.nan <- is.na(tranche[,4])
-    tranche <- tranche[!t.nan,]
+    #t.nan <- is.na(tranche[,4])
+    #tranche <- tranche[!t.nan,]
 
     c.clust <- cluster_jfr_fmin(cerveau,cl_min,cl_max,min_fonc)
     
@@ -531,6 +536,12 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
       for (jour in jours){# une fenêtre pour la fonctionnalité courante
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
         cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
+        #if (tranches[0]==0){
+        #  cerveau_isch <- cerveau_fonc[cerveau_seg$Label!=2,] # on inclut éventuellement des valeurs manquantes à la zone ischémiée
+        #}
+        #else{
+        #  cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
+        #}
         cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
         
         if (jour=="00"){
@@ -571,7 +582,7 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
           lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
           lines(dst$x, dst$y, lwd = 3, col="gray70")
           
-          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain","Cerveau entier"),
+          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain J00","Cerveau entier"),
                  col = c("darkred","darkblue","gray70"),
                  lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
         }
@@ -579,6 +590,107 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
       # sub-plot fait
     }
     # fonctionnalité vue
+  }
+  else if (any(opt_1==tranche_unique)){
+    # suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
+    liste_s_slice <- opt_1
+    
+    #subtitle <- paste("Tr ",tr) # indiquie les tranches du suivi
+    
+    for (fonc in liste_fonc){
+      
+      segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+      fonc_seg <- fonc # la segmentation avec fonc_seg sera celle utilisée
+      #if (opt_2!=''){
+      #  fonc_seg <- opt_2 # fonc prend la valeur de l'argument optionnel opt_1 si celui-ci est non vide
+      #  segtitle <- paste("SEG : ",opt_2)
+      #}
+      tranches <- liste_s_slice
+      
+      subtitle <- 'Tranche ' # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+      for (tr in tranches){
+        subtitle <- paste(subtitle,'-',tr)
+      }
+      
+      liste_jr <- liste_jfr[[fonc]]
+      jours <- liste_jr[[rat]]# plus tard --------#
+      
+      # Représentation graphique : fonctionnalité courante
+      plot.new()
+      par(mfrow=c(2,3),cex.main=1.7, cex.sub=1.2,col.main="black", col.sub="red")
+      
+      for (jour in jours){
+        cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
+        cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
+        cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
+        
+        if (jour=="00"){
+          # sélection de l'hémisphère sain au jour 00
+          cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
+          # sélection des tranches pour le suivi temporel
+          l <- length(cerveau_hem[,4])
+          liste_tr <- rep(FALSE,l)
+          for (tr in tranches){
+            liste_tr <- ifelse(any(tr==cerveau_hem$Slice),TRUE,liste_tr)
+          }
+          tranches_hem <- cerveau_hem[liste_tr,]
+          # on crée la liste de niveaux de gris exploitable par density()
+          hem_sain <- tranches_hem[,4]
+          liste.nan <- is.na(hem_sain)
+          hem_sain <- hem_sain[!liste.nan] # on retire les valeurs manquantes de la fonctionnalité pour évaluer sa densité
+        }
+        # on définit hem_sain au jour 00, on ne le modifie plus par la suite
+        
+        l <- length(cerveau_fonc[,4])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(any(tr==cerveau_fonc$Slice),TRUE,liste_tr)
+        }
+        tranches_fonc <- cerveau_fonc[liste_tr,]
+        # on crée la liste de niveaux de gris exploitable par density()
+        entieres <- tranches_fonc[,4]
+        liste.nan <- is.na(entieres)
+        entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
+        
+        l <- length(cerveau_isch[,4])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(any(tr==cerveau_isch$Slice),TRUE,liste_tr)
+        }
+        tranches_isch <- cerveau_isch[liste_tr,]
+        # on crée la liste de niveaux de gris exploitable par density()
+        isch <- tranches_isch[,4]
+        liste.nan <- is.na(isch)
+        isch <- isch[!liste.nan] # on retire les valeurs manquantes
+        
+        ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
+        n <- 1#length(entieres)
+        ni <- 1#length(isch)
+        ns <- 1#length(hem_sain)
+        
+        dst <- density(entieres)
+        if (length(isch)!=0){dsti <- density(isch)}
+        dsts <- density(hem_sain)
+        
+        #plot.new()
+        #par(lend="butt")
+        title <- sprintf("Rat %s jour %s %s",rat,jour,fonc)
+        #title <- paste(title,subtitle,segtitle)
+        
+        if (length(isch)!=0){
+          plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle))
+          lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
+          lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
+          lines(dst$x, dst$y, lwd = 3, col="gray70")
+          
+          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain J00","Cerveau entier"),
+                 col = c("darkred","darkblue","gray70"),
+                 lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
+        }
+      }# sub-plot fait
+      
+      
+    }# fonctionnalité vue
   }
   else{# suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
     liste_s_slice <- opt_1
@@ -616,7 +728,11 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
           # sélection de l'hémisphère sain au jour 00
           cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
           # sélection des tranches pour le suivi temporel
-          liste_tr <- ifelse(any(tranches==cerveau_hem$Slice),TRUE,FALSE)
+          l <- length(cerveau_hem[,4])
+          liste_tr <- rep(FALSE,l)
+          for (tr in tranches){
+            liste_tr <- ifelse(any(tr==cerveau_hem$Slice),TRUE,liste_tr)
+          }
           tranches_hem <- cerveau_hem[liste_tr,]
           # on crée la liste de niveaux de gris exploitable par density()
           hem_sain <- tranches_hem[,4]
@@ -625,14 +741,22 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
         }
         # on définit hem_sain au jour 00, on ne le modifie plus par la suite
         
-        liste_tr <- ifelse(any(tranches==cerveau_fonc$Slice),TRUE,FALSE)
+        l <- length(cerveau_fonc[,4])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(any(tr==cerveau_fonc$Slice),TRUE,liste_tr)
+        }
         tranches_fonc <- cerveau_fonc[liste_tr,]
         # on crée la liste de niveaux de gris exploitable par density()
         entieres <- tranches_fonc[,4]
         liste.nan <- is.na(entieres)
         entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
         
-        liste_tr <- ifelse(any(tranches==cerveau_isch$Slice),TRUE,FALSE)
+        l <- length(cerveau_isch[,4])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(any(tr==cerveau_isch$Slice),TRUE,liste_tr)
+        }
         tranches_isch <- cerveau_isch[liste_tr,]
         # on crée la liste de niveaux de gris exploitable par density()
         isch <- tranches_isch[,4]
@@ -659,7 +783,7 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
           lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
           lines(dst$x, dst$y, lwd = 3, col="gray70")
           
-          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain","Cerveau entier"),
+          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain J00","Cerveau entier"),
                  col = c("darkred","darkblue","gray70"),
                  lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
         }
@@ -681,66 +805,80 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
   vect.fonc <- c('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
   vect.fonc.color <- c('red','green','blue','orange','purple','black','grey70')
   
-  liste_suivi <- list('ADC'='','BVf'='','CBF'='','CMRO2'='','SO2map'='','T1map'='','VSI'='')
   num_jours <- list("00"=0,"03"=3,"08"=8,"15"=15,"22"=22)
   color.fonc.list <- list('ADC'='red','BVf'='green','CBF'='blue','CMRO2'='orange','SO2map'='purple','T1map'='black','VSI'='grey70')
   
+  abs_suivi <- c(0,3,8,15,22)
+  # liste des temps disponibles par fonctionnalité
+  liste_abs_seg <- list('ADC'=c(),'BVf'=c(),'CBF'=c(),'CMRO2'=c(),'SO2map'=c(),'T1map'=c(),'VSI'=c())
+  # liste des aires ou volumes par fonctionnalité
+  liste_etendues <- list('ADC'='','BVf'='','CBF'='','CMRO2'='','SO2map'='','T1map'='','VSI'='')
+  
   if (any(opt=='cer')){# suivi sur le cerveau entier, boucle sur les jours existant pour chaque fonctionnalité.
     for (fonc in liste_fonc){
-      
-      fonc_seg <- fonc # la segmentation avec fonc_seg sera celle utilisée
-      #if (opt_2!=''){
-      #  fonc_seg <- opt_2 # fonc prend la valeur de l'argument optionnel opt_1 si celui-ci est non vide
-      #}
+      fonc_seg <- fonc
+      #print(opt)
+      #tranches <- liste_s_slice#[[fonc_seg]]
+      #print(tranches)
       
       liste_jr <- liste_jfr[[fonc]]
       jours <- liste_jr[[rat]]
       
-      
       # Abscisses : jours de segmentation
       abs_seg <- c()
-      # Vecteur des aires de la zone ischémiée pour la fonctionnalité courante, initialisé
-      aires_fonc <- c()
+      # Vecteur des volumes de la zone ischémiée pour la fonctionnalité courante, initialisé
+      vols_fonc <- c()
       
       for (jour in jours){# une fenêtre pour la fonctionnalité courante
+        
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
         cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
         cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
-
+        
+        #l <- length(cerveau_isch$Slice)
+        #liste_tr <- rep(FALSE,l)
+        #for (tr in tranches){
+        #  liste_tr <- ifelse(cerveau_isch$Slice==tr,TRUE,liste_tr)
+        #}
+        
+        #tranches_isch <- cerveau_isch[liste_tr,]
+        ## on crée la liste de niveaux de gris exploitable par density()
         isch <- cerveau_isch[,4]
         liste.nan <- is.na(isch)
         isch <- isch[!liste.nan] # on retire les valeurs manquantes
         
         ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
-        aire <- length(isch)
+        #n <- length(entieres)
+        vol <- length(isch)
         njour <- num_jours[[jour]]
-        #aires_fonc[njour] <- aire
         
-        if(aire!=0){
-          abs_seg <- cbind(abs_seg,c(num_jours[[jour]]))
-          aires_fonc <- cbind(aires_fonc,c(aire))
+        if(vol!=0){
+          abs_seg <- cbind(abs_seg,c(njour))
+          vols_fonc <- cbind(vols_fonc,c(vol))
         }
-
-        #legend()#"topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain","Cerveau entier"),
-        #col = c("darkred","darkblue","gray70"),
-        #lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
       }
       # vecteur rempli pour la fonctionnalité
-      liste_suivi[[fonc]] <- aires_fonc
+      liste_etendues[[fonc]] <- vols_fonc
+      # liste des temps disponibles remplie pour fonctionnalité courante
+      liste_abs_seg[[fonc]] <- abs_seg
     }
     # listes toutes remplies pour les nuages de points correspondant aux fonctionnalités
     # on passe à la représentation graphique
     plot.new()
     par(mfrow=c(1,1),new=T)
-    abs <- c(1,2,3,4,5)
-    sain <- rep(0,length(abs_seg))
-    plot(x=abs,y=sain,col='blue',ylim = range(c(-10, 5000)), xlab = "", ylab = "")
+    sain <- rep(0,length(abs_suivi))
+    plot(x=abs_suivi,
+         y=sain,
+         col='blue',ylim = range(c(-10, 3000)),
+         xlab = "",
+         ylab = "",
+         main = "Zones ischémiées, toutes les tranches observables"
+         )
     for (fonc in liste_fonc){
       #print(liste_suivi[[fonc]])
-      lines(x=abs_seg,y=liste_suivi[[fonc]],col=color.fonc.list[[fonc]])
-      #polygon(x=abs,y=liste_suivi[[fonc]],col='grey70',border=NA) # on superpose les nuages de points
+      lines(x=liste_abs_seg[[fonc]],y=liste_etendues[[fonc]],col=color.fonc.list[[fonc]])
     }
-    legend(title="Suivi temporel : étendue des zones ischémiées",
+    legend(title="Suivi temporel sur les jours disponibles",
            "topright", inset = 0.01,
            legend = liste_fonc,#vect.fonc,
            col = vect.fonc.color,#color.fonc.list,
@@ -748,23 +886,97 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
            lwd = 2, pt.cex = 2
     )
   }
-  else{# suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
-
+  else if (any(opt==tranche_unique)){
+    # suivi sur la tranche sélectionnée, boucle sur les jours existant pour chaque fonctionnalité.
+    liste_s_slice <- opt
+    
     for (fonc in liste_fonc){
       fonc_seg <- fonc
-      liste_suivi_slice <- opt
-      print(opt)
-      tranches <- liste_suivi_slice[[fonc_seg]]
-      print(tranches)
+      #print(opt)
+      tranches <- liste_s_slice#[[fonc_seg]]
+      #print(tranches)
       
       liste_jr <- liste_jfr[[fonc]]
       jours <- liste_jr[[rat]]
       
       # Abscisses : jours de segmentation
       abs_seg <- c()
-      # Vecteur des aires de la zone ischémiée pour la fonctionnalité courante, initialisé
-      aires_fonc <- c()
+      # Vecteur des volumes de la zone ischémiée pour la fonctionnalité courante, initialisé
+      vols_fonc <- c()
       
+      for (jour in jours){# une fenêtre pour la fonctionnalité courante
+        
+        cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
+        cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
+        cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
+        
+        l <- length(cerveau_isch$Slice)
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(cerveau_isch$Slice==tr,TRUE,liste_tr)
+        }
+        
+        tranches_isch <- cerveau_isch[liste_tr,]
+        # on crée la liste de niveaux de gris exploitable par density()
+        isch <- tranches_isch[,4]
+        liste.nan <- is.na(isch)
+        isch <- isch[!liste.nan] # on retire les valeurs manquantes
+        
+        ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
+        #n <- length(entieres)
+        vol <- length(isch)
+        njour <- num_jours[[jour]]
+        
+        if(vol!=0){
+          abs_seg <- cbind(abs_seg,c(njour))
+          vols_fonc <- cbind(vols_fonc,c(vol))
+        }
+      }
+      # vecteur rempli pour la fonctionnalité
+      liste_etendues[[fonc]] <- vols_fonc
+      # liste des temps disponibles remplie pour fonctionnalité courante
+      liste_abs_seg[[fonc]] <- abs_seg
+    }
+    # listes toutes remplies pour les nuages de points correspondant aux fonctionalités
+    # on passe à la représentation graphique
+    plot.new()
+    par(mfrow=c(1,1),new=T)
+    sain <- rep(0,length(abs_suivi))
+    plot(x=abs_suivi,y=sain,col='blue',ylim = range(c(-10, 1000)),
+         xlab = "",
+         ylab = "",
+         main=sprintf("Zones ischémiées, tranche %i",tranche_unique)
+    )
+    for (fonc in liste_fonc){
+      #print(liste_suivi[[fonc]])
+      lines(x=liste_abs_seg[[fonc]],y=liste_etendues[[fonc]],col=color.fonc.list[[fonc]])
+    }
+    legend(title="Suivi temporel sur les jours disponibles",
+           "topright", inset = 0.01,
+           legend = liste_fonc,#vect.fonc,
+           col = vect.fonc.color,#color.fonc.list,
+           #lty = c(1, 2, 1),
+           lwd = 2, pt.cex = 2
+    )
+    
+  }
+  else{# suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
+    liste_s_slice <- opt
+
+    for (fonc in liste_fonc){
+      fonc_seg <- fonc
+      #print(opt)
+      tranches <- liste_s_slice[[fonc_seg]]
+      #print(tranches)
+      
+      liste_jr <- liste_jfr[[fonc]]
+      jours <- liste_jr[[rat]]
+      
+      # Abscisses : jours de segmentation
+      abs_seg <- c()
+      # Vecteur des volumes de la zone ischémiée pour la fonctionnalité courante, initialisé
+      vols_fonc <- c()
+
       for (jour in jours){# une fenêtre pour la fonctionnalité courante
         
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
@@ -776,7 +988,6 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
         for (tr in tranches){
           liste_tr <- ifelse(cerveau_isch$Slice==tr,TRUE,liste_tr)
         }
-
         
         tranches_isch <- cerveau_isch[liste_tr,]
         # on crée la liste de niveaux de gris exploitable par density()
@@ -786,12 +997,12 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
         
         ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
         #n <- length(entieres)
-        aire <- length(isch)
+        vol <- length(isch)
         njour <- num_jours[[jour]]
         
-        if(aire!=0){
+        if(vol!=0){
           abs_seg <- cbind(abs_seg,c(njour))
-          aires_fonc <- cbind(aires_fonc,c(aire))
+          vols_fonc <- cbind(vols_fonc,c(vol))
         }
         
         #aires_fonc[njour] <- aire
@@ -800,19 +1011,24 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
 
       }
       # vecteur rempli pour la fonctionnalité
-      liste_suivi[[fonc]] <- aires_fonc
+      liste_etendues[[fonc]] <- vols_fonc
+      # liste des temps disponibles remplie pour fonctionnalité courante
+      liste_abs_seg[[fonc]] <- abs_seg
     }
     # listes toutes remplies pour les nuages de points correspondant aux fonctionalités
     # on passe à la représentation graphique
     plot.new()
     par(mfrow=c(1,1),new=T)
-    sain <- rep(0,length(abs_seg))
-    plot(x=abs_seg,y=sain,col='blue',ylim = range(c(-10, 5000)), xlab = "", ylab = "")
+    sain <- rep(0,length(abs_suivi))
+    plot(x=abs_suivi,y=sain,col='blue',ylim = range(c(-10, 2000)),
+         main = "Suivi temporel, tranches d'intérêt.",
+         xlab = "",
+         ylab = "")
     for (fonc in liste_fonc){
       #print(liste_suivi[[fonc]])
-      lines(x=abs_seg,y=liste_suivi[[fonc]],col=color.fonc.list[[fonc]])
+      lines(x=liste_abs_seg[[fonc]],y=liste_etendues[[fonc]],col=color.fonc.list[[fonc]])
     }
-    legend(title="Suivi temporel : étendue des zones ischémiées",
+    legend(title="Suivi temporel sur les jours disponibles",
            "topright", inset = 0.01,
            legend = liste_fonc,#vect.fonc,
            col = vect.fonc.color,#color.fonc.list,
