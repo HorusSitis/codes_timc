@@ -289,23 +289,25 @@ liste_suivi_slice <- list('ADC'=list(10),
 )
 
 #liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
-liste_fonc <- list('ADC','BVf','CBF','CMRO2','T1map','VSI','SO2map')# on peut tester avec une liste des fonctionnalités restreinte
-
-# Je choisis les fonctionnalités ADC et T1map comme références
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','VSI','T1map','SO2map')# on peut tester avec une liste des fonctionnalités restreinte
 
 dgris_temp_fonc(num_rat,list('cer'),"")
-#dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
-#dgris_temp_fonc(num_rat,list('cer'),"ADC")
 
-dgris_temp_fonc(num_rat,liste_suivi_slice,"")
-#dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
-#dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+tranche_unique <- 10
+dgris_temp_fonc(num_rat,list(tranche_unique),"")
+
+#dgris_temp_fonc(num_rat,liste_suivi_slice,"")
 
 #-------------------------------- Etape 5 : --------------------------------#
 
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
+
 suivi_etendue_fonc(num_rat,list('cer'))
-suivi_etendue_fonc(num_rat,liste_suivi_slice)
+
+#suivi_etendue_fonc(num_rat,liste_suivi_slice)
+
+tranche_unique <- 10
+suivi_etendue_fonc(num_rat,list(tranche_unique))
 
 ###################################################### Rat numéro 19 ######################################################
 
@@ -319,14 +321,14 @@ for (fonc in liste_fonc){
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. --------------------------------#
 
-liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI') # ordre de priorité pour les fonctionnalités.
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','T1map','SO2map','VSI') # ordre de priorité pour les fonctionnalités.
 liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
 
 cl <- c(3,5)# encadrement du nombre de clusters
 #cl <- c(4,4)
 for (fonc in liste_fonc){
   #rg_FONC_3d(2,fonc,num_rat,cl)
-  rg_FONC_3d(3,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl,'')
 }
 
 # Remplir liste_clust et liste_suivi_slice en observant les représentations graphiques obtenues
@@ -340,37 +342,63 @@ cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
+
 fonc <- 'BVf'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'CBF'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
+
 fonc <- 'CMRO2'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'SO2map'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
+
 fonc <- 'T1map'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'VSI'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-comp_2vs3d_clust(fonc,num_rat,cl,10)
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 # trop lente
 #for (fonc in liste_fonc){
@@ -380,46 +408,54 @@ comp_2vs3d_clust(fonc,num_rat,cl,10)
 
 #-------------------------------- Etape 3 : --------------------------------#
 
-liste_clust <- list('ADC'=list("00"=c(1),"03"=c(1),"08"=c(3,4),"15"=c(4),"22"=c(4)), # clusters utilisables, cf étape 2
-                    'BVf'=list("00"=c(1),"08"=c(3,4),"15"=c(),"22"=c()),
-                    'CBF'=list("00"=c(1),"03"=c(),"08"=c(4),"15"=c(2),"22"=c(1,3)), # 3 clusters
-                    'CMRO2'=list("00"=c(1),"08"=c(3),"15"=c(1),"22"=c(3)),
-                    'SO2map'=list("00"=c(0),"08"=c(1),"15"=c(4),"22"=c()),
-                    'T1map'=list("00"=c(3),"03"=c(3),"08"=c(3,4,5),"15"=c(4,5),"22"=c(4)),
-                    'VSI'=list("00"=c(1),"08"=c(2,3),"15"=c(3),"22"=c(3))
+liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3),"15"=c(4),"22"=c(4)), # clusters utilisables, cf étape 2
+                    'BVf'=list("00"=c(1),"08"=c(3),"15"=c(3),"22"=c(0,1)),
+                    'CBF'=list("00"=c(1),"03"=c(),"08"=c(1),"15"=c(1),"22"=c(1)), # 3 clusters
+                    'CMRO2'=list("00"=c(0),"08"=c(3),"15"=c(1),"22"=c(0)),
+                    'SO2map'=list("00"=c(1),"08"=c(1),"15"=c(),"22"=c(1)),
+                    'T1map'=list("00"=c(3),"03"=c(3),"08"=c(4),"15"=c(4),"22"=c(4)),
+                    'VSI'=list("00"=c(1),"08"=c(1),"15"=c(1),"22"=c(1))
                     )
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
 #-------------------------------- Etape 4 : --------------------------------#
 
-liste_suivi_slice <- list('ADC'=list(9),
-                          'BVf'=list(8,9,10),
+liste_suivi_slice <- list('ADC'=list(9,10),
+                          'BVf'=list(9,10),
                           'CBF'=list(9,10),
                           'CMRO2'=list(9,10),
-                          'SO2map'=list(10),
+                          'SO2map'=list(9,10),
                           'T1map'=list(9),
-                          'VSI'=list()
+                          'VSI'=list(9,10)
                           )
 
 #liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
-liste_fonc <- list('T1map','CMRO2','VSI','SO2map','CBF','ADC','BVf')# on peut tester avec une liste des fonctionnalités restreinte
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')# on peut tester avec une liste des fonctionnalités restreinte
 
 # Je choisis les fonctionnalités ADC et T1map comme références
 
 dgris_temp_fonc(num_rat,list('cer'),"")
-dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
-dgris_temp_fonc(num_rat,list('cer'),"ADC")
+#dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
+#dgris_temp_fonc(num_rat,list('cer'),"ADC")
+
+tranche_unique <- 9
+dgris_temp_fonc(num_rat,list(tranche_unique),"")
 
 dgris_temp_fonc(num_rat,liste_suivi_slice,"")
-dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
-dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+#dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
+#dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
 
 #-------------------------------- Etape 5 : --------------------------------#
 
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
+
 suivi_etendue_fonc(num_rat,list('cer'))
+
 suivi_etendue_fonc(num_rat,liste_suivi_slice)
+
+tranche_unique <- 9
+suivi_etendue_fonc(num_rat,list(tranche_unique))
 
 ###################################################### Rat numéro 26 ######################################################
 
@@ -521,9 +557,9 @@ cc <- cluster_jfr_fmin(data = rr,cl_min = 4,cl_max = 4,min = 10)
 
 #-------------------------------- Etape 3 : --------------------------------#
 
-liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(),"15"=c(),"22"=c()), # clusters utilisables, cf étape 2
+liste_clust <- list('ADC'=list("00"=c(),"03"=c(),"08"=c(),"15"=c(),"22"=c()), # clusters utilisables, cf étape 2
                     'BVf'=list("00"=c(1),"03"=c(),"08"=c(),"15"=c(),"22"=c()),
-                    'CBF'=list("00"=c(1),"03"=c(4),"08"=c(4),"15"=c(),"22"=c(4)),
+                    'CBF'=list("00"=c(1),"03"=c(4),"08"=c(3),"15"=c(),"22"=c(4)),
                     'CMRO2'=list("00"=c(1),"03"=c(3),"08"=c(3),"15"=c(3),"22"=c(3)),
                     'SO2map'=list("00"=c(),"03"=c(),"08"=c(),"15"=c(),"22"=c()),
                     'T1map'=list("00"=c(),"03"=c(),"08"=c(),"15"=c(),"22"=c()),
@@ -543,7 +579,39 @@ liste_suivi_slice <- list('ADC'=list(6,7,8),
 
 #-------------------------------- Etape 4 : --------------------------------#
 
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')# on peut tester avec une liste des fonctionnalités restreinte
+
+# Je choisis les fonctionnalités ADC et T1map comme références
+
+dgris_temp_fonc(num_rat,list('cer'),"")
+#dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
+#dgris_temp_fonc(num_rat,list('cer'),"ADC")
+
+tranche_unique <- 6
+dgris_temp_fonc(num_rat,list(tranche_unique),"")
+tranche_unique <- 7
+dgris_temp_fonc(num_rat,list(tranche_unique),"")
+tranche_unique <- 8
+dgris_temp_fonc(num_rat,list(tranche_unique),"")
+
+dgris_temp_fonc(num_rat,liste_suivi_slice,"")
+#dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
+#dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+
 #-------------------------------- Etape 5 : --------------------------------#
+
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
+
+suivi_etendue_fonc(num_rat,list('cer'))
+
+suivi_etendue_fonc(num_rat,liste_suivi_slice)
+
+tranche_unique <- 6
+suivi_etendue_fonc(num_rat,list(tranche_unique))
+tranche_unique <- 7
+suivi_etendue_fonc(num_rat,list(tranche_unique))
+tranche_unique <- 8
+suivi_etendue_fonc(num_rat,list(tranche_unique))
 
 ###################################################### Rat numéro 30 ######################################################
 
@@ -557,7 +625,7 @@ for (fonc in liste_fonc){
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. Attention au BVf, J00, slice8. --------------------------------#
 
-liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI') # ordre de priorité pour les fonctionnalités.
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','T1map','SO2map','VSI') # ordre de priorité pour les fonctionnalités.
 liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
 
 cl <- c(3,5)# encadrement du nombre de clusters
@@ -565,6 +633,10 @@ cl <- c(3,5)# encadrement du nombre de clusters
 for (fonc in liste_fonc){
   #rg_FONC_3d(2,fonc,num_rat,cl)
   rg_FONC_3d(3,fonc,num_rat,cl)
+}
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
 }
 
 cl <- c(4,4)
@@ -584,37 +656,63 @@ cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
+
 fonc <- 'BVf'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'CBF'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
+
 fonc <- 'CMRO2'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'SO2map'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
+
 fonc <- 'T1map'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
+
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 fonc <- 'VSI'
 cl <- c(4,4)
 cl_se <- liste_clust[[fonc]]
 seg_clust_3d(fonc,num_rat,cl,cl_se,fr_hemi)
 
-comp_2vs3d_clust(fonc,num_rat,cl,10)
+for (sl in liste_suivi_slice[[fonc]]){
+  comp_2vs3d_clust(fonc,num_rat,cl,sl)
+}
 
 # trop lente
 #for (fonc in liste_fonc){
@@ -624,7 +722,7 @@ comp_2vs3d_clust(fonc,num_rat,cl,10)
 
 #-------------------------------- Etape 3 : --------------------------------#
 
-liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"=c(3)), # clusters utilisables, cf étape 2
+liste_clust <- list('ADC'=list("00"=c(1),"08"=c(3,4,5),"15"=c(4,5)), # clusters utilisables, cf étape 2
                     'BVf'=list(),
                     'CBF'=list(),
                     'CMRO2'=list(),
@@ -634,6 +732,15 @@ liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3,4,5),"15"=c(4,5),"22"
 )
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
+
+liste_suivi_slice <- list('ADC'=list(11,12,13),
+                          'BVf'=list(11,12,13),
+                          'CBF'=list(11,12,13),
+                          'CMRO2'=list(11,12,13),
+                          'SO2map'=list(11,12,13),
+                          'T1map'=list(11,12,13),
+                          'VSI'=list(11,12,13)
+)
 
 #-------------------------------- Etape 4 : --------------------------------#
 #-------------------------------- Etape 5 : --------------------------------#
