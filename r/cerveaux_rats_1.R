@@ -127,19 +127,40 @@ liste_sfr <- list("11"=liste_R11_seg_FONC, "19"=liste_R19_seg_FONC, "26"=liste_R
 
 # Etape 1 :
 
-#FONC_3d_rat('Anat',"11")
-#FONC_3d_rat('Anat',"19")
-#FONC_3d_rat('Anat',"26")
-#FONC_3d_rat('Anat',"30")
+#FONC_3d_rat('Anat',"11",'avec')
+#FONC_3d_rat('Anat',"19",'avec')
+#FONC_3d_rat('Anat',"26",'avec')
+#FONC_3d_rat('Anat',"30",'avec')
 
 # Etape 2 :
 
-rg_FONC_3d(2,'Anat',"11",2,4)
-rg_FONC_3d(2,'Anat',"19",3,5)
-rg_FONC_3d(2,'Anat',"26",3,5)
-rg_FONC_3d(2,'Anat',"30",2,5)
+liste_fonc <- list('Anat')
+liste_min_fonc <- list('Anat'=10)
 
-# Etape 3 : pas de segmentation possible avec des clusters
+cl <- c(2,5)
+cl <- c(4,4)
+
+rg_FONC_3d(3,'Anat',"11",cl,'')
+rg_FONC_3d(3,'Anat',"19",cl,'')
+rg_FONC_3d(3,'Anat',"26",cl,'')
+rg_FONC_3d(3,'Anat',"30",cl,'')
+
+for (tr in c(4:12)){
+  comp_2vs3d_clust('Anat',"11",cl,tr)
+}
+
+for (tr in c(6:12)){
+  comp_2vs3d_clust('Anat',"19",cl,tr)
+}
+
+
+
+# Etape 3 : 
+#pas de segmentation possible avec des clusters (?)
+
+
+
+
 
 ####################################### Protocole pour réaliser la présentation. IRM fonctionnelle #######################################
 
@@ -439,10 +460,9 @@ dgris_temp_fonc(num_rat,list('cer'),"")
 #dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
 #dgris_temp_fonc(num_rat,list('cer'),"ADC")
 
-tranche_unique <- 9
-dgris_temp_fonc(num_rat,list(tranche_unique),"")
+dgris_temp_fonc(num_rat,9,"")
 
-dgris_temp_fonc(num_rat,liste_suivi_slice,"")
+dgris_temp_fonc(num_rat,'tranches',"")
 #dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
 #dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
 
@@ -452,10 +472,9 @@ liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
 
 suivi_etendue_fonc(num_rat,list('cer'))
 
-suivi_etendue_fonc(num_rat,liste_suivi_slice)
+suivi_etendue_fonc(num_rat,'tranches')
 
-tranche_unique <- 9
-suivi_etendue_fonc(num_rat,list(tranche_unique))
+suivi_etendue_fonc(num_rat,9)
 
 ###################################################### Rat numéro 26 ######################################################
 

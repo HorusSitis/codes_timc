@@ -508,8 +508,9 @@ suivi_temp_fonc <- function(rat, fonc){#, class){# représentations graphiques t
 # ------------------- Suivi temporel des densités de niveaux de gris sur un cerveau segmenté, par fonctionnalité. Répertoire fonctionnel_gris du rat concerné. ------------------- #
 
 # Option 1 : chaîne ou liste.
-# 'cer' : suivi effectué sur le cerveau entier, ou plutôt sur les slices disponibles chaque jour pour le rat courant.
-# Sinon : liste des numéros des slices utilisées pour le suivi temporel.
+# 'cer' : suivi effectué sur le cerveau entier, ou plutôt sur les slices disponibles chaque jour pour le rat courant ;
+# 'tranches' : suivi temporel sur les tranches pour lesquelles cela est possible, toutes fonctionnalités confondues ;
+# Sinon : numéro de la tranche choisie pour le suivi temporel.
 
 # Option 2 : chaîne de caractères, liste pour une version améliorée de la fonction.
 # Désigne une éventuelle fonctionnalité, par exemple l'ADC, dont la segmentation choisie à l'étape 2 sera utilisée pour suivre les valeurs de toutes les fonctionnalités.
@@ -536,12 +537,6 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
       for (jour in jours){# une fenêtre pour la fonctionnalité courante
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
         cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
-        #if (tranches[0]==0){
-        #  cerveau_isch <- cerveau_fonc[cerveau_seg$Label!=2,] # on inclut éventuellement des valeurs manquantes à la zone ischémiée
-        #}
-        #else{
-        #  cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
-        #}
         cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
         
         if (jour=="00"){
@@ -592,10 +587,8 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
     # fonctionnalité vue
   }
   else if (opt_1=='tranches'){# suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
-    liste_s_slice <- opt_1
+    liste_s_slice <- liste_suivi_slice
 
-    #subtitle <- paste("Tr ",tr) # indiquie les tranches du suivi
-    
     for (fonc in liste_fonc){
 
       segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
@@ -688,10 +681,10 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
         }
       }# sub-plot fait
       }# fonctionnalité vue
-    }# option 2 codée.
+    }# option 2 codée : suivi du plus grabnd volume disponible
   else{
     # suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
-    liste_s_slice <- opt_1
+    num_tranche <- opt_1
     
     #subtitle <- paste("Tr ",tr) # indiquie les tranches du suivi
     
@@ -703,13 +696,10 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
       #  fonc_seg <- opt_2 # fonc prend la valeur de l'argument optionnel opt_1 si celui-ci est non vide
       #  segtitle <- paste("SEG : ",opt_2)
       #}
-      tranches <- liste_s_slice
+      #tranches <- liste_s_slice
       
-      subtitle <- 'Tranche ' # indique si nécessaire la fonctionnalité utilisée pour la segmentation
-      for (tr in tranches){
-        subtitle <- paste(subtitle,'-',tr)
-      }
-      
+      subtitle <- sprintf("Tranche %i",num_tranche) # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+
       liste_jr <- liste_jfr[[fonc]]
       jours <- liste_jr[[rat]]# plus tard --------#
       
@@ -726,36 +716,20 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
           # sélection de l'hémisphère sain au jour 00
           cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
           # sélection des tranches pour le suivi temporel
-          l <- length(cerveau_hem[,4])
-          liste_tr <- rep(FALSE,l)
-          for (tr in tranches){
-            liste_tr <- ifelse(any(tr==cerveau_hem$Slice),TRUE,liste_tr)
-          }
-          tranches_hem <- cerveau_hem[liste_tr,]
+          tranches_hem <- cerveau_hem[cerveau_hem$Slice==num_tranche,]
           # on crée la liste de niveaux de gris exploitable par density()
           hem_sain <- tranches_hem[,4]
           liste.nan <- is.na(hem_sain)
           hem_sain <- hem_sain[!liste.nan] # on retire les valeurs manquantes de la fonctionnalité pour évaluer sa densité
         }
         # on définit hem_sain au jour 00, on ne le modifie plus par la suite
-        
-        l <- length(cerveau_fonc[,4])
-        liste_tr <- rep(FALSE,l)
-        for (tr in tranches){
-          liste_tr <- ifelse(any(tr==cerveau_fonc$Slice),TRUE,liste_tr)
-        }
-        tranches_fonc <- cerveau_fonc[liste_tr,]
+        tranches_fonc <- cerveau_fonc[cerveau_fonc$Slice==num_tranche,]
         # on crée la liste de niveaux de gris exploitable par density()
         entieres <- tranches_fonc[,4]
         liste.nan <- is.na(entieres)
         entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
         
-        l <- length(cerveau_isch[,4])
-        liste_tr <- rep(FALSE,l)
-        for (tr in tranches){
-          liste_tr <- ifelse(any(tr==cerveau_isch$Slice),TRUE,liste_tr)
-        }
-        tranches_isch <- cerveau_isch[liste_tr,]
+        tranches_isch <- cerveau_isch[cerveau_isch$Slice==num_tranche,]
         # on crée la liste de niveaux de gris exploitable par density()
         isch <- tranches_isch[,4]
         liste.nan <- is.na(isch)
@@ -875,7 +849,7 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
     )
   }
   else if (opt=='tranches'){# suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
-    liste_s_slice <- opt
+    liste_s_slice <- liste_suivi_slice
     
     for (fonc in liste_fonc){
       fonc_seg <- fonc
@@ -944,12 +918,11 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
   }
   else{
     # suivi sur la tranche sélectionnée, boucle sur les jours existant pour chaque fonctionnalité.
-    liste_s_slice <- liste_suivi_slice
+    num_trnahc <- opt
+    #liste_s_slice <- liste_suivi_slice
     
     for (fonc in liste_fonc){
       fonc_seg <- fonc
-
-      tranches <- liste_s_slice
 
       liste_jr <- liste_jfr[[fonc]]
       jours <- liste_jr[[rat]]
@@ -964,14 +937,8 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
         cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
         cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
-        
-        l <- length(cerveau_isch$Slice)
-        liste_tr <- rep(FALSE,l)
-        for (tr in tranches){
-          liste_tr <- ifelse(cerveau_isch$Slice==tr,TRUE,liste_tr)
-        }
-        
-        tranches_isch <- cerveau_isch[liste_tr,]
+
+        tranches_isch <- cerveau_isch[cerveau_isch$Slice==num_tranche,]
         # on crée la liste de niveaux de gris exploitable par density()
         isch <- tranches_isch[,4]
         liste.nan <- is.na(isch)
