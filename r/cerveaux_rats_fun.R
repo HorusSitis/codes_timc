@@ -76,7 +76,7 @@ FONC_3d_rat <- function(fonc,rat,val){
   }
 }
 
-# ------------------- Mâme chose, avec les tranches dénoyautées suivables temporellement  ------------------- #
+# ------------------- Même chose, avec les tranches dénoyautées suivables temporellement  ------------------- #
 
 # Fonction à utiliser après avoir sélectionné le bon répertoire de travail : fonctionnel_gris
 # Ne pas oublier les .csv pour les slices !
@@ -123,17 +123,16 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt){# option : clusterisation sur
     if (opt=='ker'){
       d <- read.table(sprintf("%s/%s-J%s-%s-kertemp-all.dat",fonc,rat,day,fonc),header=T)
     }
+    else if (opt=='dark'){
+      d <- read.table(sprintf("%s/%s-J%s-%s-dark-all.dat",fonc,rat,day,fonc),header=T)
+    }
     else{
       d <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,day,fonc),header=T)
     }
-    d <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,day,fonc),header=T)
-    
-    #print(d[1:50,4])
+
     liste.nan <- is.na(d[,4])
-    #print(liste.nan[1:50])
     d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe, pas besoin de réassembler ensuite
-    #print(d[1:50,4])
-    
+
     d.clust <- cluster_jfr_fmin(d,cl_min,cl_max,min_fonc)
     d.fonc <- d[,4]
     
@@ -510,6 +509,7 @@ suivi_temp_fonc <- function(rat, fonc){#, class){# représentations graphiques t
 # Option 1 : chaîne ou liste.
 # 'cer' : suivi effectué sur le cerveau entier, ou plutôt sur les slices disponibles chaque jour pour le rat courant ;
 # 'tranches' : suivi temporel sur les tranches pour lesquelles cela est possible, toutes fonctionnalités confondues ;
+# 'dark' : zones sombres remarquées pour le rat 30
 # Sinon : numéro de la tranche choisie pour le suivi temporel.
 
 # Option 2 : chaîne de caractères, liste pour une version améliorée de la fonction.
@@ -535,6 +535,7 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
       par(mfrow=c(2,3),cex.main=1.7, cex.sub=1.2,col.main="black", col.sub="red")
       
       for (jour in jours){# une fenêtre pour la fonctionnalité courante
+        
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
         cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
         cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
@@ -681,7 +682,101 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
         }
       }# sub-plot fait
       }# fonctionnalité vue
-    }# option 2 codée : suivi du plus grabnd volume disponible
+    }# option 2 codée : suivi du plus grand volume disponible
+  else if (opt_1=='dark'){
+    liste_s_slice <- liste_suivi_slice
+    for (fonc in liste_fonc){
+      
+      segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+      fonc_seg <- 'ADC' # la segmentation avec fonc_seg sera celle utilisée
+      #if (opt_2!=''){
+      #  fonc_seg <- opt_2 # fonc prend la valeur de l'argument optionnel opt_1 si celui-ci est non vide
+      #  segtitle <- paste("SEG : ",opt_2)
+      #}
+
+      tranches <- c(11:13)#liste_s_slice[[fonc]]
+      
+      subtitle <- "Tranche 10" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+      
+      liste_jr <- liste_jfr[[fonc]]
+      jours <- liste_jr[[rat]]# plus tard --------#
+      
+      # Représentation graphique : fonctionnalité courante
+      plot.new()
+      par(mfrow=c(2,3),cex.main=1.7, cex.sub=1.5,col.main="black", col.sub="red")
+      
+      for (jour in jours){
+        cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-%s-all.dat",fonc,rat,jour,fonc,'bg'),header=T)
+        cerveau_seg <- read.table(sprintf("%s/%s-J%s-%s-%s-all.dat",fonc_seg,rat,jour,fonc_seg,opt_1),header=T)
+        
+        cerveau_les <- cerveau_fonc # on va délimiter une enveloppe rectangulaire de la partie lésée sur l'image observée, fonctionnalité et jour courants
+        
+        l <- length(cerveau_les[,4])
+        liste_tr <- rep(FALSE,l)
+        for (ix in cerveau_seg$x){
+          liste_tr <- ifelse(ix==cerveau_les$x,TRUE,liste_tr)
+        }
+        cerveau_les <- cerveau_les[liste_tr,] # on garde les abscisses de la partie lésée
+        
+        l <- length(cerveau_les[,4])
+        liste_tr <- rep(FALSE,l)
+        for (iy in cerveau_seg$y){
+          liste_tr <- ifelse(iy==cerveau_les$y,TRUE,liste_tr)
+        }
+        cerveau_les <- cerveau_les[liste_tr,] # on garde les ordonnées de la partie lésée
+        
+        print(length(cerveau_seg[,4]))
+        print(length(cerveau_les[,4]))
+        
+        l <- length(cerveau_fonc[,4])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(any(tr==cerveau_fonc$Slice),TRUE,liste_tr)
+        }
+        tranches_fonc <- cerveau_fonc[liste_tr,]
+        
+        # on crée la liste de niveaux de gris exploitable par density()
+        entieres <- tranches_fonc[,4]
+        liste.nan <- is.na(entieres)
+        entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
+        
+        tranches_les <- cerveau_les#isch[cerveau_isch$Slice==num_tranche,]
+        # on crée la liste de niveaux de gris exploitable par density()
+        les <- tranches_les[,4]
+        liste.nan <- is.na(les)
+        les <- les[!liste.nan] # on retire les valeurs manquantes
+        
+        ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
+        n <- 1#length(entieres)
+        ni <- 1#length(isch)
+        ns <- 1#length(hem_sain)
+        
+        dst <- density(entieres)
+        if (length(les)!=0){dstl <- density(les)}
+        #dsts <- density(hem_sain)
+        
+        #plot.new()
+        #par(lend="butt")
+        title <- sprintf("Rat %s jour %s %s",rat,jour,fonc)
+        #title <- paste(title,subtitle,segtitle)
+        
+        if (length(les)!=0){
+          plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle))
+          lines(dstl$x, ni/n*dstl$y, lwd = 2, col = "darkred")
+          #lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
+          lines(dst$x, dst$y, lwd = 3, col="gray70")
+          
+          legend("topright", inset = 0.01, 
+                 legend = c("Zone segmentée",# "Hémisphère sain J00",
+                            "Cerveau entier"),
+                 col = c("darkred",#"darkblue",
+                         "gray70"),
+                 lty = c(1, 2),#, 1),
+                 lwd = 2, pt.cex = 2)
+        }
+      }# sub-plot fait
+    }# fonctionnalité vue
+  }
   else{
     # suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
     num_tranche <- opt_1
@@ -711,7 +806,7 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
         cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
         cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
-        
+
         if (jour=="00"){
           # sélection de l'hémisphère sain au jour 00
           cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
@@ -786,6 +881,8 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
   liste_etendues <- list('ADC'='','BVf'='','CBF'='','CMRO2'='','SO2map'='','T1map'='','VSI'='')
   
   if (opt=='cer'){# suivi sur le cerveau entier, boucle sur les jours existant pour chaque fonctionnalité.
+    # Plus grand volume, toutes fonctionnalités et tous jours confondus
+    vol_max <- 0
     for (fonc in liste_fonc){
       fonc_seg <- fonc
 
@@ -796,7 +893,7 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
       abs_seg <- c()
       # Vecteur des volumes de la zone ischémiée pour la fonctionnalité courante, initialisé
       vols_fonc <- c()
-      
+ 
       for (jour in jours){# une fenêtre pour la fonctionnalité courante
         
         cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
@@ -819,6 +916,7 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
           vols_fonc <- cbind(vols_fonc,c(vol))
         }
       }
+      vol_max <- max(max(vols_fonc,vol_max))
       # vecteur rempli pour la fonctionnalité
       liste_etendues[[fonc]] <- vols_fonc
       # liste des temps disponibles remplie pour fonctionnalité courante
@@ -831,10 +929,10 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
     sain <- rep(0,length(abs_suivi))
     plot(x=abs_suivi,
          y=sain,
-         col='blue',ylim = range(c(-10, 3000)),
+         col='blue',ylim = range(c(-10, vol_max)),
          xlab = "",
          ylab = "",
-         main = "Zones ischémiées, toutes les tranches observables"
+         main = sprintf("Zones ischémiées, toutes les tranches observables, rat %s",rat)
          )
     for (fonc in liste_fonc){
       #print(liste_suivi[[fonc]])
@@ -850,6 +948,8 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
   }
   else if (opt=='tranches'){# suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
     liste_s_slice <- liste_suivi_slice
+    # Plus grand volume, toutes fonctionnalités et tous jours confondus
+    vol_max <- 0
     
     for (fonc in liste_fonc){
       fonc_seg <- fonc
@@ -891,6 +991,7 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
           vols_fonc <- cbind(vols_fonc,c(vol))
         }
       }
+      vol_max <- max(max(vols_fonc,vol_max))
       # vecteur rempli pour la fonctionnalité
       liste_etendues[[fonc]] <- vols_fonc
       # liste des temps disponibles remplie pour fonctionnalité courante
@@ -901,8 +1002,8 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
     plot.new()
     par(mfrow=c(1,1),new=T)
     sain <- rep(0,length(abs_suivi))
-    plot(x=abs_suivi,y=sain,col='blue',ylim = range(c(-10, 2000)),
-         main = "Suivi temporel, tranches d'intérêt.",
+    plot(x=abs_suivi,y=sain,col='blue',ylim = range(c(-10, vol_max)),
+         main = sprintf("Suivi temporel, tranches d'intérêt, rat %s.",rat),
          xlab = "",
          ylab = "")
     for (fonc in liste_fonc){
@@ -918,8 +1019,9 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
   }
   else{
     # suivi sur la tranche sélectionnée, boucle sur les jours existant pour chaque fonctionnalité.
-    num_trnahc <- opt
-    #liste_s_slice <- liste_suivi_slice
+    num_tranche <- opt
+    # Plus grand volume, toutes fonctionnalités et tous jours confondus
+    vol_max <- 0
     
     for (fonc in liste_fonc){
       fonc_seg <- fonc
@@ -954,6 +1056,7 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
           vols_fonc <- cbind(vols_fonc,c(vol))
         }
       }
+      vol_max <- max(max(vols_fonc,vol_max))
       # vecteur rempli pour la fonctionnalité
       liste_etendues[[fonc]] <- vols_fonc
       # liste des temps disponibles remplie pour fonctionnalité courante
@@ -964,10 +1067,10 @@ suivi_etendue_fonc <- function(rat,opt){# cerveau entier ou slices suivables tem
     plot.new()
     par(mfrow=c(1,1),new=T)
     sain <- rep(0,length(abs_suivi))
-    plot(x=abs_suivi,y=sain,col='blue',ylim = range(c(-10, 1000)),
+    plot(x=abs_suivi,y=sain,col='blue',ylim = range(c(-10, 800)),
          xlab = "",
          ylab = "",
-         main=sprintf("Zones ischémiées, tranche %i",tranche_unique)
+         main=sprintf("Zones ischémiées, tranche %i, rat %s",num_tranche,rat)
     )
     for (fonc in liste_fonc){
       lines(x=liste_abs_seg[[fonc]],y=liste_etendues[[fonc]],col=color.fonc.list[[fonc]],lwd=1.8)

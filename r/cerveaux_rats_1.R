@@ -323,12 +323,11 @@ dgris_temp_fonc(num_rat,list(tranche_unique),"")
 
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
 
-suivi_etendue_fonc(num_rat,list('cer'))
+suivi_etendue_fonc(num_rat,'cer')
 
-#suivi_etendue_fonc(num_rat,liste_suivi_slice)
+#suivi_etendue_fonc(num_rat,'tranches')
 
-tranche_unique <- 10
-suivi_etendue_fonc(num_rat,list(tranche_unique))
+suivi_etendue_fonc(num_rat,10)
 
 ###################################################### Rat numéro 19 ######################################################
 
@@ -338,6 +337,32 @@ num_rat <- "19"
 
 for (fonc in liste_fonc){
   FONC_3d_rat(fonc,num_rat,'avec')
+}
+
+# on continue avec une segmentation manuelle
+
+tache_ADC00_R19 <- function(jour,fonc){
+  
+  d.filename <- sprintf("%s/liste_R%s_%s_J00.csv",fonc,num_rat,fonc)
+  day.slices <- c(10)#read.csv(d.filename,check.names=F,header=T)
+  d <- data.frame(matrix(ncol = 5, nrow = 0))
+  colnames(d) <- c("x","y","z",fonc,"Slice")
+  
+  for (slice in day.slices){
+    d.filename <- sprintf("%s/%s-J%s-%s-dark-slice%i.txt",'ADC',num_rat,jour,fonc,slice)
+    d.increment <- read.table(d.filename,header=T,sep='\t')
+    d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*slice, d.increment[,3],slice))
+    colnames(d.increment) <- c("x","y","z",fonc,"Slice")
+    d <- as.data.frame(rbind(d,d.increment))
+  }
+  
+  return(d)
+}
+
+fonc <- 'ADC'
+for (jour in jours_R19_ADC){
+  t <- tache_ADC00_R19(jour,'ADC')
+  write.table(t, sprintf("%s/%s-J%s-%s-dark-all.dat",fonc,num_rat,jour,fonc), row.names=F, quote=F, sep='\t')
 }
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. --------------------------------#
@@ -465,6 +490,8 @@ dgris_temp_fonc(num_rat,9,"")
 dgris_temp_fonc(num_rat,'tranches',"")
 #dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
 #dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+
+dgris_temp_fonc(num_rat,'dark','')
 
 #-------------------------------- Etape 5 : --------------------------------#
 
@@ -621,16 +648,13 @@ dgris_temp_fonc(num_rat,liste_suivi_slice,"")
 
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
 
-suivi_etendue_fonc(num_rat,list('cer'))
+suivi_etendue_fonc(num_rat,'cer')
 
-suivi_etendue_fonc(num_rat,liste_suivi_slice)
+suivi_etendue_fonc(num_rat,'tranches')
 
-tranche_unique <- 6
-suivi_etendue_fonc(num_rat,list(tranche_unique))
-tranche_unique <- 7
-suivi_etendue_fonc(num_rat,list(tranche_unique))
-tranche_unique <- 8
-suivi_etendue_fonc(num_rat,list(tranche_unique))
+suivi_etendue_fonc(num_rat,6)
+suivi_etendue_fonc(num_rat,7)
+suivi_etendue_fonc(num_rat,8)
 
 ###################################################### Rat numéro 30 ######################################################
 
@@ -651,7 +675,7 @@ cl <- c(3,5)# encadrement du nombre de clusters
 #cl <- c(4,4)
 for (fonc in liste_fonc){
   #rg_FONC_3d(2,fonc,num_rat,cl)
-  rg_FONC_3d(3,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl,'')
 }
 
 for (sl in liste_suivi_slice[[fonc]]){
@@ -661,7 +685,7 @@ for (sl in liste_suivi_slice[[fonc]]){
 cl <- c(4,4)
 for (fonc in liste_fonc){
   #rg_FONC_3d(2,fonc,num_rat,cl)
-  rg_FONC_3d(3,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl,'')
 }
 
 # Remplir liste_clust et liste_suivi_slice en observant les représentations graphiques obtenues
@@ -761,5 +785,55 @@ liste_suivi_slice <- list('ADC'=list(11,12,13),
                           'VSI'=list(11,12,13)
 )
 
+#-------------------------------- Etape pi : suivi sur les taches d'ADC, observées au jour 00 --------------------------------#
+
+tache_ADC00_R30 <- function(jour,fonc){
+  
+  d.filename <- sprintf("%s/liste_R%s_%s_J00.csv",fonc,"30",fonc)
+  day.slices <- c(11:13)#read.csv(d.filename,check.names=F,header=T)
+  d <- data.frame(matrix(ncol = 5, nrow = 0))
+  colnames(d) <- c("x","y","z",fonc,"Slice")
+
+  for (slice in day.slices){
+    d.filename <- sprintf("%s/%s-J%s-%s-dark-slice%i.txt",'ADC',"30",jour,fonc,slice)
+    d.increment <- read.table(d.filename,header=T,sep='\t')
+    d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*slice, d.increment[,3],slice))
+    colnames(d.increment) <- c("x","y","z",fonc,"Slice")
+    d <- as.data.frame(rbind(d,d.increment))
+  }
+  
+  return(d)
+}
+
+fonc <- 'ADC'
+for (jour in jours_R30_ADC){
+  t <- tache_ADC00_R30(jour,'ADC')
+  write.table(t, sprintf("%s/%s-J%s-%s-dark-all.dat",fonc,"30",jour,fonc), row.names=F, quote=F, sep='\t')
+}
+
+cl <- c(4,4)
+for (fonc in list('ADC')){
+  #rg_FONC_3d(2,fonc,num_rat,cl)
+  rg_FONC_3d(3,fonc,num_rat,cl,'dark')
+}
+
+
+
+
+liste_suivi_slice <- list('ADC'=list(11,12,13),
+                          'BVf'=list(11,12,13),
+                          'CBF'=list(11,12,13),
+                          'CMRO2'=list(11,12,13),
+                          'SO2map'=list(11,12,13),
+                          'T1map'=list(11,12,13),
+                          'VSI'=list(11,12,13)
+)
+
 #-------------------------------- Etape 4 : --------------------------------#
+
+
+dgris_temp_fonc("30",'dark','')
+
+
+
 #-------------------------------- Etape 5 : --------------------------------#
