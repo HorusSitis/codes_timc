@@ -412,6 +412,28 @@ record_seg_cl <- function(rat, liste_clust, hemi){
   
 }
 
+# ------------------- Enregistrement du volume, lésé en ADC au jour 00, examiné au jour et à la fonctionnalité en cours ------------------- #
+
+vol_lesADC00 <- function(rat,tr){
+  liste_jr <- liste_jfr[['ADC']]
+  jours <- liste_jr[[rat]]
+  for (jour in jours){
+    d.filename <- sprintf("%s/liste_R%s_%s_J00.csv",'ADC',rat,'ADC')
+    day.slices <- tr
+    d <- data.frame(matrix(ncol = 5, nrow = 0))
+    colnames(d) <- c("x","y","z",fonc,"Slice")
+    
+    for (slice in day.slices){
+      d.filename <- sprintf("%s/%s-J%s-%s-dark-slice%i.txt",'ADC',rat,jour,fonc,slice)
+      d.increment <- read.table(d.filename,header=T,sep='\t')
+      d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*slice, d.increment[,3],slice))
+      colnames(d.increment) <- c("x","y","z",fonc,"Slice")
+      d <- as.data.frame(rbind(d,d.increment))
+    }
+    write.table(d, sprintf("%s/%s-J%s-%s-dark-all.dat",'ADC',rat,jour,'ADC'), row.names=F, quote=F, sep='\t')
+  }
+}
+
 # ------------------- Représente les niveaux de gris pour chaque fonctionnalité, sur un cerveau segmenté avec FONC ------------------- #
 
 gr_ngris_seg <- function(jour,FONC,rat){
@@ -600,7 +622,7 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
       #}
       tranches <- liste_s_slice[[fonc_seg]]
       
-      subtitle <- 'Tranches ' # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+      subtitle <- 'Tranches ' # indique si nécessaire la fonctionnalité utilisée pour la segmentation : refaire
       for (tr in tranches){
         subtitle <- paste(subtitle,'-',tr)
       }
@@ -694,9 +716,12 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
       #  segtitle <- paste("SEG : ",opt_2)
       #}
 
-      tranches <- c(11:13)#liste_s_slice[[fonc]]
+      tranches <- liste_s_slice[[fonc_seg]]
       
-      subtitle <- "Tranche 10" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+      subtitle <- 'Tranche(s) '
+      for (tr in tranches){
+        subtitle <- paste(subtitle,'-',tr)
+      }
       
       liste_jr <- liste_jfr[[fonc]]
       jours <- liste_jr[[rat]]# plus tard --------#
@@ -713,20 +738,19 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
         
         l <- length(cerveau_les[,4])
         liste_tr <- rep(FALSE,l)
-        for (ix in cerveau_seg$x){
-          liste_tr <- ifelse(ix==cerveau_les$x,TRUE,liste_tr)
+        m <- length(cerveau_seg[,4])
+        for (i in c(1:m)){#(ix in cerveau_seg$x){
+          ix <- cerveau_seg[i,1]
+          iy <- cerveau_seg[i,2]
+          sli <- cerveau_seg[i,5]
+          liste_tr <- ifelse(ix==cerveau_les$x&iy==cerveau_les$y&sli==cerveau_les$Slice,TRUE,liste_tr)
         }
         cerveau_les <- cerveau_les[liste_tr,] # on garde les abscisses de la partie lésée
         
-        l <- length(cerveau_les[,4])
-        liste_tr <- rep(FALSE,l)
-        for (iy in cerveau_seg$y){
-          liste_tr <- ifelse(iy==cerveau_les$y,TRUE,liste_tr)
-        }
-        cerveau_les <- cerveau_les[liste_tr,] # on garde les ordonnées de la partie lésée
-        
-        print(length(cerveau_seg[,4]))
-        print(length(cerveau_les[,4]))
+        #print(jour)
+        #print(fonc)
+        #print(length(cerveau_seg[,4]))
+        #print(length(cerveau_les[,4]))
         
         l <- length(cerveau_fonc[,4])
         liste_tr <- rep(FALSE,l)

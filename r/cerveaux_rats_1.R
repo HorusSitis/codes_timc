@@ -198,6 +198,9 @@ for (fonc in liste_fonc){
   dker_3d_rat(fonc,num_rat)
 }
 
+vol_lesADC00(num_rat,c(10))
+#vol_lesADC00(num_rat,c(9:10))
+
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. Attention au BVf, J00, slice8. --------------------------------#
 
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI') # ordre de priorité pour les fonctionnalités.
@@ -312,12 +315,12 @@ liste_suivi_slice <- list('ADC'=list(10),
 #liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','VSI','T1map','SO2map')# on peut tester avec une liste des fonctionnalités restreinte
 
-dgris_temp_fonc(num_rat,list('cer'),"")
+dgris_temp_fonc(num_rat,'cer',"")
+#dgris_temp_fonc(num_rat,'tranches',"")
+dgris_temp_fonc(num_rat,10,"")
 
-tranche_unique <- 10
-dgris_temp_fonc(num_rat,list(tranche_unique),"")
 
-#dgris_temp_fonc(num_rat,liste_suivi_slice,"")
+dgris_temp_fonc(num_rat,'dark','')
 
 #-------------------------------- Etape 5 : --------------------------------#
 
@@ -341,29 +344,7 @@ for (fonc in liste_fonc){
 
 # on continue avec une segmentation manuelle
 
-tache_ADC00_R19 <- function(jour,fonc){
-  
-  d.filename <- sprintf("%s/liste_R%s_%s_J00.csv",fonc,num_rat,fonc)
-  day.slices <- c(10)#read.csv(d.filename,check.names=F,header=T)
-  d <- data.frame(matrix(ncol = 5, nrow = 0))
-  colnames(d) <- c("x","y","z",fonc,"Slice")
-  
-  for (slice in day.slices){
-    d.filename <- sprintf("%s/%s-J%s-%s-dark-slice%i.txt",'ADC',num_rat,jour,fonc,slice)
-    d.increment <- read.table(d.filename,header=T,sep='\t')
-    d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*slice, d.increment[,3],slice))
-    colnames(d.increment) <- c("x","y","z",fonc,"Slice")
-    d <- as.data.frame(rbind(d,d.increment))
-  }
-  
-  return(d)
-}
-
-fonc <- 'ADC'
-for (jour in jours_R19_ADC){
-  t <- tache_ADC00_R19(jour,'ADC')
-  write.table(t, sprintf("%s/%s-J%s-%s-dark-all.dat",fonc,num_rat,jour,fonc), row.names=F, quote=F, sep='\t')
-}
+vol_lesADC00(num_rat,c(9:10))
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. --------------------------------#
 
@@ -382,6 +363,7 @@ for (fonc in liste_fonc){
 # Vérification : aprè savoir rempli liste_clust
 
 fr_hemi <- c(5,-240) # inter-hémisphère, supposé plan
+
 
 fonc <- 'ADC'
 cl <- c(4,4)
@@ -477,7 +459,7 @@ liste_suivi_slice <- list('ADC'=list(9,10),
                           )
 
 #liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
-liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')# on peut tester avec une liste des fonctionnalités restreinte
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','VSI')#,'T1map')# on peut tester avec une liste des fonctionnalités restreinte
 
 # Je choisis les fonctionnalités ADC et T1map comme références
 
@@ -512,6 +494,8 @@ num_rat <- "26"
 for (fonc in liste_fonc){
   FONC_3d_rat(fonc,num_rat,'avec')
 }
+
+vol_lesADC00(num_rat,c(6,7,8))
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. --------------------------------#
 
@@ -614,13 +598,13 @@ liste_clust <- list('ADC'=list("00"=c(),"03"=c(),"08"=c(),"15"=c(),"22"=c()), # 
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
-liste_suivi_slice <- list('ADC'=list(6,7,8),
-                          'BVf'=list(6,7,8),
-                          'CBF'=list(6,7,8),
-                          'CMRO2'=list(6,7,8),
-                          'SO2map'=list(6,7,8),
-                          'T1map'=list(6,7,8),
-                          'VSI'=list(6,7,8)
+liste_suivi_slice <- list('ADC'=c(6,7,8),
+                          'BVf'=c(6,7,8),
+                          'CBF'=c(6,7,8),
+                          'CMRO2'=c(6,7,8),
+                          'SO2map'=c(6,7,8),
+                          'T1map'=c(6,7,8),
+                          'VSI'=c(6,7,8)
 )
 
 #-------------------------------- Etape 4 : --------------------------------#
@@ -629,20 +613,20 @@ liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')# on peut te
 
 # Je choisis les fonctionnalités ADC et T1map comme références
 
-dgris_temp_fonc(num_rat,list('cer'),"")
+dgris_temp_fonc(num_rat,'cer',"")
 #dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
 #dgris_temp_fonc(num_rat,list('cer'),"ADC")
 
-tranche_unique <- 6
-dgris_temp_fonc(num_rat,list(tranche_unique),"")
-tranche_unique <- 7
-dgris_temp_fonc(num_rat,list(tranche_unique),"")
-tranche_unique <- 8
-dgris_temp_fonc(num_rat,list(tranche_unique),"")
+dgris_temp_fonc(num_rat,6,"")
+dgris_temp_fonc(num_rat,7,"")
+dgris_temp_fonc(num_rat,8,"")
 
-dgris_temp_fonc(num_rat,liste_suivi_slice,"")
+dgris_temp_fonc(num_rat,'tranches',"")
 #dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
 #dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+
+dgris_temp_fonc(num_rat,'dark',"")
+
 
 #-------------------------------- Etape 5 : --------------------------------#
 
@@ -832,7 +816,7 @@ liste_suivi_slice <- list('ADC'=list(11,12,13),
 #-------------------------------- Etape 4 : --------------------------------#
 
 
-dgris_temp_fonc("30",'dark','')
+dgris_temp_fonc(num_rat,'dark','')
 
 
 
