@@ -883,6 +883,104 @@ dgris_temp_fonc <- function(rat, opt_1, opt_2){
   }# option 3 codée : suivi temporel d'une tranche individuelle
 }
 
+# ------------------- Suivi temporel des répartitions de niveaux de gris sur un cerveau segmenté, par fonctionnalité. Répertoire fonctionnel_gris du rat concerné. ------------------- #
+
+# Option : chaîne.
+# Modalité utilisée pour effectuer la segmentation
+
+ngris_box_fonc <- function(rat, hemi, opt, liste_s_slice){# on appliquera la fonction à liste_suivi_slice, correctement initialisée.
+  if (opt=='dark_ADC_J00'){
+    for (fonc in liste_fonc){
+      
+      # On crée la dataframe pour le suivi de la fonctionnalioté courante
+      # Représenter avec ggplot
+      d <- data.frame(matrix(ncol = 7, nrow = 0))
+      colnames(d) <- c("x","y","z",fonc,"Slice","Zone","Jour")
+      
+      segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+      fonc_seg <- 'ADC' # la segmentation avec fonc_seg sera celle utilisée
+      
+      tranches <- liste_s_slice[[fonc_seg]]
+      
+      subtitle <- 'Tranche(s) '
+      for (tr in tranches){
+        subtitle <- paste(subtitle,'-',tr)
+      }
+      
+      liste_jr <- liste_jfr[[fonc]]
+      jours <- liste_jr[[rat]]# plus tard --------#
+      
+      # Représentation graphique : fonctionnalité courante
+      plot.new()
+      par(mfrow=c(2,3),cex.main=1.7, cex.sub=1.5,col.main="black", col.sub="red")
+      
+      for (jour in jours){
+        cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-%s-all.dat",fonc,rat,jour,fonc,'bg'),header=T)
+        cerveau_seg <- read.table(sprintf("%s/%s-J%s-%s-%s-all.dat",fonc_seg,rat,jour,fonc_seg,opt_1),header=T)
+        
+        # on définit hem_sain au jour 00, on ne le modifie plus par la suite
+        if (jour=="00"){
+          # sélection de l'hémisphère sain au jour 00
+          l <- length(cerveau_fonc[,4])
+          liste_hem <- rep(FALSE,l)
+          liste_hem <- ifelse(hemi[1]*cerveau_fonc$x+hemi[2]>cerveau_fonc$y,TRUE,liste_hem)
+          cerveau_hem <- cerveau_fonc[liste_hem,]
+          # sélection des tranches pour le suivi temporel
+          l <- length(cerveau_hem[,5])
+          liste_tr <- rep(FALSE,l)
+          for (tr in tranches){
+            liste_tr <- ifelse(any(tr==cerveau_hem$Slice),TRUE,liste_tr)
+          }
+          tranches_hem <- cerveau_hem[liste_tr,]
+          # on crée la liste de niveaux de gris exploitable par density()
+          hem_sain <- tranches_hem[,4]
+          liste.nan <- is.na(hem_sain)
+          hem_sain <- hem_sain[!liste.nan] # on retire les valeurs manquantes de la fonctionnalité pour évaluer sa densité
+        }
+        
+        # --------- On va délimiter la partie lésée sur l'image observée, fonctionnalité et jour courants --------- #
+        cerveau_les <- cerveau_fonc
+        
+        l <- length(cerveau_les[,4])
+        liste_tr <- rep(FALSE,l)
+        m <- length(cerveau_seg[,4])
+        for (i in c(1:m)){#(ix in cerveau_seg$x){
+          ix <- cerveau_seg[i,1]
+          iy <- cerveau_seg[i,2]
+          sli <- cerveau_seg[i,5]
+          liste_tr <- ifelse(ix==cerveau_les$x&iy==cerveau_les$y&sli==cerveau_les$Slice,TRUE,liste_tr)
+        }
+        cerveau_les <- cerveau_les[liste_tr,] # on garde les abscisses de la partie lésée
+        
+        l <- length(cerveau_fonc[,4])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(any(tr==cerveau_fonc$Slice),TRUE,liste_tr)
+        }
+        tranches_fonc <- cerveau_fonc[liste_tr,]
+        # --------- Délimitation faite --------- #
+        
+        # on crée la liste de niveaux de gris exploitable par density()
+        entieres <- tranches_fonc[,4]
+        liste.nan <- is.na(entieres)
+        entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
+        
+        tranches_les <- cerveau_les#isch[cerveau_isch$Slice==num_tranche,]
+        # on crée la liste de niveaux de gris exploitable par density()
+        les <- tranches_les[,4]
+        liste.nan <- is.na(les)
+        les <- les[!liste.nan] # on retire les valeurs manquantes
+        
+        #
+        
+      }# sub-plot fait
+      #
+      # p <- ggplot(d, aes(x="Jour", y=fonc, fill="Zone")) + geom_boxplot()
+    }# fonctionnalité vue
+  }
+  # Ajouter : anatomique ? Changement de répertoire : celui du rat.
+}
+
 # ------------------- Suivi temporel de l'étendue d'une zone anormale, graphiques des diférentes fonctionnalités superposés ------------------- #
 
 # Option : chaîne ou liste.
