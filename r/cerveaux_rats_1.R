@@ -322,6 +322,20 @@ dgris_temp_fonc(num_rat,10,"")
 
 dgris_temp_fonc(num_rat,'dark','')
 
+ngris_box_fonc(num_rat,fr_hemi,'ADC',liste_suivi_slice)
+
+
+ddd <- ngris_box_fonc(num_rat,fr_hemi,'ADC',liste_suivi_slice)
+
+ppp <- ggplot(ddd,
+            aes(x=ddd$Jour,y=ddd[,3],fill=ddd$Zone
+            )
+)
+ppp <- ppp + geom_boxplot(outlier.shape = NA)
+ppp <- ppp + scale_fill_manual(values = alpha(c("grey70","red","blue"), .3))
+ppp <- ppp + ggtitle(sprintf("Evolution de %s, segmentation %s",'SO2map','ADC')) + xlab("Jours") + ylab('VSI')
+print(ppp)
+
 #-------------------------------- Etape 5 : --------------------------------#
 
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
@@ -451,7 +465,7 @@ record_seg_cl(num_rat,liste_clust,fr_hemi)
 
 liste_suivi_slice <- list('ADC'=list(9,10),
                           'BVf'=list(9,10),
-                          'CBF'=list(9,10),
+                          'CBF'=list(9),
                           'CMRO2'=list(9,10),
                           'SO2map'=list(9,10),
                           'T1map'=list(9),
@@ -474,6 +488,10 @@ dgris_temp_fonc(num_rat,'tranches',"")
 #dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
 
 dgris_temp_fonc(num_rat,'dark','')
+
+liste_fonc <- list('T1map')
+
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice)
 
 #-------------------------------- Etape 5 : --------------------------------#
 
@@ -627,6 +645,7 @@ dgris_temp_fonc(num_rat,'tranches',"")
 
 dgris_temp_fonc(num_rat,'dark',"")
 
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice)
 
 #-------------------------------- Etape 5 : --------------------------------#
 
@@ -818,6 +837,6 @@ liste_suivi_slice <- list('ADC'=list(11,12,13),
 
 dgris_temp_fonc(num_rat,'dark','')
 
-
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice)
 
 #-------------------------------- Etape 5 : --------------------------------#
