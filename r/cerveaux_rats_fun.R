@@ -551,7 +551,7 @@ suivi_temp_fonc <- function(rat, fonc){#, class){# représentations graphiques t
 # '' affiche sinon
 
 
-dgris_temp_fonc <- function(rat,hemi, opt_1,opt_2){
+dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
   repertoires <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
                       'BVf'="fonctionnel_gris",
                       'CBF'="fonctionnel_gris",
@@ -630,7 +630,7 @@ dgris_temp_fonc <- function(rat,hemi, opt_1,opt_2){
     # fonctionnalité vue
   }
   else if (opt_1=='tranches'){# suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
-    liste_s_slice <- liste_suivi_slice
+    #liste_s_slice <- liste_suivi_slice
 
     for (fonc in liste_fonc){
 
@@ -726,7 +726,7 @@ dgris_temp_fonc <- function(rat,hemi, opt_1,opt_2){
       }# fonctionnalité vue
     }# option 2 codée : suivi du plus grand volume disponible
   else if (opt_1=='dark'){
-    liste_s_slice <- liste_suivi_slice
+    #liste_s_slice <- liste_suivi_slice
     for (fonc in liste_fonc){
       
       segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
@@ -748,7 +748,7 @@ dgris_temp_fonc <- function(rat,hemi, opt_1,opt_2){
       
       for (jour in jours){
         cerveau_fonc <- read.table(sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc,rat,jour,fonc,'bg'),header=T)
-        cerveau_seg <- read.table(sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc_seg,rat,jour,fonc_seg,opt_1),header=T)
+        cerveau_seg <- read.table(sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc_seg]],fonc_seg,rat,jour,fonc_seg,opt_1),header=T)
         
         # on définit hem_sain au jour 00, on ne le modifie plus par la suite
         if (jour=="00"){
@@ -773,6 +773,11 @@ dgris_temp_fonc <- function(rat,hemi, opt_1,opt_2){
         }
         
         cerveau_les <- cerveau_fonc # on va délimiter une enveloppe rectangulaire de la partie lésée sur l'image observée, fonctionnalité et jour courants
+        
+        if (fonc=='Anat'){# anatomique : trop de valeurs manquantes qui allongent la boucle
+          list.nan <- is.na(cerveau_les[,4])
+          cerveau_les <- cerveau_les[!list.nan,]
+        }
         
         l <- length(cerveau_les[,4])
         liste_tr <- rep(FALSE,l)
@@ -821,7 +826,7 @@ dgris_temp_fonc <- function(rat,hemi, opt_1,opt_2){
           
           if (length(les)!=0){
             pdf(file = sprintf("%s/%s_suivi_dens_vol%s_%s-%s.pdf","segmentation_manuelle",num_rat,'ADC',fonc,jour))
-            plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle),ylim = c(-0.01*max(dsts$y),1.5*max(dsts$y)))
+            plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle),ylim = c(-0.01*max(dsts$y),2*max(dsts$y)))
             lines(dstl$x, nl/n*dstl$y, lwd = 2, col = "darkred")
             lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
             lines(dst$x, dst$y, lwd = 3, col="gray70")
@@ -839,7 +844,7 @@ dgris_temp_fonc <- function(rat,hemi, opt_1,opt_2){
         }
         else{# on affiche systématiquement
           if (length(les)!=0){
-            plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle),ylim = c(-0.01*max(dsts$y),1.5*max(dsts$y)))
+            plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle),ylim = c(-0.01*max(dsts$y),2*max(dsts$y)))
             lines(dstl$x, nl/n*dstl$y, lwd = 2, col = "darkred")
             lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
             lines(dst$x, dst$y, lwd = 3, col="gray70")
@@ -943,9 +948,16 @@ dgris_temp_fonc <- function(rat,hemi, opt_1,opt_2){
 # Option : chaîne.
 # Modalité utilisée pour effectuer la segmentation
 
-ngris_box_fonc <- function(rat, hemi, opt, liste_s_slice){
+ngris_box_fonc <- function(rat, hemi, opt, liste_s_slice,opt_2){
   num_jours <- list("00"=0,"03"=3,"08"=8,"15"=15,"22"=22)
-  repertoires <- list('ADC'="fonctionnel_gris",'Anat'="anatomique_gris")
+  repertoires <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
   
   for (fonc in liste_fonc){
     
@@ -972,7 +984,7 @@ ngris_box_fonc <- function(rat, hemi, opt, liste_s_slice){
     jours <- liste_jr[[rat]]
     
     for (jour in jours){
-      cerveau_fonc <- read.table(sprintf("%s/%s/%s-J%s-%s-%s-all.dat","fonctionnel_gris",fonc,rat,jour,fonc,'bg'),header=T)
+      cerveau_fonc <- read.table(sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc,rat,jour,fonc,'bg'),header=T)
       cerveau_seg <- read.table(sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc_seg]],fonc_seg,rat,jour,fonc_seg,'dark'),header=T)
       
       # on définit hem_sain au jour 00, on ne le modifie plus par la suite
@@ -1037,20 +1049,38 @@ ngris_box_fonc <- function(rat, hemi, opt, liste_s_slice){
     liste.nan <- is.na(d[,3])
     d <- d[!liste.nan,]
     
+    #print(d[10,3])
+    
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
-    pdf(file = sprintf("%s/%s_suivi_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt,fonc))
-    # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
-    p <- ggplot(d,
-                aes(x=d$Jour,y=d[,3],fill=d$Zone
-                )
-    )
-    p <- p + geom_boxplot(outlier.shape = NA)
-    p <- p + scale_fill_manual(values = alpha(c("grey70","red","blue"), .3))
-    p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
-    print(p)
-    dev.off()
+    if (opt_2=='pdf'){
+      pdf(file = "ddd.pdf")#sprintf("%s/%s_suivi_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt,fonc))
+      
+      # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
+      p <- ggplot(d,
+                  aes(x=d$Jour,y=d[,3],fill=d$Zone
+                  )
+      )
+      p <- p + geom_boxplot(outlier.shape = NA)
+      p <- p + scale_fill_manual(values = alpha(c("grey70","red","blue"), .3))
+      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
+      #print(p)
+      #dev.off()
+    }
+    else{
+      # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
+      p <- ggplot(d,
+                  aes(x=d$Jour,y=d[,3],fill=d$Zone
+                  )
+      )
+      p <- p + geom_boxplot(outlier.shape = NA)
+      p <- p + scale_fill_manual(values = alpha(c("grey70","red","blue"), .3))
+      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
+      print(p)
+      #dev.off()
+    }
   }# fonctionnalité vue
+  #return(d)
 }# opt : segmentation utilisée
 
 # ------------------- Suivi temporel de l'étendue d'une zone anormale, graphiques des diférentes fonctionnalités superposés ------------------- #
