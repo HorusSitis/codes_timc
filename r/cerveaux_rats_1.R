@@ -153,14 +153,71 @@ for (tr in c(6:12)){
   comp_2vs3d_clust('Anat',"19",cl,tr)
 }
 
+#-------------------------------- Etape 3 : segmentation ADC, par rat ; liste_suivi_slice. --------------------------------#
 
+fr_hemi <- c(5,-240) # tranches Anat et autres modalités recalées
 
-# Etape 3 : 
-#pas de segmentation possible avec des clusters (?)
+# -- Répertoires : ceus des rats
+num_rat <- "11"
+vol_lesADC00(num_rat,c(10))
+num_rat <- "19"
+vol_lesADC00(num_rat,c(10))
+num_rat <- "26"
+vol_lesADC00(num_rat,c(10))
+num_rat <- "30"
+vol_lesADC00("11",c(10))
+# -- Déjà fait au 21/07/0217
 
+# -- listes de suivi temporel ADC
+l_s_s_11 <- list('ADC'=list(10),
+                 'BVf'=list(10),
+                 'CBF'=list(10),
+                 'CMRO2'=list(10),
+                 'SO2map'=list(10),
+                 'T1map'=list(10),
+                 'VSI'=list(10)
+)
+l_s_s_19 <- list('ADC'=list(9,10),
+                 'BVf'=list(9,10),
+                 'CBF'=list(9),
+                 'CMRO2'=list(9,10),
+                 'SO2map'=list(9,10),
+                 'T1map'=list(9),
+                 'VSI'=list(9,10)
+)
+l_s_s_26 <- list('ADC'=c(6,7,8),
+                          'BVf'=c(6,7,8),
+                          'CBF'=c(6,7,8),
+                          'CMRO2'=c(6,7,8),
+                          'SO2map'=c(6,7,8),
+                          'T1map'=c(6,7,8),
+                          'VSI'=c(6,7,8)
+)
+l_s_s_30 <- list('ADC'=list(11,12,13),
+                 'BVf'=list(11,12,13),
+                 'CBF'=list(11,12,13),
+                 'CMRO2'=list(11,12,13),
+                 'SO2map'=list(11,12,13),
+                 'T1map'=list(11,12,13),
+                 'VSI'=list(11,12,13)
+)
 
+liste_ss_rat <- list("11"=l_s_s_11,"19"=l_s_s_19,"26"=l_s_s_26,"30"=l_s_s_30)
 
+#-------------------------------- Etape 4 : statistiques sur les niveaux de gris. Répertoire du rat concerné --------------------------------#
 
+num_rat <- "30"
+
+liste_fonc <- list('ADC')
+liste_suivi_slice <- liste_ss_rat[[num_rat]]
+
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'')
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
+
+dgris_temp_fonc(num_rat,fr_hemi,liste_suivi_slice,'dark','') # pas d'option prévue pour une segmentation CBF ou Anat
+dgris_temp_fonc(num_rat,fr_hemi,liste_suivi_slice,'dark','pdf')
+
+#-------------------------------- Etape 5 : --------------------------------#
 
 ####################################### Protocole pour réaliser la présentation. IRM fonctionnelle #######################################
 
@@ -315,9 +372,9 @@ liste_suivi_slice <- list('ADC'=list(10),
 #liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','VSI','T1map','SO2map')# on peut tester avec une liste des fonctionnalités restreinte
 
-dgris_temp_fonc(num_rat,'cer',"")
-#dgris_temp_fonc(num_rat,'tranches',"")
-dgris_temp_fonc(num_rat,10,"")
+#dgris_temp_fonc(num_rat,'cer',"")
+dgris_temp_fonc(num_rat,'tranches',"")
+#dgris_temp_fonc(num_rat,10,"")
 
 
 dgris_temp_fonc(num_rat,'dark','')
