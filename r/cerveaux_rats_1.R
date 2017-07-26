@@ -206,6 +206,9 @@ liste_ss_rat <- list("11"=l_s_s_11,"19"=l_s_s_19,"26"=l_s_s_26,"30"=l_s_s_30)
 
 #-------------------------------- Etape 4 : statistiques sur les niveaux de gris. Répertoire du rat concerné --------------------------------#
 
+num_rat <- "11"
+num_rat <- "19"
+num_rat <- "26"
 num_rat <- "30"
 
 liste_fonc <- list('ADC')
@@ -357,6 +360,12 @@ liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3),"15"=c(4),"22"=c(4))
 )
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
+
+liste_fonc <- list('ADC','BVf','CBF','SO2map','T1map','VSI')
+liste_min_fonc <- list('ADC'=50,'BVf'=1,'CBF'=5,'SO2map'=5,'T1map'=10,'VSI'=1)#,'CMRO2'=10)
+comp_clust_volADC00(num_rat,liste_suivi_slice,c(1:3),liste_min_fonc,'')
+
+comp_clust_volADC00(num_rat,liste_suivi_slice,c(2,2),liste_min_fonc,'pdf')
 
 #-------------------------------- Etape 4 : --------------------------------#
 
@@ -518,6 +527,12 @@ liste_clust <- list('ADC'=list("00"=c(1),"03"=c(),"08"=c(3),"15"=c(4),"22"=c(4))
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
+liste_fonc <- list('ADC','BVf','CBF','SO2map','T1map','VSI')
+liste_min_fonc <- list('ADC'=50,'BVf'=1,'CBF'=5,'SO2map'=5,'T1map'=10,'VSI'=1)#,'CMRO2'=10)
+comp_clust_volADC00(num_rat,liste_suivi_slice,c(1:3),liste_min_fonc,'')
+
+comp_clust_volADC00(num_rat,liste_suivi_slice,c(2,2),liste_min_fonc,'pdf')
+
 #-------------------------------- Etape 4 : --------------------------------#
 
 liste_suivi_slice <- list('ADC'=list(9,10),
@@ -530,7 +545,7 @@ liste_suivi_slice <- list('ADC'=list(9,10),
                           )
 
 #liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
-liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','VSI')#,'T1map')# on peut tester avec une liste des fonctionnalités restreinte
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')# on peut tester avec une liste des fonctionnalités restreinte
 
 # Je choisis les fonctionnalités ADC et T1map comme références
 
@@ -538,17 +553,19 @@ dgris_temp_fonc(num_rat,list('cer'),"")
 #dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
 #dgris_temp_fonc(num_rat,list('cer'),"ADC")
 
-dgris_temp_fonc(num_rat,9,"")
+dgris_temp_fonc(num_rat,fr_hemi,9,"")
 
-dgris_temp_fonc(num_rat,'tranches',"")
-#dgris_temp_fonc(num_rat,liste_suivi_slice,"T1map")
-#dgris_temp_fonc(num_rat,liste_suivi_slice,"ADC")
+dgris_temp_fonc(num_rat,fr_hemi,'tranches',"")
+#dgris_temp_fonc(num_rat,fr_hemi,liste_suivi_slice,"T1map")
+#dgris_temp_fonc(num_rat,fr_hemi,liste_suivi_slice,"ADC")
 
 dgris_temp_fonc(num_rat,'dark','')
 
 liste_fonc <- list('T1map')
 
-ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice)
+liste_fonc <- list('ADC','CBF','T1map')
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'')
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
 
 #-------------------------------- Etape 5 : --------------------------------#
 
@@ -682,6 +699,11 @@ liste_suivi_slice <- list('ADC'=c(6,7,8),
                           'VSI'=c(6,7,8)
 )
 
+liste_fonc <- list('BVf','CBF','CMRO2','T1map','ADC','SO2map','VSI')#,'Anat')
+comp_clust_volADC00(num_rat,liste_suivi_slice,c(1:3),liste_min_fonc,'')
+
+comp_clust_volADC00(num_rat,liste_suivi_slice,c(2,2),liste_min_fonc,'pdf')
+
 #-------------------------------- Etape 4 : --------------------------------#
 
 liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')# on peut tester avec une liste des fonctionnalités restreinte
@@ -728,8 +750,8 @@ for (fonc in liste_fonc){
 
 #-------------------------------- Etape 2 : répertoires des fonctionnalités. Attention au BVf, J00, slice8. --------------------------------#
 
-liste_fonc <- list('ADC','BVf','CBF','CMRO2','T1map','SO2map','VSI') # ordre de priorité pour les fonctionnalités.
-liste_min_fonc <- list('ADC'=10,'BVf'=1,'CBF'=10,'CMRO2'=10,'SO2map'=10,'T1map'=10,'VSI'=10)
+liste_fonc <- list('ADC','BVf','CBF','T1map','SO2map','VSI')#,'CMRO2') # ordre de priorité pour les fonctionnalités.
+liste_min_fonc <- list('ADC'=50,'BVf'=1,'CBF'=5,'SO2map'=5,'T1map'=10,'VSI'=1)#,'CMRO2'=10)
 
 cl <- c(3,5)# encadrement du nombre de clusters
 #cl <- c(4,4)
@@ -738,6 +760,7 @@ for (fonc in liste_fonc){
   rg_FONC_3d(3,fonc,num_rat,cl,'')
 }
 
+fonc <- 'ADC'
 for (sl in liste_suivi_slice[[fonc]]){
   comp_2vs3d_clust(fonc,num_rat,cl,sl)
 }
@@ -825,7 +848,7 @@ for (sl in liste_suivi_slice[[fonc]]){
 
 #-------------------------------- Etape 3 : --------------------------------#
 
-liste_clust <- list('ADC'=list("00"=c(1),"08"=c(3,4,5),"15"=c(4,5)), # clusters utilisables, cf étape 2
+liste_clust <- list('ADC'=list("00"=c(4),"08"=c(4),"15"=c(4)), # clusters utilisables, cf étape 2
                     'BVf'=list(),
                     'CBF'=list(),
                     'CMRO2'=list(),
@@ -836,7 +859,7 @@ liste_clust <- list('ADC'=list("00"=c(1),"08"=c(3,4,5),"15"=c(4,5)), # clusters 
 
 record_seg_cl(num_rat,liste_clust,fr_hemi)
 
-liste_suivi_slice <- list('ADC'=list(11,12,13),
+liste_suivi_slice <- list('ADC'=list(9,10,11,12,13),
                           'BVf'=list(11,12,13),
                           'CBF'=list(11,12,13),
                           'CMRO2'=list(11,12,13),
@@ -889,11 +912,101 @@ liste_suivi_slice <- list('ADC'=list(11,12,13),
                           'VSI'=list(11,12,13)
 )
 
+liste_fonc <- list('ADC','BVf','CBF','SO2map','T1map','VSI')#,'Anat','CMRO2')
+liste_min_fonc <- list('ADC'=50,'BVf'=1,'CBF'=5,'SO2map'=5,'T1map'=10,'VSI'=1)
+
+comp_clust_volADC00(num_rat,liste_suivi_slice,c(1:3),liste_min_fonc,'')
+
+comp_clust_volADC00(num_rat,liste_suivi_slice,c(2,2),liste_min_fonc,'pdf')
+
 #-------------------------------- Etape 4 : --------------------------------#
 
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc,'ADCdark00', liste_suivi_slice, '')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc,'ADCdark00', liste_suivi_slice, 'pdf')
 
 dgris_temp_fonc(num_rat,'dark','')
 
 ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice)
 
 #-------------------------------- Etape 5 : --------------------------------#
+
+
+
+##################################################################################################
+# -------------------------------- Etape 4 : tous rats confondus-------------------------------- #
+##################################################################################################
+
+fr_hemi <- c(5,-240)
+
+liste_fonc <- list('ADC','BVf','CBF','SO2map','T1map','VSI')#,'Anat','CMRO2')
+liste_min_fonc <- list('ADC'=50,'BVf'=1,'CBF'=5,'SO2map'=5,'T1map'=10,'VSI'=1)
+
+l_s_s_11 <- list('ADC'=list(10),
+                 'BVf'=list(10),
+                 'CBF'=list(10),
+                 'CMRO2'=list(10),
+                 'SO2map'=list(10),
+                 'T1map'=list(10),
+                 'VSI'=list(10)
+)
+l_s_s_19 <- list('ADC'=list(9,10),
+                 'BVf'=list(9,10),
+                 'CBF'=list(9),
+                 'CMRO2'=list(9,10),
+                 'SO2map'=list(9,10),
+                 'T1map'=list(9),
+                 'VSI'=list(9,10)
+)
+l_s_s_26 <- list('ADC'=c(6,7,8),
+                 'BVf'=c(6,7,8),
+                 'CBF'=c(6,7,8),
+                 'CMRO2'=c(6,7,8),
+                 'SO2map'=c(6,7,8),
+                 'T1map'=c(6,7,8),
+                 'VSI'=c(6,7,8)
+)
+l_s_s_30 <- list('ADC'=list(11,12,13),
+                 'BVf'=list(11,12,13),
+                 'CBF'=list(11,12,13),
+                 'CMRO2'=list(11,12,13),
+                 'SO2map'=list(11,12,13),
+                 'T1map'=list(11,12,13),
+                 'VSI'=list(11,12,13)
+)
+
+liste_ss_rat <- list("11"=l_s_s_11,"19"=l_s_s_19,"26"=l_s_s_26,"30"=l_s_s_30)
+
+
+num_rat <- "11"
+liste_suivi_slice <- liste_ss_rat[[num_rat]]
+
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'')
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, '')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, 'pdf')
+
+num_rat <- "19"
+liste_suivi_slice <- liste_ss_rat[[num_rat]]
+
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'')
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, '')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, 'pdf')
+
+num_rat <- "26"
+liste_suivi_slice <- liste_ss_rat[[num_rat]]
+
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'')
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, '')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, 'pdf')
+
+num_rat <- "30"
+liste_suivi_slice <- liste_ss_rat[[num_rat]]
+
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'')
+ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, '')
+ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, 'pdf')
+
+
