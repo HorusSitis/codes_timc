@@ -939,6 +939,8 @@ ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice)
 fr_hemi <- c(5,-240)
 
 liste_fonc <- list('ADC','BVf','CBF','SO2map','T1map','VSI')#,'Anat','CMRO2')
+
+liste_fonc <- list('T1map','SO2map','CBF','BVf')
 liste_min_fonc <- list('ADC'=50,'BVf'=1,'CBF'=5,'SO2map'=5,'T1map'=10,'VSI'=1)
 
 l_s_s_11 <- list('ADC'=list(10),
@@ -1009,4 +1011,93 @@ ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, '')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, 'pdf')
 
+# Répertoire benjamin_antoine_labo
+liste_rats_tr <- list("11"=c(10),"19"=c(9),"26"=c(8),"30"=c(11))
+#fonc <- 'ADC'
+comp_rats_fonc(fr_hemi,liste_rats_tr,fonc,'ADCdark00','')
+comp_rats_fonc(fr_hemi,liste_rats_tr,fonc,'ADCdark00','pdf')
+
+
+carte_fonc_rat(fonc,fr_hemi,'')
+
+
+###############################################################################################################################################
+###----------------- Simulations : modèle phénoménologique pour décrire les suites de l'ischémie, sur les jours d'examen. -----------------###
+###############################################################################################################################################
+
+liste_succ_ADC_11 <- list("00"=list("dep"=c(600,700,725,750,850),"arr"=c(500,750,850,1000,1400)),
+                          "03"=list("dep"=c(500,750,850,1000,1400),"arr"=c(450,1000,1200,1450,2100)),
+                          "08"=list("dep"=c(450,1000,1200,1450,2100),"arr"=c(800,1200,2100,2300,3300)),
+                          "15"=list("dep"=c(300,1200,2100,2300,3300),"arr"=c(800,1800,2200,2550,3300))
+)
+
+liste_succ_BVf_11 <- list("00"=list("dep"=c(0,0.5,1,1.5,2),"arr"=c(0,2.5,4,6.5,11.5)),
+                          "03"=list("dep"=c(0,2.5,4,6.5,11.5),"arr"=c(0.5,5,7,12,23)),
+                          "08"=list("dep"=c(0.5,5,7,12,23),"arr"=c(0,4,5.5,6.5,12)),
+                          "15"=list("dep"=c(0,4,5.5,6.5,12),"arr"=c(0,0.5,2,3,8))
+)
+
+liste_succ_CBF_11 <- list("00"=list("dep"=c(0,15,25,40,80),"arr"=c(0,45,75,150,310)),
+                          "03"=list("dep"=c(0,45,75,150,310),"arr"=c(0,10,20,30,60)),
+                          "08"=list("dep"=c(0,10,20,30,60),"arr"=c(0,45,70,100,190)),
+                          "15"=list("dep"=c(0,45,70,100,190),"arr"=c(0,20,40,80,170))
+)
+
+liste_succ_SO2map_11<- list("00"=list("dep"=c(0,10,25,40,72),"arr"=c(2,47,65,75,100)),
+                            "03"=list("dep"=c(5,47,65,75,100),"arr"=c(18,53,73,80,100)),
+                            "15"=list("dep"=c(18,53,73,80,100),"arr"=c(0,35,60,74,100))
+)
+
+liste_succ_T1map_11 <- list("00"=list("dep"=c(1150,1450,1550,1700,1950),"arr"=c(1155,1455,1555,1750,2050)),
+                            "03"=list("dep"=c(1155,1455,1555,1750,2050),"arr"=c(1200,1600,1800,2100,2700)),
+                            "08"=list("dep"=c(1200,1600,1800,2100,2700),"arr"=c(1600,2400,2600,2800,3500)),
+                            "15"=list("dep"=c(1600,2400,2600,2800,3500),"arr"=c(850,2100,2700,3100,3500))
+)
+
+liste_succ_VSI_11 <- list("00"=list("dep"=c(1,7,12,20,40),"arr"=c(0,8,13,19,35)),
+                          "03"=list("dep"=c(0,8,13,19,35),"arr"=c(2,11,15,21,34)),
+                          "08"=list("dep"=c(2,11,15,21,34),"arr"=c(3,10,14,20,34)),
+                          "15"=list("dep"=c(3,10,14,20,34),"arr"=c(0,6,10,15,29))
+)
+
+liste_box_11 <- list("ADC"=liste_succ_ADC_11 ,
+                     "BVf"=liste_succ_BVf_11 ,
+                     "CBF"=liste_succ_CBF_11 ,
+                     "SO2map"=liste_succ_SO2map_11 ,
+                     "T1map"=liste_succ_T1map_11 ,
+                     "VSI"=liste_succ_VSI_11
+)
+
+###----------------- Premières tentatives : on note les indicateurs de position pour les fonctionnalités. Rat 11. -----------------###
+
+
+source(file="modele_pheno_fun.R", encoding ="UTF-8")
+
+fr_hemi <- c(5,-240)
+
+num_rat <- "11"
+liste_suivi_slice <- liste_ss_rat[[num_rat]]
+
+comp_succ_suivi(num_rat,fr_hemi,'ADC',liste_suivi_slice,'ADCdark00','box','')
+comp_succ_suivi(num_rat,fr_hemi,'BVf',liste_suivi_slice,'ADCdark00','box','')
+comp_succ_suivi(num_rat,fr_hemi,'CBF',liste_suivi_slice,'ADCdark00','box','')
+comp_succ_suivi(num_rat,fr_hemi,'SO2map',liste_suivi_slice,'ADCdark00','box','')
+comp_succ_suivi(num_rat,fr_hemi,'T1map',liste_suivi_slice,'ADCdark00','box','')
+comp_succ_suivi(num_rat,fr_hemi,'VSI',liste_suivi_slice,'ADCdark00','box','')
+
+
+comp_succ_suivi(num_rat,fr_hemi,'ADC',liste_suivi_slice,'ADCdark00','dens','')
+comp_succ_suivi(num_rat,fr_hemi,'ADC',liste_suivi_slice,'ADCdark00','dens','pdf')
+
+comp_succ_suivi(num_rat,fr_hemi,'BVf',liste_suivi_slice,'ADCdark00','dens','')
+comp_succ_suivi(num_rat,fr_hemi,'CBF',liste_suivi_slice,'ADCdark00','dens','')
+comp_succ_suivi(num_rat,fr_hemi,'SO2map',liste_suivi_slice,'ADCdark00','dens','')
+comp_succ_suivi(num_rat,fr_hemi,'T1map',liste_suivi_slice,'ADCdark00','dens','')
+comp_succ_suivi(num_rat,fr_hemi,'VSI',liste_suivi_slice,'ADCdark00','dens','')
+
+
+
+#suivi_voxels(num_rat,'ADC',10,c(50,30),7,'ADCdark00')
+
+aff_suivi_voxels(num_rat,'ADC',10,c(50,30),7,'ADCdark00','')
 
