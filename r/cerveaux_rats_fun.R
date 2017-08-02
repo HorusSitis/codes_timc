@@ -430,18 +430,61 @@ vol_lesADC00 <- function(rat,tr){
     #dr.filename <- paste(repertoires[[fonc]],"/",d.filename)
     day.slices <- tr
     d <- data.frame(matrix(ncol = 5, nrow = 0))
+    colnames(d) <- c("x","y","z",'ADC',"Slice")
+    
+    for (slice in day.slices){
+      d.filename <- sprintf("%s/%s-J%s-%s-dark-slice%i.txt",'ADC',rat,jour,'ADC',slice)
+      dr.filename <- paste(repertoires[['ADC']],"/",d.filename,sep='') # on va chercher les niveaux de gris de la zone segmentée ADC dane le bon répertoire
+      d.increment <- read.table(dr.filename,header=T,sep='\t')
+      d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*slice, d.increment[,3],slice))
+      colnames(d.increment) <- c("x","y","z",'ADC',"Slice")
+      d <- as.data.frame(rbind(d,d.increment))
+    }
+    w.filename <- sprintf("%s/%s-J%s-%s-dark-all.dat",'ADC',rat,jour,'ADC')
+    wr.filename <- paste(repertoires[['ADC']],"/",w.filename,sep='')# on met le volume segmenté dans le bon répertoire
+    write.table(d, wr.filename, row.names=F, quote=F, sep='\t')
+  }
+}
+
+# ------------------- Enregistrement du volume, lésé en CBF au jour 00, examiné au jour et à la fonctionnalité en cours, avec les tranches du vecteur tr. Répertoire benjamin_antoine_labo. ------------------- #
+
+vol_lesCBF00 <- function(rat,tr){
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
+  fonc <- 'CBF'
+  liste_jr <- liste_jfr[['CBF']]
+  jours <- liste_jr[[rat]]
+  for (jour in c("00")){#jours){
+    day.slices <- tr
+    d <- data.frame(matrix(ncol = 5, nrow = 0))
     colnames(d) <- c("x","y","z",fonc,"Slice")
     
     for (slice in day.slices){
-      d.filename <- sprintf("%s/%s-J%s-%s-dark-slice%i.txt",'ADC',rat,jour,fonc,slice)
-      dr.filename <- paste(repertoires[[fonc]],"/",d.filename) # on va chercher les niveaux de gris de la zone segmentée ADC dane le bon répertoire
+      # Lecture du fichier texte des valeurs de la modalité -> niveaux de gris pour ImageJ
+      d.filename <- sprintf("%s/%s-J%s-%s-dark-slice%i.txt",'CBF',rat,jour,'CBF',slice)
+      dr.filename <- paste("R",rat,"/",repertoires[[fonc]],"/",d.filename,sep='') # on va chercher les niveaux de gris de la zone segmentée ADC dane le bon répertoire
       d.increment <- read.table(dr.filename,header=T,sep='\t')
+      
+      # Retrait des valeurs -1, laissées dans la fichier .txt pendant le traitement manuel des données.
+      #l <- length(d.increment[,3])
+      #print(d.increment[100:110,3])
+      #liste_bg <- rep(TRUE,l)
+      #liste_bg <- ifelse(d.increment[,3]==-1,FALSE,liste_bg)
+      #d.increment <- d.increment[liste_bg,]
+      
+      # Remplissage de la dataframe à enregistrer
       d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*slice, d.increment[,3],slice))
       colnames(d.increment) <- c("x","y","z",fonc,"Slice")
       d <- as.data.frame(rbind(d,d.increment))
     }
-    w.filename <- sprintf("%s/%s-J%s-%s-dark-all.dat",'ADC',rat,jour,'ADC')
-    wr.filename <- paste(repertoires[[fonc]],"/",w.filename)# on met le volume segmenté dans le bon répertoire
+    w.filename <- sprintf("%s/%s-J%s-%s-dark-all.dat",fonc,rat,jour,fonc)
+    wr.filename <- paste("R",rat,"/",repertoires[[fonc]],"/",w.filename,sep='')# on met le volume segmenté dans le bon répertoire
     write.table(d, wr.filename, row.names=F, quote=F, sep='\t')
   }
 }
@@ -968,7 +1011,7 @@ dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
         liste.nan <- is.na(entieres)
         entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
         
-        tranches_les <- cerveau_les#isch[cerveau_isch$Slice==num_tranche,]
+        tranches_les <- cerveau_les
         # on crée la liste de niveaux de gris exploitable par density() : zone lésée
         les <- tranches_les[,4]
         liste.nan <- is.na(les)
@@ -1138,6 +1181,9 @@ ngris_box_fonc <- function(rat, hemi, opt_1, liste_s_slice,opt_2){
     else if (opt_1=='brightAnat00'){
       fonc_seg <- 'Anat'
     }
+    else if (opt_1=='CBFdark00'){
+      fonc_seg <- 'CBF'
+    }
     
     #print(fonc)
     #print(fonc_seg)
@@ -1226,7 +1272,7 @@ ngris_box_fonc <- function(rat, hemi, opt_1, liste_s_slice,opt_2){
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_2=='pdf'){
-      file_name <- sprintf("%s/%s_suivi_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt,fonc)
+      file_name <- sprintf("%s/%s_suivi_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt_1,fonc)
       
       # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
       p <- ggplot(d,
@@ -1284,6 +1330,9 @@ comp_rats_fonc <- function(hemi,liste_r_tr,fonc,opt_1,opt_2){
   }
   else if (opt_1=='brightAnat00'){
     fonc_seg <- 'Anat'
+  }
+  else if (opt_1=='CBFdark00'){
+    fonc_seg <- 'CBF'
   }
   
   for (rat in noms_rats){
@@ -1374,7 +1423,7 @@ comp_rats_fonc <- function(hemi,liste_r_tr,fonc,opt_1,opt_2){
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_2=='pdf'){
-      file_name <- #- ? -#sprintf("%s/%s_suivi_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt,fonc)
+      file_name <- sprintf("R%s/%s/%s_suivi_box_vol%s_%s.pdf",num_rat,"segmentation_manuelle",num_rat,opt_1,fonc)
       
       # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
       p <- ggplot(d,
@@ -1439,6 +1488,9 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
     }
     else if (opt_1=='brightAnat00'){
       fonc_seg <- 'Anat'
+    }
+    else if (opt_1=='CBFdark00'){
+      fonc_seg <- 'CBF'
     }
     
     #print(fonc)
@@ -1561,7 +1613,7 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
   }# fonctionnalité vue
 }
 
-# ------------------- Cartographie la distribution de valeurs d'une fonctionnalité, dans l'hémisphère sain au jour 00, par rat. ------------------- #
+# ------------------- Cartographie la distribution de valeurs d'une fonctionnalité, dans l'hémisphère sain au jour 00, par rat. Option : pdf ou sortie RStudio . ------------------- #
 
 carte_fonc_rat <- function(fonc,hemi,opt){
   repertoires_rats <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
