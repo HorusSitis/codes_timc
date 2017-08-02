@@ -26,9 +26,56 @@ trans_box <- function(x,dep,arr){
   return(res)
 }
 
+## Paramètres pour les fonctions de transition
+
+# ------- Rat 11 ------- #
+
+block <- {
+  liste_succ_ADC_11 <- list("00"=list("dep"=c(600,700,725,750,850),"arr"=c(500,750,850,1000,1400)),
+                            "03"=list("dep"=c(500,750,850,1000,1400),"arr"=c(450,1000,1200,1450,2100)),
+                            "08"=list("dep"=c(450,1000,1200,1450,2100),"arr"=c(800,1200,2100,2300,3300)),
+                            "15"=list("dep"=c(300,1200,2100,2300,3300),"arr"=c(800,1800,2200,2550,3300))
+  )
+  
+  liste_succ_BVf_11 <- list("00"=list("dep"=c(0,0.5,1,1.5,2),"arr"=c(0,2.5,4,6.5,11.5)),
+                            "03"=list("dep"=c(0,2.5,4,6.5,11.5),"arr"=c(0.5,5,7,12,23)),
+                            "08"=list("dep"=c(0.5,5,7,12,23),"arr"=c(0,4,5.5,6.5,12)),
+                            "15"=list("dep"=c(0,4,5.5,6.5,12),"arr"=c(0,0.5,2,3,8))
+  )
+  
+  liste_succ_CBF_11 <- list("00"=list("dep"=c(0,15,25,40,80),"arr"=c(0,45,75,150,310)),
+                            "03"=list("dep"=c(0,45,75,150,310),"arr"=c(0,10,20,30,60)),
+                            "08"=list("dep"=c(0,10,20,30,60),"arr"=c(0,45,70,100,190)),
+                            "15"=list("dep"=c(0,45,70,100,190),"arr"=c(0,20,40,80,170))
+  )
+  
+  liste_succ_SO2map_11<- list("00"=list("dep"=c(0,10,25,40,72),"arr"=c(2,47,65,75,100)),
+                              "03"=list("dep"=c(5,47,65,75,100),"arr"=c(18,53,73,80,100)),
+                              "15"=list("dep"=c(18,53,73,80,100),"arr"=c(0,35,60,74,100))
+  )
+  
+  liste_succ_T1map_11 <- list("00"=list("dep"=c(1150,1450,1550,1700,1950),"arr"=c(1155,1455,1555,1750,2050)),
+                              "03"=list("dep"=c(1155,1455,1555,1750,2050),"arr"=c(1200,1600,1800,2100,2700)),
+                              "08"=list("dep"=c(1200,1600,1800,2100,2700),"arr"=c(1600,2400,2600,2800,3500)),
+                              "15"=list("dep"=c(1600,2400,2600,2800,3500),"arr"=c(850,2100,2700,3100,3500))
+  )
+  
+  liste_succ_VSI_11 <- list("00"=list("dep"=c(1,7,12,20,40),"arr"=c(0,8,13,19,35)),
+                            "03"=list("dep"=c(0,8,13,19,35),"arr"=c(2,11,15,21,34)),
+                            "08"=list("dep"=c(2,11,15,21,34),"arr"=c(3,10,14,20,34)),
+                            "15"=list("dep"=c(3,10,14,20,34),"arr"=c(0,6,10,15,29))
+  )
+}
+
+liste_box_11 <- list("ADC"=liste_succ_ADC_11 ,
+                     "BVf"=liste_succ_BVf_11 ,
+                     "CBF"=liste_succ_CBF_11 ,
+                     "SO2map"=liste_succ_SO2map_11 ,
+                     "T1map"=liste_succ_T1map_11 ,
+                     "VSI"=liste_succ_VSI_11
+)
+
 # ADC : pour le moment aucune relation avec les autres modalités. #
-
-
 
 succ11_ADC_00 <- function(x){
   dep_arr <- liste_succ_ADC_11[["00"]]
@@ -189,6 +236,7 @@ liste_fsucc_VSI_11 <- list("00"=succ11_VSI_00,
                            "08"=succ11_VSI_08,
                            "15"=succ11_VSI_15
                            )
+# Toutes fonctionnalités confondues
 
 liste_fsucc_11 <- list("ADC"=liste_fsucc_ADC_11 ,
                        "BVf"=liste_fsucc_BVf_11 ,
@@ -198,12 +246,19 @@ liste_fsucc_11 <- list("ADC"=liste_fsucc_ADC_11 ,
                        "VSI"=liste_fsucc_VSI_11
                        )
 
+
+# ------- Rat 19 ------- #
+# ------- Rat 26 ------- #
+# ------- Rat 30 ------- #
+
+
+## ------- Fonctions de transitikon : tous rats confondus ------- ##
+
 liste_fsucc <- list("11"=liste_fsucc_11,
                     "19"='',#liste_fsucc_19,
                     "26"='',#liste_fsucc_26,
                     "30"=''#liste_fsucc_30
-                    )
-
+)
 
 ### Deuxième volée de fonctions : dans un répertoire de benjamin_antoine_labo, utilise des versions vectorisées des fonctions précédentes. ###
 ## Prennent en arguments des coordonnées pour le coin inférieur gauche, et la taille du carré de pixels. ##
@@ -630,7 +685,7 @@ niveau_rel_gris <- function(g,min,max){
 
 # Affichage : carré de pixels, prévisions vs mesures. Sortie pdf à faire.
 
-aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
+aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2,opt_3){
   num_jours <- list("00"=0,"03"=3,"08"=8,"15"=15,"22"=22)
   repertoires <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
                       'BVf'="fonctionnel_gris",
@@ -653,34 +708,79 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
   jours <- liste_jr[[rat]]
   njours <- length(jours)
   
-  get( getOption( "device" ) )()
-  #plot.new()
-  par(mfrow=c(2,njours))
-  
-  for (type in c('Mesures','Prévisions')){
-    for (jour in jours){
-      l <- length(d[,3])
-      liste_sel <- rep(TRUE,l)
-      liste_sel <- ifelse(d$Type==type,liste_sel,FALSE)
-      liste_sel <- ifelse(d$Jour==jour,liste_sel,FALSE)
-      e <- d[liste_sel,]
+  if (opt_2=='voxels'){
+    if (opt_3=='pdf'){}
+    else{
+      #get( getOption( "device" ) )()
+      plot.new()
+      par(mfrow=c(2,njours))
       
-      vol <- mesure*mesure
-      col_vec <- rep("",vol)
-      
-      for (m in c(1:vol)){
-        col_vec[m] <- niveau_rel_gris(d[m,3],val_min,val_max)
+      for (type in c('Mesures','Prévisions')){
+        for (jour in jours){
+          l <- length(d[,3])
+          liste_sel <- rep(TRUE,l)
+          liste_sel <- ifelse(d$Type==type,liste_sel,FALSE)
+          liste_sel <- ifelse(d$Jour==jour,liste_sel,FALSE)
+          e <- d[liste_sel,]
+          
+          # on crée un vecteur des niveaux de gris du carré de voxels
+          vol <- mesure*mesure
+          col_vec <- rep("",vol)
+          
+          for (m in c(1:vol)){
+            col_vec[m] <- niveau_rel_gris(d[m,3],val_min,val_max)
+          }
+          
+          plot(e$x, e$y,
+               col=col_vec,
+               pch=20,
+               cex=3,#*(1-d.clust$uncertainty)^4, 
+               xlab='x', ylab='y',
+               main=sprintf("J%s, %s",jour,type)
+          )
+        }
       }
-      
-      plot(e$x, e$y,
-           col=col_vec,
-           pch=20,
-           cex=3,#*(1-d.clust$uncertainty)^4, 
-           xlab='x', ylab='y',
-           main=sprintf("J%s, %s",jour,type)
-      )
+      title(sprintf("Suivi temporel : rat %s, modalité %s",rat,fonc),outer=TRUE)
     }
   }
-  title(sprintf("Suivi temporel : rat %s, modalité %s",rat,fonc),outer=TRUE)
+  else if (opt_2=='hist'){
+    if (opt_3=='pdf'){
+      # histogrammes renvoyés en pdf
+    }
+    else{
+      # histogrammes affichés : valeurs des modalités sur le carré.
+      #get( getOption( "device" ) )()
+      plot.new()
+      par(mfrow=c(2,njours))
+      
+      for (type in c('Mesures','Prévisions')){
+        for (jour in jours){
+          # on extrait une sous-dataframe e correspondant au type et au jour courants
+          l <- length(d[,3])
+          liste_sel <- rep(TRUE,l)
+          liste_sel <- ifelse(d$Type==type,liste_sel,FALSE)
+          liste_sel <- ifelse(d$Jour==jour,liste_sel,FALSE)
+          e <- d[liste_sel,]
+          
+          # on paramètre et on trace l'histogramme
+          vol <- mesure*mesure
+          d.fonc <- d[,3]
+          liste.nan <- is.na(d.fonc)
+          d.fonc <- d.fonc[!liste.nan]
+          e.fonc <- e[,3]
+          FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
+          e.hist <- hist(e.fonc,
+                         breaks=FONC.breaks,
+                         ylim=c(0,vol),
+                         xlab="",
+                         ylab="Nombre de voxels",
+                         col='grey50',
+                         main=type,sub=sprintf("%s, jour %s",fonc,jour)
+                         )
+        }
+      }
+      title(sprintf("Suivi temporel : rat %s, modalité %s",rat,fonc),outer=TRUE)
+    }
+  }
 }
 
