@@ -1,8 +1,7 @@
 ### Première volée de fonctions d'évolution : scalaires ; rat 11, une modalité, un jour. ###
 
 
-# dep et arr sont les deux vecteurs qui contiennent respectivement les antécédents et images qui définissent le polynôme d'interpolation de Lagrange recherché.
-# On utilisera des polynômes de degré 4, pour associer les médiane-quartiles-déciles.
+# dep et arr sont les deux vecteurs qui contiennent respectivement les antécédents et images qui définissent la fonction affine par morceaux ...
 
 trans_box <- function(x,dep,arr){
   if (x<=dep[1]){
@@ -28,7 +27,7 @@ trans_box <- function(x,dep,arr){
 
 ## Paramètres pour les fonctions de transition
 
-# ------- Rat 11 ------- #
+# ------- Rat 11 : émanent des statistiques sur la segmentation ADC. ------- #
 
 block <- {
   liste_succ_ADC_11 <- list("00"=list("dep"=c(600,700,725,750,850),"arr"=c(500,750,850,1000,1400)),
@@ -566,7 +565,7 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
 # Dans un premier temps : fonctions qui génèrent et enregistrent éventuellement des dataframe pour les suivis temporels.
 # Dans un deuxième temps : Affichage, comparaisons avec les données répertoriées pour les zones lésées.
 
-suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1){
+suivi_voxels <- function(rat,fonc,slice,sommet,mesure){
   num_jours <- list("00"=0,"03"=3,"08"=8,"15"=15,"22"=22)
   repertoires <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
                       'BVf'="fonctionnel_gris",
@@ -579,15 +578,6 @@ suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1){
   
   segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
   fonc_seg <- 'ADC' # la segmentation avec fonc_seg sera celle utilisée
-  if (opt_1=='ADCdark00'){
-    fonc_seg <- 'ADC'
-  }
-  else if (opt_1=='brightAnat00'){
-    fonc_seg <- 'Anat'
-  }
-  else if (opt_2=='CBFdark00'){
-    fonc_seg <- 'CBF'
-  }
   
   subtitle <- sprintf("Rat %s, tranche %i",rat,slice)
   
@@ -685,7 +675,10 @@ niveau_rel_gris <- function(g,min,max){
 
 # Affichage : carré de pixels, prévisions vs mesures. Sortie pdf à faire.
 
-aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2,opt_3){
+# Option 1 : voxels ou hist, pour afficher les niveaux de gris en carré ou un histogramme des valeurs de la modalité sur le  carré de voxels.
+# Option 2 : sortie dans RStudio ou en pdf, dans le répertoire courant.
+
+aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
   num_jours <- list("00"=0,"03"=3,"08"=8,"15"=15,"22"=22)
   repertoires <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
                       'BVf'="fonctionnel_gris",
@@ -696,7 +689,7 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2,opt_3){
                       'VSI'="fonctionnel_gris",
                       'Anat'="anatomique_gris")
   
-  d <- suivi_voxels(rat,fonc,slice,sommet,mesure,opt_1)
+  d <- suivi_voxels(rat,fonc,slice,sommet,mesure)
   
   name_cerveau_fonc <- sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc,rat,"00",fonc,'bg')
   cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
@@ -708,8 +701,8 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2,opt_3){
   jours <- liste_jr[[rat]]
   njours <- length(jours)
   
-  if (opt_2=='voxels'){
-    if (opt_3=='pdf'){}
+  if (opt_1=='voxels'){
+    if (opt_2=='pdf'){}
     else{
       #get( getOption( "device" ) )()
       plot.new()
@@ -743,8 +736,8 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2,opt_3){
       title(sprintf("Suivi temporel : rat %s, modalité %s",rat,fonc),outer=TRUE)
     }
   }
-  else if (opt_2=='hist'){
-    if (opt_3=='pdf'){
+  else if (opt_1=='hist'){
+    if (opt_2=='pdf'){
       # histogrammes renvoyés en pdf
     }
     else{
