@@ -1846,9 +1846,12 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
   }# fonctionnalité vue
 }
 
-# ------------------- Cartographie la distribution de valeurs d'une fonctionnalité, dans l'hémisphère sain au jour 00, par rat. Option : pdf ou sortie RStudio . ------------------- #
+# ------------------- Cartographie la distribution de valeurs d'une fonctionnalité, dans l'hémisphère sain, par rat. Option : pdf ou sortie RStudio . ------------------- #
 
-carte_fonc_rat <- function(fonc,hemi,opt){
+# Option 1 : jour 00 seul ou suivi
+# Option 2 : sortie dans RStudio ou en pdf, dans le répertoire courant.
+
+carte_fonc_rat <- function(fonc,hemi,opt_1,opt_2){
   repertoires_rats <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
                            'BVf'="fonctionnel_gris",
                            'CBF'="fonctionnel_gris",
@@ -1860,74 +1863,154 @@ carte_fonc_rat <- function(fonc,hemi,opt){
   
   
   for (rat in noms_rats){
-    tr.filename <- sprintf("R%s/%s/%s/liste_R%s_%s_J%s.csv",rat,repertoires_rats[[fonc]],fonc,rat,fonc,"00")
-    j00.tranches <- read.csv(tr.filename,check.names=F,header=T)
-    tranches <- j00.tranches$"00"
-    
-    # On crée la dataframe pour le suivi de la fonctionnalité courante
-    d <- data.frame(matrix(ncol = 4, nrow = 0))
-    colnames(d) <- c("x","y",fonc,"Slice")
-    
-    subtitle <- sprintf("Rat%s, J00, tranche(s) ",rat)
-    for (tr in tranches){
-      subtitle <- paste(subtitle,'-',tr)
-    }
-    
-    name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires_rats[[fonc]],fonc,rat,"00",fonc,'bg')
-    cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
-    
-    l <- length(cerveau_fonc[,4])
-    liste_hem <- rep(FALSE,l)
-    liste_hem <- ifelse(hemi[1]*cerveau_fonc$x+hemi[2]>cerveau_fonc$y,TRUE,liste_hem)
-    cerveau_hem <- cerveau_fonc[liste_hem,]
-    
-    d <- as.data.frame(cbind(cerveau_hem[,1:2],cerveau_hem[,4:5]),stringsAsFactors=FALSE)#,'Hem sain J00'
-    colnames(d) <- c("x","y",fonc,"Slice")#,"Zone")
-    # Un seul jour : J00
-    # Seulement la région saine
-    
-    liste.nan <- is.na(d[,3])
-    d <- d[!liste.nan,]
-    
-    gg_title <- sprintf("Distribution spatiale de %s",fonc)
-    
-    if (opt=='pdf'){
-      d$Slice <- as.character(d$Slice)
-      file_name <- #sprintf(".pdf","segmentation_manuelle",num_rat,opt,fonc)
+    if (opt_1=="00"){
+      tr.filename <- sprintf("R%s/%s/%s/liste_R%s_%s_J%s.csv",rat,repertoires_rats[[fonc]],fonc,rat,fonc,"00")
+      j00.tranches <- read.csv(tr.filename,check.names=F,header=T)
+      tranches <- j00.tranches$"00"
       
-      # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
-      p <- ggplot(d,
-                  aes(x=d$Slice,y=d[,3]#,fill=d$Zone
-                  )
-      )
-      p <- p + geom_boxplot(outlier.shape = NA, fill="lightblue")
-      #p <- p + scale_fill_manual(values = alpha(c("blue"), .3))
-      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Tranches") + ylab(fonc)
+      # On crée la dataframe pour le suivi de la fonctionnalité courante
+      d <- data.frame(matrix(ncol = 4, nrow = 0))
+      colnames(d) <- c("x","y",fonc,"Slice")
       
-      # On imprime pour que le graphique soit exporté
-      print(p)
-      dev.off()
+      subtitle <- sprintf("Rat%s, J00, tranche(s) ",rat)
+      for (tr in tranches){
+        subtitle <- paste(subtitle,'-',tr)
+      }
       
-      # On enregistre le dernier ggplot réalisé
-      ggsave(filename=file_name,plot = p)
+      name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires_rats[[fonc]],fonc,rat,"00",fonc,'bg')
+      cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+      
+      l <- length(cerveau_fonc[,4])
+      liste_hem <- rep(FALSE,l)
+      liste_hem <- ifelse(hemi[1]*cerveau_fonc$x+hemi[2]>cerveau_fonc$y,TRUE,liste_hem)
+      cerveau_hem <- cerveau_fonc[liste_hem,]
+      
+      d <- as.data.frame(cbind(cerveau_hem[,1:2],cerveau_hem[,4:5]),stringsAsFactors=FALSE)#,'Hem sain J00'
+      colnames(d) <- c("x","y",fonc,"Slice")#,"Zone")
+      # Un seul jour : J00
+      # Seulement la région saine
+      
+      liste.nan <- is.na(d[,3])
+      d <- d[!liste.nan,]
+      
+      gg_title <- sprintf("Distribution spatiale de %s",fonc)
+      
+      if (opt_2=='pdf'){
+        d$Slice <- as.character(d$Slice)
+        file_name <- #sprintf(".pdf","segmentation_manuelle",num_rat,opt,fonc)
+          
+          # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
+          p <- ggplot(d,
+                      aes(x=d$Slice,y=d[,3]#,fill=d$Zone
+                      )
+          )
+        p <- p + geom_boxplot(outlier.shape = NA, fill="lightblue")
+        #p <- p + scale_fill_manual(values = alpha(c("blue"), .3))
+        p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Tranches") + ylab(fonc)
+        
+        # On imprime pour que le graphique soit exporté
+        print(p)
+        dev.off()
+        
+        # On enregistre le dernier ggplot réalisé
+        ggsave(filename=file_name,plot = p)
+      }
+      else{
+        d$Slice <- as.character(d$Slice)
+        #print(d$Slice[20:50])
+        # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
+        p <- ggplot(d,
+                    aes(x=d$Slice,
+                        y=d[,3]#,
+                        #fill=d$Zone,
+                        #group = cut_width(x, 0.1)
+                    )
+        )
+        p <- p + scale_x_discrete(limits=as.character(tranches))
+        p <- p + geom_boxplot(outlier.shape = NA, fill="lightblue")
+        #p <- p + scale_fill_manual(values = alpha(c("blue"), .3))
+        p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Tranches") + ylab(fonc)
+        print(p)
+        #dev.off()
+      }
     }
     else{
-      d$Slice <- as.character(d$Slice)
-      #print(d$Slice[20:50])
-      # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
-      p <- ggplot(d,
-                  aes(x=d$Slice,
-                      y=d[,3]#,
-                      #fill=d$Zone,
-                      #group = cut_width(x, 0.1)
-                  )
-      )
-      p <- p + scale_x_discrete(limits=as.character(tranches))
-      p <- p + geom_boxplot(outlier.shape = NA, fill="lightblue")
-      #p <- p + scale_fill_manual(values = alpha(c("blue"), .3))
-      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Tranches") + ylab(fonc)
-      print(p)
-      #dev.off()
+      # --- Mise en page du ggplot
+      
+      liste_data_jours <- list("00"='',"03"='',"08"='',"15"='',"22"='')# certains jours ne seront pas toujours utilisés
+      liste_sub <- list("00"='',"03"='',"08"='',"15"='',"22"='')
+      
+      liste_jr <- liste_jfr[[fonc]]
+      jours <- liste_jr[[rat]]
+      
+      for (jour in jours){# --- On génère une dataframe par jour
+        tr.filename <- sprintf("R%s/%s/%s/liste_R%s_%s_J%s.csv",rat,repertoires_rats[[fonc]],fonc,rat,fonc,jour)
+        j.tranches <- read.csv(tr.filename,check.names=F,header=T)
+        tranches <- j.tranches[[jour]]
+        
+        # On crée la dataframe pour le suivi de la fonctionnalité courante
+        d <- data.frame(matrix(ncol = 4, nrow = 0))
+        colnames(d) <- c("x","y",fonc,"Slice")
+        
+        subtitle <- sprintf("Rat%s, J%s, tranche(s) ",rat,jour)
+        for (tr in tranches){
+          subtitle <- paste(subtitle,'-',tr)
+        }
+        liste_sub[[jour]] <- subtitle
+        
+        name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires_rats[[fonc]],fonc,rat,jour,fonc,'bg')
+        cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+        
+        l <- length(cerveau_fonc[,4])
+        liste_hem <- rep(FALSE,l)
+        liste_hem <- ifelse(hemi[1]*cerveau_fonc$x+hemi[2]>cerveau_fonc$y,TRUE,liste_hem)
+        cerveau_hem <- cerveau_fonc[liste_hem,]
+        
+        d <- as.data.frame(cbind(cerveau_hem[,1:2],cerveau_hem[,4:5]),stringsAsFactors=FALSE)#,'Hem sain J00'
+        colnames(d) <- c("x","y",fonc,"Slice")#,"Zone")
+        # Jour courant
+        # Seulement la région saine
+        liste_data_jours[[jour]] <- d
+      }
+      # --- if else pour afficher ou enregistrer : comme dans comp_seg_ADCvsCBF
+      if (opt_2=='pdf'){
+        # plus tard
+      }
+      else{
+        # initialisation de la liste des subggplots
+        d0 <- data.frame()
+        plot0 <- ggplot(d0) + geom_point() + xlim(0, 10) + ylim(0, 100)
+        plots <- list("00"=plot0,"03"=plot0,"08"=plot0,"15"=plot0,"22"=plot0)
+        
+        for (jour in c("03")){
+          
+          d <- liste_data_jours[[jour]]
+          d$Slice <- as.character(d$Slice)
+          
+          liste.nan <- is.na(d[,3])
+          d <- d[!liste.nan,]
+          print(d[10:20,])
+          print(length(d[,3]))
+          
+          gg_title <- sprintf("Distribution spatiale de %s, jour %s",fonc,jour)
+          
+          # On va représenter l'évolution des valeurs de fonc sur la zone lésée ADC, et comparer avec ...
+          plots[[jour]] <- ggplot(d,
+                          aes(x=d$Slice,y=d[,3]#,fill=d$Zone
+                          )
+          )
+          plots[[jour]] <- plots[[jour]] + scale_x_discrete(limits=as.character(tranches))
+          plots[[jour]] <- plots[[jour]] + geom_boxplot(outlier.shape = NA, fill="lightblue")
+          #plots[[jour]] <- plots[[jour]] + scale_fill_manual(values = alpha(c("grey70","red","blue"), .3))
+          plots[[jour]] <- plots[[jour]] + ggtitle(bquote(atop(.(gg_title), atop(italic(.(liste_sub[[jour]])), "")))) + xlab("Jours") + ylab(fonc)
+        }
+        
+        print(rat)
+        #print(plots$"00")
+        p <- grid.arrange(plots[["00"]],plots[["03"]],plots[["08"]],plots[["15"]],plots[["22"]],ncol=3,nrow=2)#,ncol=1,nrow=1)#
+        print(p)
+        #dev.off()
+      }
     }
   }# un rat cartographié
 }
