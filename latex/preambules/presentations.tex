@@ -1,0 +1,36 @@
+%\usepackage[frenchb]{babel}
+%\usepackage[T1]{fontenc}
+%\usepackage[latin1]{inputenc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{default}
+
+\usepackage{verbatim}
+
+%%% Pour de jolis dessins %%%
+
+\usepackage[dvipsnames]{pstricks}
+%\usepackage{pstricks-add,pst-plot,pst-node}
+\usepackage{pstricks,pst-plot,pst-text,pst-tree}%,pst-eps,pst-fill,pst-node,pst-math,pstricks-add,pst-xkey}
+\usepackage{epic,eepic}
+% Versions propos\'ees par Frédéric Junier
+\usepackage{graphicx}
+% Attention on compile avec pdfLatex
+
+\usepackage{multicol}
+
+%%%Pour la barre de navigation %%%
+
+\setbeamertemplate{navigation symbols}{%
+\insertslidenavigationsymbol
+\insertframenavigationsymbol
+\insertsubsectionnavigationsymbol
+\insertsectionnavigationsymbol
+\insertdocnavigationsymbol
+\insertbackfindforwardnavigationsymbol
+}
+
+\newcommand{\g}[1]{\`#1}
+\newcommand{\h}{\mathbf{h}}
+
+\usetheme{Warsaw}%%% pas obligatoire et j'en changerai peut-être %%%
