@@ -483,9 +483,14 @@ vol_lesCBF00 <- function(rat,tr){
   }
 }
 
-# ------------------- Représente graphiquement les volumes lésés, enregistrés avec vol_lesADC00, clusterisés  ------------------- #
+# ------------------- Représente graphiquement les volumes lésés, enregistrés avec ... , clusterisés. Répertoire benjamin_antoine_labo.  ------------------- #
 
-comp_clust_volADC00 <- function(rat,liste_s_slice,cl,lm_fonc,opt){
+# Option 1 : segmentation utilisée.
+# Option 2 : sortie. pdf si 'pdf', affichage dans RStudio sinon.
+
+# Attention : faire commencer liste_fonc par la modalité utilisée pour la segmentation.
+
+comp_clust_vol00 <- function(rat,liste_s_slice,cl,lm_fonc,opt_1,opt_2){
   repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
                       'BVf'="fonctionnel_gris",
                       'CBF'="fonctionnel_gris",
@@ -498,7 +503,7 @@ comp_clust_volADC00 <- function(rat,liste_s_slice,cl,lm_fonc,opt){
   cl_min <- cl[1]
   cl_max <- cl[length(cl)]
   
-  lsauv_adc_clust <- list("00"=list("vol"='',"val"='',"clust"=''),
+  lsauv_seg_clust <- list("00"=list("vol"='',"val"='',"clust"=''),
                                "03"=list("vol"='',"val"='',"clust"=''),
                                "08"=list("vol"='',"val"='',"clust"=''),
                                "15"=list("vol"='',"val"='',"clust"=''),
@@ -507,7 +512,15 @@ comp_clust_volADC00 <- function(rat,liste_s_slice,cl,lm_fonc,opt){
   
   for (fonc in liste_fonc){
     segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
-    fonc_seg <- 'ADC' # la segmentation avec fonc_seg sera celle utilisée
+    if (opt_1=='ADCdark00'){
+      fonc_seg <- 'ADC'
+    }
+    else if (opt_1=='brightAnat00'){
+      fonc_seg <- 'Anat'
+    }
+    else if (opt_1=='CBFdark00'){
+      fonc_seg <- 'CBF'
+    } # la segmentation avec fonc_seg sera celle utilisée
     
     tranches <- liste_s_slice[[fonc_seg]]
     
@@ -520,8 +533,8 @@ comp_clust_volADC00 <- function(rat,liste_s_slice,cl,lm_fonc,opt){
     jours <- liste_jr[[rat]]
     
     for (jour in jours){
-      cerveau_fonc <- read.table(sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc,rat,jour,fonc,'bg'),header=T)
-      cerveau_seg <- read.table(sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc_seg]],fonc_seg,rat,jour,fonc_seg,'dark'),header=T)
+      cerveau_fonc <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc,'bg'),header=T)
+      cerveau_seg <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,'dark'),header=T)
       
       cerveau_les <- cerveau_fonc # on va délimiter une enveloppe rectangulaire de la partie lésée sur l'image observée, fonctionnalité et jour courants
       
@@ -548,20 +561,20 @@ comp_clust_volADC00 <- function(rat,liste_s_slice,cl,lm_fonc,opt){
       
       l.clust <- cluster_jfr_fmin(cerveau_les,cl_min,cl_max,lm_fonc[[fonc]])
       
-      if (fonc=='ADC'){
+      if (fonc==fonc_seg){
         #adc_cerveau_les <- cerveau_les
         #adc_les <- les
         #jouradc.l.clust <- l.clust
         
-        lsauv_adc_clust[[jour]] <- list("vol"=cerveau_les,"val"=les,"clust"=l.clust)
+        lsauv_seg_clust[[jour]] <- list("vol"=cerveau_les,"val"=les,"clust"=l.clust)
       }
       
-      if (opt=='pdf'){
+      if (opt_2=='pdf'){
         # on verra
-      }# une lésion imprimé
+      }# une lésion imprimée
       else{# On passe à la représentation graphique
         
-        if (fonc=='ADC'){
+        if (fonc==fonc_seg){
           m <- rbind(c(1,2,3),c(4,4,4))
           layout(m, heights = c(1,3), width=c(1,1,1), respect = TRUE)
           
@@ -586,30 +599,34 @@ comp_clust_volADC00 <- function(rat,liste_s_slice,cl,lm_fonc,opt){
                         lab.z=1+les.clust$Slice[length(les.clust$Slice)]-les.clust$Slice[1],
                         main=paste("Cerveau ",rat,", J",jour)
           )
-        }# ADC affiché, à traiter en premier : attention à liste_fonc
+        }# modalité à traiter en premier : attention à liste_fonc
         else{
-          liste_sauv <- lsauv_adc_clust[[jour]]
+          liste_sauv <- lsauv_seg_clust[[jour]]
           
-          adc_cerveau_les <-liste_sauv[["vol"]]
-          adc_les <- liste_sauv[["val"]]
-          adc.l.clust <- liste_sauv[["clust"]]
+          seg_cerveau_les <-liste_sauv[["vol"]]
+          seg_les <- liste_sauv[["val"]]
+          seg.l.clust <- liste_sauv[["clust"]]
           
           #get( getOption( "device" ) )()
-          plot.new()
-          split.screen( figs = c( 2, 1 ) )
-          split.screen( figs = c( 1, 3 ), screen = 1 )
-          split.screen( figs = c( 1, 2 ), screen = 2 )
+          #plot.new()
+          #split.screen( figs = c( 2, 1 ) )
+          #split.screen( figs = c( 1, 3 ), screen = 1 )
+          #split.screen( figs = c( 1, 2 ), screen = 2 )
+          layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6,byrow = TRUE),
+                 widths=c(1,1,1,1,1,1),
+                 heights=c(1,2)
+                 )
           
-          screen( 3 )
+          #screen( 3 )
           plot(l.clust, what="BIC")
-          screen( 4 )
+          #screen( 4 )
           plot(l.clust, what="classification", col=color.vector)
           
           FONC.breaks <- seq(min(les)-0.1*min(les), max(les)+0.1*max(les), length.out=100)
-          screen( 5 )
+          #screen( 5 )
           l.hist <- hist(les,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
           
-          screen( 6 )
+          #screen( 6 )
           les.clust <- cbind(cerveau_les,l.clust$classification)
           colnames(les.clust) <- c("x","y","z",fonc,"Slice","clust")
           scatterplot3d(les.clust$x,
@@ -618,29 +635,29 @@ comp_clust_volADC00 <- function(rat,liste_s_slice,cl,lm_fonc,opt){
                         #cerveau.clust$z, 
                         color= color.vector[les.clust$clust],
                         pch=20,
-                        cex.symbols=2.5*(1-l.clust$uncertainty)^4,
+                        cex.symbols=2.5*(1-l.clust$uncertainty)^3,
                         xlab='x',
                         ylab='y',
                         zlab='Slice',#'z',
                         lab.z=1+les.clust$Slice[length(les.clust$Slice)]-les.clust$Slice[1],
-                        main=paste("Cerveau ",rat,", J",jour,"fonctionnalité courante")
+                        main=sprintf("Cerveau %s, J%s, %s",rat,jour,fonc)
           )
           
-          screen( 7 )
-          adc.les.clust <- cbind(adc_cerveau_les,adc.l.clust$classification)
-          colnames(adc.les.clust) <- c("x","y","z",'ADC',"Slice","clust")
-          scatterplot3d(adc.les.clust$x,
-                        adc.les.clust$y,
-                        adc.les.clust$Slice,
+          #screen( 7 )
+          seg.les.clust <- cbind(seg_cerveau_les,seg.l.clust$classification)
+          colnames(seg.les.clust) <- c("x","y","z",fonc_seg,"Slice","clust")
+          scatterplot3d(seg.les.clust$x,
+                        seg.les.clust$y,
+                        seg.les.clust$Slice,
                         #cerveau.clust$z, 
-                        color= color.vector[adc.les.clust$clust],
+                        color= color.vector[seg.les.clust$clust],
                         pch=20,
-                        cex.symbols=2.5*(1-adc.l.clust$uncertainty)^4,
+                        cex.symbols=2.5*(1-seg.l.clust$uncertainty)^3,
                         xlab='x',
                         ylab='y',
                         zlab='Slice',#'z',
-                        lab.z=1+adc.les.clust$Slice[length(adc.les.clust$Slice)]-adc.les.clust$Slice[1],
-                        main=paste("Comparaison ",rat,", J",jour,"ADC")
+                        lab.z=1+seg.les.clust$Slice[length(seg.les.clust$Slice)]-seg.les.clust$Slice[1],
+                        main=paste("Comparaison ",rat,", J",jour,fonc_seg)
           )
           #close.screen( all = TRUE )
         }# comparaison entre la fonctionnalité courante et l'ADC
@@ -1461,6 +1478,164 @@ comp_rats_fonc <- function(hemi,liste_r_tr,fonc,opt_1,opt_2){
   }# Un jeu de graphiques réalisé : les quatre rats pour la fonctionnalité passée en argument.
 }
 
+# ------------------- Même principe, mais on clusterise. ------------------- #
+
+# Option 1 : segmentation, non complètement pris en compte pour le moment.
+# Option 2 : sortie dans RStudio ou en pdf, dans le répertoire courant.
+
+# Eventuellement : modifier pour avoir une liste de vecteurs à la place de liste_tr, et de nouveau Tranches(s) en sous titre.
+
+comp_rats_clust_fonc <- function(hemi,cl,lm_fonc,liste_r_tr,fonc,opt_1,opt_2){
+  repertoires_rats <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
+                           'BVf'="fonctionnel_gris",
+                           'CBF'="fonctionnel_gris",
+                           'CMRO2'="fonctionnel_gris",
+                           'SO2map'="fonctionnel_gris",
+                           'T1map'="fonctionnel_gris",
+                           'VSI'="fonctionnel_gris",
+                           'Anat'="anatomique_gris")
+  cl_min <- cl[1]
+  cl_max <- cl[length(cl)]
+  
+  segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+  if (opt_1=='ADCdark00'){
+    fonc_seg <- 'ADC'
+  }
+  else if (opt_1=='brightAnat00'){
+    fonc_seg <- 'Anat'
+  }
+  else if (opt_1=='CBFdark00'){
+    fonc_seg <- 'CBF'
+  }
+  
+  for (rat in noms_rats){
+    
+    # --------- Initialisation pour le graphique du rat courant --------- #
+    block <- {
+      tranches <- liste_r_tr[[rat]]
+      subtitle <- sprintf("Rat%s, tranche(s) ",rat)
+      for (tr in tranches){
+        subtitle <- paste(subtitle,'-',tr)
+      }
+      
+      liste_jr <- liste_jfr[[fonc]]
+      jours <- liste_jr[[rat]]
+      
+      # On crée la dataframe pour le suivi de la fonctionnalioté courante
+      d <- data.frame(matrix(ncol = 6, nrow = 0))
+      colnames(d) <- c("x","y",fonc,"Slice","Zone","Jour")
+    }
+    
+    for (jour in jours){
+      # --------- On charge les résultats de l'examen du jour pour fonc, et la zone segmentée en fonc_seg --------- #
+      block <- {
+        name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires_rats[[fonc]],fonc,rat,jour,fonc,'bg')
+        name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires_rats[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,'dark')
+        
+        cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+        cerveau_seg <- read.table(name_cerveau_seg,header=T) # on segmentera par rapport à ADC au jour 00. 
+      }
+      
+      # --------- On définit hem_sain au jour 00, on ne le modifie plus par la suite --------- #
+      if (jour=="00"){
+        # sélection de l'hémisphère sain au jour 00
+        l <- length(cerveau_fonc[,4])
+        liste_hem <- rep(FALSE,l)
+        liste_hem <- ifelse(hemi[1]*cerveau_fonc$x+hemi[2]>cerveau_fonc$y,TRUE,liste_hem)
+        cerveau_hem <- cerveau_fonc[liste_hem,]
+        # sélection des tranches pour le suivi temporel
+        l <- length(cerveau_hem[,5])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(tr==cerveau_hem$Slice,TRUE,liste_tr)
+        }
+        tranches_hem <- cerveau_hem[liste_tr,]
+        d.sain <- as.data.frame(cbind(tranches_hem[,1:2],tranches_hem[,4:5],'Hem sain J00'),stringsAsFactors=FALSE)
+        colnames(d.sain) <- c("x","y",fonc,"Slice","Zone")
+      }
+      
+      # --------- On va délimiter la partie lésée sur l'image observée, fonctionnalité et jour courants --------- #
+      block <- {
+        cerveau_les <- cerveau_fonc
+        
+        l <- length(cerveau_les[,4])
+        liste_tr <- rep(FALSE,l)
+        
+        m <- length(cerveau_seg[,4])
+        for (i in c(1:m)){
+          ix <- cerveau_seg[i,1]
+          iy <- cerveau_seg[i,2]
+          sli <- cerveau_seg[i,5]
+          # On garde seulement, dans cerveau_les et pour chaque tranche segmentée, les coordonnées de la zone d'intérêt
+          liste_tr <- ifelse(ix==cerveau_les$x&iy==cerveau_les$y&sli==cerveau_les$Slice,TRUE,liste_tr)
+          # Seules les tranches de liste_s_slice sont présentes dans cerveau_seg : pas besoin de trier les tranches du cerveau_les obtenu
+        }
+        cerveau_les <- cerveau_les[liste_tr,]
+        
+        # On retire les valeurs manquantes pour pouvoir ensuite clusteriser le volume lésé
+        list.nan <- is.na(cerveau_les[,4])
+        cerveau_les <- cerveau_les[!list.nan,]
+        
+        # On ajoute la colonne "Zone", qui qualifie les voxels lésés.
+        d.les <- as.data.frame(cbind(cerveau_les[,1:2],cerveau_les[,4:5],'Lesion'))
+        colnames(d.les) <- c("x","y",fonc,"Slice","Zone")
+      }
+      # --------- On clusterise puis on étiquette les pixels correspondant au cluster 1, et aux suivants respectivement. --------- #
+      l.clust <- cluster_jfr_fmin(cerveau_les,cl_min,cl_max,lm_fonc[[fonc]])
+      d.les$Zone <- ifelse(l.clust$classification >1,'Lesion 2','Lesion 1')
+      
+      # --------- On remplit la dataframe à représenter graphiquement, au jour courant. --------- #
+      block <- {
+        d.increment <- as.data.frame(rbind(d.les,d.sain))#,header=T)
+        # données pour le jour courant, fonctionnalité fonc
+        num_jour <- jour#num_jours[[jour]]
+        d.increment <- as.data.frame(cbind(d.increment,num_jour))
+        colnames(d.increment) <- c("x","y",fonc,"Slice","Zone","Jour")
+        
+        d <- as.data.frame(rbind(d,d.increment))
+      }
+    }# dataframe d remplie pour le rat courant
+    
+    liste.nan <- is.na(d[,3])
+    d <- d[!liste.nan,]
+    
+    gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
+    
+    if (opt_2=='pdf'){
+      file_name <- sprintf("R%s/%s/%s_suivi_box_vol%s_%s.pdf",num_rat,"segmentation_manuelle",num_rat,opt_1,fonc)
+      
+      # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
+      p <- ggplot(d,
+                  aes(x=d$Jour,y=d[,3],fill=d$Zone
+                  )
+      )
+      p <- p + geom_boxplot(outlier.shape = NA)
+      p <- p + scale_fill_manual(values = alpha(c("grey70","red","blue"), .3))
+      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
+      
+      # On imprime pour que le graphique soit exporté
+      print(p)
+      dev.off()
+      
+      # On enregistre le dernier ggplot réalisé
+      ggsave(filename=file_name,plot = p)
+    }
+    else{
+      # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
+      p <- ggplot(d,
+                  aes(x=d$Jour,y=d[,3],fill=d$Zone
+                  )
+      )
+      p <- p + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+      p <- p + scale_fill_manual(values = alpha(c("cyan","red","orange"), .3))
+      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
+      print(p)
+      #dev.off()
+    }
+    
+  }# Un jeu de graphiques réalisé : les quatre rats pour la fonctionnalité passée en argument.
+}
+
 # ------------------- Compare pour un rat, une tranche et une fonctionnalité, les statistiques sur les segmentations ADC et CBF. ------------------- #
 
 # Option : sortie dans RStudio ou en pdf, dans le répertoire courant.
@@ -1819,8 +1994,8 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
                   aes(x=d$Jour,y=d[,3],fill=d$Zone
                   )
       )
-      p <- p + geom_boxplot(outlier.shape = NA)
-      p <- p + scale_fill_manual(values = alpha(c("blue","red","orange"), .3))
+      p <- p + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+      p <- p + scale_fill_manual(values = alpha(c("cyan","red","orange"), .3))
       p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
       
       # On imprime pour que le graphique soit exporté
@@ -1837,8 +2012,8 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
                   aes(x=d$Jour,y=d[,3],fill=d$Zone
                   )
       )
-      p <- p + geom_boxplot(outlier.shape = NA)
-      p <- p + scale_fill_manual(values = alpha(c("blue","red","orange"), .3))
+      p <- p + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+      p <- p + scale_fill_manual(values = alpha(c("cyan","red","orange"), .3))
       p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
       print(p)
       #dev.off()
