@@ -1602,15 +1602,17 @@ comp_rats_clust_fonc <- function(hemi,cl,lm_fonc,liste_r_tr,fonc,opt_1,opt_2){
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_2=='pdf'){
-      file_name <- sprintf("R%s/%s/%s_suivi_box_vol%s_%s.pdf",num_rat,"segmentation_manuelle",num_rat,opt_1,fonc)
+      file_name <- sprintf("%s_suivi_box_vol%s_%s.pdf",
+                           #rat,"segmentation_manuelle",
+                           rat,opt_1,fonc)
       
       # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
       p <- ggplot(d,
                   aes(x=d$Jour,y=d[,3],fill=d$Zone
                   )
       )
-      p <- p + geom_boxplot(outlier.shape = NA)
-      p <- p + scale_fill_manual(values = alpha(c("grey70","red","blue"), .3))
+      p <- p + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+      p <- p + scale_fill_manual(values = alpha(c("cyan","red","orange"), .3))
       p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
       
       # On imprime pour que le graphique soit exporté
