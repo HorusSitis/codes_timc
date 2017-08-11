@@ -599,6 +599,7 @@ comp_clust_vol00 <- function(rat,liste_s_slice,cl,lm_fonc,opt_1,opt_2){
                         lab.z=1+les.clust$Slice[length(les.clust$Slice)]-les.clust$Slice[1],
                         main=paste("Cerveau ",rat,", J",jour)
           )
+          title(sprintf("Zone lésée clusterisée : rat %s, modalité %s, jour %s",rat,fonc,jour),outer=TRUE)
         }# modalité à traiter en premier : attention à liste_fonc
         else{
           liste_sauv <- lsauv_seg_clust[[jour]]
@@ -659,8 +660,9 @@ comp_clust_vol00 <- function(rat,liste_s_slice,cl,lm_fonc,opt_1,opt_2){
                         lab.z=1+seg.les.clust$Slice[length(seg.les.clust$Slice)]-seg.les.clust$Slice[1],
                         main=paste("Comparaison ",rat,", J",jour,fonc_seg)
           )
+          title(sprintf("Zone lésée clusterisée : rat %s, modalité %s, jour %s",rat,fonc,jour),outer=TRUE)
           #close.screen( all = TRUE )
-        }# comparaison entre la fonctionnalité courante et l'ADC
+        }# comparaison entre la fonctionnalité courante et la modalité de segmentation
       }# lésion affichée
     }# cerveaux terminés, fonctionnalité courante
   }# fonctionnalités toutes traitées
