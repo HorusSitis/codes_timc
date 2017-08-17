@@ -30,7 +30,7 @@ trans_box <- function(x,dep,arr){
 # ------- Rat 11 : émanent des statistiques sur la segmentation ADC. ------- #
 
 block <- {
-  liste_succ_ADC_11 <- list("00"=list("dep"=c(600,700,725,750,850),"arr"=c(500,750,850,1000,1400)),
+  liste_succ_ADC_11 <- list("00"=list("dep"=c(500,700,725,800,100),"arr"=c(500,750,850,1000,1400)),
                             "03"=list("dep"=c(500,750,850,1000,1400),"arr"=c(450,1000,1200,1450,2100)),
                             "08"=list("dep"=c(450,1000,1200,1450,2100),"arr"=c(800,1200,2100,2300,3300)),
                             "15"=list("dep"=c(300,1200,2100,2300,3300),"arr"=c(800,1800,2200,2550,3300))
@@ -283,7 +283,7 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
   else if (opt_1=='brightAnat00'){
     fonc_seg <- 'Anat'
   }
-  else if (opt_2=='CBFdark00'){
+  else if (opt_1=='CBFdark00'){
     fonc_seg <- 'CBF'
   }
   
@@ -305,8 +305,8 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
       if(jour!="00"){
         cerveau_aux <- cerveau_pr
       }
-      name_cerveau_fonc <- sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
-      name_cerveau_seg <- sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc_seg]],fonc_seg,rat,jour,fonc_seg,'dark')
+      name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
+      name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,'dark')
       
       cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
       cerveau_seg <- read.table(name_cerveau_seg,header=T)
@@ -445,8 +445,8 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
         d.aux <- as.data.frame(cbind(cerveau_pr[,1:2],cerveau_pr[,4:5],'Lésion prévue'))
         colnames(d.aux) <- c("x","y",fonc,"Slice","Zone")
       }
-      name_cerveau_fonc <- sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
-      name_cerveau_seg <- sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc_seg]],fonc_seg,rat,jour,fonc_seg,'dark')
+      name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
+      name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,'dark')
       
       cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
       cerveau_seg <- read.table(name_cerveau_seg,header=T)
@@ -594,8 +594,8 @@ suivi_voxels <- function(rat,fonc,slice,sommet,mesure){
       d.aux <- as.data.frame(cbind(vox_pr[,1:2],vox_pr[,4:5],'Prévisions'))
       colnames(d.aux) <- c("x","y",fonc,"Slice","Type")
     }
-    name_cerveau_fonc <- sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
-    #name_cerveau_seg <- sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc_seg]],fonc_seg,rat,jour,fonc_seg,'dark')
+    name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
+    #name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,epertoires[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,'dark')
     
     cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
     #cerveau_seg <- read.table(name_cerveau_seg,header=T)
@@ -691,7 +691,7 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
   
   d <- suivi_voxels(rat,fonc,slice,sommet,mesure)
   
-  name_cerveau_fonc <- sprintf("%s/%s/%s-J%s-%s-%s-all.dat",repertoires[[fonc]],fonc,rat,"00",fonc,'bg')
+  name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,"00",fonc,'bg')
   cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
   
   val_max <- max(cerveau_fonc[,4],na.rm=TRUE)
