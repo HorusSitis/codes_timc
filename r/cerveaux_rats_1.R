@@ -558,26 +558,16 @@ liste_suivi_slice <- list('ADC'=list(9,10),
                           'VSI'=list(9,10)
                           )
 
-#liste_jf <- #--------> adaptée à l'éventuelle absence de segmentation
-liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')# on peut tester avec une liste des fonctionnalités restreinte
+#liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
+# --------> on peut tester avec une liste des fonctionnalités restreinte
 
-# Je choisis les fonctionnalités ADC et T1map comme références
+#dgris_temp_fonc(num_rat,list('cer'),"")
 
-dgris_temp_fonc(num_rat,list('cer'),"")
-#dgris_temp_fonc(num_rat,list('cer'),"T1map")# ----> fonctionne avec toutes les modalités ! Les données isch3d ont le bon format.
-#dgris_temp_fonc(num_rat,list('cer'),"ADC")
+dgris_temp_fonc(num_rat,fr_hemi,'ADCdark00',list(9),"")
+dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(9),"")
+#dgris_temp_fonc(num_rat,fr_hemi,'brightAnat00',list(9),"")
+#dgris_temp_fonc(num_rat,fr_hemi,'T1map...00',list(9),"")
 
-dgris_temp_fonc(num_rat,fr_hemi,9,"")
-
-dgris_temp_fonc(num_rat,fr_hemi,'tranches',"")
-#dgris_temp_fonc(num_rat,fr_hemi,liste_suivi_slice,"T1map")
-#dgris_temp_fonc(num_rat,fr_hemi,liste_suivi_slice,"ADC")
-
-dgris_temp_fonc(num_rat,'dark','')
-
-liste_fonc <- list('T1map')
-
-liste_fonc <- list('ADC','CBF','T1map')
 ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'')
 ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
 
@@ -962,10 +952,11 @@ liste_fonc <- list('VSI','T1map','SO2map','ADC','BVf','CBF')#,'Anat','CMRO2')
 
 # Pour des clusterisations sur des zones segmentées
 liste_fonc <- list('ADC','VSI','T1map','SO2map','CMRO2','CBF','BVf')
-liste_fonc <- list('CBF',#'BVf',
+liste_fonc <- list('CBF','BVf',
                    'VSI',
                    'SO2map','CMRO2'#,
-                   #'T1map','ADC'
+                   #'T1map'
+                   ,'ADC'
                    )
 ###################################################
 
@@ -1032,12 +1023,34 @@ ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, '')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, 'pdf')
 
+dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(9),"")
 ngris_box_fonc(num_rat,fr_hemi,'CBFdark00',liste_suivi_slice,'')
 ngris_box_fonc(num_rat,fr_hemi,'CBFdark00',liste_suivi_slice,'pdf')
+
 ngris_box_clust(num_rat, fr_hemi, c(1,3), liste_min_fonc, 'CBFdark00', liste_suivi_slice, '')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'CBFdark00', liste_suivi_slice, 'pdf')
 
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'CBFdark00','')
+
+suivi_hemC_rat19 <- function(hemi,fonc){
+  num_rat <- "19"
+  liste_jr <- liste_jfr[[fonc]]
+  jours <- liste_jr[[num_rat]]
+  for (jour in jours){
+    carte_fonc_rat(num_rat,fonc,hemi,jour,'')
+  }
+}
+
+suivi_hemC_rat19(fr_hemi,'ADC')
+suivi_hemC_rat19(fr_hemi,'CBF')
+
+suivi_hemC_rat19(fr_hemi,'VSI')
+suivi_hemC_rat19(fr_hemi,'BVf')
+suivi_hemC_rat19(fr_hemi,'SO2map')
+suivi_hemC_rat19(fr_hemi,'CMRO2')
+
+
+
 
 num_rat <- "26"
 liste_suivi_slice <- liste_ss_rat[[num_rat]]
@@ -1086,10 +1099,14 @@ comp_rats_clust_fonc(fr_hemi,c(1,2),liste_min_fonc,liste_rats_tr,'CMRO2','CBFdar
 #comp_rats_clust_fonc(fr_hemi,c(1,2),liste_min_fonc,liste_rats_tr,'SO2map','CBFdark00','pdf')
 #comp_rats_clust_fonc(fr_hemi,c(1,2),liste_min_fonc,liste_rats_tr,'VSI','CBFdark00','pdf')
 
-carte_fonc_rat(fonc,fr_hemi,"00",'')
-carte_fonc_rat(fonc,fr_hemi,"15",'')
 
-carte_fonc_rat(fonc,fr_hemi,'Suivi','')# --- > pas au point.
+
+## Une autre version
+#carte_fonc_rat(fonc,fr_hemi,"00",'')
+#carte_fonc_rat(fonc,fr_hemi,"15",'')
+
+
+#carte_fonc_rat(fonc,fr_hemi,'Suivi','')# --- > pas au point.
 #carte_fonc_rat(fonc,fr_hemi,'Suivi','pdf')
 
 comp_seg_ADCvsCBF(fr_hemi,liste_rats_tr,'ADC','')
