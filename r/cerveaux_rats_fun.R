@@ -762,18 +762,15 @@ suivi_temp_fonc <- function(rat, fonc){#, class){# représentations graphiques t
 
 # ------------------- Suivi temporel des densités de niveaux de gris sur un cerveau segmenté, par fonctionnalité. Répertoire fonctionnel_gris du rat concerné. ------------------- #
 
-# Option 1 : chaîne ou liste.
-# 'cer' : suivi effectué sur le cerveau entier, ou plutôt sur les slices disponibles chaque jour pour le rat courant ;
-# 'tranches' : suivi temporel sur les tranches pour lesquelles cela est possible, toutes fonctionnalités confondues ;
-# '...dark...' : zones sombres ...
-# Sinon : numéro de la tranche choisie pour le suivi temporel.
+# Option 1 : chaîne. Segmentation choisie.
 
-# Option 2 : chaîne.
-# 'pdf' : exporte un pdf pour graphique
-# '' affiche sinon
+# Option 2 : liste.
+# Indique que les statistiques seront effectuées sur des cerveaux entiers, selon un suivi temporel de volume maximal ou sur une seule tranche.
+
+# Option 3 : chaîne, sortie. pdf si 'pdf', affichage dans RStudio sinon.
 
 
-dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
+dgris_temp_fonc <- function(rat,hemi,opt_1,opt_2,opt_3){#liste_s_slice,
   repertoires <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
                       'BVf'="fonctionnel_gris",
                       'CBF'="fonctionnel_gris",
@@ -783,14 +780,10 @@ dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
                       'VSI'="fonctionnel_gris",
                       'Anat'="anatomique_gris")
 
-  if (opt_1=='cer'){# suivi sur le cerveau entier, boucle sur les jours existant pour chaque fonctionnalité.
+  if (any(opt_2=='cer')){# suivi sur le cerveau entier, boucle sur les jours existant pour chaque fonctionnalité.
     for (fonc in liste_fonc){
       #segtitle <- '' # indique si nécessaire la fonctionnalité utilisée pour la segmentation
       fonc_seg <- fonc # la segmentation avec fonc_seg sera celle utilisée
-      #if (opt_2!=''){
-      #  fonc_seg <- opt_2 # fonc prend la valeur de l'argument optionnel opt_1 si celui-ci est non vide
-      #  segtitle <- paste("Segmentation ",opt_2)
-      #}
       liste_jr <- liste_jfr[[fonc]]
       jours <- liste_jr[[rat]]# plus tard --------#
       
@@ -850,185 +843,8 @@ dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
       # sub-plot fait
     }
     # fonctionnalité vue
-  }
-  else if (opt_1=='tranches'){# suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
-    #liste_s_slice <- liste_suivi_slice
-
-    for (fonc in liste_fonc){
-
-      segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
-      fonc_seg <- fonc # la segmentation avec fonc_seg sera celle utilisée
-      #if (opt_2!=''){
-      #  fonc_seg <- opt_2 # fonc prend la valeur de l'argument optionnel opt_1 si celui-ci est non vide
-      #  segtitle <- paste("SEG : ",opt_2)
-      #}
-      tranches <- liste_s_slice[[fonc_seg]]
-      
-      subtitle <- 'Tranches ' # indique si nécessaire la fonctionnalité utilisée pour la segmentation : refaire
-      for (tr in tranches){
-        subtitle <- paste(subtitle,'-',tr)
-      }
-      
-      liste_jr <- liste_jfr[[fonc]]
-      jours <- liste_jr[[rat]]# plus tard --------#
-      
-      # Représentation graphique : fonctionnalité courante
-      plot.new()
-      par(mfrow=c(2,3),cex.main=1.7, cex.sub=1.2,col.main="black", col.sub="red")
-
-      for (jour in jours){
-        cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
-        cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
-        cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
-        
-        if (jour=="00"){
-          # sélection de l'hémisphère sain au jour 00
-          cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
-          # sélection des tranches pour le suivi temporel
-          l <- length(cerveau_hem[,4])
-          liste_tr <- rep(FALSE,l)
-          for (tr in tranches){
-            liste_tr <- ifelse(any(tr==cerveau_hem$Slice),TRUE,liste_tr)
-          }
-          tranches_hem <- cerveau_hem[liste_tr,]
-          # on crée la liste de niveaux de gris exploitable par density()
-          hem_sain <- tranches_hem[,4]
-          liste.nan <- is.na(hem_sain)
-          hem_sain <- hem_sain[!liste.nan] # on retire les valeurs manquantes de la fonctionnalité pour évaluer sa densité
-        }
-        # on définit hem_sain au jour 00, on ne le modifie plus par la suite
-        
-        l <- length(cerveau_fonc[,4])
-        liste_tr <- rep(FALSE,l)
-        for (tr in tranches){
-          liste_tr <- ifelse(any(tr==cerveau_fonc$Slice),TRUE,liste_tr)
-        }
-        tranches_fonc <- cerveau_fonc[liste_tr,]
-        # on crée la liste de niveaux de gris exploitable par density()
-        entieres <- tranches_fonc[,4]
-        liste.nan <- is.na(entieres)
-        entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
-        
-        l <- length(cerveau_isch[,4])
-        liste_tr <- rep(FALSE,l)
-        for (tr in tranches){
-          liste_tr <- ifelse(any(tr==cerveau_isch$Slice),TRUE,liste_tr)
-        }
-        tranches_isch <- cerveau_isch[liste_tr,]
-        # on crée la liste de niveaux de gris exploitable par density()
-        isch <- tranches_isch[,4]
-        liste.nan <- is.na(isch)
-        isch <- isch[!liste.nan] # on retire les valeurs manquantes
-        
-        ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
-        n <- 1#length(entieres)
-        ni <- 1#length(isch)
-        ns <- 1#length(hem_sain)
-        
-        dst <- density(entieres)
-        if (length(isch)!=0){dsti <- density(isch)}
-        dsts <- density(hem_sain)
-        
-        #plot.new()
-        #par(lend="butt")
-        title <- sprintf("Rat %s jour %s %s",rat,jour,fonc)
-        #title <- paste(title,subtitle,segtitle)
-        
-        if (length(isch)!=0){
-          plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle))
-          lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
-          lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
-          lines(dst$x, dst$y, lwd = 3, col="gray70")
-          
-          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain J00","Cerveau entier"),
-                 col = c("darkred","darkblue","gray70"),
-                 lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
-        }
-      }# sub-plot fait
-      }# fonctionnalité vue
-    }# option 2 codée : suivi du plus grand volume disponible
-  else if (opt_1=='ind'){
-    # suivi sur les slices sélectionnées, boucle sur les jours existant pour chaque fonctionnalité.
-    num_tranche <- opt_1
-    
-    #subtitle <- paste("Tr ",tr) # indiquie les tranches du suivi
-    
-    for (fonc in liste_fonc){
-      
-      segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
-      fonc_seg <- fonc # la segmentation avec fonc_seg sera celle utilisée
-      #if (opt_2!=''){
-      #  fonc_seg <- opt_2 # fonc prend la valeur de l'argument optionnel opt_1 si celui-ci est non vide
-      #  segtitle <- paste("SEG : ",opt_2)
-      #}
-      #tranches <- liste_s_slice
-      
-      subtitle <- sprintf("Tranche %i",num_tranche) # indique si nécessaire la fonctionnalité utilisée pour la segmentation
-      
-      liste_jr <- liste_jfr[[fonc]]
-      jours <- liste_jr[[rat]]# plus tard --------#
-      
-      # Représentation graphique : fonctionnalité courante
-      plot.new()
-      par(mfrow=c(2,3),cex.main=1.7, cex.sub=1.2,col.main="black", col.sub="red")
-      
-      for (jour in jours){
-        cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
-        cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
-        cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
-        
-        if (jour=="00"){
-          # sélection de l'hémisphère sain au jour 00
-          cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
-          # sélection des tranches pour le suivi temporel
-          tranches_hem <- cerveau_hem[cerveau_hem$Slice==num_tranche,]
-          # on crée la liste de niveaux de gris exploitable par density()
-          hem_sain <- tranches_hem[,4]
-          liste.nan <- is.na(hem_sain)
-          hem_sain <- hem_sain[!liste.nan] # on retire les valeurs manquantes de la fonctionnalité pour évaluer sa densité
-        }
-        # on définit hem_sain au jour 00, on ne le modifie plus par la suite
-        tranches_fonc <- cerveau_fonc[cerveau_fonc$Slice==num_tranche,]
-        # on crée la liste de niveaux de gris exploitable par density()
-        entieres <- tranches_fonc[,4]
-        liste.nan <- is.na(entieres)
-        entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
-        
-        tranches_isch <- cerveau_isch[cerveau_isch$Slice==num_tranche,]
-        # on crée la liste de niveaux de gris exploitable par density()
-        isch <- tranches_isch[,4]
-        liste.nan <- is.na(isch)
-        isch <- isch[!liste.nan] # on retire les valeurs manquantes
-        
-        ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
-        n <- 1#length(entieres)
-        ni <- 1#length(isch)
-        ns <- 1#length(hem_sain)
-        
-        dst <- density(entieres)
-        if (length(isch)!=0){dsti <- density(isch)}
-        dsts <- density(hem_sain)
-        
-        #plot.new()
-        #par(lend="butt")
-        title <- sprintf("Rat %s jour %s %s",rat,jour,fonc)
-        #title <- paste(title,subtitle,segtitle)
-        
-        if (length(isch)!=0){
-          plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle))
-          lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
-          lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
-          lines(dst$x, dst$y, lwd = 3, col="gray70")
-          
-          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain J00","Cerveau entier"),
-                 col = c("darkred","darkblue","gray70"),
-                 lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
-        }
-      }# sub-plot fait
-    }# fonctionnalité vue
-  }# option 3 codée : tranche individuelle
-  else{# zones segmentées à l'oeil : sombres T2 ou ? lumineuses T1.
-    #liste_s_slice <- liste_suivi_slice
+  }# option 2 codée : plus grand volume disponible pour chaque jour
+  else if (length(opt_2)==1){# zones segmentées à l'oeil : sombres T2 ou ? lumineuses T1.
     for (fonc in liste_fonc){
       
       segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
@@ -1042,9 +858,9 @@ dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
         fonc_seg <- 'CBF'
       }
       
-      tranches <- liste_s_slice[[fonc_seg]]
+      tranches <- opt_2
       
-      subtitle <- sprintf('Rat %s, tranche(s) ',rat)
+      subtitle <- sprintf('Segmentation %s, Tr',fonc_seg)
       for (tr in tranches){
         subtitle <- paste(subtitle,'-',tr)
       }
@@ -1057,8 +873,11 @@ dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
       par(mfrow=c(2,3),cex.main=1.7, cex.sub=1.5,col.main="black", col.sub="red")
       
       for (jour in jours){
-        cerveau_fonc <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc,'bg'),header=T)
-        cerveau_seg <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,opt_1),header=T)
+        name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
+        name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,'dark')
+        
+        cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+        cerveau_seg <- read.table(name_cerveau_seg,header=T)
         
         # on définit hem_sain au jour 00, on ne le modifie plus par la suite
         if (jour=="00"){
@@ -1132,7 +951,7 @@ dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
         title <- sprintf("Rat %s jour %s %s",rat,jour,fonc)
         #title <- paste(title,subtitle,segtitle)
         
-        if (opt_2=='pdf'){# on imprime dans un fichier
+        if (opt_3=='pdf'){# on imprime dans un fichier
           
           if (length(les)!=0){
             pdf(file = sprintf("%s/%s_suivi_dens_vol%s_%s-%s.pdf","segmentation_manuelle",num_rat,'ADC',fonc,jour))
@@ -1170,7 +989,110 @@ dgris_temp_fonc <- function(rat,hemi,liste_s_slice,opt_1,opt_2){
         }
       }# sub-plot fait
     }# fonctionnalité vue
-  }
+  }# option 2 codée : suivi d'une tranche individuelle
+  else{
+    tranches <- opt_2
+    
+    if (opt_1=='ADCdark00'){
+      fonc_seg <- 'ADC'
+    }
+    else if (opt_1=='brightAnat00'){
+      fonc_seg <- 'Anat'
+    }
+    else if (opt_1=='CBFdark00'){
+      fonc_seg <- 'CBF'
+    }
+    
+    for (fonc in liste_fonc){
+      
+      segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+      #fonc_seg <- fonc # la segmentation avec fonc_seg sera celle utilisée
+      
+      #tranches <- liste_s_slice[[fonc_seg]]
+      
+      subtitle <- 'Tranches ' # indique si nécessaire la fonctionnalité utilisée pour la segmentation : refaire
+      for (tr in tranches){
+        subtitle <- paste(subtitle,'-',tr)
+      }
+      
+      liste_jr <- liste_jfr[[fonc]]
+      jours <- liste_jr[[rat]]# plus tard --------#
+      
+      # Représentation graphique : fonctionnalité courante
+      plot.new()
+      par(mfrow=c(2,3),cex.main=1.7, cex.sub=1.2,col.main="black", col.sub="red")
+      
+      for (jour in jours){
+        cerveau_seg <- read.table(sprintf('%s/isch3d-%s-%s-J%s.dat',fonc_seg,fonc_seg,rat,jour),header=T)#,checknames=F)
+        cerveau_fonc <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
+        cerveau_isch <- cerveau_fonc[cerveau_seg$Label==1,]
+        
+        if (jour=="00"){
+          # sélection de l'hémisphère sain au jour 00
+          cerveau_hem <- cerveau_fonc[cerveau_seg$Label==2,]
+          # sélection des tranches pour le suivi temporel
+          l <- length(cerveau_hem[,4])
+          liste_tr <- rep(FALSE,l)
+          for (tr in tranches){
+            liste_tr <- ifelse(any(tr==cerveau_hem$Slice),TRUE,liste_tr)
+          }
+          tranches_hem <- cerveau_hem[liste_tr,]
+          # on crée la liste de niveaux de gris exploitable par density()
+          hem_sain <- tranches_hem[,4]
+          liste.nan <- is.na(hem_sain)
+          hem_sain <- hem_sain[!liste.nan] # on retire les valeurs manquantes de la fonctionnalité pour évaluer sa densité
+        }
+        # on définit hem_sain au jour 00, on ne le modifie plus par la suite
+        
+        l <- length(cerveau_fonc[,4])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(any(tr==cerveau_fonc$Slice),TRUE,liste_tr)
+        }
+        tranches_fonc <- cerveau_fonc[liste_tr,]
+        # on crée la liste de niveaux de gris exploitable par density()
+        entieres <- tranches_fonc[,4]
+        liste.nan <- is.na(entieres)
+        entieres <- entieres[!liste.nan] # on retire les valeurs manquantes
+        
+        l <- length(cerveau_isch[,4])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(any(tr==cerveau_isch$Slice),TRUE,liste_tr)
+        }
+        tranches_isch <- cerveau_isch[liste_tr,]
+        # on crée la liste de niveaux de gris exploitable par density()
+        isch <- tranches_isch[,4]
+        liste.nan <- is.na(isch)
+        isch <- isch[!liste.nan] # on retire les valeurs manquantes
+        
+        ## Eventuellement, on oublie la normalisation pour représenter les courbes d'effectifs.
+        n <- 1#length(entieres)
+        ni <- 1#length(isch)
+        ns <- 1#length(hem_sain)
+        
+        dst <- density(entieres)
+        if (length(isch)!=0){dsti <- density(isch)}
+        dsts <- density(hem_sain)
+        
+        #plot.new()
+        #par(lend="butt")
+        title <- sprintf("Rat %s jour %s %s",rat,jour,fonc)
+        #title <- paste(title,subtitle,segtitle)
+        
+        if (length(isch)!=0){
+          plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle))
+          lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
+          lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
+          lines(dst$x, dst$y, lwd = 3, col="gray70")
+          
+          legend("topright", inset = 0.01, legend = c("Zone ischémiée", "Hémisphère sain J00","Cerveau entier"),
+                 col = c("darkred","darkblue","gray70"),
+                 lty = c(1, 2, 1), lwd = 2, pt.cex = 2)
+        }
+      }# sub-plot fait
+    }# fonctionnalité vue
+  }# option 2 codée : suivi temporel d'un volume, cette option est utile seulement pour les rats 26 et 30 sinon cf cas précédent.
 }
 
 # ------------------- Suivi temporel des répartitions de niveaux de gris sur un cerveau segmenté, par fonctionnalité. Répertoire fonctionnel_gris du rat concerné. ------------------- #
