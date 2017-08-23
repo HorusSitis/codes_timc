@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 
 \input{preambules/rapports.tex}
+\includeonly{methodes/rapport}
 
 %%%%%%%%%%%%%%%%% Préambule commun aux papiers du stage %%%%%%%%%%%%%%%%
 
@@ -14,25 +15,28 @@
 \maketitle
 
 \begin{abstract}
-Mon stage s'est d\'eroul\'e au laboratoire TIMC-IMAG (Tenchniques de l'Ingénierie M\'edical et computationnelle - %
-Informatique, Mathématiques et applications, Grenoble), sous la direction d'Angélique Stéphanou (CNRS). %
+Mon stage s'est d\'eroul\'e au laboratoire TIMC-IMAG (Tenchniques de l'Ingénierie M\'edicale et Computationnelle - %
+Informatique, Mathématiques et Applications, Grenoble), sous la direction d'Angélique Stéphanou (CNRS). %
 Il s'inscrit dans le projet Imagerie par Résonnance Magn\'etique Augment\'ee (IRMA) qui vise \g{a} effectuer des pr\'edictions, %
 \g{a} partir d'images IRM, sur des param\g{e}tres qui ne sont pas directement mesurables comme la pression art\'erielle en dioxyg\g{e}ne $P_aO_2$ %
 ou avec une meilleure r\'esolution spatiotemporelle que celle des images brutes.
 
 \end{abstract}
 
-%\section{Introduction : contenu du stage et \'etat actuel des connaissances}
-\input{state_art/rapport.tex}
+%\section{Introduction : contenu du stage ...}
+\include{introduction/rapport}
+
+%\section{Etat actuel des connaissances : isch\'emie cérébrale}
+\include{state_art/rapport}% et \'etat actuel des connaissances}
 
 %\section{M\'ethodes}
-\input{methodes/rapport.tex}
+\include{methodes/rapport}
 
 %\section{R\'esultats}
-\input{resultats/rapport.tex}
+\include{resultats/rapport}
 
 %\section{Discussion}
-\input{discussion/rapport.tex}
+\include{discussion/rapport}
 
 %\section{Annexes}
 

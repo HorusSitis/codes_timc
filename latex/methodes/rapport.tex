@@ -1,5 +1,18 @@
 \section{M\'ethodes}
 
+%%%% debut macro %%%%
+\makeatletter
+\renewcommand{\thefigure}{\ifnum \c@section>\z@ \thesection.\fi
+ \@arabic\c@figure}
+\@addtoreset{figure}{section}
+\makeatother
+%%%% fin macro %%%%
+\begin{comment}
+Remarque : pour renuméroter les sous-figures de la même manière
+           (avec le package 'subfigure'), il suffit de rajouter
+	   la ligne \let\p@subfigure\thefigure dans le préambule.
+\end{comment}
+
 \subsection{Protocole exp\'erimental : isch\'emie induite sur des rats par suture intraluminale}
 
 Ces exp\'eriences ont \'et\'e men\'ees \g{a} l'Institut de Neurosciences de Grenoble (GIN) par Benjamin Lemasson, %
@@ -9,24 +22,85 @@ avec Ang\'elique St\'ephanou, Emmanuel Barbier, et Benjamin Lemasson.
 %\par
 % Demander aux coll\g{e}gues du GIN.
 
+%\subsubsection{Calcul de l'ADC}
+
+\subsubsection{BVf, VSI}
+
+
+
+
 \subsection{Traitement d'images avec ImageJ}
 
 J'ai choisi de traiter pr\'ealablement les images r\'ealis\'ees en niveaux de gris par Benjamin Lemasson, \g{a} l'aide du logiciel ImageJ : %
 c'est une collection d'instructions en Java qui permet de manipuler des images. Dans le cas de mon travail, il pr\'esente plusieurs avantages :
+%
 \begin{description}
-\item[Travail sur des images indivuduelles] Il est possible de d\'elimiter manuellement des r\'egions d'int\'er\^et : enc\'ephale dans une coupe % de t\^ete, %
-zone l\'es\'ee caract\'eris\'ee par des valeurs basses d'ADC ou de CBF.
-\item[Exploitation de donn\'ees sous diff\'erents formats] On peut convertir des fichiers afin de les rendre exploitables : %
-images en .jpg pour une pr\'esentation, fichiers texte avec les ccordonn\'ees et les valeurs, repr\'esent\'ees en niveaux de gris, des diff\'erents pixels.
-\item[Traitement syst\'ematique avec des macros] Le logiciel permet de cr\'eer des macros %
-afin de traiter syst\'ematiquement un grand nombre d'images : il suffit de d\'elimiter des r\'egions d'int\'r\^et %
-comme le cerveau %etc
-ce qui est un travail fastidieux, pour une seule modalit\'e et d'ex\'ecuter ces petits programmes pour avoir un nombre relativement grand de donn\'ees exploitables.
+\item[Travail sur des images individuelles] Une fonctionnalit\'e importante est la d\'elimitation de r\'egions d'int\'er\^et : %
+enc\'ephale dans une coupe bidimensionnelle, zone l\'es\'ee caract\'eris\'ee, typiquement, par des valeurs basses d'ADC ou de CBF. %
+%On cr\'ee ainsi des objets r\'eiutilisables
+D'autres fonctionnalit\'es plus classiques sont disponobles : remplissage, rognage etc.
+%\item[Cr\'eation d'objets graphiques]
+%
+\begin{comment}
+\begin{tabular}{ccc}%width=0.2\linewidth,height=2cm
+\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J00-segADC-slice-10.jpg}%<+->
+&
+\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J03-segADC-slice-10.jpg}%<+->
+&
+\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J08-segADC-slice-10.jpg}%<+->%
+\\
+\includegraphics[width=0.2\linewidth,height=2cm]{methodes/11-J00-ADC-cropped-slice10.jpg}%<+->
+&
+\includegraphics[width=0.2\linewidth,height=2cm]{methodes/11-J03-ADC-cropped-slice10.jpg}%<+->
+&
+\includegraphics[width=0.2\linewidth,height=2cm]{methodes/11-J08-ADC-cropped-slice10.jpg}%<+->
+\\
+\end{tabular}
+\end{comment}
+%
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J00-segADC-slice-10.jpg}%<+->
+\hfill
+\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J03-segADC-slice-10.jpg}%<+->
+\hfill
+\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J08-segADC-slice-10.jpg}%<+->%
+\end{center}
+\caption{Coupe segment\'ee : rat 11, images en ADC sur trois jours}
+\label{ex_cer}
+\end{figure}
+%
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.2\linewidth,height=3cm]{methodes/11-J00-ADC-cropped-slice10.jpg}%<+->
+\hfill
+\includegraphics[width=0.2\linewidth,height=3cm]{methodes/11-J03-ADC-cropped-slice10.jpg}%<+->
+\hfill
+\includegraphics[width=0.2\linewidth,height=3cm]{methodes/11-J08-ADC-cropped-slice10.jpg}%<+->
+\end{center}
+\caption{L\'esion d\'elimit\'ee au jour 0 : faibles valeurs d'ADC. On r\'eutilise la r\'egion d'int\'er\^et pour les autres jours.}
+\label{ex_les}
+\end{figure}
+%
+\item[Exploitation de donn\'ees sous diff\'erents formats] On peut convertir des fichiers afin de les rendre exploitables par d'autres logiciels : %
+images en .jpg pour une pr\'esentation, fichiers texte avec les coordonn\'ees et les valeurs, repr\'esent\'ees en niveaux de gris, des diff\'erents pixels.
+%
+\item[Traitement syst\'ematique avec des macros] Le logiciel permet de cr\'eer des macros afin de traiter syst\'ematiquement un grand nombre d'images : %
+en effet la d\'elimitation de r\'egions d'int\'er\^et et leur exploitation est fastidieuse, et ces petits programmes permettent de traiter rapidement et avec fiabilit\'e des centaines d'images.
+%
 \begin{itemize}
 \item
 \item 
 \end{itemize}
 \end{description}
+
+
+
+
+
+
+
+
 
 
 \subsection{Le paquet R Mclust : une id\'ee de Nicolas Glade (TIMC)}% On peut utiliser sweaver
