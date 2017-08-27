@@ -19,14 +19,22 @@ graph_gauss <- function(valeurs,Nclust,Col){# valeurs est le tableau contenant i
 # ---------------------------- Une fonction : segmentation d'un cerveau, une fonctionnalité, un rat ---------------------------- #
 
 cerveau_jfr <- function(jour,fonc,rat){
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
   
-  d.filename <- sprintf("%s/liste_R%s_%s_J%s.csv",fonc,rat,fonc,jour)
+  d.filename <- sprintf("R%s/%s/%s/liste_R%s_%s_J%s.csv",rat,repertoires[[fonc]],fonc,rat,fonc,jour)
   day.slices <- read.csv(d.filename,check.names=F,header=T)
   d <- data.frame(matrix(ncol = 5, nrow = 0))
   colnames(d) <- c("x","y","z",fonc,"Slice")
   
   for (slice.select in 1:length(day.slices[,1])){
-    d.filename <- sprintf("%s/%s-J%s-%s-bg-slice%i.txt",fonc,rat,jour,fonc,day.slices[slice.select,1])
+    d.filename <- sprintf("R%s/%s/%s/%s-J%s-%s-bg-slice%i.txt",rat,repertoires[[fonc]],fonc,rat,jour,fonc,day.slices[slice.select,1])
     d.increment <- read.table(d.filename,header=F,sep='\t')
     d.increment <- as.data.frame(cbind(d.increment[,1:2],z=d.slice.size*day.slices[slice.select,1], d.increment[,3], day.slices[slice.select,1]))
     colnames(d.increment) <- c("x","y","z",fonc,"Slice")
@@ -62,6 +70,15 @@ tranches_fr_ker <- function(jour,fonc,rat){
 # Ne pas oublier les .csv pour les slices !
 
 FONC_3d_rat <- function(fonc,rat,val){
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
+  
   jours_fonc <- liste_jfr[[fonc]]
   jours <- jours_fonc[[rat]]
   
@@ -72,7 +89,7 @@ FONC_3d_rat <- function(fonc,rat,val){
       liste.nan <- is.na(d[,4])
       d <- d[!liste.nan,] # On retire les valeurs NaN de la dataframe si demandé
     }
-    write.table(d, sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,day,fonc), row.names=F, quote=F, sep='\t')
+    write.table(d, sprintf("R%s/%s/%s/%s-J%s-%s-bg-all.dat",rat,repertoires[[fonc]],fonc,rat,day,fonc), row.names=F, quote=F, sep='\t')
   }
 }
 
@@ -110,6 +127,14 @@ cluster_jfr_fmin <- function(data,cl_min,cl_max,min){# on adapte le rabotage à 
 # ------------------- Pour un affichage systématique des données tridimensionnelles : une représentation graphique par jour. ------------------- #
 
 rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt){# option : clusterisation sur les tranches dénoyautées suivables temporellement
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
   
   jours_fonc <- liste_jfr[[fonc]]
   jours <- jours_fonc[[rat]]
@@ -121,13 +146,13 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt){# option : clusterisation sur
   for (j in 1:length(jours)){
     day=jours[j]
     if (opt=='ker'){
-      d <- read.table(sprintf("%s/%s-J%s-%s-kertemp-all.dat",fonc,rat,day,fonc),header=T)
+      d <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-kertemp-all.dat",rat,repertoires[[fonc]],fonc,rat,day,fonc),header=T)
     }
     else if (opt=='dark'){
-      d <- read.table(sprintf("%s/%s-J%s-%s-dark-all.dat",fonc,rat,day,fonc),header=T)
+      d <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-dark-all.dat",rat,repertoires[[fonc]],fonc,rat,day,fonc),header=T)
     }
     else{
-      d <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,day,fonc),header=T)
+      d <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-bg-all.dat",rat,repertoires[[fonc]],fonc,rat,day,fonc),header=T)
     }
 
     liste.nan <- is.na(d[,4])
@@ -179,6 +204,14 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt){# option : clusterisation sur
 # ------------------- Comparaison graphique entre clusterisation et segmentation ------------------- #
 
 seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
 
   liste_jr <- liste_jfr[[fonc]]
   liste_j <- liste_jr[[rat]]
@@ -190,7 +223,7 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
   for (jour in liste_j){
 
     # Importation des données : cerveau tridimensionnel et niveaux de gris de la fonctionnalité, tranches indexées.
-    t <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
+    t <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-bg-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc),header=T)
 
     # Mise à part des valeurs manquantes.
     liste.nan <- is.na(t[,4])
@@ -272,6 +305,14 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
 # ------------------- Comparaison graphique : tranches d'intérêt clusterisées au sein, ou non, de cerveaux entiers. ------------------- #
 
 comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche){
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
   
   cl_min <- cl_bounds[1]
   cl_max <- cl_bounds[2]
@@ -283,7 +324,7 @@ comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche){
 
   for (jour in liste_j){
     
-    cerveau <- read.table(sprintf('%s/%s-J%s-%s-bg-all.dat',fonc,rat,jour,fonc),header=T)
+    cerveau <- read.table(sprintf('R%s/%s/%s/%s-J%s-%s-bg-all.dat',rat,repertoires[[fonc]],fonc,rat,jour,fonc),header=T)
     c.nan <- is.na(cerveau[,4])
     cerveau <- cerveau[!c.nan,]
     
@@ -359,9 +400,17 @@ comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche){
 # ------------------- Extraction de clusters pour une segmentation. Ouvrir dans le répertoire fonctionnel_gris ------------------- #
 
 seg_cl_FONC <- function(jour,fonc,rat,clusters,hemi){# clust : vecteur des clusters utilisables pour la segmentation, estimés à l'oeil à partir de la fonction rg_FONC_3d.
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
 
   # Importation des données : cerveau tridimensionnel, tranches indexées
-  t <- read.table(sprintf("%s/%s-J%s-%s-bg-all.dat",fonc,rat,jour,fonc),header=T)
+  t <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-bg-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc),header=T)
     
   # Extraction des valeurs manquantes
   liste.nan <- is.na(t[,4])
@@ -396,6 +445,14 @@ seg_cl_FONC <- function(jour,fonc,rat,clusters,hemi){# clust : vecteur des clust
 # ------------------- Enregistrement systématique des segmentations produites avec seg_cl_FONC. Utilise une liste de clusters établie à l'étape 2. ------------------- #
 
 record_seg_cl <- function(rat, liste_clust, hemi){
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
   
   for (fonc in liste_fonc){
     liste_jr <- liste_jfr[[fonc]]
@@ -405,7 +462,7 @@ record_seg_cl <- function(rat, liste_clust, hemi){
     
     for (jour in liste_j){
       d_seg <- seg_cl_FONC(jour,fonc,rat,liste_clust_fonc[[jour]],hemi)
-      write.table(d_seg, sprintf("%s/isch3d-%s-%s-J%s.dat",fonc,fonc,rat,jour), row.names=F, quote=F, sep='\t')
+      write.table(d_seg, sprintf("R%s/%s/%s/isch3d-%s-%s-J%s.dat",rat,repertoires[[fonc]],fonc,fonc,rat,jour), row.names=F, quote=F, sep='\t')
     }
     
   }
@@ -668,11 +725,19 @@ comp_clust_vol00 <- function(rat,liste_s_slice,cl,lm_fonc,opt_1,opt_2){
   }# fonctionnalités toutes traitées
 }
 
-# ------------------- Représente les niveaux de gris pour chaque fonctionnalité, sur un cerveau segmenté avec FONC ------------------- #
+# ------------------- Représente les niveaux de gris pour chaque fonctionnalité, sur un cerveau segmenté avec FONC. Obsolète ? ------------------- #
 
 gr_ngris_seg <- function(jour,FONC,rat){
+  repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
+                      'BVf'="fonctionnel_gris",
+                      'CBF'="fonctionnel_gris",
+                      'CMRO2'="fonctionnel_gris",
+                      'SO2map'="fonctionnel_gris",
+                      'T1map'="fonctionnel_gris",
+                      'VSI'="fonctionnel_gris",
+                      'Anat'="anatomique_gris")
   
-  cerveau_seg <- read.table(sprintf("%s/isch3d-%s-%s-J%s.dat",FONC,FONC,rat,jour),header=T)
+  cerveau_seg <- read.table(sprintf("R%s/%s/%s/isch3d-%s-%s-J%s.dat",rat,repertoires[[FONC]],FONC,FONC,rat,jour),header=T)
   
   liste_F <- list()
 
@@ -722,7 +787,7 @@ gr_ngris_seg <- function(jour,FONC,rat){
   return(liste_F)# vérification
 }
 
-# ------------------- Suivi temporel de tranches clusterisées ou segmentées. Répertoire fonctionnel_gris. Une représentation graphique par jour. ------------------- #
+# ------------------- Suivi temporel de tranches clusterisées ou segmentées. OBSOLETE. Répertoire fonctionnel_gris. Une représentation graphique par jour. ------------------- #
 
 suivi_temp_fonc <- function(rat, fonc){#, class){# représentations graphiques tridimensionnelles
   
@@ -770,7 +835,6 @@ suivi_temp_fonc <- function(rat, fonc){#, class){# représentations graphiques t
 # Option 3 : chaîne. Indique le jour choisi pour l'hémisphère contralatéral, le plus souvent 00, 15 ou 22 suivant les rats.
 
 # Option 4 : chaîne, sortie. pdf si 'pdf', affichage dans RStudio sinon.
-
 
 dgris_temp_fonc <- function(rat,hemi,opt_1,opt_2,opt_3,opt_4){#liste_s_slice,
   repertoires <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
@@ -1661,6 +1725,279 @@ comp_rats_clust_fonc <- function(hemi,cl,lm_fonc,liste_r_tr,fonc,opt_1,opt_2){
   }# Un jeu de graphiques réalisé : les quatre rats pour la fonctionnalité passée en argument.
 }
 
+
+
+
+
+
+
+# ------------------- Statistiques sur les clusters . ------------------- #
+
+ngris_box_fonc_cl_les <- function(rat,hemi,opt_1,fonc_cl,lm_fonc,liste_s_slice,opt_2){
+  repertoires <- list('ADC'="fonctionnel_gris",# on peut ajouter ici les autres modalités
+                           'BVf'="fonctionnel_gris",
+                           'CBF'="fonctionnel_gris",
+                           'CMRO2'="fonctionnel_gris",
+                           'SO2map'="fonctionnel_gris",
+                           'T1map'="fonctionnel_gris",
+                           'VSI'="fonctionnel_gris",
+                           'Anat'="anatomique_gris")
+  
+  # Liste des nombres de clusters de la lésion, par jour, avec la modalité fonc_cl.
+  l_l_f_c <- liste_les_jfr_cl[[rat]]
+  l_l_c <- l_l_f_c[[fonc_cl]]
+  
+  segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+  if (opt_1=='ADCdark00'){
+    fonc_seg <- 'ADC'
+  }
+  else if (opt_1=='brightAnat00'){
+    fonc_seg <- 'Anat'
+  }
+  else if (opt_1=='CBFdark00'){
+    fonc_seg <- 'CBF'
+  }
+  
+  # Construction de la base de données d : clusterisation, modalité fonc_cl
+  block <- {
+    fonc <- fonc_cl
+    # Initialisation
+    d <- data.frame(matrix(ncol = 6, nrow = 0))
+    colnames(d) <- c("x","y",fonc,"Slice","Zone","Jour")
+    
+    liste_jr <- liste_jfr[[fonc_cl]]
+    jours <- liste_jr[[rat]]
+    
+    for (jour in jours){
+      
+      vec_cl <- l_l_c[[jour]]
+      cl_min <- vec_cl[1]
+      cl_max <- vec_cl[2]
+      
+      name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
+      name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,'dark')
+      
+      cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+      cerveau_seg <- read.table(name_cerveau_seg,header=T)
+      
+      cerveau_les <- cerveau_fonc
+      
+      l <- length(cerveau_les[,4])
+      liste_tr <- rep(FALSE,l)
+      
+      # Segmentation du volume lésé, à l'aide d'ADCdark00
+      m <- length(cerveau_seg[,4])
+      for (i in c(1:m)){
+        ix <- cerveau_seg[i,1]
+        iy <- cerveau_seg[i,2]
+        sli <- cerveau_seg[i,5]
+        # On garde seulement, dans cerveau_les et pour chaque tranche segmentée, les coordonnées de la zone d'intérêt
+        liste_tr <- ifelse(ix==cerveau_les$x&iy==cerveau_les$y&sli==cerveau_les$Slice,TRUE,liste_tr)
+        # Seules les tranches de liste_s_slice sont présentes dans cerveau_seg : pas besoin de trier les tranches du cerveau_les obtenu
+      }
+      cerveau_les <- cerveau_les[liste_tr,]
+      
+      # On retire les valeurs manquantes pour pouvoir ensuite clusteriser le volume lésé
+      list.nan <- is.na(cerveau_les[,4])
+      cerveau_les <- cerveau_les[!list.nan,]
+      
+      # On ajoute la colonne "Zone", qui qualifie les voxels lésés.
+      d.les <- as.data.frame(cbind(cerveau_les[,1:2],cerveau_les[,4:5],'Lesion 1'))
+      colnames(d.les) <- c("x","y",fonc,"Slice","Zone")
+      # --------- Dataframe créée : volume lésé --------- #
+      
+      l.clust <- cluster_jfr_fmin(cerveau_les,cl_min,cl_max,lm_fonc[[fonc]])
+      #les.clust <- cbind(cerveau_les,l.clust$classification)
+      
+      d.les$Zone <- ifelse(l.clust$classification >1,'Lesion 2','Lesion 1')
+      # --------- Caractérisation sur la dataframe : volume lésé clusterrisé --------- #
+      
+      d.increment <- d.les#as.data.frame(rbind(d.les,d.sain))#,header=T)
+      # données pour le jour courant, fonctionnalité fonc
+      num_jour <- jour#num_jours[[jour]]
+      d.increment <- as.data.frame(cbind(d.increment,num_jour))
+      colnames(d.increment) <- c("x","y",fonc,"Slice","Zone","Jour")
+      
+      d <- as.data.frame(rbind(d,d.increment))
+    }# dataframe d remplie pour la fonctionnalité de clusterisation
+  }
+  d_fcl <- d
+  block <- {
+    tranches <- liste_s_slice[[fonc]]
+    subtitle <- sprintf("Rat%s, tranche(s) ",rat)
+    for (tr in tranches){
+      subtitle <- paste(subtitle,'-',tr)
+    }
+    
+    liste.nan <- is.na(d[,3])
+    d <- d[!liste.nan,]
+    
+    gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
+    
+    if (opt_2=='pdf'){
+      file_name = sprintf("%s/%s_suivi_clust_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt_1,fonc)
+      #pdf(file_name)
+      
+      # On réalise le ggplot
+      p <- ggplot(d,
+                  aes(x=d$Jour,y=d[,3],fill=d$Zone
+                  )
+      )
+      p <- p + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+      p <- p + scale_fill_manual(values = alpha(c("red","orange"), .3))
+      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
+      
+      # On imprime pour que le graphique soit exporté
+      print(p)
+      dev.off()
+      
+      # On enregistre le dernier ggplot réalisé
+      ggsave(filename=file_name,plot = p)
+    }
+    else{
+      #print("dd")
+      # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
+      p <- ggplot(d,
+                  aes(x=d$Jour,y=d[,3],fill=d$Zone
+                  )
+      )
+      p <- p + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+      p <- p + scale_fill_manual(values = alpha(c("red","orange"), .3))
+      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
+      print(p)
+      #dev.off()
+    }
+  }
+  
+  # On passe aux représentations graphiques : diagrammmes en boîtes. Condition pour avoir des densités ? Option.
+  for (fonc in liste_fonc){
+    
+    # On crée la dataframe pour le suivi de la fonctionnalioté courante
+    d <- data.frame(matrix(ncol = 6, nrow = 0))
+    colnames(d) <- c("x","y",fonc,"Slice","Zone","Jour")
+    
+    tranches <- liste_s_slice[[fonc]]
+    subtitle <- sprintf("Rat%s, tranche(s) ",rat)
+    for (tr in tranches){
+      subtitle <- paste(subtitle,'-',tr)
+    }
+    
+    liste_jr <- liste_jfr[[fonc]]
+    jours <- liste_jr[[rat]]
+    
+    for (jour in jours){
+      name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc]],fonc,rat,jour,fonc,'bg')
+      name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,repertoires[[fonc_seg]],fonc_seg,rat,"00",fonc_seg,'dark')
+      
+      cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+      cerveau_seg <- read.table(name_cerveau_seg,header=T)
+      
+      # Sélection de l'hémisphère sain au jour courant.
+      block <- {
+        l <- length(cerveau_fonc[,4])
+        liste_hem <- rep(FALSE,l)
+        liste_hem <- ifelse(hemi[1]*cerveau_fonc$x+hemi[2]>cerveau_fonc$y,TRUE,liste_hem)
+        cerveau_hem <- cerveau_fonc[liste_hem,]
+        # sélection des tranches pour le suivi temporel
+        l <- length(cerveau_hem[,5])
+        liste_tr <- rep(FALSE,l)
+        for (tr in tranches){
+          liste_tr <- ifelse(tr==cerveau_hem$Slice,TRUE,liste_tr)
+        }
+        tranches_hem <- cerveau_hem[liste_tr,]
+        d.sain <- as.data.frame(cbind(tranches_hem[,1:2],tranches_hem[,4:5],"Hem sain courant",stringsAsFactors=FALSE))#sprintf('Hem sain J%s',jour))
+        colnames(d.sain) <- c("x","y",fonc,"Slice","Zone")
+      }
+      # --------- Dataframe créée : hémisphère sain --------- #
+      
+      cerveau_les <- cerveau_fonc
+      
+      l <- length(cerveau_les[,4])
+      liste_tr <- rep(FALSE,l)
+      
+      # Segmentation du volume lésé, à l'aide de fonc_seg : ADC, CBF ...
+      m <- length(cerveau_seg[,4])
+      for (i in c(1:m)){
+        ix <- cerveau_seg[i,1]
+        iy <- cerveau_seg[i,2]
+        sli <- cerveau_seg[i,5]
+        # On garde seulement, dans cerveau_les et pour chaque tranche segmentée, les coordonnées de la zone d'intérêt
+        liste_tr <- ifelse(ix==cerveau_les$x&iy==cerveau_les$y&sli==cerveau_les$Slice,TRUE,liste_tr)
+        # Seules les tranches de liste_s_slice sont présentes dans cerveau_seg : pas besoin de trier les tranches du cerveau_les obtenu
+      }
+      cerveau_les <- cerveau_les[liste_tr,]
+      
+      # On retire les valeurs manquantes pour pouvoir ensuite clusteriser le volume lésé
+      list.nan <- is.na(cerveau_les[,4])
+      cerveau_les <- cerveau_les[!list.nan,]
+      
+      # On ajoute la colonne "Zone", qui qualifie les voxels lésés.
+      d.les <- as.data.frame(cbind(cerveau_les[,1:2],cerveau_les[,4:5],'Lesion 1'))
+      colnames(d.les) <- c("x","y",fonc,"Slice","Zone")
+      # --------- Dataframe créée : volume lésé --------- #
+      
+      # --------- On traduit la clusterisation effectuée avec fonc_cl, en appelant d_fcl  --------- #
+      block <- {
+        l <- length(d_fcl$Jour)
+        liste_fclj <- rep(FALSE,l)
+        liste_fclj <- ifelse(d_fcl$Jour==jour,TRUE,liste_fclj)
+        d.fcl.jour <- d_fcl[liste_fclj,]
+        
+        d.les$Zone <- ifelse(d.fcl.jour$Zone=='Lesion 2','Lesion 2','Lesion 1')
+      }
+      # --------- Caractérisation sur la dataframe : volume lésé clusterisé avec fonc_cl --------- #
+      
+      d.increment <- as.data.frame(rbind(d.les,d.sain))#,header=T)
+      # données pour le jour courant, fonctionnalité fonc
+      d.increment <- as.data.frame(cbind(d.increment,jour))
+      colnames(d.increment) <- c("x","y",fonc,"Slice","Zone","Jour")
+      
+      d <- as.data.frame(rbind(d,d.increment))
+    }# dataframe d remplie pour la fonctionnalité courante
+    
+    liste.nan <- is.na(d[,3])
+    d <- d[!liste.nan,]
+    
+    gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
+    
+    if (opt_2=='pdf'){
+      file_name = sprintf("%s/%s_suivi_clust_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt_1,fonc)
+      #pdf(file_name)
+      
+      # On réalise le ggplot
+      p <- ggplot(d,
+                  aes(x=d$Jour,y=d[,3],fill=d$Zone
+                  )
+      )
+      p <- p + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+      p <- p + scale_fill_manual(values = alpha(c("cyan","red","orange"), .3))
+      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
+      
+      # On imprime pour que le graphique soit exporté
+      print(p)
+      dev.off()
+      
+      # On enregistre le dernier ggplot réalisé
+      ggsave(filename=file_name,plot = p)
+    }
+    else{
+      #print("dd")
+      # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
+      p <- ggplot(d,
+                  aes(x=d$Jour,y=d[,3],fill=d$Zone
+                  )
+      )
+      p <- p + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+      p <- p + scale_fill_manual(values = alpha(c("cyan","red","orange"), .3))
+      p <- p + ggtitle(bquote(atop(.(gg_title), atop(italic(.(subtitle)), "")))) + xlab("Jours") + ylab(fonc)
+      print(p)
+      #dev.off()
+    }
+  }
+  #
+  #
+}
+
 # ------------------- Compare pour un rat, une tranche et une fonctionnalité, les statistiques sur les segmentations ADC et CBF. ------------------- #
 
 # Option : sortie dans RStudio ou en pdf, dans le répertoire courant.
@@ -1911,23 +2248,22 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
   cl_min <- cl[1]
   cl_max <- cl[length(cl)]
   
+  segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
+  if (opt_1=='ADCdark00'){
+    fonc_seg <- 'ADC'
+  }
+  else if (opt_1=='brightAnat00'){
+    fonc_seg <- 'Anat'
+  }
+  else if (opt_1=='CBFdark00'){
+    fonc_seg <- 'CBF'
+  }
+  
   for (fonc in liste_fonc){
     
     # On crée la dataframe pour le suivi de la fonctionnalioté courante
     d <- data.frame(matrix(ncol = 6, nrow = 0))
     colnames(d) <- c("x","y",fonc,"Slice","Zone","Jour")
-    
-    segtitle <- "" # indique si nécessaire la fonctionnalité utilisée pour la segmentation
-    fonc_seg <- 'ADC' # la segmentation avec fonc_seg sera celle utilisée
-    if (opt_1=='ADCdark00'){
-      fonc_seg <- 'ADC'
-    }
-    else if (opt_1=='brightAnat00'){
-      fonc_seg <- 'Anat'
-    }
-    else if (opt_1=='CBFdark00'){
-      fonc_seg <- 'CBF'
-    }
     
     tranches <- liste_s_slice[[fonc]]
     subtitle <- sprintf("Rat%s, tranche(s) ",rat)
@@ -2043,7 +2379,7 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
       print(p)
       #dev.off()
     }
-  }# fonctionnalité vue
+  }# fonctionnalité vue, représentée graphiquement après clusterisation
 }
 
 # ------------------- Cartographie la distribution de valeurs d'une fonctionnalité, dans l'hémisphère sain, pour un rat. Option : pdf ou sortie RStudio . ------------------- #
@@ -2351,7 +2687,7 @@ carte_fonc_rat <- function(rat,fonc,hemi,opt_1,opt_2){
 
 #suivi_contra_rat
 
-# ------------------- Suivi temporel de l'étendue d'une zone anormale, graphiques des diférentes fonctionnalités superposés ------------------- #
+# ------------------- Suivi temporel de l'étendue d'une zone anormale, graphiques des différentes fonctionnalités superposés ------------------- #
 
 # Option : chaîne ou liste.
 # 'cer' : suivi effectué sur le cerveau entier, ou plutôt sur les slices disponibles chaque jour pour le rat courant ;
