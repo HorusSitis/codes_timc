@@ -998,6 +998,16 @@ l_s_s_30 <- list('ADC'=list(11,12,13),
 
 liste_ss_rat <- list("11"=l_s_s_11,"19"=l_s_s_19,"26"=l_s_s_26,"30"=l_s_s_30)
 
+liste_les_jf11_cl <- list('CBF'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,2)),# J03 : clusters ?
+                          'CMRO2'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,1),"22"=c(1,1)),
+                          'SO2map'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,2)),# J03 compatible avec le CBF.
+                          'BVf'=list("00"=c(1,1),"03"=c(1,2),"08"=c(1,2),"15"=c(1,2),"22"=c(1,1))
+)
+liste_les_jf19_cl <- list('CBF'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,2),"15"=c(1,2),"22"=c(1,2)),
+                          'CMRO2'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,2),"15"=c(1,1),"22"=c(1,2)),
+                          'SO2map'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,2))
+)
+liste_les_jfr_cl <- list("11"=liste_les_jf11_cl,"19"=liste_les_jf19_cl,"26"='',"30"='')
 
 num_rat <- "11"
 liste_suivi_slice <- liste_ss_rat[[num_rat]]
@@ -1014,6 +1024,9 @@ ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'CBFdark00', liste_sui
 
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'CBFdark00','')
 
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"15",'CBF',liste_min_fonc,liste_suivi_slice,'')
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"15",'SO2map',liste_min_fonc,liste_suivi_slice,'')
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"08",'BVf',liste_min_fonc,liste_suivi_slice,'')
 
 num_rat <- "19"
 liste_suivi_slice <- liste_ss_rat[[num_rat]]
@@ -1023,13 +1036,16 @@ ngris_box_fonc(num_rat,fr_hemi,'ADCdark00',liste_suivi_slice,'pdf')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, '')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'ADCdark00', liste_suivi_slice, 'pdf')
 
-dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(9),"")
+dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(9),"00","")
+dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(9),"22","")
 ngris_box_fonc(num_rat,fr_hemi,'CBFdark00',liste_suivi_slice,'')
 ngris_box_fonc(num_rat,fr_hemi,'CBFdark00',liste_suivi_slice,'pdf')
 
 ngris_box_clust(num_rat, fr_hemi, c(1,3), liste_min_fonc, 'CBFdark00', liste_suivi_slice, '')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'CBFdark00', liste_suivi_slice, 'pdf')
 
+comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'ADCdark00','')
+# Attention avec liste_fonc : commencer avec la modalité de segmentation.
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'CBFdark00','')
 
 suivi_hemC_rat19 <- function(hemi,fonc){
@@ -1050,7 +1066,13 @@ suivi_hemC_rat19(fr_hemi,'SO2map')
 suivi_hemC_rat19(fr_hemi,'CMRO2')
 
 
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','T1map','VSI')
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00','','CBF',liste_min_fonc,liste_suivi_slice,'')
+#ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00','','CBF,liste_min_fonc,liste_suivi_slice,'pdf')
 
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"08",'CBF',liste_min_fonc,liste_suivi_slice,'')
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"08",'CMRO2',liste_min_fonc,liste_suivi_slice,'')
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"15",'SO2map',liste_min_fonc,liste_suivi_slice,'')
 
 num_rat <- "26"
 liste_suivi_slice <- liste_ss_rat[[num_rat]]
@@ -1116,11 +1138,11 @@ comp_seg_ADCvsCBF(fr_hemi,liste_rats_tr,'SO2map','')
 comp_seg_ADCvsCBF(fr_hemi,liste_rats_tr,'T1map','')
 comp_seg_ADCvsCBF(fr_hemi,liste_rats_tr,'VSI','')
 
+comp_seg_ADCvsCBF(fr_hemi,liste_rats_tr,'CMRO2','')
 
-
-###############################################################################################################################################
+##############################################################################################################################################
 ###----------------- Simulations : modèle phénoménologique pour décrire les suites de l'ischémie, sur les jours d'examen. -----------------###
-###############################################################################################################################################
+##############################################################################################################################################
 
 
 ###----------------- Premières tentatives : on note les indicateurs de position pour les fonctionnalités. Rat 11. -----------------###
