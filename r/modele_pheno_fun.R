@@ -29,7 +29,7 @@ trans_box <- function(x,dep,arr){
 
 # ------- Rat 11 : émanent des statistiques sur la segmentation ADC. ------- #
 
-block <- {
+coeff_aff_succ_11 <- {
   liste_succ_ADC_11 <- list("00"=list("dep"=c(500,700,725,800,100),"arr"=c(500,750,850,1000,1400)),
                             "03"=list("dep"=c(500,750,850,1000,1400),"arr"=c(450,1000,1200,1450,2100)),
                             "08"=list("dep"=c(450,1000,1200,1450,2100),"arr"=c(800,1200,2100,2300,3300)),
@@ -76,24 +76,26 @@ liste_box_11 <- list("ADC"=liste_succ_ADC_11 ,
 
 # ADC : pour le moment aucune relation avec les autres modalités. #
 
-succ11_ADC_00 <- function(x){
-  dep_arr <- liste_succ_ADC_11[["00"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_ADC_03 <- function(x){
-  dep_arr <- liste_succ_ADC_11[["03"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_ADC_08 <- function(x){
-  dep_arr <- liste_succ_ADC_11[["08"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_ADC_15 <- function(x){
-  dep_arr <- liste_succ_ADC_11[["15"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+aff_fsucc_ADC_j <- {
+  succ11_ADC_00 <- function(x){
+    dep_arr <- liste_succ_ADC_11[["00"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_ADC_03 <- function(x){
+    dep_arr <- liste_succ_ADC_11[["03"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_ADC_08 <- function(x){
+    dep_arr <- liste_succ_ADC_11[["08"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_ADC_15 <- function(x){
+    dep_arr <- liste_succ_ADC_11[["15"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
 }
 
 liste_fsucc_ADC_11 <- list("00"=succ11_ADC_00,
@@ -104,24 +106,26 @@ liste_fsucc_ADC_11 <- list("00"=succ11_ADC_00,
 
 # BVf #
 
-succ11_BVf_00 <- function(x){
-  dep_arr <- liste_succ_BVf_11[["00"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_BVf_03 <- function(x){
-  dep_arr <- liste_succ_BVf_11[["03"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_BVf_08 <- function(x){
-  dep_arr <- liste_succ_BVf_11[["08"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_BVf_15 <- function(x){
-  dep_arr <- liste_succ_BVf_11[["15"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+aff_fsucc_BVf_j <- {
+  succ11_BVf_00 <- function(x){
+    dep_arr <- liste_succ_BVf_11[["00"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_BVf_03 <- function(x){
+    dep_arr <- liste_succ_BVf_11[["03"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_BVf_08 <- function(x){
+    dep_arr <- liste_succ_BVf_11[["08"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_BVf_15 <- function(x){
+    dep_arr <- liste_succ_BVf_11[["15"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
 }
 
 liste_fsucc_BVf_11 <- list("00"=succ11_BVf_00,
@@ -132,24 +136,26 @@ liste_fsucc_BVf_11 <- list("00"=succ11_BVf_00,
 
 # CBF : même chose que précédemment. #
 
-succ11_CBF_00 <- function(x){
-  dep_arr <- liste_succ_CBF_11[["00"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_CBF_03 <- function(x){
-  dep_arr <- liste_succ_CBF_11[["03"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_CBF_08 <- function(x){
-  dep_arr <- liste_succ_CBF_11[["08"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_CBF_15 <- function(x){
-  dep_arr <- liste_succ_CBF_11[["15"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+aff_fsucc_CBF_j <- {
+  succ11_CBF_00 <- function(x){
+    dep_arr <- liste_succ_CBF_11[["00"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_CBF_03 <- function(x){
+    dep_arr <- liste_succ_CBF_11[["03"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_CBF_08 <- function(x){
+    dep_arr <- liste_succ_CBF_11[["08"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_CBF_15 <- function(x){
+    dep_arr <- liste_succ_CBF_11[["15"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
 }
 
 liste_fsucc_CBF_11 <- list("00"=succ11_CBF_00,
@@ -160,19 +166,21 @@ liste_fsucc_CBF_11 <- list("00"=succ11_CBF_00,
 
 # SO2map #
 
-succ11_SO2map_00 <- function(x){
-  dep_arr <- liste_succ_SO2map_11[["00"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_SO2map_03 <- function(x){
-  dep_arr <- liste_succ_SO2map_11[["03"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_SO2map_15 <- function(x){
-  dep_arr <- liste_succ_SO2map_11[["15"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+aff_fsucc_SO2map_j <- {
+  succ11_SO2map_00 <- function(x){
+    dep_arr <- liste_succ_SO2map_11[["00"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_SO2map_03 <- function(x){
+    dep_arr <- liste_succ_SO2map_11[["03"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_SO2map_15 <- function(x){
+    dep_arr <- liste_succ_SO2map_11[["15"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
 }
 
 liste_fsucc_SO2map_11 <- list("00"=succ11_SO2map_00,
@@ -182,24 +190,26 @@ liste_fsucc_SO2map_11 <- list("00"=succ11_SO2map_00,
 
 # T1map #
 
-succ11_T1map_00 <- function(x){
-  dep_arr <- liste_succ_T1map_11[["00"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_T1map_03 <- function(x){
-  dep_arr <- liste_succ_T1map_11[["03"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_T1map_08 <- function(x){
-  dep_arr <- liste_succ_ADC_11[["08"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_T1map_15 <- function(x){
-  dep_arr <- liste_succ_T1map_11[["15"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+aff_fsucc_T1map_j <- {
+  succ11_T1map_00 <- function(x){
+    dep_arr <- liste_succ_T1map_11[["00"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_T1map_03 <- function(x){
+    dep_arr <- liste_succ_T1map_11[["03"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_T1map_08 <- function(x){
+    dep_arr <- liste_succ_ADC_11[["08"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_T1map_15 <- function(x){
+    dep_arr <- liste_succ_T1map_11[["15"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
 }
 
 liste_fsucc_T1map_11 <- list("00"=succ11_T1map_00,
@@ -210,24 +220,26 @@ liste_fsucc_T1map_11 <- list("00"=succ11_T1map_00,
 
 # VSI : #
 
-succ11_VSI_00 <- function(x){
-  dep_arr <- liste_succ_VSI_11[["00"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_VSI_03 <- function(x){
-  dep_arr <- liste_succ_VSI_11[["03"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_VSI_08 <- function(x){
-  dep_arr <- liste_succ_VSI_11[["08"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-}
-
-succ11_VSI_15 <- function(x){
-  dep_arr <- liste_succ_VSI_11[["15"]]
-  return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+aff_fsucc_VSI_j <- {
+  succ11_VSI_00 <- function(x){
+    dep_arr <- liste_succ_VSI_11[["00"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_VSI_03 <- function(x){
+    dep_arr <- liste_succ_VSI_11[["03"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_VSI_08 <- function(x){
+    dep_arr <- liste_succ_VSI_11[["08"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
+  
+  succ11_VSI_15 <- function(x){
+    dep_arr <- liste_succ_VSI_11[["15"]]
+    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+  }
 }
 
 liste_fsucc_VSI_11 <- list("00"=succ11_VSI_00,
@@ -262,7 +274,8 @@ liste_fsucc <- list("11"=liste_fsucc_11,
 ### Deuxième volée de fonctions : dans un répertoire de benjamin_antoine_labo, utilise des versions vectorisées des fonctions précédentes. ###
 ## Prennent en arguments des coordonnées pour le coin inférieur gauche, et la taille du carré de pixels. ##
 
-# Etape préliminaire : fonction graphique pour tester des fonctions de transition
+# ------------ Etape préliminaire : fonction graphique pour tester des fonctions de transition. Echelle du cerveau entier : lésion, hémisphère contralatéral. ------------ #
+# Effectue des calculs, sans renvoyer de dataframe de valeurs prévues.
 # options : 1- segmentation choisie ; 2- représentation choisie, densités ou boîtes ; 3- sortie choisie, plot R ou pdf dans un répertoire.
 comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
   num_jours <- list("00"=0,"03"=3,"08"=8,"15"=15,"22"=22)
@@ -327,7 +340,7 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
         }
         tranches_hem <- cerveau_hem[liste_tr,]
         
-        # on crée la liste de niveauxs de gris exploitable par density() : hémisphère sain
+        # on crée la liste de niveaux de gris exploitable par density() : hémisphère sain
         sain <- tranches_hem[,4]
         liste.nan <- is.na(sain)
         sain <- sain[!liste.nan]
@@ -387,6 +400,7 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
       nl <- 1#length(les)
       ns <- 1#length(sain)
       
+      # --------- Densités ; 'aux' : valeurs calculées pour la lésion. --------- #
       dsta <- density(aux)
       if (length(les)!=0){dstl <- density(les)}
       dsts <- density(sain)
@@ -562,6 +576,7 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
   #
 }
 
+# ------------ Renvoi une dataframe constituée des valeurs prévues par le modèle, sur n carré de voxels. ------------ #
 # Dans un premier temps : fonctions qui génèrent et enregistrent éventuellement des dataframe pour les suivis temporels.
 # Dans un deuxième temps : Affichage, comparaisons avec les données répertoriées pour les zones lésées.
 
@@ -673,9 +688,9 @@ niveau_rel_gris <- function(g,min,max){
   return(res)
 }
 
-# Affichage : carré de pixels, prévisions vs mesures. Sortie pdf à faire.
+# ------------ Affichage : carré de pixels, prévisions vs mesures. Sortie pdf à faire. Utilise une dataframe qui contient les résultats des calculs. ------------ #
 
-# Option 1 : voxels ou hist, pour afficher les niveaux de gris en carré ou un histogramme des valeurs de la modalité sur le  carré de voxels.
+# Option 1 : voxels ou hist, pour afficher les niveaux de gris en carré ou un histogramme des valeurs de la modalité sur le carré de voxels.
 # Option 2 : sortie dans RStudio ou en pdf, dans le répertoire courant.
 
 aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
@@ -733,7 +748,7 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
           )
         }
       }
-      title(sprintf("Suivi temporel : rat %s, modalité %s",rat,fonc),outer=TRUE)
+      title(sprintf("Mesures vs prévisions : rat %s, modalité %s",rat,fonc),outer=TRUE)
     }
   }
   else if (opt_1=='hist'){
@@ -772,7 +787,7 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
                          )
         }
       }
-      title(sprintf("Suivi temporel : rat %s, modalité %s",rat,fonc),outer=TRUE)
+      title(sprintf("Mesures vs prévisions : rat %s, modalité %s",rat,fonc),outer=TRUE)
     }
   }
 }

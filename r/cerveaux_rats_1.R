@@ -1005,7 +1005,8 @@ liste_les_jf11_cl <- list('CBF'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(
 )
 liste_les_jf19_cl <- list('CBF'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,2),"15"=c(1,2),"22"=c(1,2)),
                           'CMRO2'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,2),"15"=c(1,1),"22"=c(1,2)),
-                          'SO2map'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,2))
+                          'SO2map'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,2)),
+                          'BVf'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,1))
 )
 liste_les_jfr_cl <- list("11"=liste_les_jf11_cl,"19"=liste_les_jf19_cl,"26"='',"30"='')
 
@@ -1072,7 +1073,9 @@ ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00','','CBF',liste_min_fonc,liste_
 
 ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"08",'CBF',liste_min_fonc,liste_suivi_slice,'')
 ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"08",'CMRO2',liste_min_fonc,liste_suivi_slice,'')
+
 ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"15",'SO2map',liste_min_fonc,liste_suivi_slice,'')
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"15",'BVf',liste_min_fonc,liste_suivi_slice,'')
 
 num_rat <- "26"
 liste_suivi_slice <- liste_ss_rat[[num_rat]]
@@ -1143,12 +1146,8 @@ comp_seg_ADCvsCBF(fr_hemi,liste_rats_tr,'CMRO2','')
 ##############################################################################################################################################
 ###----------------- Simulations : modèle phénoménologique pour décrire les suites de l'ischémie, sur les jours d'examen. -----------------###
 ##############################################################################################################################################
-
-
-###----------------- Premières tentatives : on note les indicateurs de position pour les fonctionnalités. Rat 11. -----------------###
-
-
 source(file="modele_pheno_fun.R", encoding ="UTF-8")
+###----------------- Premières tentatives : on note les indicateurs de position pour les fonctionnalités. Rat 11. -----------------###
 
 fr_hemi <- c(5,-240)
 
@@ -1183,9 +1182,7 @@ comp_succ_suivi(num_rat,fr_hemi,'SO2map',liste_suivi_slice,'ADCdark00','dens','p
 comp_succ_suivi(num_rat,fr_hemi,'T1map',liste_suivi_slice,'ADCdark00','dens','pdf')
 comp_succ_suivi(num_rat,fr_hemi,'VSI',liste_suivi_slice,'ADCdark00','dens','pdf')
 
-
-
-#suivi_voxels(num_rat,'ADC',10,c(50,30),7,'ADCdark00')
+#ddd <- suivi_voxels(num_rat,'ADC',10,c(50,30),7)
 
 aff_suivi_voxels(num_rat,'ADC',10,c(50,30),7,'voxels','')
 aff_suivi_voxels(num_rat,'ADC',10,c(50,30),7,'hist','')
@@ -1204,3 +1201,12 @@ aff_suivi_voxels(num_rat,'T1map',10,c(60,40),7,'hist','')
 
 aff_suivi_voxels(num_rat,'VSI',10,c(60,40),7,'voxels','')
 aff_suivi_voxels(num_rat,'VSI',10,c(60,40),7,'hist','')
+
+###----------------- Modèle construit à partir du rat 19. -----------------###
+
+num_rat <- "19"
+liste_fonc_modele <- list('CBF','CMRO2','SO2map','BVf','VSI','ADC')
+
+# ---- Vers le répertoire fonctionnel_gris. ---- #
+cerveau_multifonc(num_rat,c(9),liste_fonc_modele,"00")
+cerveau_multifonc(num_rat,c(9),liste_fonc_modele,"08")
