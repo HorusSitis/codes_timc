@@ -1,6 +1,5 @@
 ### Première volée de fonctions d'évolution : scalaires ; rat 11, une modalité, un jour. ###
 
-
 # dep et arr sont les deux vecteurs qui contiennent respectivement les antécédents et images qui définissent la fonction affine par morceaux ...
 
 trans_box <- function(x,dep,arr){
@@ -263,7 +262,7 @@ liste_fsucc_11 <- list("ADC"=liste_fsucc_ADC_11 ,
 # ------- Rat 30 ------- #
 
 
-## ------- Fonctions de transitikon : tous rats confondus ------- ##
+## ------- Fonctions de transition : tous rats confondus ------- ##
 
 liste_fsucc <- list("11"=liste_fsucc_11,
                     "19"='',#liste_fsucc_19,
@@ -576,7 +575,7 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
   #
 }
 
-# ------------ Renvoi une dataframe constituée des valeurs prévues par le modèle, sur n carré de voxels. ------------ #
+# ------------ Renvoie une dataframe constituée des valeurs prévues par le modèle, sur n carré de voxels. ------------ #
 # Dans un premier temps : fonctions qui génèrent et enregistrent éventuellement des dataframe pour les suivis temporels.
 # Dans un deuxième temps : Affichage, comparaisons avec les données répertoriées pour les zones lésées.
 
@@ -792,3 +791,106 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
   }
 }
 
+#################################################################################
+###----------------- Modèle phénomonologique : rat numéro 19 -----------------###
+#################################################################################
+
+# ------------ Construction de deux bases de données : Jour initial 00 ou 08, toutes fonctionnalités confondues. ------------ #
+### Stockage dans .../R19/automate_2 3demi. ###
+
+#liste_fonc_modele <- list('CBF','CMRO2','SO2map','BVf','VSI','ADC')
+
+# Option ... : jour de référence pour la rat 19, 00 ou 08.
+
+ff <- function(list){#liste de voxels rudimentaires
+  list[['ADC']] <- 2*list[['ADC']]
+  list[['x']] <- list[['x']] + list[['Slice']]
+  return(list)
+}
+
+#liste_fonc_modele <- list('CBF','CMRO2','SO2map','BVf','VSI','ADC')
+cerveau_multipar <- function(rat,liste_tranches,liste_fonc,opt){
+  jour <- opt
+  fonc <- liste_fonc[1]
+  
+  # On initialise avec la première table, à laquelle s'adjoindront les colonnes correspondant aux autres modalités.
+  nom_table_ini <- sprintf('R%s/%s/%s/%s-J%s-%s-bg-all.dat',rat,"fonctionnel_gris",fonc,rat,jour,fonc)#
+  d <- read.table(nom_table_ini,header=T)
+  # On ne garde que les coordonnées spatiales
+  d <- d[,-c(4)]
+  # On ne garde que les tranches d'intérêt
+  l <- length(d[,4])
+  liste_lignes <- rep(FALSE,l)
+  for (tr in liste_tranches){
+    liste_lignes <- ifelse(d$Slice==tr,TRUE,liste_lignes)
+  }
+  d <- d[liste_lignes,]
+  
+  # On intersecte les cerveaux à chaque itération et on ajoute la colonne correspondant à fonc.
+  for (fonc in liste_fonc){
+    nom_table_increment <- sprintf('R%s/%s/%s/%s-J%s-%s-bg-all.dat',rat,"fonctionnel_gris",fonc,rat,jour,fonc)
+    e <- read.table(nom_table_increment,header=T)
+    
+    # On supprime les valeurs manquantes de la modalité courante
+    liste.nan <- is.na(e[,4])
+    e <- e[!liste.nan,]
+    
+    # On garde seulement les lignes de la dataframe déjà créée...
+    l <- length(d[,1])
+    liste_lignes <- rep(FALSE,l)
+    m <- length(e[,1])
+    for (i in 1:m){
+      ix <- e[i,1]
+      iy <- e[i,2]
+      sli <- e[i,5]
+      # On garde seulement, dans d et pour chaque tranche, les coordonnées disponibles sur l'image fonc, enregistrées dans e.
+      liste_lignes <- ifelse(ix==d$x&iy==d$y&sli==d$Slice,TRUE,liste_lignes)
+      # Luxe en ce qui concerne les tranches, dans le cas du suivi de la tranche 9 du rat 19 : liste_tranches est de longueur 1 concrètement.
+    }
+    d <- d[liste_lignes,]
+    # ... et seulement celles correspondantes à la modalité courante..
+    l <- length(e[,1])
+    liste_lignes <- rep(FALSE,l)
+    m <- length(d[,1])
+    for (i in 1:m){
+      ix <- d[i,1]
+      iy <- d[i,2]
+      sli <- d[i,4]
+      # On garde seulement, dans d et pour chaque tranche, les coordonnées disponibles sur l'image fonc, enregistrées dans e.
+      liste_lignes <- ifelse(ix==e$x&iy==e$y&sli==e$Slice,TRUE,liste_lignes)
+      # Luxe en ce qui concerne les tranches, dans le cas du suivi de la tranche 9 du rat 19 : liste_tranches est de longueur 1 concrètement.
+    }
+    e <- e[liste_lignes,]
+    
+    #print(fonc)
+    #print(m)
+    #print(length(e[,4]))
+    
+    colnames.inc <- colnames(d)
+    d <- as.data.frame(cbind(d,e[,4]))
+    colnames(d) <- c(colnames.inc,fonc)
+  }
+  
+  # Il reste à qualifier l'état initial : on utilise pour cela une fonction vectorisée.
+  if (jour=="00"){
+    etat <- ifelse(d$CBF<20,'cyto','per')
+  }
+  else{
+    # pour un stade vasogénique
+  }
+  colnames.inc <- colnames(d)
+  d <- as.data.frame(cbind(d,etat))
+  colnames(d) <- c(colnames.inc,'Etat')
+  
+  # Sorties : dataframe, qui est enregistrée dans le dossier automate_2_3demi.
+  nom_table_res <- sprintf('R%s/automate_2_3demi/cerveau%s',rat,opt)
+  write.table(d, nom_table_res, row.names=F, quote=F, sep='\t')
+  #return(d)
+}
+
+### Affichage des états : tranche 9 du rat 19. ###
+
+
+
+
+# ------------ Suivi pour ... un pixel, carré, cerveau entier ? ------------ #
