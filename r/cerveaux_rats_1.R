@@ -1182,7 +1182,30 @@ comp_succ_suivi(num_rat,fr_hemi,'SO2map',liste_suivi_slice,'ADCdark00','dens','p
 comp_succ_suivi(num_rat,fr_hemi,'T1map',liste_suivi_slice,'ADCdark00','dens','pdf')
 comp_succ_suivi(num_rat,fr_hemi,'VSI',liste_suivi_slice,'ADCdark00','dens','pdf')
 
-#ddd <- suivi_voxels(num_rat,'ADC',10,c(50,30),7)
+# Test : construction d'une dataframe
+num_rat <- "11"
+ddd <- suivi_voxels(num_rat,'ADC',10,c(50,30),7)
+# Effectué
+# Représentation graphique
+d <- ddd
+gg_title <- sprintf("Distribution temporelle de %s",'ADC')
+p <- ggplot(d,
+            aes(x=d$Jour,y=d[,3]#,fill=d$Zone
+            )
+)
+p <- p + geom_boxplot(outlier.shape = NA)
+p <- p + scale_fill_manual(values = alpha(c("red","orange","blue"), .3))
+p_1 <- p + ggtitle(bquote(atop(.(gg_title)))) + xlab("Jours") + ylab('ADC')
+p <- ggplot(d,
+            aes(x=d$Jour,y=d[,1]#,fill=d$Zone
+            )
+)
+gg_title <- sprintf("Distribution temporelle de %s",'x')
+p <- p + geom_boxplot(outlier.shape = NA)
+p <- p + scale_fill_manual(values = alpha(c("red","orange","blue"), .3))
+p_2 <- p + ggtitle(bquote(atop(.(gg_title)))) + xlab("Jours") + ylab('x')
+multiplot(p_1,p_2,ncol=3)
+# Effectué : on peut utiliser une dataframe multimodalité, avec multiplot.
 
 aff_suivi_voxels(num_rat,'ADC',10,c(50,30),7,'voxels','')
 aff_suivi_voxels(num_rat,'ADC',10,c(50,30),7,'hist','')
@@ -1205,8 +1228,22 @@ aff_suivi_voxels(num_rat,'VSI',10,c(60,40),7,'hist','')
 ###----------------- Modèle construit à partir du rat 19. -----------------###
 
 num_rat <- "19"
-liste_fonc_modele <- list('CBF','CMRO2','SO2map','BVf','VSI','ADC')
+liste_fonc <- list('CBF','CMRO2','SO2map','BVf','ADC','VSI')
 
 # ---- Vers le répertoire fonctionnel_gris. ---- #
-cerveau_multifonc(num_rat,c(9),liste_fonc_modele,"00")
-cerveau_multifonc(num_rat,c(9),liste_fonc_modele,"08")
+## Initialisation pour le modèle 2 ##
+cerveau_multipar(num_rat,"automate_2",c(9),liste_fonc)
+## Initialisation pour le modèle 3demi ##
+cerveau_multipar(num_rat,"automate_3demi",c(9),liste_fonc)
+cerveau_multipar(num_rat,"automate_3demi",c(10),liste_fonc)
+cerveau_multipar(num_rat,"automate_3demi",c(9,10),liste_fonc)
+
+
+color.vector = c('darkred','cyan','red','brown','gold','orange','blue')
+
+
+affichage_etats_cerveau(num_rat,"automate_2",c(9),"00",'')
+
+affichage_etats_cerveau(num_rat,"automate_3demi",c(9),"08",'')
+affichage_etats_cerveau(num_rat,"automate_3demi",c(10),"08",'')
+affichage_etats_cerveau(num_rat,"automate_3demi",c(9,10),"08",'')

@@ -505,6 +505,8 @@ vol_lesADC00 <- function(rat,tr){
 
 # ------------------- Enregistrement du volume, lésé en CBF au jour 00, examiné au jour et à la fonctionnalité en cours, avec les tranches du vecteur tr. Répertoire benjamin_antoine_labo. ------------------- #
 
+##  Remarque importante : les valeurs manquantes sont sauvegardées, vol_lesCBF00 génère donc une table qui rend compte de la géométrie de la lésion, vue comme étant simplement connexe. ##
+
 vol_lesCBF00 <- function(rat,tr){
   repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
                       'BVf'="fonctionnel_gris",
