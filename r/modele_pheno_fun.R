@@ -809,8 +809,14 @@ ff <- function(list){#liste de voxels rudimentaires
 }
 
 #liste_fonc_modele <- list('CBF','CMRO2','SO2map','BVf','VSI','ADC')
-cerveau_multipar <- function(rat,liste_tranches,liste_fonc,opt){
-  jour <- opt
+cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar){
+  # Chaque modèle a son jour de départ
+  if (automate=="automate_2"){
+    jour <- "00"
+  }
+  else{
+    jour <- "08"
+  }
   fonc <- liste_fonc[1]
   
   # On initialise avec la première table, à laquelle s'adjoindront les colonnes correspondant aux autres modalités.
@@ -827,7 +833,7 @@ cerveau_multipar <- function(rat,liste_tranches,liste_fonc,opt){
   d <- d[liste_lignes,]
   
   # On intersecte les cerveaux à chaque itération et on ajoute la colonne correspondant à fonc.
-  for (fonc in liste_fonc){
+  for (fonc in liste_multipar){
     nom_table_increment <- sprintf('R%s/%s/%s/%s-J%s-%s-bg-all.dat',rat,"fonctionnel_gris",fonc,rat,jour,fonc)
     e <- read.table(nom_table_increment,header=T)
     
@@ -872,25 +878,119 @@ cerveau_multipar <- function(rat,liste_tranches,liste_fonc,opt){
   }
   
   # Il reste à qualifier l'état initial : on utilise pour cela une fonction vectorisée.
-  if (jour=="00"){
-    etat <- ifelse(d$CBF<20,'cyto','per')
+  if (automate=="automate_2"){
+    l <- length(d[,1])
+    etat <- rep('per',l)
+    # on segmente la lésion en CBFdark00
+    cerveau_seg <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",'CBF',rat,"00",'CBF','dark'),header=T)
+    m <- length(cerveau_seg[,4])
+    for (i in c(1:m)){
+      ix <- cerveau_seg[i,1]
+      iy <- cerveau_seg[i,2]
+      sli <- cerveau_seg[i,5]
+      etat <- ifelse(ix==d$x&iy==d$y&sli==d$Slice,'cyto',etat)
+    }
   }
   else{
-    # pour un stade vasogénique
+    # pour un stade vasogénique : par défaut, l'état est perturbé. Les fluctuations autour d'un équilibre arrivent, en principe, rapidement.
+    l <- length(d[,1])
+    etat <- rep('per',l)
+    # on segmente la lésion en CBFdark00
+    cerveau_seg <- read.table(sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",'CBF',rat,"00",'CBF','dark'),header=T)
+    m <- length(cerveau_seg[,4])
+    for (i in c(1:m)){
+      ix <- cerveau_seg[i,1]
+      iy <- cerveau_seg[i,2]
+      sli <- cerveau_seg[i,5]
+      etat <- ifelse(ix==d$x&iy==d$y&sli==d$Slice,'les_1_deb',etat)
+    }
+    # on utilise le résultat de la clusterisation CBF, c(1,2), au jour 08
+    etat <- ifelse(etat=='les_1_deb'&d$CBF>100,'les_2_deb',etat)
   }
   colnames.inc <- colnames(d)
   d <- as.data.frame(cbind(d,etat))
   colnames(d) <- c(colnames.inc,'Etat')
   
-  # Sorties : dataframe, qui est enregistrée dans le dossier automate_2_3demi.
-  nom_table_res <- sprintf('R%s/automate_2_3demi/cerveau%s',rat,opt)
+  # Sorties : dataframe, qui est enregistrée dans le dossier automate_2_3demi. On mentionne les rtanches retenues.
+  nom_tranches <- ""
+  for (tr in liste_tranches){
+    nom_tranches <- paste(nom_tranches,tr,sep="-")
+  }
+  nom_table_res <- sprintf('R%s/%s/cerveau_multi_J%s_Slices%s.dat',rat,automate,jour,nom_tranches)
   write.table(d, nom_table_res, row.names=F, quote=F, sep='\t')
   #return(d)
 }
 
 ### Affichage des états : tranche 9 du rat 19. ###
 
+# Option : sortie. pdf si 'pdf', affichage dans RStudio sinon.
 
+#list.color=list('cyto'='darkred','equi'='cyan','les_1_deb=red','les_1_fin'='brown','les_2_deb'='gold','les_2_fin'='orange','per'='blue')
+couleur_etat <- function(etat){
+  if (etat=='cyto'){
+    color <- 'darkred'
+  }
+  else if (etat=='per'){
+    color <- 'cyan'
+  }
+  else if (etat=='les_1_deb'){
+    color <- 'red'
+  }
+  else if (etat=='les_1_fin'){
+    color <- 'brown'
+  }
+  else if (etat=='les_2_deb'){
+    color <- 'orange'
+  }
+  else if (etat=='les_2_fin'){
+    color <- 'gold'
+  }
+  else{
+    color <- 'grey50'
+  }
+  return(color)
+}
+
+affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt){
+  # Nom du nombre de tranches, numéro du modèle
+  nom_tranches <- ""
+  for (tr in liste_tranches){
+    nom_tranches <- paste(nom_tranches,tr,sep="-")
+  }
+  if (automate=="automate_2"){
+    nom_mod <- "2"
+  }
+  else{
+    nom_mod <- "3/2"
+  }
+  
+  nom_table <- sprintf("R%s/%s/cerveau_multi_J%s_Slices%s.dat",rat,automate,jour,nom_tranches)
+  d <- read.table(nom_table,header=T)
+  
+  d$Etat <- sapply(d$Etat,couleur_etat)
+  
+  if (opt=='pdf'){
+    #
+  }
+  else{
+    plot.new()
+    par(mfrow=c(1,1))
+    scatterplot3d(d$x,
+                  d$y,
+                  d$Slice,
+                  #cerveau.clust$z, 
+                  color= d$Etat,
+                  pch=20,
+                  xlab='x',
+                  ylab='y',
+                  zlab='Slice',#'z',
+                  lab.z=1+d$Slice[length(d$Slice)]-d$Slice[1],
+                  main=sprintf("Modèle %s : rat %s, jour %s",nom_mod,rat,jour),
+                  sub = sprintf("Tranches %s",nom_tranches)
+    )
+    #title(sprintf("Cerveau modélisé : rat %s, %s, jour %s, modèle %f",rat,automate,jour,mod),outer=TRUE)
+  }
+}
 
 
 # ------------ Suivi pour ... un pixel, carré, cerveau entier ? ------------ #
