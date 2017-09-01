@@ -798,18 +798,10 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
 # ------------ Construction de deux bases de données : Jour initial 00 ou 08, toutes fonctionnalités confondues. ------------ #
 ### Stockage dans .../R19/automate_2 3demi. ###
 
-#liste_fonc_modele <- list('CBF','CMRO2','SO2map','BVf','VSI','ADC')
-
-# Option ... : jour de référence pour la rat 19, 00 ou 08.
-
-ff <- function(list){#liste de voxels rudimentaires
-  list[['ADC']] <- 2*list[['ADC']]
-  list[['x']] <- list[['x']] + list[['Slice']]
-  return(list)
-}
+# Option : liste des modalités pour lesqueles on effectue le remplissage gaussien.
 
 #liste_fonc_modele <- list('CBF','CMRO2','SO2map','BVf','VSI','ADC')
-cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar){
+cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar,opt){
   # Chaque modèle a son jour de départ
   if (automate=="automate_2"){
     jour <- "00"
@@ -820,7 +812,7 @@ cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar){
   fonc <- liste_fonc[1]
   
   # On initialise avec la première table, à laquelle s'adjoindront les colonnes correspondant aux autres modalités.
-  nom_table_ini <- sprintf('R%s/%s/%s/%s-J%s-%s-bg-all.dat',rat,"fonctionnel_gris",fonc,rat,jour,fonc)#
+  nom_table_ini <- sprintf('R%s/%s/%s/%s-J%s-%s-bg-all.dat',rat,"fonctionnel_gris",fonc,rat,jour,fonc)
   d <- read.table(nom_table_ini,header=T)
   # On ne garde que les coordonnées spatiales
   d <- d[,-c(4)]
@@ -837,7 +829,63 @@ cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar){
     nom_table_increment <- sprintf('R%s/%s/%s/%s-J%s-%s-bg-all.dat',rat,"fonctionnel_gris",fonc,rat,jour,fonc)
     e <- read.table(nom_table_increment,header=T)
     
-    # On supprime les valeurs manquantes de la modalité courante
+    
+    if (any(opt==fonc)){
+      # On crée la base de données correspondant à la lésion dont on va compléter les valeurs.
+      name_lesCBF <- sprintf('R%s/%s/%s/%s-J%s-%s-dark-all.dat',rat,"fonctionnel_gris",'CBF',rat,jour,'CBF')
+      cerveau_lesCBF <- read.table(name_lesCBF,header=T)
+      
+      # On délimite la lésion pour la fonctionnalit\'e courante
+      l <- length(e[,4])
+      liste_lignes <- rep(FALSE,l)
+      m <- length(cerveau_lesCBF[,4])
+      for (i in 1:m){
+        ix <- cerveau_lesCBF[i,1]
+        iy <- cerveau_lesCBF[i,2]
+        sli <- cerveau_lesCBF[i,5]
+        # On garde seulement, dans d et pour chaque tranche, les coordonnées disponibles sur l'image fonc, enregistrées dans e.
+        liste_lignes <- ifelse(ix==e$x&iy==e$y&sli==e$Slice,TRUE,liste_lignes)
+        # Luxe en ce qui concerne les tranches, dans le cas du suivi de la tranche 9 du rat 19 : liste_tranches est de longueur 1 concrètement.
+      }
+      lesion3d <- e[liste_lignes,]
+      
+      # On crée la future base de données complétée pour la lésion : image contractile
+      f <- data.frame(matrix(ncol = 5, nrow = 0))
+      colnames(f) <- c('x','y','z','CBF','Slice')
+      
+      for (tranche in liste_tranches){
+        lesion <- lesion3d[lesion3d$Slice==tranche,]
+        
+        liste.nan <- is.na(lesion[[fonc]])
+        les_val <- lesion[[fonc]][!liste.nan]
+        
+        l <- length(lesion[[fonc]])
+        norm_l <- rnorm(l)*sqrt(var(les_val))+rep(mean(les_val),l)
+        norm_l_0 <- ifelse(norm_l>=0,norm_l,0)
+        #print(norm_l_0[1:10])
+        
+        lesion[[fonc]] <- ifelse(is.na(lesion[[fonc]]),norm_l_0,lesion[[fonc]])
+        # Les valeurs manquantes correspondant à la lésion sur la tranche courante sont remplacées par les composantes d'un vecteur gaussien de mêmes espérance et écart-type que l'ensemble des valeurs disponibles.
+        
+        #print(lesion[1:5,])
+        f <- as.data.frame(rbind(f,lesion))
+        colnames(f) <- c('x','y','z','CBF','Slice')
+      }
+      l <- length(e[,4])
+      liste_lignes <- rep(FALSE,l)
+      m <- length(f[,4])
+      for (i in 1:m){
+        ix <- f[i,1]
+        iy <- f[i,2]
+        sli <- f[i,5]
+        # On garde seulement, dans d et pour chaque tranche, les coordonnées disponibles sur l'image fonc, enregistrées dans e.
+        liste_lignes <- ifelse(ix==e$x&iy==e$y&sli==e$Slice,TRUE,liste_lignes)
+        # Luxe en ce qui concerne les tranches, dans le cas du suivi de la tranche 9 du rat 19 : liste_tranches est de longueur 1 concrètement.
+      }
+      e[liste_lignes,] <- f
+    }
+    
+    # On enlève les (dernières) valeurs manquantes.
     liste.nan <- is.na(e[,4])
     e <- e[!liste.nan,]
     
@@ -867,10 +915,6 @@ cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar){
       # Luxe en ce qui concerne les tranches, dans le cas du suivi de la tranche 9 du rat 19 : liste_tranches est de longueur 1 concrètement.
     }
     e <- e[liste_lignes,]
-    
-    #print(fonc)
-    #print(m)
-    #print(length(e[,4]))
     
     colnames.inc <- colnames(d)
     d <- as.data.frame(cbind(d,e[,4]))
@@ -916,14 +960,20 @@ cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar){
   for (tr in liste_tranches){
     nom_tranches <- paste(nom_tranches,tr,sep="-")
   }
-  nom_table_res <- sprintf('R%s/%s/cerveau_multi_J%s_Slices%s.dat',rat,automate,jour,nom_tranches)
+  if (length(opt)==0){
+    nom_table_res <- sprintf('R%s/%s/cerveau%s_multi_J%s%s_Slices%s.dat',rat,automate,rat,jour,"",nom_tranches)
+  }
+  else{
+    nom_table_res <- sprintf('R%s/%s/cerveau%s_multi_J%s%s_Slices%s.dat',rat,automate,rat,jour,"_fill_norm",nom_tranches)
+  }
   write.table(d, nom_table_res, row.names=F, quote=F, sep='\t')
   #return(d)
 }
 
 ### Affichage des états : tranche 9 du rat 19. ###
 
-# Option : sortie. pdf si 'pdf', affichage dans RStudio sinon.
+# Option 1 : on utilise ou non une base de données avec des valeurs manquantes complétées.
+# Option 2 : sortie. pdf si 'pdf', affichage dans RStudio sinon.
 
 #list.color=list('cyto'='darkred','equi'='cyan','les_1_deb=red','les_1_fin'='brown','les_2_deb'='gold','les_2_fin'='orange','per'='blue')
 couleur_etat <- function(etat){
@@ -951,7 +1001,13 @@ couleur_etat <- function(etat){
   return(color)
 }
 
-affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt){
+affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt_1,opt_2){
+  if (length(opt_1)==0){
+    nom_opt <- ""
+  }
+  else{
+    nom_opt <- "_fill_norm"
+  }
   # Nom du nombre de tranches, numéro du modèle
   nom_tranches <- ""
   for (tr in liste_tranches){
@@ -964,16 +1020,16 @@ affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt){
     nom_mod <- "3/2"
   }
   
-  nom_table <- sprintf("R%s/%s/cerveau_multi_J%s_Slices%s.dat",rat,automate,jour,nom_tranches)
+  nom_table <- sprintf("R%s/%s/cerveau%s_multi_J%s%s_Slices%s.dat",rat,automate,rat,jour,nom_opt,nom_tranches)
   d <- read.table(nom_table,header=T)
   
   d$Etat <- sapply(d$Etat,couleur_etat)
   
-  if (opt=='pdf'){
+  if (opt_2=='pdf'){
     #
   }
   else{
-    plot.new()
+    #plot.new()
     par(mfrow=c(1,1))
     scatterplot3d(d$x,
                   d$y,
