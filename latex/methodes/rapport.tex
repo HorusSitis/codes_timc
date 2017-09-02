@@ -37,7 +37,7 @@ sur une longueur correspondant au cerveau du rat, et pour les modalit\'es qui su
 
 
 
-\begin{figure}
+\begin{figure}[!h]
 \begin{tabular}{|c|c|c|c|}
 \hline
 \includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}
@@ -70,52 +70,6 @@ l'image brute en T2 \og{} Anatomique\fg{}, l'ADC, le BVf, le CBF, la CMRO2, la S
 
 J'ai choisi de traiter pr\'ealablement les images r\'ealis\'ees en niveaux de gris par Benjamin Lemasson, \g{a} l'aide du logiciel ImageJ : %
 c'est un logiciel \'ecrit en Java qui permet de manipuler des images.
-\begin{comment}% Format à utiliser pour la présentation, pertinent pour le rapport ?
-% Dans le cas de mon travail, il pr\'esente plusieurs avantages :
-%
-\begin{description}
-\item[Travail sur des images individuelles] Une fonctionnalit\'e importante est la d\'elimitation de r\'egions d'int\'er\^et : %
-enc\'ephale dans une coupe bidimensionnelle, zone l\'es\'ee caract\'eris\'ee, typiquement, par des valeurs basses d'ADC ou de CBF. %
-%On cr\'ee ainsi des objets r\'eiutilisables
-D'autres fonctionnalit\'es plus classiques sont disponobles : remplissage, rognage etc.
-%\item[Cr\'eation d'objets graphiques]
-%
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J00-segADC-slice-10.jpg}%<+->
-\hfill
-\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J03-segADC-slice-10.jpg}%<+->
-\hfill
-\includegraphics[width=0.2\linewidth,height=4cm]{methodes/11-J08-segADC-slice-10.jpg}%<+->%
-\end{center}
-\caption{Coupe segment\'ee : rat 11, images en ADC sur trois jours}
-\label{ex_cer}
-\end{figure}
-%
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.2\linewidth,height=3cm]{methodes/11-J00-ADC-cropped-slice10.jpg}%<+->
-\hfill
-\includegraphics[width=0.2\linewidth,height=3cm]{methodes/11-J03-ADC-cropped-slice10.jpg}%<+->
-\hfill
-\includegraphics[width=0.2\linewidth,height=3cm]{methodes/11-J08-ADC-cropped-slice10.jpg}%<+->
-\end{center}
-\caption{L\'esion d\'elimit\'ee au jour 0 : faibles valeurs de l'ADC. On r\'eutilise la r\'egion d'int\'er\^et pour les autres jours.}
-\label{ex_les}
-\end{figure}
-%
-\item[Exploitation de donn\'ees sous diff\'erents formats] On peut convertir des fichiers afin de les rendre exploitables par d'autres logiciels : %
-images en .jpg pour une pr\'esentation, fichiers texte avec les coordonn\'ees et les valeurs, repr\'esent\'ees en niveaux de gris, des diff\'erents pixels.
-%
-\item[Traitement syst\'ematique avec des macros] Le logiciel permet de cr\'eer des macros afin de traiter syst\'ematiquement un grand nombre d'images : %
-en effet la d\'elimitation de r\'egions d'int\'er\^et et leur exploitation est fastidieuse, et ces petits programmes permettent de traiter rapidement et avec fiabilit\'e des centaines d'images.
-%
-\begin{itemize}
-\item
-\item 
-\end{itemize}
-\end{description}
-\end{comment}
 %
 \par
 A partir des images, au format .tif, transmises par Benjamin Lemasson, %
@@ -129,9 +83,10 @@ Ma d\'emarche a \'et\'e la suivante :
 \item Automatiser la proc\'edure pour traiter et trier, \g{a} partir des contours d\'efinis manuellement, toutes les images disponibles.
 \end{enumerate}
 
-J'ai ainsi obtenu des images, par tranche
+\newcounter{stock}
+\setcounter{stock}{\value{enumi}}
 
-\begin{figure}%Ajouter les colonnes correspondant à anatomique, ADC sans contour ce ADC segmentée.
+\begin{figure}%[h]%Ajouter les colonnes correspondant à anatomique, ADC sans contour ce ADC segmentée.
 \includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}
 \hfill
 \includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}
@@ -143,31 +98,21 @@ J'ai ainsi obtenu des images, par tranche
 \label{cephcer}
 \end{figure}
 
+\FloatBarrier
+J'ai ainsi obtenu des images, par tranche examin\'ee, pour toutes les modalit\'es, restreintes \g{a} l'enc\'ephale. L'\'etape finale pour l'exploitation des donn\'ees IRM a \'et\'e :
+\begin{enumerate}
+\setcounter{enumi}{\value{stock}}
+\item Regrouper les niveaux de gris, qui correspondent aux valeurs mesur\'ees ou calcul\'ees de chacune des images, dans un fichier texte exploitable sous R.
+\end{enumerate}
 
-
-
-
-\begin{comment}
-\caption{IRM multiparam\'etrique : on distingue, sur les images ADC, CBF et T1map une zone sombre dans l'\'emisph\g{e}re gauche.
-\\
-Ces r\'egions varient peu suivant la modalit\'e, et sont quasiment identiques pour l'ADC et en T1. La zone d'int\'er\^et du CBF, %
-l\'eg\g{e}rement plus grande et qui correspond \g{a} un crit\g{e}re physiologique d'insch\'emie, sera retenue.}
-\ref{lesion_R11_J00}
-\end{comment}
-
+\etoile
 Les images aux tranches : 10 pour le rat num\'ero 11, 9 et 10 pour le rat 19, 6 \g{a} 8 pour le rat 26 et 11 \g{a} 13 pour le rat 30 sont disponibles pour toutes les modalit\'es, %
 pour tous les jours d'examens. %
-Ces tranches sont donc utilisables pour effectuer un suivi temporel des valeurs mesur\'ees ou calcul\'ees, pixel par pixel, ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
+Ces tranches sont donc utilisables pour effectuer un suivi temporel des valeurs mesur\'ees ou calcul\'ees, pixel par pixel, %
+ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 
-\par
-Avec des choix judicieux de contraste, on peut discerner, \g{a} l'oeil, des r\'egions l\'es\'ees sur les tranchse segment\'ees de cerveau. %
-Plus particuli\g{e}rement, et pour tous les rats, on discerne une aire sombre sur les images en CBF au jour 00, c'est-\g{a}-dire produites par l'examen r\'ealis\'e 30 minutes apr\g{e}s la reperfusion. %
-Cette aire se situe sur l'h\'emisph\g{e}re droit, et on retrouve des r\'egions similaires, mais plus petites, sur des images obtenues dans les autres modalit\'es : %
-voir les figures \ref{11_dark_00}, \ref{19_dark_00}, \ref{26_dark_00} et \ref{30_dark_00}. %
-L'isch\'emie focale transitoire se traduit pr\'ecis\'ement par une baisse du d\'ebit sanguin c\'er\'ebral %et la reperfusion ?
-L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'eliser l'ensemble des pixels initialement l\'es\'es.
-
-\begin{figure}
+\begin{figure}[h]
+\begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \subfloat[Anatomique]{\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J00-Coreg01_Anat-masked-Cropped-slice10.jpg}}
@@ -189,11 +134,13 @@ L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'elis
 \\
 \hline
 \end{tabular}
+\end{center}
 \caption{Rat 11, jour 00, tranche 10}
 \label{11_dark_00}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
+\begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \subfloat[Anatomique]{\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/19-J00-Coreg01_Anat-masked-Cropped-slice9.jpg}}
@@ -215,11 +162,13 @@ L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'elis
 \\
 \hline
 \end{tabular}
+\end{center}
 \caption{Rat 19, jour 00, tranche 9}
 \label{19_dark_00}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
+\begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \subfloat[Anatomique]{\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/26-J00-Coreg01_Anat-masked-Cropped-slice8.jpg}}
@@ -241,11 +190,13 @@ L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'elis
 \\
 \hline
 \end{tabular}
+\end{center}
 \caption{Rat 26, jour 00, tranche 8}
 \label{26_dark_00}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
+\begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \subfloat[Anatomique]{\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/30-J00-Coreg01_Anat-masked-Cropped-slice11.jpg}}
@@ -267,24 +218,203 @@ L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'elis
 \\
 \hline
 \end{tabular}
+\end{center}
 \caption{Rat 30, jour 00, tranche 11}
 \label{30_dark_00}
 \end{figure}
 
-J'ai utilis\'e une technique similaire \g{a} celle utilis\'ee pour d\'elimiter les cerveaux afin de s\'electionner les r\'egions l\'es\'ees en CBF, %
-et de les convertir dans des fichiers texte exploitables sous R.
+\FloatBarrier
+%\par
+Avec des choix judicieux de contraste, on peut discerner, \g{a} l'oeil, des r\'egions l\'es\'ees sur les tranches segment\'ees de cerveau. %
+Plus particuli\g{e}rement, et pour tous les rats, on discerne une aire sombre sur les images en CBF au jour 00, %
+c'est-\g{a}-dire produites par l'examen r\'ealis\'e 30 minutes apr\g{e}s la reperfusion. %
+Cette aire se situe sur l'h\'emisph\g{e}re visible \g{a} gauche, et on retrouve des r\'egions similaires, mais plus petites, %
+sur des images obtenues dans les autres modalit\'es, notamment l'ADC : %
+voir les figures \ref{11_dark_00}, \ref{19_dark_00}, \ref{26_dark_00} et \ref{30_dark_00}. %
+L'isch\'emie focale transitoire se traduit pr\'ecis\'ement par une baisse du d\'ebit sanguin c\'er\'ebral %et la reperfusion ?
+L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'eliser l'ensemble des pixels initialement l\'es\'es.
 
+\etoile
+J'ai utilis\'e une technique similaire \g{a} celle d\'etaill\'ee ci-dessus pour la segmentation des cerveaux, %
+afin de s\'electionner les r\'egions l\'es\'ees en CBF, et de les convertir dans des fichiers texte exploitables sous R.
+
+\par
+Le tableau ci-dessous r\'ecapitule la taille, en nombre de pixels, des l\'esions ainsi d\'elimit\'ees sur les tranches suivables temporellement.
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+Tranches&6&7&8&9&10&11&12&13
+\\
+\hline
+Rat 11&&&&&813&&&
+\\
+\hline
+Rat 19&&&&742&654&&&
+\\
+\hline
+Rat 26&772&791&558&&&&&
+\\
+\hline
+Rat 30&&&&&&88&139&83
+\\
+\hline
+\end{tabular}
+
+\newpage
 \subsection{Traitement statistique avec R}% Utilisation de R : statistiques sur les cerveaux segment\'es, h\'emisph\g{e}res sains.
 
-% Quelques exemples de diagrammes
+Encourag\'e par Ang\'elique St\'ephanou et par Nicolas Glade, j'ai utilis\'ee les donn\'ees ainsi collect\'ees pour observer l'\'evolution, au cours de l'exp\'erience, %
+des diff\'erentes modalit\'es.
 
+\par
+Les diagrammes \ref{11_box_lch00}, \ref{19_box_lch00}, \ref{26_box_lch00} et \ref{30_box_lch00} permettent de lire facilement la r\'epartition des valeurs des diff\'erentes modalit\'es : ADC, BVf, CBF, CMRO2, SO2map et VSI. %
+Ces valeurs sont compar\'ees avec celles mesur\'ees sur le cerveau entier, et sur l'h\'emisph\g{e}re contralat\'eral -non desservi par l'art\g{e}re op\'er\'ee- le jour 0.
 
-% Comparaison entre les deux segmentation, éventuellement dans le section résultats : peu de différences entre ADC et CBF.
+\par
+Notons au passage que ce dernier choix ne revient pas \g{a} comparer avec un tissu sain : bien que ne subissant pas de dysfonctionnement significatif, %
+l'\'emisph\^g{e}re \og{}sain\fg{} subit \'egalement, notamment le permier jour, des r\'epercussions de l'intervention ou de la reperfusion. %
+L'\'evolution de l'\'etat de l'h\'emisph\g{e}re contralat\'eral est visible \g{a} la figure \ref{} et sera incorpor\'e au mod\g{e}le %\ref{}.
 
+%\ligneinter
 
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\subfloat[ADC]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/11_suivi_box_volCBFdark00_ADC.pdf}}
+&%
+\subfloat[BVf]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/11_suivi_box_volCBFdark00_BVf.pdf}}
+&%
+\subfloat[CBF]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/11_suivi_box_volCBFdark00_CBF.pdf}}
+\\
+\hline
+\subfloat[CMRO2]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/11_suivi_box_volCBFdark00_CMRO2.pdf}}
+&%
+\subfloat[SO2map]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/11_suivi_box_volCBFdark00_SO2map.pdf}}
+&%
+\subfloat[VSI]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/11_suivi_box_volCBFdark00_VSI.pdf}}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Rat num\'ero 11 : \'evolution par jour d'examen}
+\label{11_box_lch00}
+\end{figure}
 
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\subfloat[ADC]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/19_suivi_box_volCBFdark00_ADC.pdf}}
+&%
+\subfloat[BVf]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/19_suivi_box_volCBFdark00_BVf.pdf}}
+&%
+\subfloat[CBF]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/19_suivi_box_volCBFdark00_CBF.pdf}}
+\\
+\hline
+\subfloat[CMRO2]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/19_suivi_box_volCBFdark00_CMRO2.pdf}}
+&%
+\subfloat[SO2map]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/19_suivi_box_volCBFdark00_SO2map.pdf}}
+&%
+\subfloat[VSI]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/19_suivi_box_volCBFdark00_VSI.pdf}}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Rat num\'ero 19 : \'evolution par jour d'examen}
+\label{19_box_lch00}
+\end{figure}
 
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\subfloat[ADC]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/26_suivi_box_volCBFdark00_ADC.pdf}}
+&%
+\subfloat[BVf]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/26_suivi_box_volCBFdark00_BVf.pdf}}
+&%
+\subfloat[CBF]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/26_suivi_box_volCBFdark00_CBF.pdf}}
+\\
+\hline
+\subfloat[CMRO2]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/26_suivi_box_volCBFdark00_CMRO2.pdf}}
+&%
+\subfloat[SO2map]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/26_suivi_box_volCBFdark00_SO2map.pdf}}
+&%
+\subfloat[VSI]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/26_suivi_box_volCBFdark00_VSI.pdf}}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Rat num\'ero 26 : \'evolution par jour d'examen}
+\label{26_box_lch00}
+\end{figure}
 
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\subfloat[ADC]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/30_suivi_box_volCBFdark00_ADC.pdf}}
+&%
+\subfloat[BVf]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/30_suivi_box_volCBFdark00_BVf.pdf}}
+&%
+\subfloat[CBF]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/30_suivi_box_volCBFdark00_CBF.pdf}}
+\\
+\hline
+\subfloat[CMRO2]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/30_suivi_box_volCBFdark00_CMRO2.pdf}}
+&%
+\subfloat[SO2map]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/30_suivi_box_volCBFdark00_SO2map.pdf}}
+&%
+\subfloat[VSI]{\includegraphics[width=0.3\linewidth,height=5cm]{../../images_rapport/30_suivi_box_volCBFdark00_VSI.pdf}}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Rat num\'ero 30 : \'evolution par jour d'examen}
+\label{30_box_lch00}
+\end{figure}
+
+%\FloatBarrier
+Les diagrammes \ref{11_box_lch00} \g{a} \ref{30_box_lch00} montrent syst\'ematiquement une baisse des valeurs d'ADC 30 minutes apr\g{e}s la reperfusion, %
+ce qui correspond \g{a} un \'etat cytotoxique -oed\g{e}me- comme nous l'avons vu dans la section pr\'ec\'edente.
+
+\par
+Ces diagrammes indiquent aussi que les valeurs de BVf et de VSI sont, sauf pour le rat 11, corr\'el\'ees : %
+les tendances d'\'evolution en position ou en dispersion sont les m\^emes ; %
+rappelons qu'il s'agit l\g{a} respectivement de la proportion, en volume, de sang dans l'enc\'ephale et du diam\g{e}tre des vaisseaux sanguins.
+
+\etoile
+La distribution des valeurs \ref{26_box_lch00}, pour toutes les modalit\'es, est peu variable chez le rat num\'ero 26, et presque plus \g{a} partir du jour 8.
+
+\par
+Les diagrammes de la figure \ref{30_box_lch00}, qui correspondent aux seuls jours 0, 8 et 15 de l'exp\'erience, %
+indiquent une croissance globale de toutes les modalit\'es pour le rat num\'ero 30, sans que l'on puisse voir de lien plus particulier entre deux variables ; %
+la CMRO2, seule, se stabilise d\g{e}s le jour 8 apr\g{e}s avoir pris des valeurs initiales basses.
+
+\par
+Pour l'\'elaboration, et la validation du mod\g{e}le qui va suivre, j'ai donc choisi d'\'ecarter les rats num\'eros 26 et 30. %
+Compte tenu de la position : ant\'erieure \g{a} $8$ pour le rat 26, post\'erieure \g{a} $11$ pour le rat 30, %
+il est possible que les donn\'ees dont on dispose corresponde \g{a} une r\'egion p\'eriph\'erique de la l\'esion.
+
+\etoile
+Les rats 11 et 19 -figures \ref{11_box_lch00} et \ref{19_box_lch00}, pr\'esentent quelques similitudes : %
+outre le comportement de la SO2 d\'ej\g{a}mentionn\'e, on remarque une croissance et une grande dispersion des valeurs d'ADC de la l\'esion avec le temps.
+
+\par
+On constate aussi une chute des valeurs du CBF :
+\begin{itemize}
+\item le jour 8, chez le rat 11, elle accompagne une hausse de la BVf ;
+\item le jour 15, chez le rat 19, elle co\"incide avec des valeurs basses et peu dispers\'ees de la CMRO2.
+\end{itemize}
+
+\etoile
+Enfin, on remarque des valeurs de VSI beaucoup plus \'elev\'ees chez le rat 11 que chez tous les autres rats, %
+ceci est valable pour la r\'egion l\'es\'ee et pour l'h\'emisph\g{e}re contralat\'eral.
+
+\par
+En raison de cette diff\'erence inn\'ee entre le rat 11 et les autres rats, %
+j'ai choisi d'utiliser les donn\'ees disponibles sur le rat num\'ero 19 comme r\'ef\'erence pour mon mod\g{e}le pr\'edictif.
+
+\FloatBarrier
 \subsection{Le paquet R Mclust : une id\'ee de Nicolas Glade (TIMC)}% On peut utiliser sweaver
 
 % Genèse de l'idée.
@@ -294,4 +424,4 @@ S\'electionner des images de bonnes clusterisations.
 
 
 
-\subsection{}
+%\subsection{Le rat num\'ero 19}
