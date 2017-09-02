@@ -126,7 +126,10 @@ cluster_jfr_fmin <- function(data,cl_min,cl_max,min){# on adapte le rabotage à 
 
 # ------------------- Pour un affichage systématique des données tridimensionnelles : une représentation graphique par jour. ------------------- #
 
-rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt){# option : clusterisation sur les tranches dénoyautées suivables temporellement
+# Option : clusterisation sur les tranches privées de leurs ganglions (ventricules ?) suivables temporellement
+# Option 2 : sortie, .pdf ou dans Rstudio.
+
+rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt,opt_2){
   repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
                       'BVf'="fonctionnel_gris",
                       'CBF'="fonctionnel_gris",
@@ -162,40 +165,83 @@ rg_FONC_3d <- function(dim,fonc,rat,cl_bounds,opt){# option : clusterisation sur
     d.fonc <- d[,4]
     
     # On passe aux représentations graphiques
-
-    #par(mfrow = c(2,2))
-    m <- rbind(c(1,2,3),c(4,4,4))
-    layout(m, heights = c(1,3), width=c(1,1,1), respect = TRUE)
-
-    plot(d.clust, what="BIC")
-    plot(d.clust, what="classification", col=color.vector)
-    
-    FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
-    d.hist <- hist(d.fonc,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
-    
-    if (dim==2){ # Cerveaux en deux ou trois dimensions
-      plot(d$x, d$y, col=color.vector[d.clust$classification],
-           pch=20, cex=2*(1-d.clust$uncertainty)^4,
-           xlab='x', ylab='y',
-           main=paste("Cerveau ",rat,", J",day))
-      #plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, xlab='x', ylab='y',main=paste("Cerveau ",rat,", J",day))
+    if (opt_2=='pdf'){
+      #par(mfrow = c(2,2))
+      m <- rbind(c(1,2,3),c(4,4,4))
+      layout(m, heights = c(1,3), width=c(1,1,1), respect = TRUE)
+      
+      plot(d.clust, what="BIC")
+      plot(d.clust, what="classification", col=color.vector)
+      
+      FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
+      d.hist <- hist(d.fonc,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
+      
+      if (dim==2){ # Cerveaux en deux ou trois dimensions
+        nom <- sprintf("R%s/%s/%s-J%s-%s-cerveau_clust_proj2d.pdf")
+        pdf(file=nom)
+        plot(d$x, d$y, col=color.vector[d.clust$classification],
+             pch=20, cex=2*(1-d.clust$uncertainty)^4,
+             xlab='x', ylab='y',
+             main=paste("Cerveau ",rat,", J",day))
+        #plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, xlab='x', ylab='y',main=paste("Cerveau ",rat,", J",day))
+        dev.off()
+      }
+      else{
+        nom <- sprintf("R%s/%s/%s-J%s-%s-cerveau_clust.pdf")
+        pdf(file=nom)
+        cerveau.clust <- cbind(d,d.clust$classification)
+        colnames(cerveau.clust) <- c("x","y","z",'ADC',"Slice","clust")
+        scatterplot3d(cerveau.clust$x,
+                      cerveau.clust$y,
+                      cerveau.clust$Slice,
+                      #cerveau.clust$z, 
+                      color= color.vector[cerveau.clust$clust],
+                      pch=20,
+                      #cex=2*(1-d.clust$uncertainty)^4,
+                      xlab='x',
+                      ylab='y',
+                      zlab='Slice',#'z',
+                      lab.z=1+cerveau.clust$Slice[length(cerveau.clust$Slice)]-cerveau.clust$Slice[1],
+                      main=paste("Cerveau ",rat,", J",day)
+        )
+        dev.off()
+      }
     }
     else{
-      cerveau.clust <- cbind(d,d.clust$classification)
-      colnames(cerveau.clust) <- c("x","y","z",'ADC',"Slice","clust")
-      scatterplot3d(cerveau.clust$x,
-                    cerveau.clust$y,
-                    cerveau.clust$Slice,
-                    #cerveau.clust$z, 
-                    color= color.vector[cerveau.clust$clust],
-                    pch=20,
-                    #cex=2*(1-d.clust$uncertainty)^4,
-                    xlab='x',
-                    ylab='y',
-                    zlab='Slice',#'z',
-                    lab.z=1+cerveau.clust$Slice[length(cerveau.clust$Slice)]-cerveau.clust$Slice[1],
-                    main=paste("Cerveau ",rat,", J",day)
-      )
+      #par(mfrow = c(2,2))
+      m <- rbind(c(1,2,3),c(4,4,4))
+      layout(m, heights = c(1,3), width=c(1,1,1), respect = TRUE)
+      
+      plot(d.clust, what="BIC")
+      plot(d.clust, what="classification", col=color.vector)
+      
+      FONC.breaks <- seq(min(d.fonc)-0.1*min(d.fonc), max(d.fonc)+0.1*max(d.fonc), length.out=100)
+      d.hist <- hist(d.fonc,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
+      
+      if (dim==2){ # Cerveaux en deux ou trois dimensions
+        plot(d$x, d$y, col=color.vector[d.clust$classification],
+             pch=20, cex=2*(1-d.clust$uncertainty)^4,
+             xlab='x', ylab='y',
+             main=paste("Cerveau ",rat,", J",day))
+        #plot(d$x, d$y, col=color.vector[d.clust$classification], pch=20, xlab='x', ylab='y',main=paste("Cerveau ",rat,", J",day))
+      }
+      else{
+        cerveau.clust <- cbind(d,d.clust$classification)
+        colnames(cerveau.clust) <- c("x","y","z",'ADC',"Slice","clust")
+        scatterplot3d(cerveau.clust$x,
+                      cerveau.clust$y,
+                      cerveau.clust$Slice,
+                      #cerveau.clust$z, 
+                      color= color.vector[cerveau.clust$clust],
+                      pch=20,
+                      #cex=2*(1-d.clust$uncertainty)^4,
+                      xlab='x',
+                      ylab='y',
+                      zlab='Slice',#'z',
+                      lab.z=1+cerveau.clust$Slice[length(cerveau.clust$Slice)]-cerveau.clust$Slice[1],
+                      main=paste("Cerveau ",rat,", J",day)
+        )
+      }
     }
     # Fin de la représentation graphique du jour
   }
@@ -304,7 +350,9 @@ seg_clust_3d <- function(fonc,rat,cl_bounds,cl_seg,hemi){
 
 # ------------------- Comparaison graphique : tranches d'intérêt clusterisées au sein, ou non, de cerveaux entiers. ------------------- #
 
-comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche){
+# Option : sortie, .pdf ou dans Rstudio.
+
+comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche,opt){
   repertoires <- list('ADC'="fonctionnel_gris",# répertoire du rat courant
                       'BVf'="fonctionnel_gris",
                       'CBF'="fonctionnel_gris",
@@ -328,14 +376,7 @@ comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche){
     c.nan <- is.na(cerveau[,4])
     cerveau <- cerveau[!c.nan,]
     
-    #if (rat=="30"){# on retire les structures visibles à l'oeil, pour garder la substance blanche
-    #  c.clust.v0 <- cluster_jfr_fmin(cerveau,cl_min,cl_max,min_fonc)
-    #  cerveau <- cerveau[c.clust.v0$uncertainty>0.3,]
-    #}
-
     tranche <- cerveau[cerveau$Slice==num_tranche,]
-    #t.nan <- is.na(tranche[,4])
-    #tranche <- tranche[!t.nan,]
 
     c.clust <- cluster_jfr_fmin(cerveau,cl_min,cl_max,min_fonc)
     
@@ -346,54 +387,109 @@ comp_2vs3d_clust <- function(fonc,rat,cl_bounds,num_tranche){
 
     t.clust <- cluster_jfr_fmin(tranche,cl_min,cl_max,min_fonc) # tranche clusterisée seule
     
-    #plot.new()
-    m <- rbind(c(1,4),c(2,0),c(3,5))
-    layout(m, heights = c(1,1,1), width=c(1,1), respect = TRUE)
-    
-    # ------------------------------ Cerveau entier projeté, tranche d'intérêt, classification globale ------------------------------ #
-    
-    plot(tc$x, tc$y, col=color.vector[tc$ClLabel], # tranche extraite du cerveau entier clusterisé
-         pch=20,
-         cex=2*(1-tc$UncLabel)^4,
-         xlab='x', ylab='y',
-         main=sprintf("Tranche %i clusterisation induite",num_tranche),
-         cex.main = 1.5,
-         sub = sprintf("%s : Rat %s, J%s",fonc,rat,jour),
-         col.sub = 'red',
-         cex.sub=1.5
-         )
-    plot(cerveau$x, cerveau$y, col=color.vector[c.clust$classification], # cerveau entier clusterisé
-         pch=20,
-         cex=2*(1-c.clust$uncertainty)^4,
-         xlab='x', ylab='y',
-         main = sprintf("Cerveau entier clusterisé",num_tranche),
-         cex.main = 1.5
-         )
-    plot(c.clust, what="classification", col=color.vector)
-    title(sub = "Cerveau entier",
-          col.sub = 'red',
-          #cex.main = 1.5,
-          cex.sub=1.5
-          )
-    
-    # ------------------------------ Classification 2d pour la tranche d'intérêt ------------------------------ #
-    
-    plot(tranche$x, tranche$y, col=color.vector[t.clust$classification], # tranche seule
-         pch=20,
-         cex=2*(1-t.clust$uncertainty)^4,
-         xlab='x', ylab='y',
-         main=sprintf("Tranche %i clusterisée seule",num_tranche),
-         cex.main = 1.5,
-         sub = sprintf("%s : Rat %s, J%s",fonc,rat,jour),
-         col.sub = 'red',
-         cex.sub=1.5
-         )
-    plot(t.clust, what="classification", col=color.vector)
-    title(sub = sprintf("Tranche %i clusterisée seule",num_tranche),
-          col.sub = 'red',
-          #cex.main = 1.5,
-          cex.sub=1.5
-          )
+    if (opt==''){
+      #plot.new()
+      m <- rbind(c(1,4),c(2,0),c(3,5))
+      layout(m, heights = c(1,1,1), width=c(1,1), respect = TRUE)
+      
+      # ------------------------------ Cerveau entier projeté, tranche d'intérêt, classification globale ------------------------------ #
+      
+      plot(tc$x, tc$y, col=color.vector[tc$ClLabel], # tranche extraite du cerveau entier clusterisé
+           pch=20,
+           cex=2*(1-tc$UncLabel)^4,
+           xlab='x', ylab='y',
+           main=sprintf("Tranche %i clusterisation induite",num_tranche),
+           cex.main = 1.5,
+           sub = sprintf("%s : Rat %s, J%s",fonc,rat,jour),
+           col.sub = 'red',
+           cex.sub=1.5
+      )
+      plot(cerveau$x, cerveau$y, col=color.vector[c.clust$classification], # cerveau entier clusterisé
+           pch=20,
+           cex=2*(1-c.clust$uncertainty)^4,
+           xlab='x', ylab='y',
+           main = sprintf("Cerveau entier clusterisé",num_tranche),
+           cex.main = 1.5
+      )
+      plot(c.clust, what="classification", col=color.vector)
+      title(sub = "Cerveau entier",
+            col.sub = 'red',
+            #cex.main = 1.5,
+            cex.sub=1.5
+      )
+      
+      # ------------------------------ Classification 2d pour la tranche d'intérêt ------------------------------ #
+      
+      plot(tranche$x, tranche$y, col=color.vector[t.clust$classification], # tranche seule
+           pch=20,
+           cex=2*(1-t.clust$uncertainty)^4,
+           xlab='x', ylab='y',
+           main=sprintf("Tranche %i clusterisée seule",num_tranche),
+           cex.main = 1.5,
+           sub = sprintf("%s : Rat %s, J%s",fonc,rat,jour),
+           col.sub = 'red',
+           cex.sub=1.5
+      )
+      plot(t.clust, what="classification", col=color.vector)
+      title(sub = sprintf("Tranche %i clusterisée seule",num_tranche),
+            col.sub = 'red',
+            #cex.main = 1.5,
+            cex.sub=1.5
+      )
+    }
+    else if (opt=='pdf'){
+      nom <- sprintf("R%s/%s/%s-J%s-%s-comp%i2dvs3d.pdf",rat,"segmentation_manuelle",rat,jour,fonc,num_tranche)
+      pdf(file=nom)
+      
+      m <- rbind(c(1,4),c(2,0),c(3,5))
+      layout(m, heights = c(1,1,1), width=c(1,1), respect = TRUE)
+      
+      # ------------------------------ Cerveau entier projeté, tranche d'intérêt, classification globale ------------------------------ #
+      
+      plot(tc$x, tc$y, col=color.vector[tc$ClLabel], # tranche extraite du cerveau entier clusterisé
+           pch=20,
+           cex=2*(1-tc$UncLabel)^4,
+           xlab='x', ylab='y',
+           main=sprintf("Tranche %i clusterisation induite",num_tranche),
+           cex.main = 1.5,
+           sub = sprintf("%s : Rat %s, J%s",fonc,rat,jour),
+           col.sub = 'red',
+           cex.sub=1.5
+      )
+      plot(cerveau$x, cerveau$y, col=color.vector[c.clust$classification], # cerveau entier clusterisé
+           pch=20,
+           cex=2*(1-c.clust$uncertainty)^4,
+           xlab='x', ylab='y',
+           main = sprintf("Cerveau entier clusterisé",num_tranche),
+           cex.main = 1.5
+      )
+      plot(c.clust, what="classification", col=color.vector)
+      title(sub = "Cerveau entier",
+            col.sub = 'red',
+            #cex.main = 1.5,
+            cex.sub=1.5
+      )
+      
+      # ------------------------------ Classification 2d pour la tranche d'intérêt ------------------------------ #
+      
+      plot(tranche$x, tranche$y, col=color.vector[t.clust$classification], # tranche seule
+           pch=20,
+           cex=2*(1-t.clust$uncertainty)^4,
+           xlab='x', ylab='y',
+           main=sprintf("Tranche %i clusterisée seule",num_tranche),
+           cex.main = 1.5,
+           sub = sprintf("%s : Rat %s, J%s",fonc,rat,jour),
+           col.sub = 'red',
+           cex.sub=1.5
+      )
+      plot(t.clust, what="classification", col=color.vector)
+      title(sub = sprintf("Tranche %i clusterisée seule",num_tranche),
+            col.sub = 'red',
+            #cex.main = 1.5,
+            cex.sub=1.5
+      )
+      dev.off()
+    }
   }
 }
 
@@ -697,7 +793,65 @@ comp_clust_vol00 <- function(rat,liste_s_slice,cl,lm_fonc,opt_1,opt_2){
       l.clust <- cluster_jfr_fmin(cerveau_les,cl_min,cl_max,lm_fonc[[fonc]])
       
       if (opt_2=='pdf'){
-        # on verra
+        liste_sauv <- lsauv_seg_clust[[jour]]
+        
+        seg_cerveau_les <-liste_sauv[["vol"]]
+        seg_les <- liste_sauv[["val"]]
+        seg.l.clust <- liste_sauv[["clust"]]
+        
+        nom <- sprintf("R%s/%s/%s-J%s-comp%svs%s_clust_lesion.pdf",rat,"segmentation_manuelle",rat,jour,fonc,fonc_seg)
+        pdf(file=nom)
+        
+        layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6,byrow = TRUE),
+               widths=c(1,1,1,1,1,1),
+               heights=c(1,2)
+        )
+        
+        #screen( 3 )
+        plot(l.clust, what="BIC")
+        #screen( 4 )
+        plot(l.clust, what="classification", col=color.vector)
+        
+        FONC.breaks <- seq(min(les)-0.1*min(les), max(les)+0.1*max(les), length.out=100)
+        #screen( 5 )
+        l.hist <- hist(les,breaks=FONC.breaks, col='grey50',main=paste("Histogram of",fonc))
+        
+        #screen( 6 )
+        les.clust <- cbind(cerveau_les,l.clust$classification)
+        colnames(les.clust) <- c("x","y","z",fonc,"Slice","clust")
+        scatterplot3d(les.clust$x,
+                      les.clust$y,
+                      les.clust$Slice,
+                      #cerveau.clust$z, 
+                      color= color.vector[les.clust$clust],
+                      pch=20,
+                      cex.symbols=2.5*(1-l.clust$uncertainty)^3,
+                      xlab='x',
+                      ylab='y',
+                      zlab='Slice',#'z',
+                      lab.z=1+les.clust$Slice[length(les.clust$Slice)]-les.clust$Slice[1],
+                      main=sprintf("Cerveau %s, J%s, %s",rat,jour,fonc)
+        )
+        
+        #screen( 7 )
+        seg.les.clust <- cbind(seg_cerveau_les,seg.l.clust$classification)
+        colnames(seg.les.clust) <- c("x","y","z",fonc_seg,"Slice","clust")
+        scatterplot3d(seg.les.clust$x,
+                      seg.les.clust$y,
+                      seg.les.clust$Slice,
+                      #cerveau.clust$z, 
+                      color= color.vector[seg.les.clust$clust],
+                      pch=20,
+                      cex.symbols=2.5*(1-seg.l.clust$uncertainty)^3,
+                      xlab='x',
+                      ylab='y',
+                      zlab='Slice',#'z',
+                      lab.z=1+seg.les.clust$Slice[length(seg.les.clust$Slice)]-seg.les.clust$Slice[1],
+                      main=paste("Comparaison ",rat,", J",jour,fonc_seg)
+        )
+        title(sprintf("Zone lésée clusterisée : rat %s, modalité %s, jour %s",rat,fonc,jour),outer=TRUE)
+        
+        dev.off()
       }# une lésion imprimée
       else{# On passe à la représentation graphique
         liste_sauv <- lsauv_seg_clust[[jour]]
@@ -951,7 +1105,7 @@ dgris_temp_fonc <- function(rat,hemi,opt_1,opt_2,opt_3,opt_4){#liste_s_slice,
         #title <- paste(title,segtitle)
         
         if (opt_4=='pdf'){
-          pdf(file = sprintf("%s/%s_suivi_dens_cer%s_contra%s_%s-%s.pdf","segmentation_manuelle",num_rat,fonc_seg,opt_3,fonc,jour))
+          pdf(file = sprintf("R%s/%s/%s_suivi_dens_cer%s_contra%s_%s-%s.pdf",rat,"segmentation_manuelle",rat,fonc_seg,opt_3,fonc,jour))
           if (length(isch)!=0){
             plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle))
             lines(dsti$x, ni/n*dsti$y, lwd = 2, col = "darkred")
@@ -1101,7 +1255,7 @@ dgris_temp_fonc <- function(rat,hemi,opt_1,opt_2,opt_3,opt_4){#liste_s_slice,
         if (opt_4=='pdf'){# on imprime dans un fichier
           
           if (length(les)!=0){
-            pdf(file = sprintf("%s/%s_suivi_dens_sl%s_contra%s_%s-%s.pdf","segmentation_manuelle",num_rat,fonc_seg,opt_3,fonc,jour))
+            pdf(file = sprintf("R%s/%s/%s_suivi_dens_sl%s_contra%s_%s-%s.pdf",rat,"segmentation_manuelle",rat,fonc_seg,opt_3,fonc,jour))
             plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle),ylim = c(-0.01*max(dsts$y),2*max(dsts$y)))
             lines(dstl$x, nl/n*dstl$y, lwd = 2, col = "darkred")
             lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
@@ -1258,7 +1412,7 @@ dgris_temp_fonc <- function(rat,hemi,opt_1,opt_2,opt_3,opt_4){#liste_s_slice,
         if (opt_4=='pdf'){# on imprime dans un fichier
           
           if (length(les)!=0){
-            pdf(file = sprintf("%s/%s_suivi_dens_sl%s_contra%s_%s-%s.pdf","segmentation_manuelle",num_rat,fonc_seg,opt_3,fonc,jour))
+            pdf(file = sprintf("R%s/%s/%s_suivi_dens_sl%s_contra%s_%s-%s.pdf",rat,"segmentation_manuelle",rat,fonc_seg,opt_3,fonc,jour))
             plot(dst$x,dst$y,type="n",main=title,sub=paste(subtitle,segtitle),ylim = c(-0.01*max(dsts$y),2*max(dsts$y)))
             lines(dstl$x, nl/n*dstl$y, lwd = 2, col = "darkred")
             lines(dsts$x, ns/n*dsts$y, lwd = 2, lty = 2, col = "darkblue")
@@ -1419,7 +1573,7 @@ ngris_box_fonc <- function(rat, hemi, opt_1, liste_s_slice,opt_2){
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_2=='pdf'){
-      file_name <- sprintf("%s/%s_suivi_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt_1,fonc)
+      file_name <- sprintf("R%s/%s/%s_suivi_box_vol%s_%s.pdf",rat,"segmentation_manuelle",rat,opt_1,fonc)
       
       # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
       p <- ggplot(d,
@@ -1485,7 +1639,7 @@ comp_rats_fonc <- function(hemi,liste_r_tr,fonc,opt_1,opt_2){
   for (rat in noms_rats){
     
     tranches <- liste_r_tr[[rat]]
-    subtitle <- sprintf("Rat%s, tranche(s) ",rat)
+    subtitle <- sprintf("Rat %s, tranche(s) ",rat)
     for (tr in tranches){
       subtitle <- paste(subtitle,'-',tr)
     }
@@ -1570,7 +1724,7 @@ comp_rats_fonc <- function(hemi,liste_r_tr,fonc,opt_1,opt_2){
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_2=='pdf'){
-      file_name <- sprintf("R%s/%s/%s_suivi_box_vol%s_%s.pdf",num_rat,"segmentation_manuelle",num_rat,opt_1,fonc)
+      file_name <- sprintf("%s_suivi_box_vol%s_%s.pdf",rat,opt_1,fonc)
       
       # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
       p <- ggplot(d,
@@ -1640,7 +1794,7 @@ comp_rats_clust_fonc <- function(hemi,cl,lm_fonc,liste_r_tr,fonc,opt_1,opt_2){
     # --------- Initialisation pour le graphique du rat courant --------- #
     block <- {
       tranches <- liste_r_tr[[rat]]
-      subtitle <- sprintf("Rat%s, tranche(s) ",rat)
+      subtitle <- sprintf("Rat %s, tranche(s) ",rat)
       for (tr in tranches){
         subtitle <- paste(subtitle,'-',tr)
       }
@@ -1729,7 +1883,7 @@ comp_rats_clust_fonc <- function(hemi,cl,lm_fonc,liste_r_tr,fonc,opt_1,opt_2){
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_2=='pdf'){
-      file_name <- sprintf("%s_suivi_box_vol%s_%s.pdf",
+      file_name <- sprintf("%s_suivi_clust_box_vol%s_%s.pdf",
                            #rat,"segmentation_manuelle",
                            rat,opt_1,fonc)
       
@@ -1922,7 +2076,7 @@ ngris_box_fonc_cl_les <- function(rat,hemi,opt_1,opt_2,fonc_cl,lm_fonc,liste_s_s
   # Représentation graphique : couleurs pour la lésion seulement.
   if (opt_2==''){
     tranches <- liste_s_slice[[fonc]]
-    subtitle <- sprintf("Rat%s, tranche(s) ",rat)
+    subtitle <- sprintf("Rat %s, tranche(s) ",rat)
     for (tr in tranches){
       subtitle <- paste(subtitle,'-',tr)
     }
@@ -1933,7 +2087,7 @@ ngris_box_fonc_cl_les <- function(rat,hemi,opt_1,opt_2,fonc_cl,lm_fonc,liste_s_s
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_3=='pdf'){
-      file_name = sprintf("%s/%s_suivi_clust_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt_1,fonc)
+      file_name = sprintf("R%s/%s/%s_suivi_pixelclust_box_vol%s_%s.pdf",rat,"segmentation_manuelle",rat,opt_1,fonc)
       #pdf(file_name)
       
       # On réalise le ggplot
@@ -1953,7 +2107,6 @@ ngris_box_fonc_cl_les <- function(rat,hemi,opt_1,opt_2,fonc_cl,lm_fonc,liste_s_s
       ggsave(filename=file_name,plot = p)
     }
     else{
-      #print("dd")
       # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
       p <- ggplot(d,
                   aes(x=d$Jour,y=d[,3],fill=d$Zone
@@ -1975,7 +2128,7 @@ ngris_box_fonc_cl_les <- function(rat,hemi,opt_1,opt_2,fonc_cl,lm_fonc,liste_s_s
     colnames(d) <- c("x","y",fonc,"Slice","Zone","Jour")
     
     tranches <- liste_s_slice[[fonc_cl]]
-    subtitle <- sprintf("Rat%s, tranche(s) ",rat)
+    subtitle <- sprintf("Rat %s, tranche(s) ",rat)
     for (tr in tranches){
       subtitle <- paste(subtitle,'-',tr)
     }
@@ -2101,7 +2254,7 @@ ngris_box_fonc_cl_les <- function(rat,hemi,opt_1,opt_2,fonc_cl,lm_fonc,liste_s_s
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_3=='pdf'){
-      file_name = sprintf("%s/%s_suivi_clust_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt_1,fonc)
+      file_name = sprintf("%s/%s_suivi_pixelclust_box_vol%s_%s.pdf",rat,"segmentation_manuelle",rat,opt_1,fonc)
       #pdf(file_name)
       
       # On réalise le ggplot
@@ -2407,12 +2560,12 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
   
   for (fonc in liste_fonc){
     
-    # On crée la dataframe pour le suivi de la fonctionnalioté courante
+    # On crée la dataframe pour le suivi de la fonctionnalité courante
     d <- data.frame(matrix(ncol = 6, nrow = 0))
     colnames(d) <- c("x","y",fonc,"Slice","Zone","Jour")
     
     tranches <- liste_s_slice[[fonc]]
-    subtitle <- sprintf("Rat%s, tranche(s) ",rat)
+    subtitle <- sprintf("Rat %s, tranche(s) ",rat)
     for (tr in tranches){
       subtitle <- paste(subtitle,'-',tr)
     }
@@ -2493,7 +2646,7 @@ ngris_box_clust <- function(rat, hemi, cl, lm_fonc, opt_1, liste_s_slice, opt_2)
     gg_title <- sprintf("Evolution de %s, segmentation %s",fonc,fonc_seg)
     
     if (opt_2=='pdf'){
-      file_name = sprintf("%s/%s_suivi_clust_box_vol%s_%s.pdf","segmentation_manuelle",num_rat,opt_1,fonc)
+      file_name = sprintf("R%s/%s/%s_suivi_clust_box_vol%s_%s.pdf",rat,"segmentation_manuelle",num,opt_1,fonc)
       #pdf(file_name)
       
       # On réalise le ggplot
@@ -2781,7 +2934,7 @@ carte_fonc_rat <- function(rat,fonc,hemi,opt_1,opt_2){
     d <- as.data.frame(cbind(cerveau_hem[,1:2],cerveau_hem[,4:5]),stringsAsFactors=FALSE)#,'Hem sain J00'
     colnames(d) <- c("x","y",fonc,"Slice")#,"Zone")
     # Un seul jour : opt_1
-    # Seulement la région saine
+    # Seulement la région contralatérale
     
     liste.nan <- is.na(d[,3])
     d <- d[!liste.nan,]
@@ -2790,7 +2943,7 @@ carte_fonc_rat <- function(rat,fonc,hemi,opt_1,opt_2){
     
     if (opt_2=='pdf'){
       d$Slice <- as.character(d$Slice)
-      file_name <- #sprintf(".pdf","segmentation_manuelle",num_rat,opt,fonc)
+      file_name <- sprintf("R%s/%s/%s-hem_contra-J%s-%s.pdf",rat,"segmentation_manuelle",rat,jour,fonc)
         
         # On va représenter l'évolution des valeurs de fonc sur la zone lésée, et comparer avec ...
         p <- ggplot(d,
@@ -2828,10 +2981,6 @@ carte_fonc_rat <- function(rat,fonc,hemi,opt_1,opt_2){
     }
   }
 }
-
-# ------------------- Suivi temporel de l'hémisphère contralatéral ------------------- #
-
-#suivi_contra_rat
 
 # ------------------- Suivi temporel de l'étendue d'une zone anormale, graphiques des différentes fonctionnalités superposés ------------------- #
 
