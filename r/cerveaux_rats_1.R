@@ -52,7 +52,7 @@ liste_jours_BVf <- list("11"=jours_R11_BVf,"19"=jours_R19_BVf,"26"=jours_R26_BVf
 
 #---------------------------- Base de données : CBF ----------------------------#
 
-jours_R11_CBF <- c("00","03","08","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
+jours_R11_CBF <- c("00","03","08","15","22") # attention à la slice 8, J00 qui est dans le fichier .csv
 jours_R19_CBF <- c("00","03","08","15","22")
 jours_R26_CBF <- c("00","03","08","15","22")
 jours_R30_CBF <- c("00","08","15")
@@ -61,7 +61,7 @@ liste_jours_CBF <- list("11"=jours_R11_CBF,"19"=jours_R19_CBF,"26"=jours_R26_CBF
 
 #---------------------------- Base de données : CMRO2 ----------------------------#
 
-jours_R11_CMRO2 <- c("00","03","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
+jours_R11_CMRO2 <- c("00","03","15","22") # attention à la slice 8, J00 qui est dans le fichier .csv
 jours_R19_CMRO2 <- c("00","08","15","22")
 jours_R26_CMRO2 <- c("00","03","08","15","22")
 jours_R30_CMRO2 <- c("00","08","15")
@@ -70,7 +70,7 @@ liste_jours_CMRO2 <- list("11"=jours_R11_CMRO2,"19"=jours_R19_CMRO2,"26"=jours_R
 
 #---------------------------- Base de données : SO2map ----------------------------#
 
-jours_R11_SO2map <- c("00","03","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
+jours_R11_SO2map <- c("00","03","15","22") # attention à la slice 8, J00 qui est dans le fichier .csv
 jours_R19_SO2map <- c("00","08","15","22")
 jours_R26_SO2map <- c("00","03","08","15","22")
 jours_R30_SO2map <- c("00","08","15")
@@ -88,7 +88,7 @@ liste_jours_T1map <- list("11"=jours_R11_T1map,"19"=jours_R19_T1map,"26"=jours_R
 
 #---------------------------- Base de données : VSI ----------------------------#
 
-jours_R11_VSI <- c("00","03","08","15","22") # attension à la slice 8, J00 qui est dans le fichier .csv
+jours_R11_VSI <- c("00","03","08","15","22") # attention à la slice 8, J00 qui est dans le fichier .csv
 jours_R19_VSI <- c("00","08","15","22")
 jours_R26_VSI <- c("00","03","08","15","22")
 jours_R30_VSI <- c("00","08","15")
@@ -163,7 +163,7 @@ for (tr in c(6:12)){
 
 fr_hemi <- c(5,-240) # tranches Anat et autres modalités recalées
 
-# -- Répertoires : ceus des rats
+# -- Répertoires : ceux des rats
 num_rat <- "11"
 vol_lesADC00(num_rat,c(10))
 num_rat <- "19"
@@ -238,7 +238,7 @@ dgris_temp_fonc(num_rat,fr_hemi,liste_suivi_slice,'dark','pdf')
 ## --> seg_clust_3d.
 ## --> comp_2vs3d_clust pour comparer, sur une tranche d'intérêt, la classification induite depuis la 3d d'une classification issue de la clusterisation 2d.
 
-# 3- Extraction de données. On s'appuie sur l'étude graphique de l'étape précédente..
+# 3- Extraction de données. On s'appuie sur l'étude graphique de l'étape précédente.
 ## --> seg_cl_FONC.
 
 # 4- Suivi des densités de niveaux de gris, par fonctionnalité, en utilisant des segmentations : commune à toutes les fonctionnalités ou respectivement réalisées avec les foctionnalités étudiées.
@@ -1008,7 +1008,12 @@ liste_les_jf19_cl <- list('CBF'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,2),"15"=c(
                           'SO2map'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,2)),
                           'BVf'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,1))
 )
-liste_les_jfr_cl <- list("11"=liste_les_jf11_cl,"19"=liste_les_jf19_cl,"26"='',"30"='')
+liste_les_jf26_cl <- list('CBF'=list("00"=c(1,1),"03"=c(1,2),"08"=c(1,1),"15"=c(1,1),"22"=c(1,1)),
+                          #'CMRO2'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,2),"15"=c(1,1),"22"=c(1,2)),
+                          'SO2map'=list("00"=c(1,1),"03"=c(1,2),"08"=c(1,1),"15"=c(1,1),"22"=c(1,2))#,
+                          #'BVf'=list("00"=c(1,1),"03"=c(1,1),"08"=c(1,1),"15"=c(1,2),"22"=c(1,1))
+)
+liste_les_jfr_cl <- list("11"=liste_les_jf11_cl,"19"=liste_les_jf19_cl,"26"=liste_les_jf26_cl,"30"='')
 
 num_rat <- "11"
 liste_suivi_slice <- liste_ss_rat[[num_rat]]
@@ -1046,7 +1051,7 @@ ngris_box_clust(num_rat, fr_hemi, c(1,3), liste_min_fonc, 'CBFdark00', liste_sui
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'CBFdark00', liste_suivi_slice, 'pdf')
 
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'ADCdark00','')
-# Attention avec liste_fonc : commencer avec la modalité de segmentation.
+
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'CBFdark00','')
 
 suivi_hemC_rat19 <- function(hemi,fonc){
@@ -1092,6 +1097,8 @@ ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'CBFdark00', liste_sui
 
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'CBFdark00','')
 
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"03",'CBF',liste_min_fonc,liste_suivi_slice,'')
+
 num_rat <- "30"
 liste_suivi_slice <- liste_ss_rat[[num_rat]]
 
@@ -1124,7 +1131,9 @@ comp_rats_clust_fonc(fr_hemi,c(1,2),liste_min_fonc,liste_rats_tr,'CMRO2','CBFdar
 #comp_rats_clust_fonc(fr_hemi,c(1,2),liste_min_fonc,liste_rats_tr,'SO2map','CBFdark00','pdf')
 #comp_rats_clust_fonc(fr_hemi,c(1,2),liste_min_fonc,liste_rats_tr,'VSI','CBFdark00','pdf')
 
-
+comp_rats_fonc(fr_hemi,liste_rats_tr,'T1map','CBFdark00','')
+comp_rats_fonc(fr_hemi,liste_rats_tr,'ADC','CBFdark00','')
+comp_rats_fonc(fr_hemi,liste_rats_tr,'CBF','CBFdark00','')
 
 ## Une autre version
 #carte_fonc_rat(fonc,fr_hemi,"00",'')
@@ -1228,22 +1237,36 @@ aff_suivi_voxels(num_rat,'VSI',10,c(60,40),7,'hist','')
 ###----------------- Modèle construit à partir du rat 19. -----------------###
 
 num_rat <- "19"
-liste_fonc <- list('CBF','CMRO2','SO2map','BVf','ADC','VSI')
+liste_fonc <- list('CBF','CMRO2','SO2map','BVf','ADC','VSI')#
 
 # ---- Vers le répertoire fonctionnel_gris. ---- #
 ## Initialisation pour le modèle 2 ##
-cerveau_multipar(num_rat,"automate_2",c(9),liste_fonc)
+cerveau_multipar(num_rat,"automate_2",c(9),liste_fonc,list('CBF','CMRO2','SO2map'))
 ## Initialisation pour le modèle 3demi ##
-cerveau_multipar(num_rat,"automate_3demi",c(9),liste_fonc)
-cerveau_multipar(num_rat,"automate_3demi",c(10),liste_fonc)
-cerveau_multipar(num_rat,"automate_3demi",c(9,10),liste_fonc)
+cerveau_multipar(num_rat,"automate_3demi",c(9),liste_fonc,list())
+cerveau_multipar(num_rat,"automate_3demi",c(10),liste_fonc,list())
+cerveau_multipar(num_rat,"automate_3demi",c(9,10),liste_fonc,list())
 
 
 color.vector = c('darkred','cyan','red','brown','gold','orange','blue')
 
+affichage_etats_cerveau(num_rat,"automate_2",c(9),"00",list(),'')
+affichage_etats_cerveau(num_rat,"automate_2",c(9),"00",list('CBF','CMRO2','SO2map'),'')
 
-affichage_etats_cerveau(num_rat,"automate_2",c(9),"00",'')
+affichage_etats_cerveau(num_rat,"automate_3demi",c(9),"08",list(),'')
+affichage_etats_cerveau(num_rat,"automate_3demi",c(10),"08",list(),'')
+affichage_etats_cerveau(num_rat,"automate_3demi",c(9,10),"08",list(),'')
 
-affichage_etats_cerveau(num_rat,"automate_3demi",c(9),"08",'')
-affichage_etats_cerveau(num_rat,"automate_3demi",c(10),"08",'')
-affichage_etats_cerveau(num_rat,"automate_3demi",c(9,10),"08",'')
+
+
+###----------------- Même modèle, essai avec les données des autres rats. -----------------###
+num_rat <- "11"
+liste_fonc <- list('CBF','SO2map','BVf','ADC','VSI','CMRO2')
+cerveau_multipar(num_rat,"automate_2",c(10),liste_fonc)
+affichage_etats_cerveau(num_rat,"automate_2",c(10),"00",'')
+
+
+
+num_rat <- "26"
+cerveau_multipar(num_rat,"automate_2",c(8),liste_fonc)
+affichage_etats_cerveau(num_rat,"automate_2",c(8),"00",'')
