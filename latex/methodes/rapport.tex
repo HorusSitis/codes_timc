@@ -13,7 +13,7 @@ Remarque : pour renuméroter les sous-figures de la même manière
 	   la ligne \let\p@subfigure\thefigure dans le préambule.
 \end{comment}
 
-\subsection{Protocole exp\'erimental : isch\'emie induite sur des rats par suture intraluminale}
+\subsection{Protocole exp\'erimental : isch\'emie focale transitoire induite sur des rats par suture intraluminale}
 
 Ces exp\'eriences ont \'et\'e men\'ees \g{a} l'Institut de Neurosciences de Grenoble (GIN) par Benjamin Lemasson, %
 et m'ont \'e\'e transmises \g{a} la suite d'une r\'eunion \g{a} laquelle j'ai assist\'e au GIN %
@@ -66,6 +66,7 @@ l'image brute en T2 \og{} Anatomique\fg{}, l'ADC, le BVf, le CBF, la CMRO2, la S
 \label{ex_irm_multipar}
 \end{figure}
 
+\FloatBarrier
 \subsection{Traitement d'images avec ImageJ}
 
 J'ai choisi de traiter pr\'ealablement les images r\'ealis\'ees en niveaux de gris par Benjamin Lemasson, \g{a} l'aide du logiciel ImageJ : %
@@ -86,7 +87,7 @@ Ma d\'emarche a \'et\'e la suivante :
 \newcounter{stock}
 \setcounter{stock}{\value{enumi}}
 
-\begin{figure}%[h]%Ajouter les colonnes correspondant à anatomique, ADC sans contour ce ADC segmentée.
+\begin{figure}[!h]%Ajouter les colonnes correspondant à anatomique, ADC sans contour ce ADC segmentée.
 \includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}
 \hfill
 \includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}
@@ -111,7 +112,7 @@ pour tous les jours d'examens. %
 Ces tranches sont donc utilisables pour effectuer un suivi temporel des valeurs mesur\'ees ou calcul\'ees, pixel par pixel, %
 ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 
-\begin{figure}[h]
+\begin{figure}[!p]
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -139,7 +140,7 @@ ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 \label{11_dark_00}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!p]
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -167,7 +168,7 @@ ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 \label{19_dark_00}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!p]
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -195,7 +196,7 @@ ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 \label{26_dark_00}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!p]
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -223,8 +224,8 @@ ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 \label{30_dark_00}
 \end{figure}
 
-\FloatBarrier
-%\par
+%\FloatBarrier
+\par
 Avec des choix judicieux de contraste, on peut discerner, \g{a} l'oeil, des r\'egions l\'es\'ees sur les tranches segment\'ees de cerveau. %
 Plus particuli\g{e}rement, et pour tous les rats, on discerne une aire sombre sur les images en CBF au jour 00, %
 c'est-\g{a}-dire produites par l'examen r\'ealis\'e 30 minutes apr\g{e}s la reperfusion. %
@@ -235,15 +236,16 @@ L'isch\'emie focale transitoire se traduit pr\'ecis\'ement par une baisse du d\'
 L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'eliser l'ensemble des pixels initialement l\'es\'es.
 
 \etoile
-J'ai utilis\'e une technique similaire \g{a} celle d\'etaill\'ee ci-dessus pour la segmentation des cerveaux, %
+J'ai utilis\'e une technique similaire \g{a} celle d\'etaill\'ee ci-dessus pour la segmentation des cerveaux -voir la figure \ref{cbf_seg_19}, %
 afin de s\'electionner les r\'egions l\'es\'ees en CBF, et de les convertir dans des fichiers texte exploitables sous R.
 
 \par
 Le tableau ci-dessous r\'ecapitule la taille, en nombre de pixels, des l\'esions ainsi d\'elimit\'ees sur les tranches suivables temporellement.
 
+\begin{multicols}{2}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
-Tranches&6&7&8&9&10&11&12&13
+\small{Tranche}&6&7&8&9&10&11&12&13
 \\
 \hline
 Rat 11&&&&&813&&&
@@ -260,7 +262,20 @@ Rat 30&&&&&&88&139&83
 \hline
 \end{tabular}
 
+\columnbreak
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.45\linewidth, height=3cm]{../../images_rapport/19-J00-segCBF-slice9.jpg}
+\end{center}
+\caption{D\'elimitation d'un contour : rat 19, tranche 9. On utilise une image du CBF.}
+\label{cbf_seg_19}
+\end{figure}
+\end{multicols}
+
+
+
 \newpage
+\FloatBarrier
 \subsection{Traitement statistique avec R}% Utilisation de R : statistiques sur les cerveaux segment\'es, h\'emisph\g{e}res sains.
 
 Encourag\'e par Ang\'elique St\'ephanou et par Nicolas Glade, j'ai utilis\'ee les donn\'ees ainsi collect\'ees pour observer l'\'evolution, au cours de l'exp\'erience, %
@@ -418,10 +433,126 @@ j'ai choisi d'utiliser les donn\'ees disponibles sur le rat num\'ero 19 comme r\
 \subsection{Le paquet R Mclust : une id\'ee de Nicolas Glade (TIMC)}% On peut utiliser sweaver
 
 % Genèse de l'idée.
+%Nicolas Glade \'etait parti du constat suivant : pour certaines tranches examin\'ees, %
+%les valeurs calcul\'ees en ADC pour le jour 0 peuvent \^etre regroup\'ees suivant un m\'elange de lois gaussiennes, %
 
 
-S\'electionner des images de bonnes clusterisations.
+%\par
+%Pour cela, il avait utilis\'e  
+
+A partir d'une base de donn\'ees g\'en\'er\'ee sur la segmentation des cerveaux de rats, Nicolas Glade a utilis\'e la fonction \'eponyme du paquet R Mclust %
+pour classifier les valeurs prises par l'ADC sur une tranche de cerveau, au premier jour d'examen.
+
+\par
+En effet, la librairie Mclust permet de classifier un ensemble de donn\'ees, que l'on suppose \^etre r\'eparties selon un m\'elange gaussien, %
+en utilisant une m\'ethode de maximum de vraisemblance.
+
+\par
+La figure \ref{exem_ADC_19} illustre, dans le cas tridimensionnel o\g{u} l'on effectue la classification sur plusieirs tranches, juxtapos\'ees, simultan\'ement, %
+le premier r\'esultat obtenu par Nicolas Glade.
+
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth,height=13cm]{../../images_rapport/19-J00-ADC-cerveau_clhist_clust.pdf}
+\caption{Classification des valeurs d'ADC suivant un mod\g{e}le de m\'elange gaussien, avec quatre composantes.
+%\\
+%
+}
+\label{exem_ADC_19}
+\end{figure}
+
+\par
+Les deux premiers clusters, en bleu et en rouge, de la classification correspondent aux deux pics, bien visibles, sur l'histogramme de la figure \ref{exem_ADC_19}. %
+Les distributions d'ADC peuvent \g{e}tre r\'esum\'ees par les diagrammes en bo\^ite de la figure \ref{19_box_lch00}, %
+et qui concernent respectivement la r\'egion l\'es\'ee et l'h\'emisph\g{e}re contralat\'eral.
+
+\par
+L'emplacement et la forme du cluster en bleu \'evoque les zones sombres visibles en ADC, BVf ou CBF sur les images de la figure \ref{19_box_lch00} %
+et dont la derni\g{e}re a servi \g{a} d\'efinir la l\'esion -voir \ref{cbf_seg_19}.
+
+\par
+Le troisi\g{e}me cluster du m\'elange correspond, selon Nicolas Glade, \g{a} un m\'elange de diff\'erentes structures ; %
+en effet, l'existence de deux composantes connexes sur le graphique laisse penser que ce cluster pourrait \^etre encore d\'ecompos\'e. %
+Peut-\^etre touche-t-on d\g{e}s lors aux limites de la d\'ecomposition en densit\'es gaussiennes, ou que le nombre de clusters pourrait simplement \^etre plus important, %
+au d\'etriment d'une bonne lisibilit\'e de la figure.
+
+\par
+Le dernier cluster est principalement compos\'e des pixels avec la diffusivit\'e la plus forte. La signification physiologique de cette propri\'et\'e n'est pas un objectif de ce stage.
+
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-BVf-cerveau_clust.pdf}
+&
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-CBF-cerveau_clust.pdf}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Deux autres exemples pour le jour 00.%
+\\%
+On remarque beaucoup de donn\'ees manquantes en CBF, au niveau de la l\'esion pr\'esum\'ee.%
+}
+\label{19_CBF-BVf_3d00}
+\end{figure}
+
+\etoile
+\ref{19_CBF-BVf_3d00}
+
+\subsubsection{La classification meilleure que l'oeil ?}
+
+%% Pour ou contre : listes. %%
+
+% Jours autres que le premier : travail difficile pour l'oeil.
+% De bonnes choses en ADC pour la deuxième moitié du mois.
+
+% On peut être tenté d'utiliser la classification avec mclust pour suivre l'évolution temporelle de l'étendue de la lésion.
+% Mieux : la classification ouvrirait une discuttion sur la caractérisation de la lésion : quelle modalité est la plus pertinente ?
+
+% Problème des parasites pour l'extraction des données.
+% Beaucoup d'images sont de mauvaise qualité.
+% Souvent, les clusters sont dépourvus d'une signification qui serait comparable à celle dégagée dans le cas précédent : ADC au jour 0.
+% La classification met peut-être au jour certaines structures physiologiques ! VSI, vascularisation ? ... Mais cela ne permet pas, la plupart du temps de caractériser la lésion cf...
+
+
+%\begin{figure}[!p]
+%\end{figure}
+
+
+\subsubsection{Mclust au service d'une mod\'elisation pour l'\'evolution de la l\'esion}
+
+% Point intéressant : la fonction mclust prend en argument, outre la base de données à classifier,
+% un vecteur constitué d'entiers positifs qui paramètre une famille de modèles que mclust se propose de calculer.
+% Ainsi, la fonction calcule \emph{plusieurs} mélanges gaussiens, un pour chacun des entiers du vecteur pris en argument,
+% puis sélectionne le meilleur modèle avec le critère BIC.
+% Il est d'ailleurs possibles de demander à R d'inclure, dans une représentation graphique,
+% les différentes valeurs de BIC associées à chaque possibilité de nombre de clusters.
+% On peut ainsi visualiser la pertinence du choix d'un nombre de clusters particulier pour la classsification.
+% De telles représentations graphiques apparaissent dans les figures \ref{}...
 
 
 
-%\subsection{Le rat num\'ero 19}
+
+
+
+
+
+
+
+
+
+\FloatBarrier
+\subsection{Vers un mod\g{e}le pour le rat num\'ero 19}
+
+Les r\'esultats obtenus en fin de section pr\'ec\'edente m'ont encourag\'e \g{a} suivre l'\'evolution des six modalit\'es %
+ADC, BVf, CBF, CMRO2, SO2 et VSI sur des r\'egions d'int\'er\^et d\'efinies par la clusterisation de CBF, SMRO2, SO2 et BVf aux jours 8 ou 15.
+
+
+\ref{}
+
+
+
+%\Floatbarrier
+%\subsection{}%Modèle proprement dit, évetuellement dans la section suivante.
+
+
