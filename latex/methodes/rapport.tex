@@ -19,7 +19,7 @@ Ces exp\'eriences ont \'et\'e men\'ees \g{a} l'Institut de Neurosciences de Gren
 et m'ont \'e\'e transmises \g{a} la suite d'une r\'eunion \g{a} laquelle j'ai assist\'e au GIN %
 avec Ang\'elique St\'ephanou, Emmanuel Barbier, et Benjamin Lemasson.
 
-
+\cite{Lem_PHD_10}
 
 \subsubsection{Chirurgie et examens}
 
@@ -476,24 +476,51 @@ Peut-\^etre touche-t-on d\g{e}s lors aux limites de la d\'ecomposition en densit
 au d\'etriment d'une bonne lisibilit\'e de la figure.
 
 \par
-Le dernier cluster est principalement compos\'e des pixels avec la diffusivit\'e la plus forte. La signification physiologique de cette propri\'et\'e n'est pas un objectif de ce stage.
+Le dernier cluster est principalement compos\'e des pixels avec la diffusivit\'e la plus forte. %
+La signification physiologique de cette propri\'et\'e n'est pas un objectif de ce stage.
 
 \begin{figure}[!p]
 \begin{center}
 \begin{tabular}{|c|c|}
 \hline
-\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-BVf-cerveau_clust.pdf}
+\subfloat[BVf : d\'elimitation approximative, parasites.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-BVf-cerveau_clust.pdf}%bon
+}
 &
-\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-CBF-cerveau_clust.pdf}
+\subfloat[T1map : structures visibles, %
+mais sans lien avec la l\'esion.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-T1map-cerveau_clust.pdf}%
+}
+\\
+\hline
+\subfloat[CBF : pas mieux que l'oeil.. %
+Clusters vert et rouge difficiles \g{a} interpr\'eter.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-CBF-cerveau_clust.pdf}%bon
+}
+&
+\subfloat[CMRO2 : mauvaise qualit\'e, taches bleues que l'h\'emisph\g{e}re contralat\'eral.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-CMRO2-cerveau_clust.pdf}%
+}
+\\
+\hline
+\subfloat[ADC : r\'esultat encourageant]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J22-ADC-cerveau_clust.pdf}%bon
+}
+&
+\subfloat[CBF : pas exploitable pour distinguer la r\'egion l\'es\'ee, sur le cerveau entier.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J22-CBF-cerveau_clust.pdf}%
+}
 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Deux autres exemples pour le jour 00.%
+\caption{Six exemples de classification par m\'elange gaussien.%
 \\%
-On remarque beaucoup de donn\'ees manquantes en CBF, au niveau de la l\'esion pr\'esum\'ee.%
+A gauche : pour, ou presque.%
+\\%
+A droite : contre.%
 }
-\label{19_CBF-BVf_3d00}
+\label{19_pour_contre}
 \end{figure}
 
 \etoile
@@ -505,9 +532,55 @@ On remarque beaucoup de donn\'ees manquantes en CBF, au niveau de la l\'esion pr
 
 % Jours autres que le premier : travail difficile pour l'oeil.
 % De bonnes choses en ADC pour la deuxième moitié du mois.
+% Mieux que l'oeil : distributions gaussiennes, composantes d'une décomposition putôt que simplement une région avec des valeurs plus faibles.
+
+
+%\begin{figure}[!p]
+%\end{figure}
+
 
 % On peut être tenté d'utiliser la classification avec mclust pour suivre l'évolution temporelle de l'étendue de la lésion.
-% Mieux : la classification ouvrirait une discuttion sur la caractérisation de la lésion : quelle modalité est la plus pertinente ?
+% Mieux : la classification ouvrirait une discussion sur la caractérisation de la lésion : quelle modalité est la plus pertinente ?
+
+Certains r\'esultats obtenus laissent penser que la classification des pixels avec mclust pourrait permettre d'obtenir de meilleurs r\'esultats que ceux de la sous-section pr\'ec\'edente, %
+o\g{u} la partie l\'es\'ee \'etait caract\'eris\'ee par la segmentation effectu\'ee de visu sur ImageJ comme sur la figure \ref{cbf_seg_19}.
+
+\par
+L'image en bas \g{a} gauche du tableau, figure \ref{19_pour_contre}, est en effet favorable \g{a} une telle approche, %
+puisque les r\'egions l\'es\'ees sont tr\g{e}s difficiles \g{a} limiter sur les images, en niveaux de gris, qui concernent des jour autres que 00.
+
+\par
+On peut opposer plusiers arguments concernant l'avantage, ou non, %
+d'une d\'elimitation syst\'ematique de la r\'egion l\'es\'ee sur une image obtenue \g{a} la suite des diff\'rents examens.
+\begin{enumerate}[label=\textbf{(Pour\arabic*)}]
+\item\label{19_suivi_temp} Possibilit\'e d'une utilisation sur els jours autres que 00, notamment sur la deuxi\g{e}me moiti\'e du mois que durent les exp\'erimentations ;
+\item\label{phy_gau} Eventuellement, signification physiologique des composantes du m\'elange gaussien, %
+tandis que l'oeil lit seulement des valeurs particuli\g{e}rement basses de la variable \'etudi\'ee.
+\end{enumerate}
+
+Le point \ref{suivi_temp} laisse esp\'erer, avec un choix judicieux de variable -CBF, ADC ?- %
+que l'utilisation de Mclust pourrait permettre de suivre l'\'evolution spatiale de la r\'egion l\'es\'ee. %
+Toutefois, la situation que l'on peut lire en bas \g{a} gauche du tableau \ref{19_pour_contre} reste exceptionnelle, %
+de plus, elle ne donne pas une caract\'erisation de la partie l\'es\'ee significativement diff\'erente de celle effectu\'ee au d\'ebut de cette section.
+
+\etoile
+Voici des arguments qui s'opposent \g{a} l'utilisation de Mclust pour caract\'eriser la r\'egion l\'es\'ee, \g{a} partir de tranches enti\g{e}res de cerveau :
+
+\begin{enumerate}[label=\textbf{(Contre\arabic*)}]
+\item Beaucoup d'images sont de mauvaise qualit\'e : voir le CBF ou la CMRO2 sur la figure \ref{19_pour_contre} ;
+%
+\item Les composantes d'une classification peuvent correspondre \g{a} des structures physiologiques comme nous l'avons vu dasn le premier graphique de cette sous-section, %
+mais celles-ci ne correspondent pas n\'ecessairement \g{a} la partie l\'es\'ee : %
+voir \g{a} ce titre la classification des valeurs mesur\'ees en T1, pour le rat num\'ero 19 au jour 00. %
+Ceci va \g{a} l'encontre de l'argument \ref{phy_gau}, come \'etant en faveur de l'utiliation de Mclust.
+%
+\item La classification automatique, non supervis\'ee, regroupe des pixels correspondant peu ou prou \g{a} la partie isch\'emi\'ee et des pixels de l'h\'emisph\g{e}re contralat\'eral. %
+Ici encre, le jugement humain est plus pertient.
+%
+\item Certaines images, notamment celles qui comportent des valeurs manquantes comme celle en CMRO2 de la figure \ref{19_pour_contre}, %
+donent une classification tr\g{e}s difficile \g{a} lire, pour ne pas dire de mauvaise qualit\'e.
+\end{enumerate}
+
 
 % Problème des parasites pour l'extraction des données.
 % Beaucoup d'images sont de mauvaise qualité.
@@ -518,7 +591,27 @@ On remarque beaucoup de donn\'ees manquantes en CBF, au niveau de la l\'esion pr
 %\begin{figure}[!p]
 %\end{figure}
 
+%\begin{figure}[!p]
+%\end{figure}
 
+%\begin{figure}[!p]
+%\end{figure}
+
+\ligneinter
+En conclusion, apr\g{e}s avoir consacr\'e un certain temps \g{a} la classification des niveaux de gris des images dont je disposais, %
+correspondant aux valeurs des diff\'erentes variables scalaires d\'efinies sur des structures tridimensionnelles, %
+j'ai d\'ecid\'e de ne pas utiliser le paquet R Mclust pour la caract\'erisation et le suivi des l\'esion au sein des cerveaux des rats utilis\'es pendant exp\'erience, %
+faute d'un nombre suffisant, et parfois de la pertinence, des r\'esultats obtenus, %
+comparativement \g{a} ceux de la sous-section pr\'ec\'edente qui \'etaient issus d'une segmentation \g{a} l'oeil.
+
+\etoile
+Toutefois, certains r\'esultats obtenus avec Mclust quand on invoque la fonction au sein de la r\'egion l\'es\'ee %
+m'ont encourag\'e \g{a} utiliser celle-ci pour mod\'eliser la l\'esion du rat num\'ero 19.
+
+\par
+C'est l'objet de la sous-section suivante.
+
+\FloatBarrier
 \subsubsection{Mclust au service d'une mod\'elisation pour l'\'evolution de la l\'esion}
 
 % Point intéressant : la fonction mclust prend en argument, outre la base de données à classifier,
@@ -528,18 +621,94 @@ On remarque beaucoup de donn\'ees manquantes en CBF, au niveau de la l\'esion pr
 % Il est d'ailleurs possibles de demander à R d'inclure, dans une représentation graphique,
 % les différentes valeurs de BIC associées à chaque possibilité de nombre de clusters.
 % On peut ainsi visualiser la pertinence du choix d'un nombre de clusters particulier pour la classsification.
-% De telles représentations graphiques apparaissent dans les figures \ref{}...
+% De telles représentations graphiques apparaissent dans les figures \ref{19_choix_clust_les}...
+
+
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+%\subfloat[BVf : d\'elimitation approximative, parasites.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-CBF_clust1-3_lesion.pdf}
+%}
+&
+%\subfloat[T1map : structures visibles, %
+%mais sans lien avec la l\'esion.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-BVf_clust1-3_lesion.pdf}
+%}
+\\
+\hline
+%\subfloat[CBF : pas mieux que l'oeil.. %
+%Clusters vert et rouge difficiles \g{a} interpr\'eter.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J03-CBF_clust1-3_lesion.pdf}
+%}
+&
+%\subfloat[CMRO2 : mauvaise qualit\'e, taches bleues que l'h\'emisph\g{e}re contralat\'eral.]{%
+%\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J03-BVf_clust1-3_lesion.pdf}
+%}
+\\
+\hline
+%\subfloat[ADC : r\'esultat encourageant]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J08-CBF_clust1-3_lesion.pdf}
+%}
+&
+%\subfloat[CBF : pas exploitable pour distinguer la r\'egion l\'es\'ee, sur le cerveau entier.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J08-BVf_clust1-3_lesion.pdf}
+%}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Classification sur des images en CBF et BVf.%
+\\%
+Le choix de deux clusters para\^it le plus pertient : vers une mod\'elisation \g{a} deux r\'egimes ?}
+\label{19_choix_clust_les}
+\end{figure}
 
 
 
 
 
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+%\subfloat[BVf : d\'elimitation approximative, parasites.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J08-CBF_clust_lesion.pdf}
+%}
+&
+%\subfloat[T1map : structures visibles, %
+%mais sans lien avec la l\'esion.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J08-CMRO2_clust_lesion.pdf}
+%}
+\\
+\hline
+%\subfloat[CBF : pas mieux que l'oeil.. %
+%Clusters vert et rouge difficiles \g{a} interpr\'eter.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J15-CBF_clust_lesion.pdf}
+%}
+&
+%\subfloat[CMRO2 : mauvaise qualit\'e, taches bleues que l'h\'emisph\g{e}re contralat\'eral.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J15-SO2map_clust_lesion.pdf}
+%}
+\\
+\hline
+%\subfloat[ADC : r\'esultat encourageant]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J22-CBF_clust_lesion.pdf}
+%}
+&
+%\subfloat[CBF : pas exploitable pour distinguer la r\'egion l\'es\'ee, sur le cerveau entier.]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J22-SO2map_clust_lesion.pdf}
+%}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Images favorables \g{a} une mod\'elisation \g{a} deux r\'egimes pour l'\'evolution de la partie l\'es\'ee}
+\label{19_reg_clust_les}
+\end{figure}
 
-
-
-
-
-
+%%% Broder %%%
 
 \FloatBarrier
 \subsection{Vers un mod\g{e}le pour le rat num\'ero 19}
@@ -547,12 +716,608 @@ On remarque beaucoup de donn\'ees manquantes en CBF, au niveau de la l\'esion pr
 Les r\'esultats obtenus en fin de section pr\'ec\'edente m'ont encourag\'e \g{a} suivre l'\'evolution des six modalit\'es %
 ADC, BVf, CBF, CMRO2, SO2 et VSI sur des r\'egions d'int\'er\^et d\'efinies par la clusterisation de CBF, SMRO2, SO2 et BVf aux jours 8 ou 15.
 
+%
+%
+%
 
-\ref{}
+\ligneinter
+Pour la suite de ce travail, j'ai choisi d\'etudier les valeurs de six modalit\'es sur les deux sous-r\'egions de la l\'esion, d\'elimit\'ee en CBF au jour 0, %
+elles m\^emes d\'efinies par une valeur seuil de CBF pour le jour 8 : 100 ml.min${}^{-1}$.100g${}^{-1}$. %
+On remarque sur la figure \ref{19_reg_clust_les} que ces deux r\'egions pourraient aussi bien d\'efinies par le d\'epassement, ou non, de la valeur seuil de 1000 %...
+de CMRO2.
+
+%\par
+%%% Importance des différentes modalités : CBF, SO2, CMRO2 etc. %%%
 
 
 
-%\Floatbarrier
-%\subsection{}%Modèle proprement dit, évetuellement dans la section suivante.
+%\ref{}
 
 
+
+
+
+
+
+
+
+
+
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+%\subfloat[BVf : d\'elimitation approximative, parasites.]{%
+\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/19_suivi_pixelclust_box_volCBFdark00_ADC.pdf}
+%}
+&
+%\subfloat[T1map : structures visibles, %
+%mais sans lien avec la l\'esion.]{%
+\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/19_suivi_pixelclust_box_volCBFdark00_BVf.pdf}
+%}
+\\
+\hline
+%\subfloat[CBF : pas mieux que l'oeil.. %
+%Clusters vert et rouge difficiles \g{a} interpr\'eter.]{%
+\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/19_suivi_pixelclust_box_volCBFdark00_CBF.pdf}
+%}
+&
+%\subfloat[CMRO2 : mauvaise qualit\'e, taches bleues que l'h\'emisph\g{e}re contralat\'eral.]{%
+\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/19_suivi_pixelclust_box_volCBFdark00_CMRO2.pdf}
+%}
+\\
+\hline
+%\subfloat[ADC : r\'esultat encourageant]{%
+\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/19_suivi_pixelclust_box_volCBFdark00_SO2map.pdf}
+%}
+&
+%\subfloat[CBF : pas exploitable pour distinguer la r\'egion l\'es\'ee, sur le cerveau entier.]{%
+\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/19_suivi_pixelclust_box_volCBFdark00_VSI.pdf}
+%}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Suivi pour le rat 19 : les six modalit\'es. %
+La largeur des bo\^ites est proportionnelle \g{a} la racine carr\'ee de l'effectif repr\'esent\'e, %
+ce qui prouve la pertinence de la d\'ecomposition.
+\\%
+L'\'etat de l'h\'emisph\g{e}re contralat\'eral est aussi l'objet d'un suivi.%
+}
+\label{19_suivi_clust_les}
+\end{figure}
+
+\FloatBarrier
+\subsection{Les hypoth\g{e}ses et le formalisme du mod\g{e}le}%Modèle proprement dit, évetuellement dans la section suivante.
+
+L'objectif atteint au cours de ce stage a \'et\'e d'\'elaborer unmod\g{e}le dynamique pour l'\'evolution, voxel par voxel, %
+des donn\'ees issues d'un examen d'imagerie effectu\'e, sur un rat, dans les minutes qui suivent une isch\'emie focale transitoire.
+
+\par
+Ce mod\g{e}le, qui n'est pas explicitement li\'e \g{e} des m\'ecanismes qui se d\'eroulent \g{e} l'\'echelle cellulaire, %
+doit reproduire les r\'esultats obtenus au cours des jours, et des premi\g{e}res semaines, qui suivent l'isch\'emie.
+
+\par
+Le mod\g{e}le que j'ai construit est uniquement ispir\'e des observations qui, comme on peut le voir dans les sous-sections pr\'ec\'edentes, %
+concernent exclusivement le rat 19. %
+Il est donc tr\g{e}s difficile, voire impossible, d'adapter le mod\g{e}le tel quel aux autres rats, %
+compte tenu de la mani\g{e}re dont l'exp\'erience et les examens qui les concernent se sont d\'eroul\'es, %
+et de diff\'erences mutuelles inn\'ees.
+
+\par
+En revanche, les hypoth\g{e}ses simplificatrices pos\'ees pour ce mod\g{e}le, la mani\g{e}re sont elles sont d\'egag\'ees %
+et les grandes lignes de l'\'evolution des voxels des r\'egions, l\'es\'ees ou non, du cerveau sur les semaines qui suivent l'isch\'emie seront, %
+du moins je l'esp\g{e}re, transposables \g{a} d'autres sujets.
+
+\etoile
+
+Les hypoth\g{e}ses d'un mod\g{e}le \og{} id\'eal\fg{} pour l'\'evolution locale de la r\'egion isch\'emi\'ee, et du reste du cerveau, %
+sont r\'ef\'erenc\'ees ci-dessous.
+
+\par
+Comme nous allons le voir, les hypoth\g{e}ses relativement fortes de ce mod\g{e}le n'ont malheureusement pas permis, \g{a} l'aide des seules donn\'ees IRM au jour 0, %
+de d\'ecrire la dynamique de l'\'evolution du cerveau \'etudi\'e -on observe la tranche num\'ero 9 issue du premier examen du rat num\'ero 19, %
+c'est donc un jeu d'hypoth\g{e}ses plus faible qui sera retenu pour les simulations.
+
+
+\begin{modmerate}{Mod\g{e}le 1}{\textbf{(H\arabic*)}}
+\item\label{nprog} Non progressivit\'e : l'\'evolution de l'\'etat d'un voxel n'est pas affect\'ee par l'\'etat des voxels voisins.
+\item\label{var_comp} Pas de variable cach\'ee : Les modalit\'es ADC, BVf, etc d\'efinissent, seules, et localement l'\'etat du syst\g{e}me.
+\item\label{auto} L'\'evolution du syst\g{e}me est autonome.
+%\item\label{bvf...}
+\end{modmerate}
+
+\begin{comment}
+%\begin{tabular}{|c|}
+%\hline
+%ffff
+%\\
+%\hline
+\begin{center}
+\begin{enumerate}
+\item\label{bbbbb} nnnnn
+\end{enumerate}
+\end{center}
+%\\
+%\hline
+%\end{tabular}
+\end{comment}
+
+%\begin{enumerate}[label=\textbf{(H\arabic*)}]
+%\item\label{nprog} blabla
+%\end{enumerate}
+
+L'hypoth\g{e}se \ref{nprog} distingue d'entr\'ee de jeu le mod\g{e}le de celui consid\'er\'e dans \cite{Duval_JCBFM_02} : %
+dans ce dernier, le coefficient de diffusion ADC diffuse lui-m\^eme \g{a} travers les pixels, et respecte l'\'equation disscr\g{e}te :
+\[\text{ADC}_{i,j}(t+1)=\frac{1}{9}\sum\limits_{\|k,l-i,j\|_{\infty}=1}\text{ADC}_{k,l}(t)\]
+
+Le membre de droite correspond \g{a} la moyenne ces valeurs d'ADC \g{a} un instant discret $t$ : %
+la valeur d'ADC du pixel consid\'er\'e et celles de ses $8$ voisins sont prises en compte, %
+le membre de gauche est la valeur d'ADC au temps $t+1$.
+
+\par
+L'hypoth\g{e}se \label{var_comp} doit \^etre affaibie pour deux raisons :
+\begin{itemize}
+\item J'ai d\'ecid\'e de prendre en compte des perturbations exog\g{e}nes des valeurs prises par les diff\'erentes variables, %
+en particulier dans les r\'egimes d\'equilibre r\'egis par des \'equations stochastiques.
+\item Sur les figures \ref{19_suivi_clust_les}, on note qu'il n'est pas possible de discerner les distributions de valeurs prises par les six variables choisies, %
+sur les deux composantes d\'efinies par les valeurs de CBF au jour 8.
+\end{itemize}
+
+\par
+Le dernier point qui pr\'ec\g{e}de donnera lieu \g{a} un affaiblissement de l'hypoth\g{e}se d'autonomie \ref{auto} : %
+chaque pixel se trouvant initialement dans un \'etat correspondant \g{a} l'isch\'emie subira un changement d'\'etat, %
+se produisant \g{a} un temps al\'eatoire compris entre les jours 3 et 8 de la simulation.
+
+\par
+Une telle \'echelle de temps, suivant laquelle les observations effectu\'ees sur le rat num\'ero 19 %
+sugg\g{e}rent l'existence de deux r\'egipes diff\'erents pour les pixels repr\'esentant la l\'esion, %
+co\"incide avec celle qui r\'egit les m\'ecanismes de formation d'oed\g{e}mes vasog\'eniques, %
+et l'infiltration de cellules immunitaires parfois d\'el\'et\g{e}res dans le parenchyme c\'er\'ebral. %
+L'approche qui consiste \g{a} introduire dans le mod\g{e}le de ce facteur temporel me para\^it conc pertinente, %
+m\^eme si le lien avec les diff\'erentes \'etapes de la cascade isch\'emique n'est pas \'elucid\'e \g{a} ce stade.
+
+\ligneinter
+Je distingue ainsi sept \'etats : cinq pour les pixels isch\'emi\'es, deux pour les autres, possibles pour l'\'evolution.
+
+\par
+Chacun de ces \'etats est caract\'eris\'e par un ensemble de valeurs possibles pour les valeurs des six variables, %
+et un syst\g{e}me d'\'equations d'\'evolution.
+
+\par
+Celles-ci, \'ecrites comme des \'equations diff\'erentielles ordinaires mettant en jeu les diff\'erentes variables avec les unit\'es vues \g{a} la section pr\'ec\'edente, %
+seront impl\'emlent\'ees en rempla\c cant les d\'eriv\'ees par des taux d'accroissement, l'unit\'e de temps adopt\'ee pour les \'equations \'etant le jour ; %
+cette dur\'ee sera \'egalement l'unit\'e de temps \'el\'ementaire du mod\g{e}le discret, impl\'ement\'e dans la suite de ce travail.
+
+\etoile
+On note que l'hypoth\g{e}se de non progressivit\'e, que je conserve dans toute la sute de ce travail, %
+revient \g{a} utiliser des automates pour le mod\g{e}le dynamique, et non des automates cellulaires. %
+%Une critique de l'hypoth\g{e}se \ref{nprog} peut \^etre faite \g{a} la lumi\g{e}re de faits physiologiques reconnus.
+
+
+\subsubsection{Automates pour les pixels, d'apr\g{e}s le rat num\'ero 19}
+
+
+%%% Automates \g{a} dessiner : avec xymatrix %%%
+
+
+
+\subsubsection{Formalisme des diff\'erents r\'egimes}
+
+\begin{description}
+\item[R\'egime cytotoxique :] Il correspond aux remi\g{e}res heures d'isch\'emie, telles qu'elles sont mod\'elis\'ees par exemple. %
+On suppose qu'ici, la saturation des r\'egulations successives du CBF, puis de la CMRO2 a d\'ej\g{a} eu lieu, ce qui justifie des valeurs basses pour ces deux variables.
+
+\par
+Pour le besoin des simulations, un temps $T$, al\'eatoire, est d\'efini sur l'ensemble des pixels qui entrent dans ce premier \'etat isch\'emi\'e.
+
+\par
+Les valeurs anormalement basses d'ADC, qui ob\'eiront \g{a} l'\'equation de rappel% \ref{} ,
+signalent des n\'ecroses qui s'expliquent avec les \'etapes de la cascade isch\'emique vues \g{a} la section pr\'ec\'edente.
+
+\par
+L'influence des valeurs de CBF et de CMRO2 sur l'\'evolution de l'ADC n'est ainsi pas visible dans l'\'equation d'\'evolution de cette variable, %
+mais elles d\'eterminent le choix du r\'egime, donc la validit\'e desdites \'equations.
+
+%%% Equations : début. %%%
+\begin{equation}
+\der{ADC}=0,25\left(ADC_{contra}-ADC\right) \Ta
+\label{adc_is1}
+\end{equation}
+L'ADC a tendance \g{a} se stabiliser autour des valeurs calcul\'ees sur l'h\'emisph\g{e}re contralat\'eral, en dehors du jour 0. %
+L'utilisation de cette distribution spatiale, asymptotique dans le temps, est encore inspir\'ee de \cite{Duval_JCBFM_02}.
+
+\begin{equation}
+\der{CBF}=0,5\left(CBF_{trans}-CBF\right) \Ta
+\label{cbf_is1}
+\end{equation}
+Cette \'equation d\'ecrit une croissance et une dispersion progressive du CBF. %
+Celle-ci est lisible, indistinctement du r\'egime de l\'esion adopt\'e \g{a} partir du jour 8, %
+sur le graphique de la figure \ref{19_suivi_clust_les}
+
+La saturation tissulaire en dioxyg\g{e}ne suit une \'equation, valable pour tous les r\'egimes en dehors de la \og{} l\'esion 1\fg{} :
+\begin{equation}
+\der{SO2}=2,5(SO2_{asy}-SO2) \Ta
+\label{so2_s_l2}
+\end{equation}
+La loi choisie dans ce mod\g{e}le pour la distribution asymptotique de SO2 est la loi normale $\mathcal{N}(75,35)$.
+
+\par
+La consommation de dioxyg\g{e}ne suit une \'equation analogue aux deux premi\g{e}res :
+\begin{equation}
+\der{CMRO2}=\frac{1}{4}(CMRO2_{trans}-CMRO2) \Ta
+\end{equation}
+La distribution choisie pour la CMRO2 suit une loi $\mathcal{N}(6,7)$. %
+Dans cette approche ph\'enom\'enologique, j'ai d\'ecid\'e de ne pas relier les \'equations r\'egissant les \'evolutions de CBF et de CMRO2, %
+malgr\'e les similitudes que l'on constate entre celles-ci, sur les donn\'ees r\'esum\'ees dans la figure \ref{19_suivi_clust_les}. %
+%L'impl\'ementation de ce mod\g{e}le serait de toute mani\g{e}re peu influenc\'ee 
+
+De m\^eme que pour la CMRO2, les donn\'ees manquent pour le VSI et la BVf au jour 3. %
+D'une mani\g{e}re g\'en\'erale, les \'equations r\'egissant l'\'evolution de ces deux variables seront reli\'ees dans tous les r\'egimes du mod\g{e}le, %
+qu'ils concernent, ou non, une partie l\'es\'ee ou non.
+
+\par
+Afin de retracer l\'evolution de ces deux variables aux premiers jours de l'exp\'erience, %
+on remarque une forte similitude entre celle-ci, et l'\'evolution sur les cinq jours d'examen du CBF.
+
+\par
+J'ai donc choisi des \'equations, pour la BVf et le VSI, li\'ees \g{a} \ref{cbf_is1}.
+\begin{equation}
+\der{VSI}=0,15\times\der{CBF}
+\label{vsi_is}
+\end{equation}
+\begin{equation}
+\der{BVf}=\der{VSI}
+\label{bvf_is}
+\end{equation}
+\emph{Pour simplifier les notations et dans toute la suite de ce travail, la d\'eriv\'ee temporelle $\der{V}$ sera not\'ee $\dot{V}$ pour la variable $V$.}
+%%% Fin. %%%
+\par
+A l'issue de ce r\'egime, d\'etermin\'ee par le temps al\'eatoire $T$ qui caract\'erise la survenue possible d'un oed\g{e}me vasog\'enique, %
+et l'infiltration programm\'ee de macrophages dans le parenchype c\'er\'ebral, l'\'etat d'un pixel est d\'etermin\'e par sa valeur de CBF :
+\begin{description}
+\item[$CBF > 100$ :] Premier r\'egime d'\'evolution de la partie l\'es\'ee, notament caract\'eris\'ee par une baisse du dit CBF ;
+\item[$CBF < 100$ :] Deuxi\g{e}me r\'egime, qui aboutit \g{a} un \'etat stationnaire, distinct de l'\'etat d'\'equilibre, suppos\'ement sain, de l'h\'emisph\g{e}re contralat\'eral.
+\end{description}
+\item[R\'egime isch\'emique transitoire] Il doit \^etre vu comme un sous-r\'egime du pr\'ec\'edent : %
+il est valable pour un pixel si, et seulement si celui-ci se trouve en r\'egime cytotoxique depuis un temps $T$ qui est d\'ecrit ci-apr\g{e}s.
+
+\par
+On ne peut donc pas parler de transition entre deux \'etats de l'automate m\^eme si certaines \'equations diff\g{e}rent entre les deux r\'egimes.
+%%% Equations : début. %%%
+L'equation ma\^itresse de cette transition concerne le CBF :
+\begin{equation}
+\dot{CBF} = \tau_{trans}\times\left(CBF_{mel}-CBF\right)
+\label{cbf_l_tr}
+\end{equation}
+
+%La validit\'e de cette \'equation est d\'etermin\'ee par 
+%
+La densit\'e $CBF_{mel}$ doit \^etre compatible avec le m\'elange gaussien issu des mesures au jour 8.
+
+\par
+La figure \ref{19_suivi_clust_les} montre qu'il est toutefois difficile de pr\'edire la r\'egion \g{a} laquelle appartiendra un pixel, %
+pour lequel les valeurs des six variables sont connues uniquement pour le jour 0 %
+- c'est l'objectif d'une simulation informatique dans la pratique m\'edicale !
+
+\par
+Ainsi, on se trouve devant le dilemme suivant :
+\begin{itemize}
+\item Tricher sur la simulation et incorporer une distribution $CBF_{mel}$ issue des r\'esultats exp\'erimentaux ;
+\item S\'electionner arbitrairement, ou al\'eatoirement $CBF_{mel}$ sans consid\'eration pour l'anatomie du cerveau mod\'elis\'e.
+\end{itemize}
+
+Cette deuxi\g{e}me approche est retenue pour le mod\g{e}le courant, on revient sur la premi\g{e}re, moins artificielle, %
+dans la section suivante.
+
+\par
+Les grandeurs $\dot{CBF}$, $\dot{CMRO2}$, $\dot{VSI}$ et $\dot{BVf}$ sont proportionnelles dans ce r\'egime, %
+les coefficients doivent \^etre ajust\'es pour s'accorder aux observations.
+
+\par
+La forme de l\'equation en SO2 ne change pas.%, seule la distribution asymptotique est modifi\'ee pour les pixels de la classe \og{} l\'esion 1\fg{}; %
+%dans les \'equations du mod\g{e}le, on notera $SO2_{Asy}$ cette deuxi\g{e}me distribution.
+
+\par
+L'ADC suit, dans ce r\'egime pr\'e-jour 8, une nouveau type d'\'evolution : %
+l'\'equation $\Td$ qui va suivre d\'ecrit l'augmentation rapide, et la dispersion des valeurs d'ADC.
+\begin{equation}
+\dot{ADC} = \tau_1\times ADC^{\alpha_1}
+\label{adc_is_tr}
+\end{equation}
+$\alpha_1$ est un r\'eel strictement positif qui doit permettre de r\'egler la dispersion, plus ou moins rapide, des valeurs d'ADC.
+%%% Fin. %%%
+%
+
+Apr\g{e}s le temps $T$, on utilise les hypoth\g{e}ses \ref{nprog}, \ref{auto} et \ref{var_compf} : %
+l'\'etat d'un pixel, et donc le r\'egime suivi par ses valeurs d'ADC, de BVf, CBF, CMRO2, SO2 et VSI est d\'efini par une condition en CBF :
+%
+\item[$CBF > 100$ : l\'esion num\'ero 1 ] cet \'etat d'automate est d\'efini par les \'equations qui suivent.
+%%% Equations : début. %%%
+ADC suit un nouveau r\'egime, dit $\Td$ : c'est l'\'equation qui suit, qui d\'ecrit notamment la dispersion rapide des valsurs d'ADC.
+
+CBF, SO2 et CMRO2 suivent le m\^eme r\'egime $\Ta$. Aucun lien de cause \g{a} effet n'est \g{a} privil\'egier, \g{a} la lumi\g{e}re des r\'esultats en \ref{19_suivi_clust_les}. %
+Les \'equations d\'evolution de ces trois variables sont les suivantes :
+\begin{equation}
+\dot{CBF}=5\times\left(CBF_{asy1}-CBF\right)
+\end{equation}
+\begin{equation}
+\dot{CMRO2}=0,15\times\left(CMRO2_{asy1}-CMRO2\right)
+\end{equation}
+\begin{equation}
+\dot{SO2}=1\times\left(SO2_{asy1}-SO2\right)
+\end{equation}
+
+Les deux variables VSI et BVf suivent un r\'egime commun, distinct de l'\'evolution des autres variables :
+\begin{equation}
+\dot{VSI}=0,2\times (VSI_{asy1}-VSI)
+\end{equation}
+et une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
+\begin{equation}
+\dot{BVf}=0,5\times\dot{VSI})
+\end{equation}
+La distribution statistique VSI est encore issue des observations -jour 15 ou 22.
+%%% Fin. %%%
+%
+\item[$CBF > 100$ : l\'esion num\'ero 2 ] L\'evolution du CBF influence significativement cele des autres variables, %
+et la valeur de la SO2 est choisie pour caract\'eriser la transition vers le r\'egime asymptotique.
+%%% Equations : début. %%%
+\begin{equation}
+\dot{CBF}=-15\times\left(CBF_{trans2}-CBF\right)
+\end{equation}
+
+La densit\'e $CBF_{trans2}$ est d\'etermin\'ee par les r\'esultats de \ref{19_suivi_clust_les}, %
+et diff\g{e}re de l'\'etat sain par sa dispersion, principalement.
+
+\par
+L'\'evolution de la CMRO2 est ici reli\'ee \g{a} celle du CBF :
+\begin{equation}
+\dot{CMRO2}=0,15\times\dot{CBF}
+\end{equation}
+
+L'ADC suit une \'equation similaire \g{a} celle du r\'egime pr\'ec\'edent :
+\begin{equation}
+\dot{ADC} = \tau_1\times ADC^{\alpha_2} \Td
+\label{adc_is_tr}
+\end{equation}
+Une autre valeur $\alpha_2$, plus faible que la premi\g{e}re, doit \^etre choisie en prenant en compte \ref{19_suivi_clust_les}.
+
+VSI et BVf suivent, quand \g{a} elles un r\'egime $\Ta$, elles sont reli\'ees de la m\^eme mani\g{e}re que pour la l\'esion 1.
+\begin{equation}
+\dot{VSI}=0,3\times (VSI_{asy2}-VSI)
+\end{equation}
+et% une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
+\begin{equation}
+\dot{BVf}=2\times\dot{VSI})
+\end{equation}
+%%% Fin. %%%
+%
+\item[L\'esion 1 : r\'egime asymptotique] Les variables CBF, CMRO2, SO2, VSI et BVf \'evoluent toutes selon une \'equation $\Tb$. %
+Les param\g{e}tres correspondants sont choisis au moment des simulations.
+
+\par
+L'ADC suit encore l'\'equation $\Ta$ :
+\begin{equation}
+\dot{ADC}=\tau_1ADC^{\alpha_1}
+\end{equation}
+%
+\item[L\'esion 2 : \'evolution finale. ] Elle est d\'ecr\'et\'ee par le retour \g{a} la normale de la SO2.
+%%% Equations : début. %%%
+\par
+L'ADC suit l'\'equation $\Ta$ :
+\begin{equation}
+\dot{ADC}=\tau_1ADC^{\alpha_1}
+\end{equation}
+
+La SO2 d\'evie alors l\'eg\g{e}rement de la normale, et suit une \'equation $\Ta$ :
+\begin{equation}
+\dot{SO2}=1\times (SO2_{asy2}-SO2)
+\end{equation}
+
+$SO2_{asy2}$ est issue des mesures exp\'erimentales, qui sont r\'esum\'ees dans la figure \ref{19_suivi_clust_les}.
+\par
+Dans ce mod\g{e}le ph\'enom\'enologique, l'\'evolution de SO2 dicte celles de CBF et de la CMRO2 :
+\begin{equation}
+\dot{CBF}=-10\times\dot{SO2}
+\end{equation}
+\begin{equation}
+\dot{CMRO2}=-1\times\dot{SO2}
+\end{equation}
+Enfin le VSI et la BVf suivent ensemble un r\'egime $\Tb$.
+%%% Fin. %%%
+%
+\item[R\'egime sain perturb\'e] l'\'evolution des valeurs, calcul\'ees ou mesur\'ees, pour les six variables ADC \dots VSI %
+ne se r\'esume par \g{a} des oscillations autour d'un \'equilibre. Deux explications sont possibles pour ces \'evolutions :
+\begin{itemize}
+\item L'existence de m\'ecanismes de r\'epercussion progressive des \'ev\g{e}nements subis par la partie isch\'emi\'ee, %
+dans l'ensemble du cerveau. Un exemple de tel m\'ecanisme est bien connu : les ondes de d\'epolarisation, qui apparaissent dans les minutes qui suivent l'isch\'emie.
+%
+\item La r\'epercussion, sur le d\'ebit sanguin des r\'egions non l\'es\'ee, de la reperfusion de la partie isch\'emi\'ee.
+\end{itemize}
+
+\par
+Dans le cadre de ce mod\g{e}le, je privil\'egie la seconde explication : par \ref{nprog}, %
+les effets progressifs de chancements d'\'etat des pixels se cantonnent aux premi\g{e}res minutes de l'isch\'emie, %
+les perturbations ressenties localement en dehors de la zone l\'es\'ee sont alors de nature exog\g{e}ne.
+
+\par
+Dans un souci de simplicit\'e, je distingue, dans le mod\g{e}le du tisu sain, %
+un retour \g{a} des valeurs normales, puis des fluctuations autour de l'\'equilibre, pour le CBF.
+%%% Equations : début. %%%
+\begin{equation}
+\dot{CBF}=3\times (CBF_{sain}-CBF)
+\end{equation}
+
+Autres variables : r\'egime $Tb$.
+%%% Fin. %%%
+\item[Etat sain permanent : ] il est annonc\'e par une valeur de CBF sup\'erieur ou \'egale \g{a} 100. %
+Toutes les variables, ADC comprise, suivent le r\'egime bruit\'e $\Tb$.
+
+\par
+Dans le cas du tissu sain, le bruit est particuli\g{e}rment important pour la plupart des variables. %
+La simplification d\'ecid\'ee ci-dessus est discutable, eu \'egard l'\'evolution de la CMRO2.
+\end{description}
+
+
+
+
+%\ref{cyto}
+%$\mathbf{T0_{\mathbb{P}}}$
+%$\mathbf{T1}$
+%$\mathbf{T2}$
+
+\ligneinter%\newpage ?
+Les \'equations qui pr\'ec\g{e}dent sont r\'eparties en trois types :
+
+\fbox{%
+\begin{minipage}{\textwidth}
+\begin{description}
+\item[$\Tb$ :] c'est l'\'equation, stochastique : $\dot{V}=\mathcal{B}$ o\g{u} $\mathcal{B}$ est un bruit blanc, param\'etr\'e avec les observations, %
+et qui d\'ecrit un r\'egime \g{a} l'\'equilibre.
+
+\par
+Elle n'\'etablit pas de lien entre les variables.
+%
+\item[$\Ta$ :] c'est l'\'equation diff\'erentielle du premier ordre $\dot{V}=\tau\times\left(V^{asy}-V\right)$, %
+qui d\'ecrit le retour de la variable $V$ vers une distribution asymptotique $V^{asy}$.
+
+\par
+Ces \'equations peuvent \^etre li\'ees entre elles, comme pour le BVf et le VSI ; %
+le coefficient $\tau$ est obtenu \g{a} l'aide des observations de la figure \ref{19_suivi_clust_les} %
+Elles sont en principe transitoires, et pr\'ec\g{e}dent un retour au r\'egime $\mathbf{T0_{\mathbb{P}}}$.
+%Distribution spatiale ? Voir encore \cite{Duval_JCBFM_02}
+%
+\item[$\Td$ :] c'est l'\'equation qui r\'egit l'\'evolution de l'ADC dans les r\'egions l\'es\'ees, apr\g{e}s la premi\g{e}re semaine.
+
+\par
+Elle traduit une h\'et\'erog\'en\'eit\'e des structures examin\'ees et une forte diffusivit\'e des mol\'ecules d'eau, %
+soit possiblement les cons\'equences de n\'ecroses massives ou d'un oed\g{e}me vasog\'enique.
+
+\par
+Les param\g{e}tres $\alpha_1$ et $\alpha_2$ doivent servir \g{a} ajuster les \'equations du mod\g{e}le : je n'ai pas choisi de valeurs.
+\end{description}%
+\end{minipage}
+}
+
+
+%Cas continu : les seconds membres \mathcal{E} seraient remplac\'es par des bruits blancs.
+%Ici il s'agit de processus gaussiens à temps discret.
+
+\etoile
+Il faut noter que les \'equations qui pr\'ec\g{e}dent, qui sont \'ecrites commme un syst\g{e}me d'un temps continu $t$ exprim\'e en jours, %
+seront remplac\'ees par des \'equations discr\g{e}tes pour l'impl\'ementation :
+\begin{itemize}
+\item Les op\'erateurs $\dfrac{\text{d}}{\text{dt}}$ sont remplac\'es par l'op\'erateur discret $\Box_{t+1}-\Box_t$ %
+qui porte sur la variable toutes choses \'etant par ailleurs \'egales ;
+\item Le second membre $\mathcal{E}(m,\sigma)_t$, analogue au bruit blanc des processus \g{a} temps continu, %
+est ici une suite de variables al\'eatoires gaussiennes, simul\'ees chaque jour sur l'ensemble des pixels, avec une esp\'erance $m$ et un \'ecart-type $\sigma$.
+\end{itemize}
+
+\ligneinter
+Les diff\'erents r\'egimes mis en \'evidence dans cette sous-section, et les \'equations qui les d\'efinissent satisfont %
+un jeu d'hypoth\g{e}ses plus faible que celui du mod\g{e}le 1 qui pr\'ec\g{e}de. En voici un r\'esum\'e :
+
+\begin{modmerate}{Mod\g{e}le 2}{\textbf{(H${}^{\ast}$\arabic*)}}
+\item Non-progressivit\'e, identique \g{a} \ref{nprog}.
+\item\label{var_compf} Le mod\g{e}le d\'efini par les \'equations qui pr\'ec\g{e}dent, %
+qui contiennent en plus des six variables, \emph{une composante stochastique}, est bien pos\'e.
+\item\label{autof} Les \'equations du mod\g{e}le sont autonomes, sauf celles du r\'egime suivi par les pixels situ\'es sur la l\'esion initiale %
+qui incorporent une dur\'ee fix\'ee initialement. %
+Dans le cadre des simpulations cette dur\'ee est d\'efinie al\'eatoirement sur les pixels qui sont entr\'es dans l'\'etat isch\'emi\'e.
+\end{modmerate}
+
+\newpage
+\subsubsection{Constitution d'une base de donn\'ees pour les conditions initiales}
+
+Les donn\'ees collect\'ees, pour le jour 0 comme pour les autres, sur le rat num\'ero 19 %
+et pour les six modalit\'es choisies ADC, BVf, CBF, CMRO2, SO2map et VSI peuvent facilement \^etre combin\'ees, %
+pour former la condition initiale des simulations.
+
+\par
+Toutefois, cette approche na\"ive donne un r\'esultat tr\g{e}s insuffisant \g{a} la r\'ealisation de simulations du mod\g{e}le num\'ero 2 : %
+voir \g{a} ce tire la figure \ref{sim_ini}, partie gauche.
+
+\par
+En effet, la base de donn\'ees multiparam\'etrique est d\'efinie sur l'intersection des ensembles de pixels disponibles pour les six modalit\'es, %
+d'o\g{u} un manque de donn\'ees pour comencer les calculs.
+
+\par
+Afin de constituer une condition initiale utilisable \g{a} partir des donn\'ees du jour 0, j'ai compl\'et\'e les vecteurs contenant certaines variables %
+- voir la figure pour CBF, SO2 et CMRO2 - avec des valeurs distribu\'ees suivant une loi gaussiene, reprenant, pour chaque variable, les moyenne et \'ecart-type des valeurs effectivement mesur\'ees. %
+Ainsi, de nombreuses valeurs, certes virtuelles, se sont trouv\'ees en vis-\g{a} vis, constituant une base de donn\'ees plus touffue comme dans la deuxi\g{e}me figure \ref{sim_ini}.
+
+%\par
+%Les distributions 
+
+\begin{figure}[!p]
+%\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\subfloat[Donn\'ee brute]{\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-modele2_simBrut.pdf}}
+&
+\subfloat[Compl\'etion de CBF, SO2 et CMRO2]{\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J00-modele2_simCom.pdf}}
+\\
+\hline
+\end{tabular}
+%\end{center}
+\caption{Conditions initiales pour le rat num\'ero 19.
+\\
+Les pixels en r\'egime cytotoxique sont color\'es en rouge sombre, %
+les autres, en bleu, sont dans un \'etat perturb\'e.
+}
+\label{sim_ini}
+\end{figure}
+
+\subsubsection{Une alternative : le mod\g{e}le 3 demi}
+
+Si l'on choisit de d\'emarrer les simulations au jour 8, pour lequel on dispose de donn\'es mesur\'ees ou calcul\'ees \g{a} partir d'un eamen IRM, %
+on peut renforcer la deuxi\g{e}me hypoth\g{e}se en laissant, comme seules variables autres que les six \'etudi\'ees, les bruits des \'equations $\Tb$.
+
+\par
+En effet, 
+
+\par
+L'\'etape isch\'emique transitoire du mod\g{e}le 2 est \'egalement superflue, %
+puisque l'\'evolution des pixels peut seulement transiter entre les \'etats l\'esion 1 d\'ebut, 1 asymptotique etc. %
+On peut ainsi reprendre la version forte \ref{auto} de l'hypoth\g{e}se d'autonomie du mod\^g{e}le.
+
+\begin{modmerate}{Mod\g{e}le 1 bruit\'e, alias \og{} 3/2\fg{}}{\textbf{(H\arabic*)}}
+\item Non progressivit\'e : l'\'evolution de l'\'etat d'un voxel n'est pas affect\'ee par l'\'etat des voxels voisins.
+\item ${}_\mathbb{P}$ : pas de variable cach\'ee, seulement un bruit exog\g{e}ne.
+\item L'\'evolution du syst\g{e}me est autonome.
+%\item\label{bvf...}
+\end{modmerate}
+
+Le jeu d'hypoth\g{e}ses qui pr\'ec\g{e}de, plus fort que celui du mod\g{e}le 2 mais moins que celui du mod\g{e}le 1, m\'erite la d\'enomination \og{} 3demi\fg{}.
+
+\etoile
+Bien s\^ur, les simulations fond\'ees sur ce mod\g{e}le n'ont pas d'int\'er\^et paratique comparable \g{a} celles qui commencent au jour 0. %
+%Toutefois, 
+
+
+\begin{figure}[!p]
+\begin{center}
+%\begin{tabular}{|c|c|}
+%\hline
+%\subfloat[Compl\'etion de CBF, SO2 et CMRO2]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J08-modele3demi_simBrut.pdf}
+%}
+% etc.
+%%% Ajouter une image recompos\'ee par gaussiennes ? %%%
+%\\
+%\hline
+%\end{tabular}
+\end{center}
+\caption{Condition initiale pour le mod\g{e}le 3demi : donn\'ees brutes au jour 08. Tranches 9 et 10.}
+\label{sim_ini_18}
+\end{figure}
+
+
+
+
+
+
+
+
+
+%\fbox{\rule[-0.4cm]{0cm}{1cm} Une boite créée avec \verb!fbox! et aérée avec \verb!rule!.}
