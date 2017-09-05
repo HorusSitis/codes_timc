@@ -173,7 +173,47 @@
 \theoremseparator{ :\newline\vspace{0.2cm}}
 \newtheorem{rema}{Remarque}[section]
 } 
-  
+
+%%% Quelques environnements bien comodes %%%
+
+\newenvironment{modmerate}[2]%
+  {%
+  \renewcommand{\arraystretch}{2.1}
+  \begin{tabular}{|c|}
+  \hline
+  %\hrule%[0.2cm]{1mm}{\linewidth}
+  %\paragraph{#1}
+  \textbf{#1}
+  \\
+  \hline
+  %\hrule%[0.2cm]{1mm}{\linewidth}
+  \begin{minipage}{0.8\linewidth}
+  \begin{enumerate}[label=#2]
+  }
+  %
+  %%% Début ... et fin. %%%
+  %
+  {\end{enumerate}
+  \end{minipage}
+  \\
+  %\hrule%[0.2cm]{1mm}{\linewidth}
+  \hline
+  \end{tabular}
+  }
+
+%Pour de belles EDO.
+\newcommand{\der}[1]{\frac{\text{d}}{\text{d}t}#1}
+
+% Pour les types d'équations d'évolution, modèles 2 et 3demi.
+\newcommand{\Tb}{\ \mathbf{Type 0_{\mathbb{P}}}}
+\newcommand{\Ta}{\ \mathbf{Type 1}}
+\newcommand{\Td}{\ \mathbf{Type 2}}
+
+%Pour stocker des valeurs enumi par exemple, si l'on quitte provisoirement l'environnement eummerate.
+\newcounter{stock}
+
+%\newcommand{\Tm}{T1}
+
 %\setcounter{section}{-1}
 \renewcommand{\thesection}{\Roman{section}}
 \renewcommand{\thesubsection}{\Roman{section}-\Alph{subsection}}

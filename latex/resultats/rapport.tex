@@ -1,1 +1,124 @@
-\section{R\'esultats}
+\section{R\'esultats des simulations}
+
+\subsection{Un mod\g{e}le-jouet : transitions avec des fonctions affines par morceaux.}
+
+Afin de me familiariser avec l'utilisation de fonctions graphiques de R en sortie d'un mod\g{e}le pr\'edictif, %
+j'ai choisi de mod\'eliser un premier type d'\'evolution, non autonome et ne correspondant \g{a} aucune r\'ealit\'e physiologique a priori. %
+Les calculs effectu\'es avec cette m\'ethode ne concernent d'ailleurs que les jours auxquels les rats ont subi des examens IRM : %
+sa port\'ee est donc tr\g{e}s faible en termes d'inf\'erences.
+
+\par
+Malgr\'e ses faiblesses, ce mod\g{e}le de pacotille a donn\'e des r\'esultats dont la pr\'ecision est surprenante, concernant l'ADC et le CBF notamment. %
+Je donne donc une illustration de ces r\'esultats dans ce rapport, voir \g{a} ce titre la figure \ref{adc_cbd_m3}.
+
+\par
+La conception de ce mod\g{e}le est simple : La fonction de transition, pour une variable $V$, entre deux jours d'examens est %
+une interpolation affine par morceaux de la bijection croissante entre les ensembles contenant les premiers et derniers quartiles et diciles, %
+et la m\'ediane de $V$ sur la r\'egion l\'es\'ee, caract\'eris\'ee avec la methode de segmentation expos\'ee au d\'ebut de la section qui pr\'ec\g{e}de.
+
+\par
+Les fonctions de transition des diff\'erentes variables n'ont donc aucun lien entre elles, contrairement aux \'equations d'\'evolution des mod\g{e}les 2 et 3demi.
+
+\par
+A titre d'exemple \dots %adc jours 8 et 15.
+
+\ligneinter
+Un aspect remarquable des r\'esultats de la figure \ref{adc_cbf_m3} est que %
+des fonctions de transition d\'efinies par interpolation affine de fonctions discr\g{e}tes %
+permetent de pr\'edire, \g{a} partir de la condition initiale -jour 0- des densit\'es dont l'aspect \'evoque celui de celles issues de l'exp\'erience.
+
+
+\par
+Merci \g{a} Nicolas Glade et Ang\'eliqeu St\'ephanou qui m'ont sugg\'er\'e cette repr\'esentation graphique en densit\'es, %
+avec la comparaison de diff\'erents r\'egimes -ici les valeurs mesur\'ees et pr\'evues pour la l\'esion, %
+avec la distribution sur l'h\'emisph\g{e}re sain en guise d'\'etalon.
+
+\begin{figure}[!h]
+\begin{tabular}{|c|c|}
+\hline
+\subfloat[ADC, jour 0]{\includegraphics[width=0.45\linewidth, height=6cm]{../../images_rapport/19_suivi_dens_volCBF_ADC-00.pdf}}
+&
+\subfloat[CBF, jour 0]{\includegraphics[width=0.45\linewidth, height=6cm]{../../images_rapport/19_suivi_dens_volCBF_CBF-00.pdf}}
+\\
+\hline
+%\subfloat[ADC, jour 3]{\includegraphics[width=0.45\linewidth, height=4cm]{../../images_rapport/19_suivi_dens_volCBF_ADC-03.pdf}}
+%&
+%\subfloat[CBF, jour 3]{\includegraphics[width=0.45\linewidth, height=4cm]{../../images_rapport/19_suivi_dens_volCBF_CBF-03.pdf}}
+%\\
+%\hline
+\subfloat[ADC, jour 8]{\includegraphics[width=0.45\linewidth, height=6cm]{../../images_rapport/19_suivi_dens_volCBF_ADC-08.pdf}}
+&
+\subfloat[CBF, jour 8]{\includegraphics[width=0.45\linewidth, height=6cm]{../../images_rapport/19_suivi_dens_volCBF_CBF-08.pdf}}
+\\
+\hline
+\subfloat[ADC, jour 15]{\includegraphics[width=0.45\linewidth, height=6cm]{../../images_rapport/19_suivi_dens_volCBF_ADC-15.pdf}}
+&
+\subfloat[CBF, jour 15]{\includegraphics[width=0.45\linewidth, height=6cm]{../../images_rapport/19_suivi_dens_volCBF_CBF-15.pdf}}
+\\
+\hline
+\subfloat[ADC, jour 22]{\includegraphics[width=0.45\linewidth, height=6cm]{../../images_rapport/19_suivi_dens_volCBF_ADC-15.pdf}}
+&
+\subfloat[CBF, jour 22]{\includegraphics[width=0.45\linewidth, height=6cm]{../../images_rapport/19_suivi_dens_volCBF_CBF-15.pdf}}
+\\
+\hline
+\end{tabular}
+\caption{Densit\'es pour  les r\'epartitions de CBF et d'ADC dans une r\'egion l\'es\'ee.
+%\\
+%On compare la densit\'e issue de l'exp\'erience \g{a} celle obtenue en appliquant successivement aux valeurs de ces deux modalit\'es, %
+%des fonctions r\'eelles, affines par morceaux et croissantes.
+}
+\label{adc_cbf_m3}
+\end{figure}
+
+
+
+
+
+
+
+\FloatBarrier
+\subsection{Simulations avec les mod\g{e}les 2 et 3demi.}
+
+
+
+\begin{comment}
+\subsection{Une alternative : le mod\g{e}le 3 demi}
+
+Si l'on choisit de d\'emarrer les simulations au jour 8, pour lequel on dispose de donn\'es mesur\'ees ou calcul\'ees \g{a} partir d'un eamen IRM, %
+on peut renforcer la deuxi\g{e}me hypoth\g{e}se en laissant, comme seules variables autres que les six \'etudi\'ees, les bruits des \'equations $\Tb$.
+
+\par
+En effet, 
+
+\par
+L'\'etape isch\'emique transitoire du mod\g{e}le 2 est \'egalement superflue, %
+puisque l'\'evolution des pixels peut seulement transiter entre les \'etats l\'esion 1 d\'ebut, 1 asymptotique etc. %
+On peut ainsi reprendre la version forte \ref{auto} de l'hypoth\g{e}se d'autonomie du mod\^g{e}le.
+
+\begin{modmerate}{Mod\g{e}le 1 bruit\'e, alias \og{} 3/2\fg{}}{\textbf{(H\arabic*)}}
+\item Non progressivit\'e : l'\'evolution de l'\'etat d'un voxel n'est pas affect\'ee par l'\'etat des voxels voisins.
+\item ${}_\mathbb{P}$ : pas de variable cach\'ee, seulement un bruit exog\g{e}ne.
+\item L'\'evolution du syst\g{e}me est autonome.
+%\item\label{bvf...}
+\end{modmerate}
+
+Le jeu d'hypoth\g{e}ses qui pr\'ec\g{e}de, plus fort que celui du mod\g{e}le 2 mais moins que celui du mod\g{e}le 1, m\'erite la d\'enomination \og{} 3demi\fg{}.
+
+
+\begin{figure}[!h]
+\begin{center}
+%\begin{tabular}{|c|c|}
+%\hline
+%\subfloat[Compl\'etion de CBF, SO2 et CMRO2]{%
+\includegraphics[height=7cm,width=0.4\linewidth]{../../images_rapport/19-J08-modele3demi_simBrut.pdf}
+%}
+% etc.
+%%% Ajouter une image recompos\'ee par gaussiennes ? %%%
+%\\
+%\hline
+%\end{tabular}
+\end{center}
+\caption{Condition initiale pour le mod\g{e}le : donn\'ees brutes au jour 08. Tranches 9 et 10.}
+\label{sim_ini_18}
+\end{figure}
+\end{comment}
