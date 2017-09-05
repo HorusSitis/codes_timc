@@ -28,236 +28,461 @@ trans_box <- function(x,dep,arr){
 
 # ------- Rat 11 : émanent des statistiques sur la segmentation ADC. ------- #
 
-coeff_aff_succ_11 <- {
-  liste_succ_ADC_11 <- list("00"=list("dep"=c(500,700,725,800,100),"arr"=c(500,750,850,1000,1400)),
-                            "03"=list("dep"=c(500,750,850,1000,1400),"arr"=c(450,1000,1200,1450,2100)),
-                            "08"=list("dep"=c(450,1000,1200,1450,2100),"arr"=c(800,1200,2100,2300,3300)),
-                            "15"=list("dep"=c(300,1200,2100,2300,3300),"arr"=c(800,1800,2200,2550,3300))
+base_donnes_11 <- {
+  coeff_aff_succ_11 <- {
+    liste_succ_ADC_11 <- list("00"=list("dep"=c(500,700,725,800,1100),"arr"=c(500,750,850,1000,1400)),
+                              "03"=list("dep"=c(500,750,850,1000,1400),"arr"=c(450,1000,1200,1450,2100)),
+                              "08"=list("dep"=c(450,1000,1200,1450,2100),"arr"=c(800,1200,2100,2300,3300)),
+                              "15"=list("dep"=c(300,1200,2100,2300,3300),"arr"=c(800,1800,2200,2550,3300))
+    )
+    
+    liste_succ_BVf_11 <- list("00"=list("dep"=c(0,0.5,1,1.5,2),"arr"=c(0,2.5,4,6.5,11.5)),
+                              "03"=list("dep"=c(0,2.5,4,6.5,11.5),"arr"=c(0.5,5,7,12,23)),
+                              "08"=list("dep"=c(0.5,5,7,12,23),"arr"=c(0,4,5.5,6.5,12)),
+                              "15"=list("dep"=c(0,4,5.5,6.5,12),"arr"=c(0,0.5,2,3,8))
+    )
+    
+    liste_succ_CBF_11 <- list("00"=list("dep"=c(0,15,25,40,80),"arr"=c(0,45,75,150,310)),
+                              "03"=list("dep"=c(0,45,75,150,310),"arr"=c(0,10,20,30,60)),
+                              "08"=list("dep"=c(0,10,20,30,60),"arr"=c(0,45,70,100,190)),
+                              "15"=list("dep"=c(0,45,70,100,190),"arr"=c(0,20,40,80,170))
+    )
+    
+    liste_succ_SO2map_11<- list("00"=list("dep"=c(0,10,25,40,72),"arr"=c(2,47,65,75,100)),
+                                "03"=list("dep"=c(5,47,65,75,100),"arr"=c(18,53,73,80,100)),
+                                "15"=list("dep"=c(18,53,73,80,100),"arr"=c(0,35,60,74,100))
+    )
+    
+    liste_succ_T1map_11 <- list("00"=list("dep"=c(1150,1450,1550,1700,1950),"arr"=c(1155,1455,1555,1750,2050)),
+                                "03"=list("dep"=c(1155,1455,1555,1750,2050),"arr"=c(1200,1600,1800,2100,2700)),
+                                "08"=list("dep"=c(1200,1600,1800,2100,2700),"arr"=c(1600,2400,2600,2800,3500)),
+                                "15"=list("dep"=c(1600,2400,2600,2800,3500),"arr"=c(850,2100,2700,3100,3500))
+    )
+    
+    liste_succ_VSI_11 <- list("00"=list("dep"=c(1,7,12,20,40),"arr"=c(0,8,13,19,35)),
+                              "03"=list("dep"=c(0,8,13,19,35),"arr"=c(2,11,15,21,34)),
+                              "08"=list("dep"=c(2,11,15,21,34),"arr"=c(3,10,14,20,34)),
+                              "15"=list("dep"=c(3,10,14,20,34),"arr"=c(0,6,10,15,29))
+    )
+  }
+  
+  liste_box_11 <- list("ADC"=liste_succ_ADC_11 ,
+                       "BVf"=liste_succ_BVf_11 ,
+                       "CBF"=liste_succ_CBF_11 ,
+                       "SO2map"=liste_succ_SO2map_11 ,
+                       "T1map"=liste_succ_T1map_11 ,
+                       "VSI"=liste_succ_VSI_11
   )
   
-  liste_succ_BVf_11 <- list("00"=list("dep"=c(0,0.5,1,1.5,2),"arr"=c(0,2.5,4,6.5,11.5)),
-                            "03"=list("dep"=c(0,2.5,4,6.5,11.5),"arr"=c(0.5,5,7,12,23)),
-                            "08"=list("dep"=c(0.5,5,7,12,23),"arr"=c(0,4,5.5,6.5,12)),
-                            "15"=list("dep"=c(0,4,5.5,6.5,12),"arr"=c(0,0.5,2,3,8))
+  # ADC : pour le moment aucune relation avec les autres modalités. #
+  
+  aff_fsucc_ADC_j <- {
+    succ11_ADC_00 <- function(x){
+      dep_arr <- liste_succ_ADC_11[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_ADC_03 <- function(x){
+      dep_arr <- liste_succ_ADC_11[["03"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_ADC_08 <- function(x){
+      dep_arr <- liste_succ_ADC_11[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_ADC_15 <- function(x){
+      dep_arr <- liste_succ_ADC_11[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_ADC_11 <- list("00"=succ11_ADC_00,
+                             "03"=succ11_ADC_03,
+                             "08"=succ11_ADC_08,
+                             "15"=succ11_ADC_15
   )
   
-  liste_succ_CBF_11 <- list("00"=list("dep"=c(0,15,25,40,80),"arr"=c(0,45,75,150,310)),
-                            "03"=list("dep"=c(0,45,75,150,310),"arr"=c(0,10,20,30,60)),
-                            "08"=list("dep"=c(0,10,20,30,60),"arr"=c(0,45,70,100,190)),
-                            "15"=list("dep"=c(0,45,70,100,190),"arr"=c(0,20,40,80,170))
+  # BVf #
+  
+  aff_fsucc_BVf_j <- {
+    succ11_BVf_00 <- function(x){
+      dep_arr <- liste_succ_BVf_11[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_BVf_03 <- function(x){
+      dep_arr <- liste_succ_BVf_11[["03"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_BVf_08 <- function(x){
+      dep_arr <- liste_succ_BVf_11[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_BVf_15 <- function(x){
+      dep_arr <- liste_succ_BVf_11[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_BVf_11 <- list("00"=succ11_BVf_00,
+                             "03"=succ11_BVf_03,
+                             "08"=succ11_BVf_08,
+                             "15"=succ11_BVf_15
   )
   
-  liste_succ_SO2map_11<- list("00"=list("dep"=c(0,10,25,40,72),"arr"=c(2,47,65,75,100)),
-                              "03"=list("dep"=c(5,47,65,75,100),"arr"=c(18,53,73,80,100)),
-                              "15"=list("dep"=c(18,53,73,80,100),"arr"=c(0,35,60,74,100))
+  # CBF : même chose que précédemment. #
+  
+  aff_fsucc_CBF_j <- {
+    succ11_CBF_00 <- function(x){
+      dep_arr <- liste_succ_CBF_11[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_CBF_03 <- function(x){
+      dep_arr <- liste_succ_CBF_11[["03"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_CBF_08 <- function(x){
+      dep_arr <- liste_succ_CBF_11[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_CBF_15 <- function(x){
+      dep_arr <- liste_succ_CBF_11[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_CBF_11 <- list("00"=succ11_CBF_00,
+                             "03"=succ11_CBF_03,
+                             "08"=succ11_CBF_08,
+                             "15"=succ11_CBF_15
   )
   
-  liste_succ_T1map_11 <- list("00"=list("dep"=c(1150,1450,1550,1700,1950),"arr"=c(1155,1455,1555,1750,2050)),
-                              "03"=list("dep"=c(1155,1455,1555,1750,2050),"arr"=c(1200,1600,1800,2100,2700)),
-                              "08"=list("dep"=c(1200,1600,1800,2100,2700),"arr"=c(1600,2400,2600,2800,3500)),
-                              "15"=list("dep"=c(1600,2400,2600,2800,3500),"arr"=c(850,2100,2700,3100,3500))
+  # SO2map #
+  
+  aff_fsucc_SO2map_j <- {
+    succ11_SO2map_00 <- function(x){
+      dep_arr <- liste_succ_SO2map_11[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_SO2map_03 <- function(x){
+      dep_arr <- liste_succ_SO2map_11[["03"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_SO2map_15 <- function(x){
+      dep_arr <- liste_succ_SO2map_11[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_SO2map_11 <- list("00"=succ11_SO2map_00,
+                                "03"=succ11_SO2map_03,
+                                "15"=succ11_SO2map_15
   )
   
-  liste_succ_VSI_11 <- list("00"=list("dep"=c(1,7,12,20,40),"arr"=c(0,8,13,19,35)),
-                            "03"=list("dep"=c(0,8,13,19,35),"arr"=c(2,11,15,21,34)),
-                            "08"=list("dep"=c(2,11,15,21,34),"arr"=c(3,10,14,20,34)),
-                            "15"=list("dep"=c(3,10,14,20,34),"arr"=c(0,6,10,15,29))
+  # T1map #
+  
+  aff_fsucc_T1map_j <- {
+    succ11_T1map_00 <- function(x){
+      dep_arr <- liste_succ_T1map_11[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_T1map_03 <- function(x){
+      dep_arr <- liste_succ_T1map_11[["03"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_T1map_08 <- function(x){
+      dep_arr <- liste_succ_ADC_11[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_T1map_15 <- function(x){
+      dep_arr <- liste_succ_T1map_11[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_T1map_11 <- list("00"=succ11_T1map_00,
+                               "03"=succ11_T1map_03,
+                               "08"=succ11_T1map_08,
+                               "15"=succ11_T1map_15
   )
+  
+  # VSI : #
+  
+  aff_fsucc_VSI_j <- {
+    succ11_VSI_00 <- function(x){
+      dep_arr <- liste_succ_VSI_11[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_VSI_03 <- function(x){
+      dep_arr <- liste_succ_VSI_11[["03"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_VSI_08 <- function(x){
+      dep_arr <- liste_succ_VSI_11[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ11_VSI_15 <- function(x){
+      dep_arr <- liste_succ_VSI_11[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_VSI_11 <- list("00"=succ11_VSI_00,
+                             "03"=succ11_VSI_03,
+                             "08"=succ11_VSI_08,
+                             "15"=succ11_VSI_15
+  )
+  # Toutes fonctionnalités confondues
+  
+  liste_fsucc_11 <- list("ADC"=liste_fsucc_ADC_11 ,
+                         "BVf"=liste_fsucc_BVf_11 ,
+                         "CBF"=liste_fsucc_CBF_11 ,
+                         "SO2map"=liste_fsucc_SO2map_11 ,
+                         "T1map"=liste_fsucc_T1map_11 ,
+                         "VSI"=liste_fsucc_VSI_11
+  )
+  
+  
 }
-
-liste_box_11 <- list("ADC"=liste_succ_ADC_11 ,
-                     "BVf"=liste_succ_BVf_11 ,
-                     "CBF"=liste_succ_CBF_11 ,
-                     "SO2map"=liste_succ_SO2map_11 ,
-                     "T1map"=liste_succ_T1map_11 ,
-                     "VSI"=liste_succ_VSI_11
-)
-
-# ADC : pour le moment aucune relation avec les autres modalités. #
-
-aff_fsucc_ADC_j <- {
-  succ11_ADC_00 <- function(x){
-    dep_arr <- liste_succ_ADC_11[["00"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_ADC_03 <- function(x){
-    dep_arr <- liste_succ_ADC_11[["03"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_ADC_08 <- function(x){
-    dep_arr <- liste_succ_ADC_11[["08"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_ADC_15 <- function(x){
-    dep_arr <- liste_succ_ADC_11[["15"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-}
-
-liste_fsucc_ADC_11 <- list("00"=succ11_ADC_00,
-                           "03"=succ11_ADC_03,
-                           "08"=succ11_ADC_08,
-                           "15"=succ11_ADC_15
-)
-
-# BVf #
-
-aff_fsucc_BVf_j <- {
-  succ11_BVf_00 <- function(x){
-    dep_arr <- liste_succ_BVf_11[["00"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_BVf_03 <- function(x){
-    dep_arr <- liste_succ_BVf_11[["03"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_BVf_08 <- function(x){
-    dep_arr <- liste_succ_BVf_11[["08"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_BVf_15 <- function(x){
-    dep_arr <- liste_succ_BVf_11[["15"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-}
-
-liste_fsucc_BVf_11 <- list("00"=succ11_BVf_00,
-                           "03"=succ11_BVf_03,
-                           "08"=succ11_BVf_08,
-                           "15"=succ11_BVf_15
-)
-
-# CBF : même chose que précédemment. #
-
-aff_fsucc_CBF_j <- {
-  succ11_CBF_00 <- function(x){
-    dep_arr <- liste_succ_CBF_11[["00"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_CBF_03 <- function(x){
-    dep_arr <- liste_succ_CBF_11[["03"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_CBF_08 <- function(x){
-    dep_arr <- liste_succ_CBF_11[["08"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_CBF_15 <- function(x){
-    dep_arr <- liste_succ_CBF_11[["15"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-}
-
-liste_fsucc_CBF_11 <- list("00"=succ11_CBF_00,
-                           "03"=succ11_CBF_03,
-                           "08"=succ11_CBF_08,
-                           "15"=succ11_CBF_15
-)
-
-# SO2map #
-
-aff_fsucc_SO2map_j <- {
-  succ11_SO2map_00 <- function(x){
-    dep_arr <- liste_succ_SO2map_11[["00"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_SO2map_03 <- function(x){
-    dep_arr <- liste_succ_SO2map_11[["03"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_SO2map_15 <- function(x){
-    dep_arr <- liste_succ_SO2map_11[["15"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-}
-
-liste_fsucc_SO2map_11 <- list("00"=succ11_SO2map_00,
-                           "03"=succ11_SO2map_03,
-                           "15"=succ11_SO2map_15
-)
-
-# T1map #
-
-aff_fsucc_T1map_j <- {
-  succ11_T1map_00 <- function(x){
-    dep_arr <- liste_succ_T1map_11[["00"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_T1map_03 <- function(x){
-    dep_arr <- liste_succ_T1map_11[["03"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_T1map_08 <- function(x){
-    dep_arr <- liste_succ_ADC_11[["08"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_T1map_15 <- function(x){
-    dep_arr <- liste_succ_T1map_11[["15"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-}
-
-liste_fsucc_T1map_11 <- list("00"=succ11_T1map_00,
-                           "03"=succ11_T1map_03,
-                           "08"=succ11_T1map_08,
-                           "15"=succ11_T1map_15
-)
-
-# VSI : #
-
-aff_fsucc_VSI_j <- {
-  succ11_VSI_00 <- function(x){
-    dep_arr <- liste_succ_VSI_11[["00"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_VSI_03 <- function(x){
-    dep_arr <- liste_succ_VSI_11[["03"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_VSI_08 <- function(x){
-    dep_arr <- liste_succ_VSI_11[["08"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-  
-  succ11_VSI_15 <- function(x){
-    dep_arr <- liste_succ_VSI_11[["15"]]
-    return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
-  }
-}
-
-liste_fsucc_VSI_11 <- list("00"=succ11_VSI_00,
-                           "03"=succ11_VSI_03,
-                           "08"=succ11_VSI_08,
-                           "15"=succ11_VSI_15
-                           )
-# Toutes fonctionnalités confondues
-
-liste_fsucc_11 <- list("ADC"=liste_fsucc_ADC_11 ,
-                       "BVf"=liste_fsucc_BVf_11 ,
-                       "CBF"=liste_fsucc_CBF_11 ,
-                       "SO2map"=liste_fsucc_SO2map_11 ,
-                       "T1map"=liste_fsucc_T1map_11 ,
-                       "VSI"=liste_fsucc_VSI_11
-                       )
 
 
 # ------- Rat 19 ------- #
+
+base_donnes_19 <- {
+  coeff_aff_succ_19 <- {
+    liste_succ_ADC_19 <- list("00"=list("dep"=c(500,700,750,800,1000),"arr"=c(550,750,800,950,1150)),
+                              "03"=list("dep"=c(550,750,800,950,1150),"arr"=c(800,1050,1300,1550,2300)),
+                              "08"=list("dep"=c(800,1050,1300,1550,2300),"arr"=c(750,1450,1950,2400,3700)),
+                              "15"=list("dep"=c(750,1450,1950,2400,3700),"arr"=c(500,1800,2400,2800,4000))
+    )
+    
+    liste_succ_BVf_19 <- list("00"=list("dep"=c(0,1,1.5,2.5,4.5),"arr"=c(0,2.5,4,5,9.5)),
+                              "08"=list("dep"=c(0,2.5,4,5,9.5),"arr"=c(0,3,5,8.5,16)),
+                              "15"=list("dep"=c(0,3,5,8.5,16),"arr"=c(0,2.5,4,6.5,13))
+    )
+    
+    liste_succ_CBF_19 <- list("00"=list("dep"=c(0,10,15,20,40),"arr"=c(0,100,140,190,300)),
+                              "03"=list("dep"=c(0,100,140,190,300),"arr"=c(0,90,145,220,420)),
+                              "08"=list("dep"=c(0,90,145,220,420),"arr"=c(0,40,80,140,300)),
+                              "15"=list("dep"=c(0,40,80,140,300),"arr"=c(0,40,105,280,460))
+    )
+    
+    liste_succ_SO2map_19 <- list("00"=list("dep"=c(0,23,40,60,95),"arr"=c(12,48,60,70,100)),
+                                 "08"=list("dep"=c(12,48,60,70,100),"arr"=c(25,52,77,88,100)),
+                                 "15"=list("dep"=c(25,52,77,88,100),"arr"=c(13,55,70,80,100))
+    )
+    
+    liste_succ_CMRO2_19 <- list("00"=list("dep"=c(0,1,2,4,6),"arr"=c(0,6,12,18,37)),
+                                "08"=list("dep"=c(0,6,12,18,37),"arr"=c(0,1,2,5,8)),
+                                "15"=list("dep"=c(0,1,2,5,8),"arr"=c(0,2,5,12,25))
+    )
+    
+    liste_succ_VSI_19 <- list("00"=list("dep"=c(0,1.5,2,3,4),"arr"=c(0,3,4,5,9)),
+                              "08"=list("dep"=c(0,3,4,5,9),"arr"=c(0,3,5,7,14)),
+                              "15"=list("dep"=c(0,3,5,7,14),"arr"=c(0,2.5,4.5,7.5,15))
+    )
+  }
+  
+  liste_box_19 <- list("ADC"=liste_succ_ADC_19 ,
+                       "BVf"=liste_succ_BVf_19 ,
+                       "CBF"=liste_succ_CBF_19 ,
+                       "SO2map"=liste_succ_SO2map_19 ,
+                       "CMRO2"=liste_succ_CMRO2_19 ,
+                       "VSI"=liste_succ_VSI_19
+  )
+  
+  # ADC : pour le moment aucune relation avec les autres modalités. #
+  
+  aff_fsucc_ADC_j_19 <- {
+    succ19_ADC_00 <- function(x){
+      dep_arr <- liste_succ_ADC_19[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_ADC_03 <- function(x){
+      dep_arr <- liste_succ_ADC_19[["03"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_ADC_08 <- function(x){
+      dep_arr <- liste_succ_ADC_19[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_ADC_15 <- function(x){
+      dep_arr <- liste_succ_ADC_19[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_ADC_19 <- list("00"=succ19_ADC_00,
+                             "03"=succ19_ADC_03,
+                             "08"=succ19_ADC_08,
+                             "15"=succ19_ADC_15
+  )
+  
+  # BVf #
+  
+  aff_fsucc_BVf_j19 <- {
+    succ19_BVf_00 <- function(x){
+      dep_arr <- liste_succ_BVf_19[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_BVf_08 <- function(x){
+      dep_arr <- liste_succ_BVf_19[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_BVf_15 <- function(x){
+      dep_arr <- liste_succ_BVf_19[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_BVf_19 <- list("00"=succ19_BVf_00,
+                             #"03"=succ19_BVf_03,
+                             "08"=succ19_BVf_08,
+                             "15"=succ19_BVf_15
+  )
+  
+  # CBF : même chose que précédemment. #
+  
+  aff_fsucc_CBF_j_19 <- {
+    succ19_CBF_00 <- function(x){
+      dep_arr <- liste_succ_CBF_19[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_CBF_03 <- function(x){
+      dep_arr <- liste_succ_CBF_19[["03"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_CBF_08 <- function(x){
+      dep_arr <- liste_succ_CBF_19[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_CBF_15 <- function(x){
+      dep_arr <- liste_succ_CBF_19[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_CBF_19 <- list("00"=succ19_CBF_00,
+                             "03"=succ19_CBF_03,
+                             "08"=succ19_CBF_08,
+                             "15"=succ19_CBF_15
+  )
+  
+  # SO2map #
+  
+  aff_fsucc_SO2map_j19 <- {
+    succ19_SO2map_00 <- function(x){
+      dep_arr <- liste_succ_SO2map_19[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_SO2map_08 <- function(x){
+      dep_arr <- liste_succ_SO2map_19[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_SO2map_15 <- function(x){
+      dep_arr <- liste_succ_SO2map_19[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_SO2map_19 <- list("00"=succ19_SO2map_00,
+                             #"03"=succ19_BVf_03,
+                             "08"=succ19_SO2map_08,
+                             "15"=succ19_SO2map_15
+  )
+  
+  # CMRO2 #
+  
+  aff_fsucc_CMRO2_j_19 <- {
+    succ19_CMRO2_00 <- function(x){
+      dep_arr <- liste_succ_CMRO2_19[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_CMRO2_08 <- function(x){
+      dep_arr <- liste_succ_CMRO2_19[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_CMRO2_15 <- function(x){
+      dep_arr <- liste_succ_CMRO2_19[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+  }
+  
+  liste_fsucc_CMRO2_19 <- list("00"=succ19_CMRO2_00,
+                               "03"=succ19_CMRO2_03,
+                               "08"=succ19_CMRO2_08,
+                               "15"=succ19_CMRO2_15
+  )
+  
+  # VSI : #
+  
+  aff_fsucc_VSI_j_19 <- {
+    succ19_VSI_00 <- function(x){
+      dep_arr <- liste_succ_VSI_19[["00"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_VSI_08 <- function(x){
+      dep_arr <- liste_succ_VSI_19[["08"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+    succ19_VSI_15 <- function(x){
+      dep_arr <- liste_succ_VSI_19[["15"]]
+      return(trans_box(x,dep_arr[["dep"]],dep_arr[["arr"]]))
+    }
+    
+  }
+  
+  liste_fsucc_VSI_19 <- list("00"=succ19_VSI_00,
+                             #"03"=succ19_VSI_03,
+                             "08"=succ19_VSI_08,
+                             "15"=succ19_VSI_15
+  )
+  # Toutes fonctionnalités confondues
+  
+  liste_fsucc_19 <- list("ADC"=liste_fsucc_ADC_19 ,
+                         "BVf"=liste_fsucc_BVf_19 ,
+                         "CBF"=liste_fsucc_CBF_19 ,
+                         "SO2map"=liste_fsucc_SO2map_19 ,
+                         "CMRO2"=liste_fsucc_CMRO2_19 ,
+                         "VSI"=liste_fsucc_VSI_19
+  )
+  
+  
+}
+
+
+
+
+
 # ------- Rat 26 ------- #
 # ------- Rat 30 ------- #
 
@@ -265,7 +490,7 @@ liste_fsucc_11 <- list("ADC"=liste_fsucc_ADC_11 ,
 ## ------- Fonctions de transition : tous rats confondus ------- ##
 
 liste_fsucc <- list("11"=liste_fsucc_11,
-                    "19"='',#liste_fsucc_19,
+                    "19"=liste_fsucc_19,
                     "26"='',#liste_fsucc_26,
                     "30"=''#liste_fsucc_30
 )
@@ -412,7 +637,7 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
       if (opt_3=='pdf'){# on imprime dans un fichier
         
         if (length(les)!=0){
-          pdf(file = sprintf("%s/%s_suivi_dens_vol%s_%s-%s.pdf","modele_ph",num_rat,'ADC',fonc,jour))
+          pdf(file = sprintf("R%s/%s/%s_suivi_dens_vol%s_%s-%s.pdf",rat,"modele_ph",num_rat,fonc_seg,fonc,jour))
           plot(dsts$x,dsts$y,type="n",main=title,sub=paste(subtitle,segtitle),ylim = c(-0.01*max(dsts$y),2.5*max(dsts$y)))
           lines(dstl$x, nl/ns*dstl$y, lwd = 2, col = "darkred")
           lines(dsts$x, ns/ns*dsts$y, lwd = 2, lty = 2, col = "darkblue")
@@ -798,7 +1023,7 @@ aff_suivi_voxels <- function(rat,fonc,slice,sommet,mesure,opt_1,opt_2){
 # ------------ Construction de deux bases de données : Jour initial 00 ou 08, toutes fonctionnalités confondues. ------------ #
 ### Stockage dans .../R19/automate_2 3demi. ###
 
-# Option : liste des modalités pour lesqueles on effectue le remplissage gaussien.
+# Option : liste des modalités pour lesquelles on effectue le remplissage gaussien.
 
 #liste_fonc_modele <- list('CBF','CMRO2','SO2map','BVf','VSI','ADC')
 cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar,opt){
@@ -981,7 +1206,7 @@ couleur_etat <- function(etat){
     color <- 'darkred'
   }
   else if (etat=='per'){
-    color <- 'cyan'
+    color <- 'blue'
   }
   else if (etat=='les_1_deb'){
     color <- 'red'
@@ -996,7 +1221,7 @@ couleur_etat <- function(etat){
     color <- 'gold'
   }
   else{
-    color <- 'grey50'
+    color <- 'grey80'
   }
   return(color)
 }
@@ -1017,7 +1242,7 @@ affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt_1,opt_2
     nom_mod <- "2"
   }
   else{
-    nom_mod <- "3/2"
+    nom_mod <- "3demi"
   }
   
   nom_table <- sprintf("R%s/%s/cerveau%s_multi_J%s%s_Slices%s.dat",rat,automate,rat,jour,nom_opt,nom_tranches)
@@ -1026,7 +1251,32 @@ affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt_1,opt_2
   d$Etat <- sapply(d$Etat,couleur_etat)
   
   if (opt_2=='pdf'){
-    #
+    if (length(opt_1)>0){
+      suffixe <- "Com"
+    }
+    else{
+      suffixe <- "Brut"
+    }
+    
+    nom_fichier <- sprintf("R%s/modele_ph/%s-J%s-modele%s_sim%s.pdf",rat,rat,jour,nom_mod,suffixe)
+    pdf(file=nom_fichier)
+    
+    par(mfrow=c(1,1))
+    scatterplot3d(d$x,
+                  d$y,
+                  d$Slice,
+                  #cerveau.clust$z, 
+                  color= d$Etat,
+                  pch=20,
+                  xlab='x',
+                  ylab='y',
+                  zlab='Slice',#'z',
+                  lab.z=1+d$Slice[length(d$Slice)]-d$Slice[1],
+                  main=sprintf("Modèle %s : rat %s, jour %s",nom_mod,rat,jour),
+                  sub = sprintf("Tranches %s",nom_tranches)
+    )
+    
+    dev.off()
   }
   else{
     #plot.new()
@@ -1050,3 +1300,14 @@ affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt_1,opt_2
 
 
 # ------------ Suivi pour ... un pixel, carré, cerveau entier ? ------------ #
+
+
+
+
+
+
+
+
+
+
+
