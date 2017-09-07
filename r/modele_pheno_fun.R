@@ -436,7 +436,7 @@ base_donnes_19 <- {
   }
   
   liste_fsucc_CMRO2_19 <- list("00"=succ19_CMRO2_00,
-                               "03"=succ19_CMRO2_03,
+                               #"03"=succ19_CMRO2_03,
                                "08"=succ19_CMRO2_08,
                                "15"=succ19_CMRO2_15
   )
@@ -631,7 +631,7 @@ comp_succ_suivi <- function(rat,hemi,fonc,liste_s_slice,opt_1,opt_2,opt_3){
       
       #plot.new()
       #par(lend="butt")
-      title <- sprintf("Rat %s jour %s %s",rat,jour,fonc)
+      title <- sprintf("%s, J%s segmentation %s",fonc,jour,fonc_seg)
       #title <- paste(title,subtitle,segtitle)
       
       if (opt_3=='pdf'){# on imprime dans un fichier
@@ -1302,8 +1302,128 @@ affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt_1,opt_2
 # ------------ Suivi pour ... un pixel, carré, cerveau entier ? ------------ #
 
 
+cerveau_dyn_2 <- function(cerveau){
+  #
+}
 
 
+cerveau_dyn_3demi <- function(rat,liste_coupes,t){
+  jour <- "08"
+  num_jour <- 8
+  suff <- ""
+  for (cp in liste_coupes){
+    suff <- paste(suff,"-",cp,sep='')
+  }
+  # Chargement du cerveau dont les données seront utilisées
+  nom_cerveau <- sprintf("R%s/automate_3demi/cerveau%s_multi_J%s_Slices%s.dat",rat,rat,jour,suff)
+  cerveau <- read.table(nom_cerveau,header=T)
+  l <- length(cerveau$x)
+  cerveau <- as.data.frame(cbind(cerveau,rep(num_jour,l)))
+  colnames(cerveau) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour'))
+  
+  # Constitution de la base de données : constantes du modèle
+  cbf_asy1 <- rnorm(l,50,50)
+  cmro2_asy1 <- rnorm(l,5,5.5)
+  so2_asy1 <- rnorm(l,75,35)
+  vsi_asy1 <- rnorm(l,4,2.8)
+  cbf_trans2 <- rnorm(l,120,50)
+  vsi_asy2 <- rnorm(l,5,4.3)
+  so2_asy2 <- rnorm(l,75,30)
+  so2_sain <- rnorm(l,75,25)
+  
+  cbf_sain <- rnorm(l,130,43)
+  
+  const <- as.data.frame(cbind(cbf_asy1,cmro2_asy1,so2_asy1,cbf_trans2,vsi_asy2,so2_asy2,so2_sain,cbf_sain))
+  colnames(const)=c("CBF_asy1","CMRO2_asy1","SO2_asy1","CBF_trans2","VSI_asy2","SO2_asy2","SO2_sain","CBF_sain")
+  
+  # Initialisation pour la simulation : ...
+  
+  # Evolution à partir du jour 8 : on part de "cerveau", dont les états sont labélisés
+  # On concatène successivement les tables de données obtenues à chaque itération de la boucle
+  
+  for (num_jour in c(9:(8+t))){
+    # Increment
+    c_inc <- cerveau[cerveau$Jour==num_jour-1,]
+    # Accroissement des modalités, en un jour
+    c_t <- data.frame(matrix(ncol = 6, nrow = l))
+    colnames(c_t) <- c('ADC','BVf','CBF','CMRO2','SO2map','VSI')
+    
+    # Calcul du bruit pour chaque variable : équations de type 0
+    bruit_mod <- data.frame(matrix(ncol = 6, nrow = l))
+    colnames(bruit_mod) <- c('ADC','BVf','CBF','CMRO2','SO2map','VSI')
+    for (fonc in liste_fonc){
+      bruit_mod[[fonc]] <- rnorm(l,0,liste_mod_bruit[[fonc]])
+    }
+    
+    # Calcul, vectorisé et conditionnel, des composantes des vecteurs de cerveau_temp.
+    # On commence par l'état d'équilibre sain, perturbé non lésé, lésé 1 début, lésé 1 fin etc.
+    # Il existe des niveaux de priorités entre les modalités
+    # SO2
+    c_t$SO2map <- bruit_mod$SO2map# Etat non lésé perturbé : même chose
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_deb',1*(so2_asy1-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$SO2map,c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_deb',4*so2_sain,c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_inc',1*(so2_asy2-c_inc$SO2map),c_t$SO2map)
+    
+    # CBF
+    c_t$CBF <- bruit_mod$CBF
+    c_t$CBF <- ifelse(c_inc$Etat=='per',3*(cbf_sain-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_1_deb',5*(cbf_asy1-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='lesion_1_fin',bruit_mod$CBF,c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='lesion_2_deb',-15*(cbf_trans2-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='lesion_2_fin',-10*c_t$SO2map,c_t$CBF)
+    
+    # ADC
+    c_t$ADC <- bruit_mod$ADC
+    c_t$ADC <- ifelse(c_inc$Etat=='les_1_deb'|c_inc$Etat=='les_1_fin',tau_1*(c_inc$ADC)^alpha_1,c_t$ADC)
+    c_t$ADC <- ifelse(c_inc$Etat=='lesion_2_deb'|c_inc$Etat=='lesion_2_fin',tau_2*(c_inc$ADC)^alpha_2,c_t$ADC)
+    
+    # CMRO2
+    c_t$CMRO2 <- bruit_mod$CMRO2
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_deb',0.15*(cmro2_asy1-c_inc$CMRO2),c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='lesion_1_fin',bruit_mod$CMRO2,c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='lesion_2_deb',0.15*c_t$CBF,c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='lesion_2_fin',-1*c_t$SO2map,c_t$CMRO2)
+    
+    # VSI
+    c_t$VSI <- bruit_mod$VSI
+    c_t$VSI <- ifelse(c_inc$Etat=='les_1_deb',0.2*(vsi_asy1-c_inc$VSI),c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='lesion_1_fin',bruit_mod$VSI,c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='lesion_2_deb',0.3*(vsi_asy2-c_inc$VSI),c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='lesion_2_fin',bruit_mod$VSI,c_t$VSI)
+    
+    # BVf
+    c_t$BVf <- bruit_mod$BVf
+    c_t$BVf <- ifelse(c_inc$Etat=='les_1_deb',0.5*c_t$VSI,c_t$BVf)
+    c_t$BVf <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$BVf,c_t$BVf)
+    c_t$BVf <- ifelse(c_inc$Etat=='les_2_deb',2*c_t$VSI,c_t$BVf)
+    c_t$BVf <- ifelse(c_inc$Etat=='les_2_fin',bruit_mod$BVf,c_t$BVf)
+    
+    # Calcul de la valeurs courante de cerveau_inc : modalités
+    for (fonc in liste_fonc){
+      c_inc[[fonc]] <- c_inc[[fonc]]+c_t[[fonc]]
+    }
+    
+    print(c_inc$Etat[1:10])
+    # Calcul des états de cerveau_inc
+    c_inc$Etat <- ifelse((c_inc$Etat=='per'&c_inc$CBF>100),'sain',c_inc$Etat)
+    c_inc$Etat <- ifelse((c_inc$Etat=='lesion_1_deb'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'lesion_1_fin',c_inc$Etat)
+    #c_inc$Etat <- ifelse(c_inc$Etat=='lesion_2_deb'&(abs(c_inc$SO2map-so2_sain)<0.5*abs(bruit_mod$SO2map)),'lesion_2_fin',c_inc$Etat)
+    print(c_inc$Etat[1:10])
+    
+    # Jour courant pour cerveau_inc
+    c_inc$Jour <- rep(num_jour,l)
+    
+    # Concaténation
+    cerveau <- as.data.frame(rbind(cerveau,c_inc))
+    colnames(cerveau) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour'))
+    
+    # Fin de la boucle
+  }
+  #return(cerveau)
+  nom_table_dyn <- sprintf("R%s/automate_3demi/cerveau%s_multi_dyn_Slices%s.dat",rat,rat,suff)
+  write.table(cerveau, nom_table_dyn, row.names=F, quote=F, sep='\t')
+}
 
 
 
