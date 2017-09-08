@@ -1177,7 +1177,7 @@ cerveau_multipar <- function(rat,automate,liste_tranches,liste_multipar,opt){
     etat <- ifelse(etat=='les_1_deb'&d$CBF>100,'les_2_deb',etat)
   }
   colnames.inc <- colnames(d)
-  d <- as.data.frame(cbind(d,etat))
+  d <- as.data.frame(cbind(d,etat),stringAsFactors=TRUE)
   colnames(d) <- c(colnames.inc,'Etat')
   
   # Sorties : dataframe, qui est enregistrée dans le dossier automate_2_3demi. On mentionne les rtanches retenues.
@@ -1212,16 +1212,16 @@ couleur_etat <- function(etat){
     color <- 'red'
   }
   else if (etat=='les_1_fin'){
-    color <- 'brown'
+    color <- 'darkmagenta'
   }
   else if (etat=='les_2_deb'){
-    color <- 'orange'
+    color <- 'darkorange3'
   }
   else if (etat=='les_2_fin'){
     color <- 'gold'
   }
   else{
-    color <- 'grey80'
+    color <- 'grey30'
   }
   return(color)
 }
@@ -1307,7 +1307,7 @@ cerveau_dyn_2 <- function(cerveau){
 }
 
 
-cerveau_dyn_3demi <- function(rat,liste_coupes,t){
+cerveau_dyn_3demi <- function(rat,liste_coupes,t){# t : jour final
   jour <- "08"
   num_jour <- 8
   suff <- ""
@@ -1333,6 +1333,9 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){
   
   cbf_sain <- rnorm(l,130,43)
   
+  adc_asy1 <- rnorm(l,3000,1000)
+  adc_asy2 <- rnorm(l,2500,700)
+  
   const <- as.data.frame(cbind(cbf_asy1,cmro2_asy1,so2_asy1,cbf_trans2,vsi_asy2,so2_asy2,so2_sain,cbf_sain))
   colnames(const)=c("CBF_asy1","CMRO2_asy1","SO2_asy1","CBF_trans2","VSI_asy2","SO2_asy2","SO2_sain","CBF_sain")
   
@@ -1341,7 +1344,7 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){
   # Evolution à partir du jour 8 : on part de "cerveau", dont les états sont labélisés
   # On concatène successivement les tables de données obtenues à chaque itération de la boucle
   
-  for (num_jour in c(9:(8+t))){
+  for (num_jour in c(9:t)){
     # Increment
     c_inc <- cerveau[cerveau$Jour==num_jour-1,]
     # Accroissement des modalités, en un jour
@@ -1362,35 +1365,35 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){
     c_t$SO2map <- bruit_mod$SO2map# Etat non lésé perturbé : même chose
     c_t$SO2map <- ifelse(c_inc$Etat=='les_1_deb',1*(so2_asy1-c_inc$SO2map),c_t$SO2map)
     c_t$SO2map <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$SO2map,c_t$SO2map)
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_deb',4*so2_sain,c_t$SO2map)
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_inc',1*(so2_asy2-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_deb',2*(so2_sain-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_ifin',1*(so2_asy2-c_inc$SO2map),c_t$SO2map)
     
     # CBF
     c_t$CBF <- bruit_mod$CBF
     c_t$CBF <- ifelse(c_inc$Etat=='per',3*(cbf_sain-c_inc$CBF),c_t$CBF)
     c_t$CBF <- ifelse(c_inc$Etat=='les_1_deb',5*(cbf_asy1-c_inc$CBF),c_t$CBF)
-    c_t$CBF <- ifelse(c_inc$Etat=='lesion_1_fin',bruit_mod$CBF,c_t$CBF)
-    c_t$CBF <- ifelse(c_inc$Etat=='lesion_2_deb',-15*(cbf_trans2-c_inc$CBF),c_t$CBF)
-    c_t$CBF <- ifelse(c_inc$Etat=='lesion_2_fin',-10*c_t$SO2map,c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$CBF,c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_2_deb',16*(cbf_trans2-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_2_fin',-10*c_t$SO2map,c_t$CBF)
     
     # ADC
     c_t$ADC <- bruit_mod$ADC
-    c_t$ADC <- ifelse(c_inc$Etat=='les_1_deb'|c_inc$Etat=='les_1_fin',tau_1*(c_inc$ADC)^alpha_1,c_t$ADC)
-    c_t$ADC <- ifelse(c_inc$Etat=='lesion_2_deb'|c_inc$Etat=='lesion_2_fin',tau_2*(c_inc$ADC)^alpha_2,c_t$ADC)
+    c_t$ADC <- ifelse(c_inc$Etat=='les_1_deb'|c_inc$Etat=='les_1_fin',tau_1*(c_inc$ADC)^alpha_1*(adc_asy1-c_inc$ADC),c_t$ADC)
+    c_t$ADC <- ifelse(c_inc$Etat=='les_2_deb'|c_inc$Etat=='les_2_fin',tau_2*(c_inc$ADC)^alpha_2*(adc_asy2-c_inc$ADC),c_t$ADC)
     
     # CMRO2
     c_t$CMRO2 <- bruit_mod$CMRO2
     c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_deb',0.15*(cmro2_asy1-c_inc$CMRO2),c_t$CMRO2)
-    c_t$CMRO2 <- ifelse(c_inc$Etat=='lesion_1_fin',bruit_mod$CMRO2,c_t$CMRO2)
-    c_t$CMRO2 <- ifelse(c_inc$Etat=='lesion_2_deb',0.15*c_t$CBF,c_t$CMRO2)
-    c_t$CMRO2 <- ifelse(c_inc$Etat=='lesion_2_fin',-1*c_t$SO2map,c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$CMRO2,c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_2_deb',c_t$SO2map,c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_2_fin',-1*c_t$SO2map,c_t$CMRO2)
     
     # VSI
     c_t$VSI <- bruit_mod$VSI
     c_t$VSI <- ifelse(c_inc$Etat=='les_1_deb',0.2*(vsi_asy1-c_inc$VSI),c_t$VSI)
-    c_t$VSI <- ifelse(c_inc$Etat=='lesion_1_fin',bruit_mod$VSI,c_t$VSI)
-    c_t$VSI <- ifelse(c_inc$Etat=='lesion_2_deb',0.3*(vsi_asy2-c_inc$VSI),c_t$VSI)
-    c_t$VSI <- ifelse(c_inc$Etat=='lesion_2_fin',bruit_mod$VSI,c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$VSI,c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_2_deb',0.3*(vsi_asy2-c_inc$VSI),c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_2_fin',bruit_mod$VSI,c_t$VSI)
     
     # BVf
     c_t$BVf <- bruit_mod$BVf
@@ -1404,12 +1407,17 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){
       c_inc[[fonc]] <- c_inc[[fonc]]+c_t[[fonc]]
     }
     
-    print(c_inc$Etat[1:10])
+    # Les modalités ne prennent pas de valeur négative
+    for (fonc in liste_fonc){
+      c_inc[[fonc]] <- ifelse(c_inc[[fonc]]<0,0,c_inc[[fonc]])
+    }
+    
+    #print(c_inc$Etat[1:10])
     # Calcul des états de cerveau_inc
-    c_inc$Etat <- ifelse((c_inc$Etat=='per'&c_inc$CBF>100),'sain',c_inc$Etat)
-    c_inc$Etat <- ifelse((c_inc$Etat=='lesion_1_deb'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'lesion_1_fin',c_inc$Etat)
-    #c_inc$Etat <- ifelse(c_inc$Etat=='lesion_2_deb'&(abs(c_inc$SO2map-so2_sain)<0.5*abs(bruit_mod$SO2map)),'lesion_2_fin',c_inc$Etat)
-    print(c_inc$Etat[1:10])
+    c_inc$Etat <- ifelse((c_inc$Etat=='per'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'sain',as.character(c_inc$Etat))
+    c_inc$Etat <- ifelse((c_inc$Etat=='les_1_deb'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'les_1_fin',as.character(c_inc$Etat))
+    c_inc$Etat <- ifelse(c_inc$Etat=='les_2_deb'&(abs(c_inc$SO2map-so2_sain)<0.5*abs(bruit_mod$SO2map)),'les_2_fin',as.character(c_inc$Etat))
+    #print(c_inc$Etat[1:10])
     
     # Jour courant pour cerveau_inc
     c_inc$Jour <- rep(num_jour,l)
@@ -1420,13 +1428,127 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){
     
     # Fin de la boucle
   }
+  print(max(adc_asy1))
+  print(max(adc_asy2))
   #return(cerveau)
-  nom_table_dyn <- sprintf("R%s/automate_3demi/cerveau%s_multi_dyn_Slices%s.dat",rat,rat,suff)
+  nom_table_dyn <- sprintf("R%s/automate_3demi/cerveau%s_multi_dyn_Slices%s_fin%i.dat",rat,rat,suff,t)
   write.table(cerveau, nom_table_dyn, row.names=F, quote=F, sep='\t')
 }
 
+# Option 1 : automate choisi comme modèle
+# Option 2 : remlissage gaussien, dans le cas de l'automate 2
+# Option 3 : densités ou diagrammes en boîte pour la sortie
+# Option 4 : sortie. pdf si 'pdf', affichage dans RStudio sinon.
 
-
+suivi_mod <- function(rat,liste_mod,liste_coupes,t,opt_1,opt_2,opt_3,opt_4){
+  
+  # Nommage de la base de données, constituée à l'aide d'une fonction cerveau_dyn
+  coupes <- ""
+  for (cp in liste_coupes){coupes <- paste(coupes,"-",cp,sep='')}
+  if (opt_1=="automate_2"){
+    jour <- "00"
+  }
+  else{
+    jour <- "08"
+  }
+  nom_cerveaux <- sprintf("R%s/%s/cerveau%s_multi_dyn%s_Slices%s_fin%s.dat",rat,opt_1,rat,opt_2,coupes,t)
+  # Importation des données calculées à l'aide du modèle opt_1
+  cerveaux <- read.table(nom_cerveaux,header=T)
+  
+  if (opt_3=='box'){
+    for (fonc in liste_mod){
+      if (opt_4=='pdf'){
+        file_name <- sprintf("R%s/%s/cerveau%s_%s%s_dyn%s_Slices%s_fin%s.pdf",rat,opt_1,rat,fonc,opt_3,opt_2,coupes,t)
+        
+        cerveaux$Jour <- as.character(cerveaux$Jour)
+        
+        gg_title <- sprintf("Partie lésée 1, jours %s à %i",jour,t)
+        subtitle <- sprintf("Coupes %s, modalité %s",coupes,fonc)
+        cerveaux_i1 <- cerveaux[cerveaux$Etat=='les_1_deb'|cerveaux$Etat=='les_1_fin',]
+        pi1 <- ggplot(cerveaux_i1,
+                      aes(x=cerveaux_i1$Jour,y=cerveaux_i1[[fonc]],fill=cerveaux_i1$Etat
+                      )
+        )
+        pi1 <- pi1 + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        pi1 <- pi1 + scale_fill_manual(values = alpha(c("red","darkmagenta"), .3))
+        pi1 <- pi1 + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        gg_title <- sprintf("Partie lésée 2, jours %s à %i",jour,t)
+        subtitle <- sprintf("Coupes %s, modalité %s",coupes,fonc)
+        cerveaux_i2 <- cerveaux[cerveaux$Etat=='les_2_deb'|cerveaux$Etat=='les_2_fin',]
+        pi2 <- ggplot(cerveaux_i2,
+                      aes(x=cerveaux_i2$Jour,y=cerveaux_i2[[fonc]],fill=cerveaux_i2$Etat
+                      )
+        )
+        pi2 <- pi2 + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        pi2 <- pi2 + scale_fill_manual(values = alpha(c("darkorange3","gold"), .3))
+        pi2 <- pi2 + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        gg_title <- sprintf("Partie saine, jours %s à %i",jour,t)
+        subtitle <- sprintf("Coupes %s, modalité %s",coupes,fonc)
+        cerveaux_s <- cerveaux[cerveaux$Etat=='per'|cerveaux$Etat=='sain',]
+        ps <- ggplot(cerveaux_s,
+                     aes(x=cerveaux_s$Jour,y=cerveaux_s[[fonc]],fill=cerveaux_s$Etat
+                     )
+        )
+        ps <- ps + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        ps <- ps + scale_fill_manual(values = alpha(c("blue","grey30"), .3))
+        ps <- ps + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        p <- grid.arrange(pi1,pi2,ps,ncol=1,nrow=3)
+        
+        # On imprime pour que le graphique soit exporté
+        print(p)
+        dev.off()
+        
+        # On enregistre le fichier .pdf
+        ggsave(filename=file_name,plot = p)
+      }
+      else{
+        cerveaux$Jour <- as.character(cerveaux$Jour)
+        
+        gg_title <- sprintf("Evolution de %s, jours %s à %i",fonc,jour,t)
+        subtitle <- sprintf("Coupes %s, modalité %s, partie %s %i",coupes,fonc,"ischémiée",1)
+        cerveaux_i1 <- cerveaux[cerveaux$Etat=='les_1_deb'|cerveaux$Etat=='les_1_fin',]
+        pi1 <- ggplot(cerveaux_i1,
+                    aes(x=cerveaux_i1$Jour,y=cerveaux_i1[[fonc]],fill=cerveaux_i1$Etat
+                    )
+        )
+        pi1 <- pi1 + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        pi1 <- pi1 + scale_fill_manual(values = alpha(c("red","darkmagenta"), .3))
+        pi1 <- pi1 + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        gg_title <- sprintf("Evolution de %s, jours %s à %i",fonc,jour,t)
+        subtitle <- sprintf("Coupes %s, modalité %s, partie %s %i",coupes,fonc,"ischémiée",2)
+        cerveaux_i2 <- cerveaux[cerveaux$Etat=='les_2_deb'|cerveaux$Etat=='les_2_fin',]
+        pi2 <- ggplot(cerveaux_i2,
+                      aes(x=cerveaux_i2$Jour,y=cerveaux_i2[[fonc]],fill=cerveaux_i2$Etat
+                      )
+        )
+        pi2 <- pi2 + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        pi2 <- pi2 + scale_fill_manual(values = alpha(c("darkorange3","gold"), .3))
+        pi2 <- pi2 + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        gg_title <- sprintf("Evolution de %s, jours %s à %i",fonc,jour,t)
+        subtitle <- sprintf("Coupes %s, modalité %s, partie %s",coupes,fonc,"saine")
+        cerveaux_s <- cerveaux[cerveaux$Etat=='per'|cerveaux$Etat=='sain',]
+        ps <- ggplot(cerveaux_s,
+                     aes(x=cerveaux_s$Jour,y=cerveaux_s[[fonc]],fill=cerveaux_s$Etat
+                     )
+        )
+        ps <- ps + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        ps <- ps + scale_fill_manual(values = alpha(c("blue","grey30"), .3))
+        ps <- ps + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        p <- grid.arrange(pi1,pi2,ps,ncol=1,nrow=3)
+        print(p)
+      }
+    }
+  }
+  else if (opt_3=='dens'){
+    #
+  }
+}
 
 
 

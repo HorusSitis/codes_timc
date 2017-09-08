@@ -1053,6 +1053,10 @@ ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'CBFdark00', liste_sui
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'ADCdark00','')
 
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'CBFdark00','')
+comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'CBFdark00','pdf')
+
+liste_fonc <- list('CBF','BVf')
+comp_clust_vol00(num_rat,liste_suivi_slice,c(1,3),liste_min_fonc,'CBFdark00','pdf')
 
 suivi_hemC_rat19 <- function(hemi,fonc){
   num_rat <- "19"
@@ -1081,6 +1085,13 @@ ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"08",'CMRO2',liste_min_fonc,li
 
 ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"15",'SO2map',liste_min_fonc,liste_suivi_slice,'')
 ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"15",'BVf',liste_min_fonc,liste_suivi_slice,'')
+
+
+liste_fonc <- list('ADC','BVf','CBF','CMRO2','SO2map','VSI')#'T1map',
+ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"08",'CBF',liste_min_fonc,liste_suivi_slice,'pdf')
+
+
+
 
 num_rat <- "26"
 liste_suivi_slice <- liste_ss_rat[[num_rat]]
@@ -1152,6 +1163,36 @@ comp_seg_ADCvsCBF(fr_hemi,liste_rats_tr,'VSI','')
 
 comp_seg_ADCvsCBF(fr_hemi,liste_rats_tr,'CMRO2','')
 
+
+##################################################################################################################
+# -------------------------------- Etape 2 pour le rapport : tous rats confondus-------------------------------- #
+##################################################################################################################
+
+liste_fonc <- list('ADC','T1map','BVf','CBF','CMRO2','SO2map','VSI')
+#liste_min_fonc <- list('ADC'=50,'BVf'=1,'CBF'=5,'SO2map'=5,'T1map'=10,'VSI'=1)
+
+cl <- c(4,4)
+
+# Avec des variables globales :
+clust3d <- function(rat,opt){
+  for (fonc in liste_fonc){
+    rg_FONC_3d(3,fonc,num_rat,cl,'',opt)
+  }
+}
+comp2vs3d <- function(rat,tranche,opt){
+  for (fonc in list('ADC','T1map','CBF')){
+    comp_2vs3d_clust(fonc,rat,cl,tranche,opt)
+  }
+}
+
+# Entrer num_rat dans la console.
+clust3d(num_rat,'')
+clust3d(num_rat,'pdf')
+
+# Tranche 9 : réservée au rat numéro 19.
+comp2vs3d("19",9,'')
+comp2vs3d("19",9,'pdf')
+
 ##############################################################################################################################################
 ###----------------- Simulations : modèle phénoménologique pour décrire les suites de l'ischémie, sur les jours d'examen. -----------------###
 ##############################################################################################################################################
@@ -1173,7 +1214,39 @@ comp_succ_suivi(num_rat,fr_hemi,'SO2map',liste_suivi_slice,opt_seg,'box','')
 comp_succ_suivi(num_rat,fr_hemi,'T1map',liste_suivi_slice,opt_seg,'box','')
 comp_succ_suivi(num_rat,fr_hemi,'VSI',liste_suivi_slice,opt_seg,'box','')
 
+### comp_succ_suivi(num_rat,fr_hemi,'CMRO2',liste_suivi_slice,opt_seg,'box','') ---> pas de fonction de transition définie.
+
 # il faut définir des fonctions de transition pour --- > # CMRO2 # comp_succ_suivi(num_rat,fr_hemi,'CMRO2',liste_suivi_slice,opt_seg,'box','')
+
+num_rat <- "19"
+liste_suivi_slice <- liste_ss_rat[[num_rat]]
+
+comp_succ_suivi(num_rat,fr_hemi,'ADC',liste_suivi_slice,opt_seg,'box','')
+comp_succ_suivi(num_rat,fr_hemi,'BVf',liste_suivi_slice,opt_seg,'box','')
+comp_succ_suivi(num_rat,fr_hemi,'CBF',liste_suivi_slice,opt_seg,'box','')
+#comp_succ_suivi(num_rat,fr_hemi,'SO2map',liste_suivi_slice,opt_seg,'box','')
+comp_succ_suivi(num_rat,fr_hemi,'CMRO2',liste_suivi_slice,opt_seg,'box','')
+comp_succ_suivi(num_rat,fr_hemi,'VSI',liste_suivi_slice,opt_seg,'box','')
+
+comp_succ_suivi(num_rat,fr_hemi,'ADC',liste_suivi_slice,opt_seg,'dens','')
+comp_succ_suivi(num_rat,fr_hemi,'BVf',liste_suivi_slice,opt_seg,'dens','')
+comp_succ_suivi(num_rat,fr_hemi,'CBF',liste_suivi_slice,opt_seg,'dens','')
+comp_succ_suivi(num_rat,fr_hemi,'SO2map',liste_suivi_slice,opt_seg,'dens','')
+comp_succ_suivi(num_rat,fr_hemi,'CMRO2',liste_suivi_slice,opt_seg,'dens','')
+comp_succ_suivi(num_rat,fr_hemi,'VSI',liste_suivi_slice,opt_seg,'dens','')
+
+comp_succ_suivi(num_rat,fr_hemi,'ADC',liste_suivi_slice,opt_seg,'dens','pdf')
+#comp_succ_suivi(num_rat,fr_hemi,'BVf',liste_suivi_slice,opt_seg,'dens','pdf')
+comp_succ_suivi(num_rat,fr_hemi,'CBF',liste_suivi_slice,opt_seg,'dens','pdf')
+comp_succ_suivi(num_rat,fr_hemi,'SO2map',liste_suivi_slice,opt_seg,'dens','pdf')
+comp_succ_suivi(num_rat,fr_hemi,'CMRO2',liste_suivi_slice,opt_seg,'dens','pdf')
+comp_succ_suivi(num_rat,fr_hemi,'VSI',liste_suivi_slice,opt_seg,'dens','pdf')
+
+
+
+
+
+
 
 
 comp_succ_suivi(num_rat,fr_hemi,'ADC',liste_suivi_slice,'ADCdark00','dens','')
@@ -1253,20 +1326,51 @@ color.vector = c('darkred','cyan','red','brown','gold','orange','blue')
 affichage_etats_cerveau(num_rat,"automate_2",c(9),"00",list(),'')
 affichage_etats_cerveau(num_rat,"automate_2",c(9),"00",list('CBF','CMRO2','SO2map'),'')
 
+affichage_etats_cerveau(num_rat,"automate_2",c(9),"00",list('CBF','CMRO2','SO2map'),'pdf')
+affichage_etats_cerveau(num_rat,"automate_2",c(9),"00",list(),'pdf')
+
 affichage_etats_cerveau(num_rat,"automate_3demi",c(9),"08",list(),'')
 affichage_etats_cerveau(num_rat,"automate_3demi",c(10),"08",list(),'')
 affichage_etats_cerveau(num_rat,"automate_3demi",c(9,10),"08",list(),'')
 
+affichage_etats_cerveau(num_rat,"automate_3demi",c(9,10),"08",list(),'pdf')
+
+# -------------------------- Base de données : modèles 2 et 3demi -------------------------- #
+
+#l <- size
+liste_mod_bruit <- list('ADC'=50,'BVf'=1,'CBF'=30,'CMRO2'=1,'SO2map'=10,'VSI'=1)
+#CBF_sain <- rnorm(l,mean=130,sd=)
+
+# ---------------------------- Simulations : modèles 2 et 3demi ---------------------------- #
 
 
+vect_fonc <- c('CBF','SO2map','BVf','ADC','VSI','CMRO2')
+liste_fonc <- list('CBF','SO2map','BVf','ADC','VSI','CMRO2')
+#cerveau_trans_2(num_rat,list(9))
+
+alpha_1 <- 3
+alpha_2 <- 2
+tau_1 <- 100
+tau_2 <- 100
+
+cerveau_dyn_3demi(num_rat,list(9),2)
+cerveau_dyn_3demi(num_rat,list(10),2)
+cerveau_dyn_3demi(num_rat,list(9,10),2)
+
+
+
+
+##############################################################################################
 ###----------------- Même modèle, essai avec les données des autres rats. -----------------###
 num_rat <- "11"
 liste_fonc <- list('CBF','SO2map','BVf','ADC','VSI','CMRO2')
 cerveau_multipar(num_rat,"automate_2",c(10),liste_fonc)
 affichage_etats_cerveau(num_rat,"automate_2",c(10),"00",'')
 
-
-
 num_rat <- "26"
 cerveau_multipar(num_rat,"automate_2",c(8),liste_fonc)
 affichage_etats_cerveau(num_rat,"automate_2",c(8),"00",'')
+### -------------------------------------------------------------------------------------- ###
+
+
+
