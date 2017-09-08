@@ -13,17 +13,18 @@ Remarque : pour renuméroter les sous-figures de la même manière
 	   la ligne \let\p@subfigure\thefigure dans le préambule.
 \end{comment}
 
-\subsection{Protocole exp\'erimental : isch\'emie focale transitoire induite sur des rats par suture intraluminale}
+\subsection{Mod\g{e}le exp\'erimental}
 
-Ces exp\'eriences ont \'et\'e men\'ees \g{a} l'Institut de Neurosciences de Grenoble (GIN) par Benjamin Lemasson, %
-et m'ont \'e\'e transmises \g{a} la suite d'une r\'eunion \g{a} laquelle j'ai assist\'e au GIN %
-avec Ang\'elique St\'ephanou, Emmanuel Barbier, et Benjamin Lemasson.
+Ces exp\'eriences ont \'et\'e men\'ees \g{a} l'Institut de Neurosciences de Grenoble (GIN) par Benjamin Lemasson.
+%, %
+%et m'ont \'et\'e transmises \g{a} la suite d'une r\'eunion \g{a} laquelle j'ai assist\'e au GIN %
+%avec Ang\'elique St\'ephanou, Emmanuel Barbier, et Benjamin Lemasson.
 
 \cite{Lem_PHD_10}
 
-\subsubsection{Chirurgie et examens}
+\subsubsection{Chirurgie et examens}% trop flou
 
-% Occlusion intraluminale.
+Occlusion intraluminale.
 
 % Sessions d'examen : jours 00, 03 etc.
 
@@ -31,7 +32,7 @@ avec Ang\'elique St\'ephanou, Emmanuel Barbier, et Benjamin Lemasson.
 Chaque session d'examens consistait \g{a} produire $13$ images, en coupe frontale, de la t\^ete du sujet, %
 sur une longueur correspondant au cerveau du rat, et pour les modalit\'es qui suivent :
 
-\subsubsection{Confection des images multiparam\'etriques, fiabilit\'e, probl\g{e}mes rencontr\'es}
+\subsubsection{G\'en\'eration des images multiparam\'etriques}%, fiabilit\'e, probl\g{e}mes rencontr\'es}
 
 
 
@@ -42,24 +43,24 @@ sur une longueur correspondant au cerveau du rat, et pour les modalit\'es qui su
 \hline
 \includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}
 &
-\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}
+\subfloat[ADC]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}}
 &
-\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregBVf-slice-10.jpg}
+\subfloat[BVf]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregBVf-slice-10.jpg}}
 &
-\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregCBF-slice-10.jpg}
+\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregCBF-slice-10.jpg}}
 \\
 \hline
-\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregCMRO2-slice-10.jpg}
+\subfloat[CMRO2]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregCMRO2-slice-10.jpg}}
 &
-\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregSO2map-slice-10.jpg}
+\subfloat[SO2map]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregSO2map-slice-10.jpg}}
 &
-\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregT1map-slice-10.jpg}
+\subfloat[T1map]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregT1map-slice-10.jpg}}
 &
-\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregVSI-slice-10.jpg}
+\subfloat[VSI]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregVSI-slice-10.jpg}}
 \\
 \hline
 \end{tabular}
-\caption{Images disponibles pour le rat 11, au jour 03, tranche num\'ero 10.
+\caption{Images disponibles pour le rat 11, au jour 03, coupe num\'ero 10.
 \\%\par
 De gauche \g{a} droite, et de haut en bas : %
 l'image brute en T2 \og{} Anatomique\fg{}, l'ADC, le BVf, le CBF, la CMRO2, la SO2, l'image en T1 et le VSI.}
@@ -67,20 +68,19 @@ l'image brute en T2 \og{} Anatomique\fg{}, l'ADC, le BVf, le CBF, la CMRO2, la S
 \end{figure}
 
 \FloatBarrier
-\subsection{Traitement d'images avec ImageJ}
+\subsection{Segmentation des images avec ImageJ}
 
-J'ai choisi de traiter pr\'ealablement les images r\'ealis\'ees en niveaux de gris par Benjamin Lemasson, \g{a} l'aide du logiciel ImageJ : %
-c'est un logiciel \'ecrit en Java qui permet de manipuler des images.
+Les images en niveau de gris ont été pr\'ealablement trait\'ees \g{a} l'aide du logisiel ImageJ couramment utilis\'e dans la manipulation d'images.
 %
 \par
-A partir des images, au format .tif, transmises par Benjamin Lemasson, %
-j'ai utilis\'e l'outil ImageJ pour d\'elimiter les r\'egions correspondant au cerveau, pour toutes les modalit\'es -voir figure \ref{cephcer}.
+A partir des images, au format .tif, %transmises par Benjamin Lemasson, %
+ImageJ a \'et\'e untilis\'e pour d\'elimiter les r\'egions correspondant au cerveau, pour toutes les modalit\'es -voir figure \ref{cephcer}.
 \par
 Ma d\'emarche a \'et\'e la suivante :
 \begin{enumerate}
-\item Tracer manuellement le contour des images anatomiques, prises en T2, pr\'ealablement masqu\'ees par Benjamin et dont on voit un exemple \g{a} gauche de la figure \ref{cephcer} ;
+\item Tracer manuellement le contour des cerveaux sur les images anatomiques, prises en T2, figure \ref{cephcer} ;
 \item Charger individuellement ces contours sur les images correspondant aux autres modalit\'es, ici l'ADC : les deux images centrales de la figure ;
-\item Retirer toutes les valeurs correspondant \g{a} l'ext\'ertieur du contour : voir l'image \g{a} droite de \ref{cephcer} ;
+\item Retirer toutes les valeurs correspondant \g{a} l'ext\'erieur du contour : voir l'image segment\'ee de la figure \ref{cephcer} ;
 \item Automatiser la proc\'edure pour traiter et trier, \g{a} partir des contours d\'efinis manuellement, toutes les images disponibles.
 \end{enumerate}
 
@@ -88,29 +88,29 @@ Ma d\'emarche a \'et\'e la suivante :
 \setcounter{stock}{\value{enumi}}
 
 \begin{figure}[!h]%Ajouter les colonnes correspondant à anatomique, ADC sans contour ce ADC segmentée.
-\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}
+\subfloat[Image en anatomique]{\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}}
 \hfill
-\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}
+\subfloat[Image brute en ADC]{\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}}
 \hfill
-\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-segADC-slice-10.jpg}
+\subfloat[Image + contour]{\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-segADC-slice-10.jpg}}
 \hfill
-\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-ADC-bg-slice10.jpg}
+\subfloat[Image segment\'ee]{\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-ADC-bg-slice10.jpg}}
 \caption{D\'elimitation du cerveau du rat num\'ero 11, jour 03, avec la modalit\'e ADC. On utilise les images anatomiques prises en ...}% en T2 ?
 \label{cephcer}
 \end{figure}
 
 \FloatBarrier
-J'ai ainsi obtenu des images, par tranche examin\'ee, pour toutes les modalit\'es, restreintes \g{a} l'enc\'ephale. L'\'etape finale pour l'exploitation des donn\'ees IRM a \'et\'e :
+Des images ont ainsi \'et\'e obtenues, par coupe, pour toutes les modalit\'es, restreintes \g{a} l'enc\'ephale. L'\'etape finale pour l'exploitation des donn\'ees IRM a \'et\'e :
 \begin{enumerate}
 \setcounter{enumi}{\value{stock}}
 \item Regrouper les niveaux de gris, qui correspondent aux valeurs mesur\'ees ou calcul\'ees de chacune des images, dans un fichier texte exploitable sous R.
 \end{enumerate}
 
 \etoile
-Les images aux tranches : 10 pour le rat num\'ero 11, 9 et 10 pour le rat 19, 6 \g{a} 8 pour le rat 26 et 11 \g{a} 13 pour le rat 30 sont disponibles pour toutes les modalit\'es, %
+Les images aux coupes : 10 pour le rat num\'ero 11, 9 et 10 pour le rat 19, 6 \g{a} 8 pour le rat 26 et 11 \g{a} 13 pour le rat 30 sont disponibles pour toutes les modalit\'es, %
 pour tous les jours d'examens. %
-Ces tranches sont donc utilisables pour effectuer un suivi temporel des valeurs mesur\'ees ou calcul\'ees, pixel par pixel, %
-ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
+Ces coupes sont donc utilisables pour effectuer un suivi temporel des valeurs mesur\'ees ou calcul\'ees, pixel par pixel, %
+ou globalement sur les coupes enti\g{e}res ou des r\'egions d'int\'er\^et.
 
 \begin{figure}[!p]
 \begin{center}
@@ -136,7 +136,7 @@ ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 \hline
 \end{tabular}
 \end{center}
-\caption{Rat 11, jour 00, tranche 10}
+\caption{Rat 11, jour 00, coupe 10}
 \label{11_dark_00}
 \end{figure}
 
@@ -164,7 +164,7 @@ ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 \hline
 \end{tabular}
 \end{center}
-\caption{Rat 19, jour 00, tranche 9}
+\caption{Rat 19, jour 00, coupe 9}
 \label{19_dark_00}
 \end{figure}
 
@@ -192,7 +192,7 @@ ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 \hline
 \end{tabular}
 \end{center}
-\caption{Rat 26, jour 00, tranche 8}
+\caption{Rat 26, jour 00, coupe 8}
 \label{26_dark_00}
 \end{figure}
 
@@ -220,13 +220,13 @@ ou globalement sur les tranches enti\g{e}res ou des r\'egions d'int\'er\^et.
 \hline
 \end{tabular}
 \end{center}
-\caption{Rat 30, jour 00, tranche 11}
+\caption{Rat 30, jour 00, coupe 11}
 \label{30_dark_00}
 \end{figure}
 
 %\FloatBarrier
 \par
-Avec des choix judicieux de contraste, on peut discerner, \g{a} l'oeil, des r\'egions l\'es\'ees sur les tranches segment\'ees de cerveau. %
+Avec des choix judicieux de contraste, on peut discerner, \g{a} l'oeil, des r\'egions l\'es\'ees sur les coupes segment\'ees de cerveau. %
 Plus particuli\g{e}rement, et pour tous les rats, on discerne une aire sombre sur les images en CBF au jour 00, %
 c'est-\g{a}-dire produites par l'examen r\'ealis\'e 30 minutes apr\g{e}s la reperfusion. %
 Cette aire se situe sur l'h\'emisph\g{e}re visible \g{a} gauche, et on retrouve des r\'egions similaires, mais plus petites, %
@@ -236,11 +236,11 @@ L'isch\'emie focale transitoire se traduit pr\'ecis\'ement par une baisse du d\'
 L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'eliser l'ensemble des pixels initialement l\'es\'es.
 
 \etoile
-J'ai utilis\'e une technique similaire \g{a} celle d\'etaill\'ee ci-dessus pour la segmentation des cerveaux -voir la figure \ref{cbf_seg_19}, %
-afin de s\'electionner les r\'egions l\'es\'ees en CBF, et de les convertir dans des fichiers texte exploitables sous R.
+Une technique similaire \g{a} celle utilis\'ee pr\'ec\'edemment a \'et\'e utilis\'ee pour la segmentation des cerveaux -voir la figure \ref{cbf_seg_19}, %
+afin de s\'electionner les r\'egions l\'es\'ees en CBF.
 
 \par
-Le tableau ci-dessous r\'ecapitule la taille, en nombre de pixels, des l\'esions ainsi d\'elimit\'ees sur les tranches suivables temporellement.
+Le tableau ci-dessous r\'ecapitule la taille, en nombre de pixels, des l\'esions ainsi d\'elimit\'ees sur les coupes suivables temporellement.
 
 \begin{multicols}{2}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -267,7 +267,7 @@ Rat 30&&&&&&88&139&83
 \begin{center}
 \includegraphics[width=0.45\linewidth, height=3cm]{../../images_rapport/19-J00-segCBF-slice9.jpg}
 \end{center}
-\caption{D\'elimitation d'un contour : rat 19, tranche 9. On utilise une image du CBF.}
+\caption{D\'elimitation d'un contour : rat 19, coupe 9. On utilise une image du CBF.}
 \label{cbf_seg_19}
 \end{figure}
 \end{multicols}
@@ -278,7 +278,7 @@ Rat 30&&&&&&88&139&83
 \FloatBarrier
 \subsection{Traitement statistique avec R}% Utilisation de R : statistiques sur les cerveaux segment\'es, h\'emisph\g{e}res sains.
 
-Encourag\'e par Ang\'elique St\'ephanou et par Nicolas Glade, j'ai utilis\'ee les donn\'ees ainsi collect\'ees pour observer l'\'evolution, au cours de l'exp\'erience, %
+Les donn\'ees ainsi collect\'ees ont \'et\'e utilis\'ees pour observer l'\'evolution, au cours de l'exp\'erience, %
 des diff\'erentes modalit\'es.
 
 \par
@@ -287,7 +287,7 @@ Ces valeurs sont compar\'ees avec celles mesur\'ees sur le cerveau entier, et su
 
 \par
 Notons au passage que ce dernier choix ne revient pas \g{a} comparer avec un tissu sain : bien que ne subissant pas de dysfonctionnement significatif, %
-l'\'emisph\^g{e}re \og{}sain\fg{} subit \'egalement, notamment le permier jour, des r\'epercussions de l'intervention ou de la reperfusion. %
+l'\'emisph\g{e}re \og{}sain\fg{} subit \'egalement, notamment le permier jour, des r\'epercussions de l'intervention ou de la reperfusion. %
 L'\'evolution de l'\'etat de l'h\'emisph\g{e}re contralat\'eral est visible \g{a} la figure \ref{} et sera incorpor\'e au mod\g{e}le %\ref{}.
 
 %\ligneinter
@@ -433,7 +433,7 @@ j'ai choisi d'utiliser les donn\'ees disponibles sur le rat num\'ero 19 comme r\
 \subsection{Le paquet R Mclust : une id\'ee de Nicolas Glade (TIMC)}% On peut utiliser sweaver
 
 % Genèse de l'idée.
-%Nicolas Glade \'etait parti du constat suivant : pour certaines tranches examin\'ees, %
+%Nicolas Glade \'etait parti du constat suivant : pour certaines coupes examin\'ees, %
 %les valeurs calcul\'ees en ADC pour le jour 0 peuvent \^etre regroup\'ees suivant un m\'elange de lois gaussiennes, %
 
 
@@ -441,14 +441,14 @@ j'ai choisi d'utiliser les donn\'ees disponibles sur le rat num\'ero 19 comme r\
 %Pour cela, il avait utilis\'e  
 
 A partir d'une base de donn\'ees g\'en\'er\'ee sur la segmentation des cerveaux de rats, Nicolas Glade a utilis\'e la fonction \'eponyme du paquet R Mclust %
-pour classifier les valeurs prises par l'ADC sur une tranche de cerveau, au premier jour d'examen.
+pour classifier les valeurs prises par l'ADC sur une coupe de cerveau, au premier jour d'examen.
 
 \par
 En effet, la librairie Mclust permet de classifier un ensemble de donn\'ees, que l'on suppose \^etre r\'eparties selon un m\'elange gaussien, %
 en utilisant une m\'ethode de maximum de vraisemblance.
 
 \par
-La figure \ref{exem_ADC_19} illustre, dans le cas tridimensionnel o\g{u} l'on effectue la classification sur plusieirs tranches, juxtapos\'ees, simultan\'ement, %
+La figure \ref{exem_ADC_19} illustre, dans le cas tridimensionnel o\g{u} l'on effectue la classification sur plusieirs coupes, juxtapos\'ees, simultan\'ement, %
 le premier r\'esultat obtenu par Nicolas Glade.
 
 \begin{figure}[H]
@@ -564,7 +564,7 @@ Toutefois, la situation que l'on peut lire en bas \g{a} gauche du tableau \ref{1
 de plus, elle ne donne pas une caract\'erisation de la partie l\'es\'ee significativement diff\'erente de celle effectu\'ee au d\'ebut de cette section.
 
 \etoile
-Voici des arguments qui s'opposent \g{a} l'utilisation de Mclust pour caract\'eriser la r\'egion l\'es\'ee, \g{a} partir de tranches enti\g{e}res de cerveau :
+Voici des arguments qui s'opposent \g{a} l'utilisation de Mclust pour caract\'eriser la r\'egion l\'es\'ee, \g{a} partir de coupes enti\g{e}res de cerveau :
 
 \begin{enumerate}[label=\textbf{(Contre\arabic*)}]
 \item Beaucoup d'images sont de mauvaise qualit\'e : voir le CBF ou la CMRO2 sur la figure \ref{19_pour_contre} ;
@@ -816,7 +816,7 @@ sont r\'ef\'erenc\'ees ci-dessous.
 
 \par
 Comme nous allons le voir, les hypoth\g{e}ses relativement fortes de ce mod\g{e}le n'ont malheureusement pas permis, \g{a} l'aide des seules donn\'ees IRM au jour 0, %
-de d\'ecrire la dynamique de l'\'evolution du cerveau \'etudi\'e -on observe la tranche num\'ero 9 issue du premier examen du rat num\'ero 19, %
+de d\'ecrire la dynamique de l'\'evolution du cerveau \'etudi\'e -on observe la coupe num\'ero 9 issue du premier examen du rat num\'ero 19, %
 c'est donc un jeu d'hypoth\g{e}ses plus faible qui sera retenu pour les simulations.
 
 
@@ -1096,7 +1096,7 @@ et% une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
 Les param\g{e}tres correspondants sont choisis au moment des simulations.
 
 \par
-L'ADC suit encore l'\'equation $\Ta$ :
+L'ADC suit encore l'\'equation $\Td$ :
 \begin{equation}
 \dot{ADC}=\tau_1ADC^{\alpha_1}
 \end{equation}
@@ -1137,7 +1137,7 @@ dans l'ensemble du cerveau. Un exemple de tel m\'ecanisme est bien connu : les o
 
 \par
 Dans le cadre de ce mod\g{e}le, je privil\'egie la seconde explication : par \ref{nprog}, %
-les effets progressifs de chancements d'\'etat des pixels se cantonnent aux premi\g{e}res minutes de l'isch\'emie, %
+les effets progressifs de changements d'\'etat des pixels se cantonnent aux premi\g{e}res minutes de l'isch\'emie, %
 les perturbations ressenties localement en dehors de la zone l\'es\'ee sont alors de nature exog\g{e}ne.
 
 \par
@@ -1148,23 +1148,15 @@ un retour \g{a} des valeurs normales, puis des fluctuations autour de l'\'equili
 \dot{CBF}=3\times (CBF_{sain}-CBF)
 \end{equation}
 
-Autres variables : r\'egime $Tb$.
+Autres variables : r\'egime $\Tb$.
 %%% Fin. %%%
-\item[Etat sain permanent : ] il est annonc\'e par une valeur de CBF sup\'erieur ou \'egale \g{a} 100. %
+\item[Etat sain permanent : ] il est annonc\'e par une valeur de CBF sup\'erieure ou \'egale \g{a} 100. %
 Toutes les variables, ADC comprise, suivent le r\'egime bruit\'e $\Tb$.
 
 \par
 Dans le cas du tissu sain, le bruit est particuli\g{e}rment important pour la plupart des variables. %
 La simplification d\'ecid\'ee ci-dessus est discutable, eu \'egard l'\'evolution de la CMRO2.
 \end{description}
-
-
-
-
-%\ref{cyto}
-%$\mathbf{T0_{\mathbb{P}}}$
-%$\mathbf{T1}$
-%$\mathbf{T2}$
 
 \ligneinter%\newpage ?
 Les \'equations qui pr\'ec\g{e}dent sont r\'eparties en trois types :
