@@ -1301,6 +1301,18 @@ affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt_1,opt_2
 
 # ------------ Suivi pour ... un pixel, carré, cerveau entier ? ------------ #
 
+## - Coefficients pour les équations - ##
+
+tau_cont <- function(delta_ini,var_seuil,n_jours){
+  return(1/n_jours*log(var_seuil/(delta_ini)))
+}
+
+q_dis <- function(delta_ini,var_seuil,n_jours){
+  return((var_seuil/delta_ini)^(1/n_jours))
+}
+
+
+
 
 cerveau_dyn_2 <- function(cerveau){
   #
@@ -1322,19 +1334,43 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){# t : jour final
   colnames(cerveau) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour'))
   
   # Constitution de la base de données : constantes du modèle
-  cbf_asy1 <- rnorm(l,50,50)
-  cmro2_asy1 <- rnorm(l,5,5.5)
-  so2_asy1 <- rnorm(l,75,35)
-  vsi_asy1 <- rnorm(l,4,2.8)
-  cbf_trans2 <- rnorm(l,120,50)
-  vsi_asy2 <- rnorm(l,5,4.3)
-  so2_asy2 <- rnorm(l,75,30)
-  so2_sain <- rnorm(l,75,25)
+  ## Distributions asymptotiques
+  cbf_asy1 <- rnorm(l,50,40)
+  cmro2_asy1 <- rnorm(l,5,1.5)
+  so2_asy1 <- rnorm(l,75,25)
+  vsi_asy1 <- rnorm(l,4,2)
+  cbf_trans2 <- rnorm(l,120,40)
+  vsi_asy2 <- rnorm(l,5,2)
+  so2_asy2 <- rnorm(l,75,15)
+  so2_sain <- rnorm(l,75,10)
   
-  cbf_sain <- rnorm(l,130,43)
+  cbf_sain <- rnorm(l,130,30)
   
   adc_asy1 <- rnorm(l,3000,1000)
   adc_asy2 <- rnorm(l,2500,700)
+  
+  ## Coefficients multiplicateurs
+  q_cbf_asy1 <- q_dis(50,40,7)#rnorm(l,50,50)
+  q_cmro2_asy1 <- q_dis(8,1.5,7)#rnorm(l,5,5.5)
+  q_so2_asy1 <- q_dis(35,25,7)#rnorm(l,75,35)
+  q_vsi_asy1 <- q_dis(3,2,7)#rnorm(l,4,2.8)
+  q_cbf_trans2 <- q_dis(50,40,7)#rnorm(l,120,50)
+  q_vsi_asy2 <- q_dis(3,2,7)#rnorm(l,5,4.3)
+  q_so2_asy2 <- q_dis(20,15,7)#rnorm(l,75,30)
+  q_so2_sain <- q_dis(30,10,7)#rnorm(l,75,25)
+  
+  q_cbf_sain <- q_dis(50,30,5)#rnorm(l,130,30)
+  
+  #adc_asy1 <- rnorm(l,3000,1000)
+  #adc_asy2 <- rnorm(l,2500,700)
+  
+  
+  
+  
+  
+  
+  
+  
   
   const <- as.data.frame(cbind(cbf_asy1,cmro2_asy1,so2_asy1,cbf_trans2,vsi_asy2,so2_asy2,so2_sain,cbf_sain))
   colnames(const)=c("CBF_asy1","CMRO2_asy1","SO2_asy1","CBF_trans2","VSI_asy2","SO2_asy2","SO2_sain","CBF_sain")
@@ -1363,17 +1399,17 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){# t : jour final
     # Il existe des niveaux de priorités entre les modalités
     # SO2
     c_t$SO2map <- bruit_mod$SO2map# Etat non lésé perturbé : même chose
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_deb',1*(so2_asy1-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_deb',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
     c_t$SO2map <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$SO2map,c_t$SO2map)
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_deb',2*(so2_sain-c_inc$SO2map),c_t$SO2map)
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_ifin',1*(so2_asy2-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_deb',(1-q_so2_sain)*(so2_sain-c_inc$SO2map),c_t$SO2map)
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_ifin',(1-q_so2_asy2)*(so2_asy2-c_inc$SO2map),c_t$SO2map)
     
     # CBF
     c_t$CBF <- bruit_mod$CBF
-    c_t$CBF <- ifelse(c_inc$Etat=='per',3*(cbf_sain-c_inc$CBF),c_t$CBF)
-    c_t$CBF <- ifelse(c_inc$Etat=='les_1_deb',5*(cbf_asy1-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='per',(1-q_cbf_sain)*(cbf_sain-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_1_deb',(1-q_cbf_asy1)*(cbf_asy1-c_inc$CBF),c_t$CBF)
     c_t$CBF <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$CBF,c_t$CBF)
-    c_t$CBF <- ifelse(c_inc$Etat=='les_2_deb',16*(cbf_trans2-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_2_deb',(1-q_cbf_trans2)*(cbf_trans2-c_inc$CBF),c_t$CBF)
     c_t$CBF <- ifelse(c_inc$Etat=='les_2_fin',-10*c_t$SO2map,c_t$CBF)
     
     # ADC
@@ -1383,16 +1419,16 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){# t : jour final
     
     # CMRO2
     c_t$CMRO2 <- bruit_mod$CMRO2
-    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_deb',0.15*(cmro2_asy1-c_inc$CMRO2),c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_deb',(1-q_cmro2_asy1)*(cmro2_asy1-c_inc$CMRO2),c_t$CMRO2)
     c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$CMRO2,c_t$CMRO2)
     c_t$CMRO2 <- ifelse(c_inc$Etat=='les_2_deb',c_t$SO2map,c_t$CMRO2)
     c_t$CMRO2 <- ifelse(c_inc$Etat=='les_2_fin',-1*c_t$SO2map,c_t$CMRO2)
     
     # VSI
     c_t$VSI <- bruit_mod$VSI
-    c_t$VSI <- ifelse(c_inc$Etat=='les_1_deb',0.2*(vsi_asy1-c_inc$VSI),c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_1_deb',(1-q_vsi_asy1)*(vsi_asy1-c_inc$VSI),c_t$VSI)
     c_t$VSI <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$VSI,c_t$VSI)
-    c_t$VSI <- ifelse(c_inc$Etat=='les_2_deb',0.3*(vsi_asy2-c_inc$VSI),c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_2_deb',(1-q_vsi_asy2)*(vsi_asy2-c_inc$VSI),c_t$VSI)
     c_t$VSI <- ifelse(c_inc$Etat=='les_2_fin',bruit_mod$VSI,c_t$VSI)
     
     # BVf
@@ -1456,11 +1492,15 @@ suivi_mod <- function(rat,liste_mod,liste_coupes,t,opt_1,opt_2,opt_3,opt_4){
   cerveaux <- read.table(nom_cerveaux,header=T)
   
   if (opt_3=='box'){
+    # On change les composantes de cerveaux_Jour en chaînes de caractères, pour que l'ensemble des abscisses du futur ggplot soit discret.
+    # On ajoute un "0" devant les numéros de jours inférieurs à 10, pour que les graduations temporelles soient dans le bon ordre.
+    Jour10 <- cerveaux$Jour < 10
+    cerveaux$Jour <- as.character(cerveaux$Jour)
+    cerveaux$Jour <- ifelse(Jour10,paste("0",cerveaux$Jour,sep=''),cerveaux$Jour)
+    
     for (fonc in liste_mod){
       if (opt_4=='pdf'){
         file_name <- sprintf("R%s/%s/cerveau%s_%s%s_dyn%s_Slices%s_fin%s.pdf",rat,opt_1,rat,fonc,opt_3,opt_2,coupes,t)
-        
-        cerveaux$Jour <- as.character(cerveaux$Jour)
         
         gg_title <- sprintf("Partie lésée 1, jours %s à %i",jour,t)
         subtitle <- sprintf("Coupes %s, modalité %s",coupes,fonc)
@@ -1505,8 +1545,6 @@ suivi_mod <- function(rat,liste_mod,liste_coupes,t,opt_1,opt_2,opt_3,opt_4){
         ggsave(filename=file_name,plot = p)
       }
       else{
-        cerveaux$Jour <- as.character(cerveaux$Jour)
-        
         gg_title <- sprintf("Evolution de %s, jours %s à %i",fonc,jour,t)
         subtitle <- sprintf("Coupes %s, modalité %s, partie %s %i",coupes,fonc,"ischémiée",1)
         cerveaux_i1 <- cerveaux[cerveaux$Etat=='les_1_deb'|cerveaux$Etat=='les_1_fin',]
@@ -1551,5 +1589,292 @@ suivi_mod <- function(rat,liste_mod,liste_coupes,t,opt_1,opt_2,opt_3,opt_4){
 }
 
 
+
+# Option 1 : remlissage gaussien, dans le cas de l'automate 2
+# Option 2 : densités ou diagrammes en boîte pour la sortie
+# Option 3 : sortie. pdf si 'pdf', affichage dans RStudio sinon.
+
+# liste_t choisit l'automate utilisé : celui dont la contition initiale est issue de l'expérieuce au premier jour de la liste.
+
+comp_mod_clust <- function(rat,hemi,liste_mod,liste_coupes,liste_t,opt_1,opt_2,opt_3){
+  
+  # Nommage de la base de données, constituée à l'aide d'une fonction cerveau_dyn
+  coupes <- ""
+  for (cp in liste_coupes){coupes <- paste(coupes,"-",cp,sep='')}
+  
+  if (liste_t[1]==0){
+    modele <- "automate_2"
+  }
+  else{
+    modele <- "automate_3demi"
+    # Dans ce cas la valeur opt_1 est triviale.
+  }
+  t <- liste_t[length(liste_t)]
+  
+  # Importation des données calculées à l'aide du modèle opt_1
+  nom_cerveaux <- sprintf("R%s/%s/cerveau%s_multi_dyn%s_Slices%s_fin%s.dat",rat,modele,rat,opt_1,coupes,t)
+  cerveaux <- read.table(nom_cerveaux,header=T)
+  
+  # On ne garde que les prédictions pour les jours de liste_t
+  l <- length(cerveaux$Jour)
+  Jours <- rep(FALSE,l)
+  for (j in liste_t){
+    Jours <- ifelse(j==cerveaux$Jour,TRUE,Jours)
+  }
+  cerveaux <- cerveaux[Jours,]
+  
+  # Construction de la base de données d : données de l'expérience, clusterisées, modalité 'CBF'. Pas d'hémisphère sain.
+  cer_clust_cbf <- {
+    fonc <- 'CBF'
+    # Initialisation
+    d <- data.frame(matrix(ncol = 6, nrow = 0))
+    colnames(d) <- c("x","y",fonc,"Slice","Zone","Jour")
+    
+    jour <- "08"
+    
+    cl_min <- 1
+    cl_max <- 2
+    
+    name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",fonc,rat,jour,fonc,'bg')
+    name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",'CBF',rat,"00",'CBF','dark')
+    
+    cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+    cerveau_seg <- read.table(name_cerveau_seg,header=T)
+    
+    cerveau_les <- cerveau_fonc
+    
+    l <- length(cerveau_les[,4])
+    liste_tr <- rep(FALSE,l)
+    
+    # Segmentation du volume lésé, à l'aide de fonc_seg
+    m <- length(cerveau_seg[,4])
+    for (i in c(1:m)){
+      ix <- cerveau_seg[i,1]
+      iy <- cerveau_seg[i,2]
+      sli <- cerveau_seg[i,5]
+      # On garde seulement, dans cerveau_les et pour chaque tranche segmentée, les coordonnées de la zone d'intérêt
+      liste_tr <- ifelse(ix==cerveau_les$x&iy==cerveau_les$y&sli==cerveau_les$Slice,TRUE,liste_tr)
+      # Seules les tranches de liste_s_slice sont présentes dans cerveau_seg : pas besoin de trier les tranches du cerveau_les obtenu
+    }
+    cerveau_les <- cerveau_les[liste_tr,]
+    
+    # On retire les valeurs manquantes pour pouvoir ensuite clusteriser le volume lésé
+    list.nan <- is.na(cerveau_les[,4])
+    cerveau_les <- cerveau_les[!list.nan,]
+    
+    # On ajoute la colonne "Zone", qui qualifie les voxels lésés.
+    d.les <- as.data.frame(cbind(cerveau_les[,1:2],cerveau_les[,4:5],'Lesion 1'))
+    colnames(d.les) <- c("x","y",fonc,"Slice","Zone")
+    # --------- Dataframe créée : volume lésé --------- #
+    
+    l.clust <- cluster_jfr_fmin(cerveau_les,cl_min,cl_max,5)
+    #les.clust <- cbind(cerveau_les,l.clust$classification)
+    
+    d.les$Zone <- ifelse(l.clust$classification >1,'Lesion 2','Lesion 1')
+    
+    #print(length(d.les$Zone))
+    # --------- Caractérisation sur la dataframe : volume lésé clusterisé --------- #
+    
+    d.increment <- d.les#as.data.frame(rbind(d.les,d.sain))#,header=T)
+    # données pour le jour courant, fonctionnalité fonc
+    #num_jour <- jour#num_jours[[jour]]
+    d.increment <- as.data.frame(cbind(d.increment,jour))
+    #print(length(d.increment$Zone))
+    colnames(d.increment) <- c("x","y",fonc,"Slice","Zone","Jour")
+    
+    d <- as.data.frame(rbind(d,d.increment))
+  }
+  d_fcl <- d
+  
+  if (opt_2=='box'){
+    # On change les composantes de cerveaux_Jour en chaînes de caractères, pour que l'ensemble des abscisses du futur ggplot soit discret.
+    # On ajoute un "0" devant les numéros de jours inférieurs à 10, pour que les graduations temporelles soient dans le bon ordre.
+    Jour10 <- cerveaux$Jour < 10
+    cerveaux$Jour <- as.character(cerveaux$Jour)
+    cerveaux$Jour <- ifelse(Jour10,paste("0",cerveaux$Jour,sep=''),cerveaux$Jour)
+    
+    for (fonc in liste_mod){
+      
+      # Dataframe contenant les résultats des expériences pour tous les jours de litse_t 
+      cer_exp_fonc <- {
+        # On crée la dataframe pour le suivi de la fonctionnalioté courante
+        d <- data.frame(matrix(ncol = 6, nrow = 0))
+        colnames(d) <- c("x","y",fonc,"Slice","Zone","Jour")
+        
+        tranches <- liste_coupes
+        jours10 <- liste_t < 10
+        jours <- as.character(liste_t)
+        jours <- ifelse(jours10,paste("0",jours,sep=''),jours)
+        
+        for (jour in jours){
+          name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",fonc,rat,jour,fonc,'bg')
+          name_cerveau_seg <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",'CBF',rat,"00",'CBF','dark')
+          
+          cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+          cerveau_seg <- read.table(name_cerveau_seg,header=T)
+          
+          # Sélection de l'hémisphère sain au jour courant.
+          block <- {
+            l <- length(cerveau_fonc[,4])
+            liste_hem <- rep(FALSE,l)
+            liste_hem <- ifelse(hemi[1]*cerveau_fonc$x+hemi[2]>cerveau_fonc$y,TRUE,liste_hem)
+            cerveau_hem <- cerveau_fonc[liste_hem,]
+            # sélection des tranches pour le suivi temporel
+            l <- length(cerveau_hem[,5])
+            liste_tr <- rep(FALSE,l)
+            for (tr in tranches){
+              liste_tr <- ifelse(tr==cerveau_hem$Slice,TRUE,liste_tr)
+            }
+            tranches_hem <- cerveau_hem[liste_tr,]
+            d.sain <- as.data.frame(cbind(tranches_hem[,1:2],tranches_hem[,4:5],"Hem sain courant",stringsAsFactors=FALSE))#sprintf('Hem sain J%s',jour))
+            colnames(d.sain) <- c("x","y",fonc,"Slice","Zone")
+          }
+          # --------- Dataframe créée : hémisphère sain --------- #
+          block <- {
+            cerveau_les <- cerveau_fonc
+            
+            l <- length(cerveau_les[,4])
+            liste_tr <- rep(FALSE,l)
+            
+            # Segmentation du volume lésé, à l'aide de fonc_seg : ADC, CBF ...
+            m <- length(cerveau_seg[,4])
+            for (i in c(1:m)){
+              ix <- cerveau_seg[i,1]
+              iy <- cerveau_seg[i,2]
+              sli <- cerveau_seg[i,5]
+              # On garde seulement, dans cerveau_les et pour chaque tranche segmentée, les coordonnées de la zone d'intérêt
+              liste_tr <- ifelse(ix==cerveau_les$x&iy==cerveau_les$y&sli==cerveau_les$Slice,TRUE,liste_tr)
+              # Seules les tranches de liste_s_slice sont présentes dans cerveau_seg : pas besoin de trier les tranches du cerveau_les obtenu
+            }
+            cerveau_les <- cerveau_les[liste_tr,]
+            
+            # On retire les valeurs manquantes pour pouvoir ensuite clusteriser le volume lésé
+            list.nan <- is.na(cerveau_les[,4])
+            cerveau_les <- cerveau_les[!list.nan,]
+            
+            # On ajoute la colonne "Zone", qui qualifie les voxels lésés.
+            d.les <- as.data.frame(cbind(cerveau_les[,1:2],cerveau_les[,4:5],'Lesion 1'))
+            colnames(d.les) <- c("x","y",fonc,"Slice","Zone")
+          }
+          # --------- Dataframe créée : volume lésé --------- #
+          
+          # --------- On traduit la clusterisation effectuée avec fonc_cl, en appelant d_fcl  --------- #
+          block <- {
+            l <- length(d_fcl$Jour)
+            liste_fclj <- rep(FALSE,l)
+            if (opt_2==''){
+              jour_cl <- jour
+            }
+            else{
+              jour_cl <- "08"
+            }
+            liste_fclj <- ifelse(d_fcl$Jour==jour_cl,TRUE,liste_fclj)
+            d.fcl.jour <- d_fcl[liste_fclj,]
+            
+            # --- Intersection entre les volumes lésés au jour courant : fonc et fonc_cl --- #
+            
+            # - Première inclusion - #
+            l <- length(d.les$Zone)
+            liste_xytr <- rep(FALSE,l)
+            m <- length(d.fcl.jour$Zone)
+            for (i in c(1:m)){
+              ix <- d.fcl.jour[i,1]
+              iy <- d.fcl.jour[i,2]
+              sli <- d.fcl.jour[i,4]
+              # On garde seulement, dans d.les et pour chaque tranche segmentée, les coordonnées de la zone d'intérêt pour fonc_cl
+              liste_xytr <- ifelse(ix==d.les$x&iy==d.les$y&sli==d.les$Slice,TRUE,liste_xytr)
+              # Seules les tranches de ... sont présentes dans d_les : pas besoin de trier les tranches du cerveau_les obtenu
+            }
+            d.les <- d.les[liste_xytr,]
+            
+            # - Deuxième inclusion - #
+            l <- length(d.fcl.jour$Zone)
+            liste_xytr <- rep(FALSE,l)
+            m <- length(d.les$Zone)
+            for (i in c(1:m)){
+              ix <- d.les[i,1]
+              iy <- d.les[i,2]
+              sli <- d.les[i,4]
+              # On garde seulement, dans d.fcl.jour et pour chaque tranche segmentée, les coordonnées de la lésion, vue depuis la fonctionnalité courante.
+              liste_xytr <- ifelse(ix==d.fcl.jour$x&iy==d.fcl.jour$y&sli==d.fcl.jour$Slice,TRUE,liste_xytr)
+              # Seules les tranches de ... sont présentes dans d_fcl : pas besoin de trier les tranches du cerveau_les obtenu
+            }
+            d.fcl.jour <- d.fcl.jour[liste_xytr,]
+            
+            d.les$Zone <- ifelse(d.fcl.jour$Zone=='Lesion 2','Lesion 2','Lesion 1')
+          }
+          # --------- Caractérisation sur la dataframe : volume lésé clusterisé avec fonc_cl --------- #
+          
+          d.increment <- as.data.frame(rbind(d.les,d.sain))#,header=T)
+          # données pour le jour courant, fonctionnalité fonc
+          d.increment <- as.data.frame(cbind(d.increment,jour))
+          colnames(d.increment) <- c("x","y",fonc,"Slice","Zone","Jour")
+          
+          d <- as.data.frame(rbind(d,d.increment))
+        }# dataframe d remplie pour la fonctionnalité courante
+      }
+      # On donne à cette dataframe une forme adaptée à ggplot.
+      liste.nan <- is.na(d[,3])
+      d <- d[!liste.nan,]
+      
+      if (opt_3=='pdf'){
+        # plus tard
+      }
+      else{
+        gg_title <- sprintf("Prévisions en %s",fonc)#,liste_t[1],t)
+        subtitle <- sprintf("Coupe(s) %s, partie %s %i",coupes,"ischémiée",1)
+        cerveaux_i1 <- cerveaux[cerveaux$Etat=='les_1_deb'|cerveaux$Etat=='les_1_fin',]
+        pi1 <- ggplot(cerveaux_i1,
+                      aes(x=cerveaux_i1$Jour,y=cerveaux_i1[[fonc]],fill=cerveaux_i1$Etat
+                      )
+        )
+        pi1 <- pi1 + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        pi1 <- pi1 + scale_fill_manual(values = alpha(c("red","darkmagenta"), .3))
+        pi1 <- pi1 + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        gg_title <- sprintf("Prévisions en %s",fonc)#,liste_t[1],t)
+        subtitle <- sprintf("Coupe(s) %s, partie %s %i",coupes,"ischémiée",2)
+        cerveaux_i2 <- cerveaux[cerveaux$Etat=='les_2_deb'|cerveaux$Etat=='les_2_fin',]
+        pi2 <- ggplot(cerveaux_i2,
+                      aes(x=cerveaux_i2$Jour,y=cerveaux_i2[[fonc]],fill=cerveaux_i2$Etat
+                      )
+        )
+        pi2 <- pi2 + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        pi2 <- pi2 + scale_fill_manual(values = alpha(c("darkorange3","gold"), .3))
+        pi2 <- pi2 + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        gg_title <- sprintf("Prévisions en %s",fonc)#,liste_t[1],t)
+        subtitle <- sprintf("Coupe(s) %s, partie %s",coupes,"saine")
+        cerveaux_s <- cerveaux[cerveaux$Etat=='per'|cerveaux$Etat=='sain',]
+        ps <- ggplot(cerveaux_s,
+                     aes(x=cerveaux_s$Jour,y=cerveaux_s[[fonc]],fill=cerveaux_s$Etat
+                     )
+        )
+        ps <- ps + geom_boxplot(outlier.shape = NA, varwidth = TRUE)
+        ps <- ps + scale_fill_manual(values = alpha(c("blue","grey30"), .3))
+        ps <- ps + ggtitle(bquote(atop(.(gg_title),atop(italic(.(subtitle)), ""))))+ xlab("Jours")+ ylab(fonc)
+        
+        gg_title <- sprintf("%s : résultats expérimentaux",fonc)#,liste_t[1],t)
+        subtitle <- sprintf("Coupe(s) %s, lésion et hémisphère contralatéral",coupes)
+        pe <- ggplot(d,
+                    aes(x=d$Jour,y=d[,3],fill=d$Zone
+                    )
+        )
+        pe <- pe + geom_boxplot(outlier.shape = NA,varwidth = TRUE)
+        pe <- pe + scale_fill_manual(values = alpha(c("cyan","red","orange"), .3))
+        pe <- pe + theme(plot.title = element_text(color="black", size=16),
+                       plot.subtitle = element_text(color="red", size=13, face="bold.italic")
+        )
+        pe <- pe + ggtitle(bquote(atop(.(gg_title), atop(.(subtitle))))) + xlab("Jours") + ylab(fonc)
+        
+        p <- grid.arrange(pi1,pi2,ps,pe,ncol=2,nrow=2)
+        print(p)
+      }
+      #
+    }
+    #
+  }
+  #
+}
 
 
