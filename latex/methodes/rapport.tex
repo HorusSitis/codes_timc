@@ -526,7 +526,7 @@ A droite : contre.%
 \etoile
 \ref{19_CBF-BVf_3d00}
 
-\subsubsection{La classification meilleure que l'oeil ?}
+\subsubsection{Evaluation de la m\'ethode de classification}
 
 %% Pour ou contre : listes. %%
 
@@ -542,18 +542,19 @@ A droite : contre.%
 % On peut être tenté d'utiliser la classification avec mclust pour suivre l'évolution temporelle de l'étendue de la lésion.
 % Mieux : la classification ouvrirait une discussion sur la caractérisation de la lésion : quelle modalité est la plus pertinente ?
 
-Certains r\'esultats obtenus laissent penser que la classification des pixels avec mclust pourrait permettre d'obtenir de meilleurs r\'esultats que ceux de la sous-section pr\'ec\'edente, %
-o\g{u} la partie l\'es\'ee \'etait caract\'eris\'ee par la segmentation effectu\'ee de visu sur ImageJ comme sur la figure \ref{cbf_seg_19}.
+Certains r\'esultats obtenus laissent penser que la classification des pixels avec Mclust %
+pourrait permettre d'obtenir de meilleurs r\'esultats que ceux de la sous-section pr\'ec\'edente, %
+o\g{u} la partie l\'es\'ee \'etait caract\'eris\'ee par la segmentation effectu\'ee manuellement sur ImageJ comme sur la figure \ref{cbf_seg_19}.
 
 \par
 L'image en bas \g{a} gauche du tableau, figure \ref{19_pour_contre}, est en effet favorable \g{a} une telle approche, %
-puisque les r\'egions l\'es\'ees sont tr\g{e}s difficiles \g{a} limiter sur les images, en niveaux de gris, qui concernent des jour autres que 00.
+puisque les r\'egions l\'es\'ees sont tr\g{e}s difficiles \g{a} segmenter sur les images, en niveaux de gris, qui concernent des jours autres que 00.
 
 \par
 On peut opposer plusiers arguments concernant l'avantage, ou non, %
 d'une d\'elimitation syst\'ematique de la r\'egion l\'es\'ee sur une image obtenue \g{a} la suite des diff\'rents examens.
 \begin{enumerate}[label=\textbf{(Pour\arabic*)}]
-\item\label{19_suivi_temp} Possibilit\'e d'une utilisation sur els jours autres que 00, notamment sur la deuxi\g{e}me moiti\'e du mois que durent les exp\'erimentations ;
+\item\label{19_suivi_temp} Possibilit\'e d'une utilisation sur les jours autres que 00, notamment sur la deuxi\g{e}me moiti\'e du mois que durent les exp\'erimentations ;
 \item\label{phy_gau} Eventuellement, signification physiologique des composantes du m\'elange gaussien, %
 tandis que l'oeil lit seulement des valeurs particuli\g{e}rement basses de la variable \'etudi\'ee.
 \end{enumerate}
@@ -569,16 +570,13 @@ Voici des arguments qui s'opposent \g{a} l'utilisation de Mclust pour caract\'er
 \begin{enumerate}[label=\textbf{(Contre\arabic*)}]
 \item Beaucoup d'images sont de mauvaise qualit\'e : voir le CBF ou la CMRO2 sur la figure \ref{19_pour_contre} ;
 %
-\item Les composantes d'une classification peuvent correspondre \g{a} des structures physiologiques comme nous l'avons vu dasn le premier graphique de cette sous-section, %
+\item Les composantes d'une classification peuvent correspondre \g{a} des structures anatomiques comme nous l'avons vu dasn le premier graphique de cette sous-section, %
 mais celles-ci ne correspondent pas n\'ecessairement \g{a} la partie l\'es\'ee : %
 voir \g{a} ce titre la classification des valeurs mesur\'ees en T1, pour le rat num\'ero 19 au jour 00. %
-Ceci va \g{a} l'encontre de l'argument \ref{phy_gau}, come \'etant en faveur de l'utiliation de Mclust.
+Ceci va \g{a} l'encontre de l'argument \ref{phy_gau}, comme \'etant en faveur de l'utiliation de Mclust.
 %
 \item La classification automatique, non supervis\'ee, regroupe des pixels correspondant peu ou prou \g{a} la partie isch\'emi\'ee et des pixels de l'h\'emisph\g{e}re contralat\'eral. %
-Ici encre, le jugement humain est plus pertient.
-%
-\item Certaines images, notamment celles qui comportent des valeurs manquantes comme celle en CMRO2 de la figure \ref{19_pour_contre}, %
-donent une classification tr\g{e}s difficile \g{a} lire, pour ne pas dire de mauvaise qualit\'e.
+Ici encore, le jugement humain est plus pertient.
 \end{enumerate}
 
 
@@ -612,7 +610,7 @@ m'ont encourag\'e \g{a} utiliser celle-ci pour mod\'eliser la l\'esion du rat nu
 C'est l'objet de la sous-section suivante.
 
 \FloatBarrier
-\subsubsection{Mclust au service d'une mod\'elisation pour l'\'evolution de la l\'esion}
+\subsubsection{Classification des pixels de la l\'esion}
 
 % Point intéressant : la fonction mclust prend en argument, outre la base de données à classifier,
 % un vecteur constitué d'entiers positifs qui paramètre une famille de modèles que mclust se propose de calculer.
@@ -711,10 +709,10 @@ Le choix de deux clusters para\^it le plus pertient : vers une mod\'elisation \g
 %%% Broder %%%
 
 \FloatBarrier
-\subsection{Vers un mod\g{e}le pour le rat num\'ero 19}
+\subsection{}%Vers un mod\g{e}le pour le rat num\'ero 19}
 
 Les r\'esultats obtenus en fin de section pr\'ec\'edente m'ont encourag\'e \g{a} suivre l'\'evolution des six modalit\'es %
-ADC, BVf, CBF, CMRO2, SO2 et VSI sur des r\'egions d'int\'er\^et d\'efinies par la clusterisation de CBF, SMRO2, SO2 et BVf aux jours 8 ou 15.
+ADC, BVf, CBF, CMRO2, SO2 et VSI sur des r\'egions d'int\'er\^et d\'efinies par la clusterisation de CBF au jour 8.%, SMRO2, SO2 et BVf aux jours 8 ou 15.
 
 %
 %
@@ -790,24 +788,21 @@ L'\'etat de l'h\'emisph\g{e}re contralat\'eral est aussi l'objet d'un suivi.%
 \FloatBarrier
 \subsection{Les hypoth\g{e}ses et le formalisme du mod\g{e}le}%Modèle proprement dit, évetuellement dans la section suivante.
 
-L'objectif atteint au cours de ce stage a \'et\'e d'\'elaborer unmod\g{e}le dynamique pour l'\'evolution, voxel par voxel, %
+L'objectif atteint au cours de ce stage a \'et\'e d'\'elaborer un mod\g{e}le dynamique pour l'\'evolution, voxel par voxel, %
 des donn\'ees issues d'un examen d'imagerie effectu\'e, sur un rat, dans les minutes qui suivent une isch\'emie focale transitoire.
 
 \par
-Ce mod\g{e}le, qui n'est pas explicitement li\'e \g{e} des m\'ecanismes qui se d\'eroulent \g{e} l'\'echelle cellulaire, %
+Ce mod\g{e}le, qui n'est pas explicitement li\'e \g{a} des m\'ecanismes qui se d\'eroulent \g{a} l'\'echelle cellulaire, %
 doit reproduire les r\'esultats obtenus au cours des jours, et des premi\g{e}res semaines, qui suivent l'isch\'emie.
 
 \par
-Le mod\g{e}le que j'ai construit est uniquement ispir\'e des observations qui, comme on peut le voir dans les sous-sections pr\'ec\'edentes, %
-concernent exclusivement le rat 19. %
-Il est donc tr\g{e}s difficile, voire impossible, d'adapter le mod\g{e}le tel quel aux autres rats, %
-compte tenu de la mani\g{e}re dont l'exp\'erience et les examens qui les concernent se sont d\'eroul\'es, %
-et de diff\'erences mutuelles inn\'ees.
+Le mod\g{e}le que j'ai construit est uniquement inspir\'e des observations qui, comme on peut le voir dans les sous-sections pr\'ec\'edentes, %
+concernent exclusivement le rat 19.
 
 \par
-En revanche, les hypoth\g{e}ses simplificatrices pos\'ees pour ce mod\g{e}le, la mani\g{e}re sont elles sont d\'egag\'ees %
-et les grandes lignes de l'\'evolution des voxels des r\'egions, l\'es\'ees ou non, du cerveau sur les semaines qui suivent l'isch\'emie seront, %
-du moins je l'esp\g{e}re, transposables \g{a} d'autres sujets.
+En revanche, les hypoth\g{e}ses simplificatrices pos\'ees pour ce mod\g{e}le, la mani\g{e}re dont elles sont d\'egag\'ees %
+et les grandes lignes de l'\'evolution des voxels des r\'egions, l\'es\'ees ou non, du cerveau sur les semaines qui suivent l'isch\'emie %
+sont potentiellement adaptables aux autres cas.
 
 \etoile
 
@@ -815,37 +810,18 @@ Les hypoth\g{e}ses d'un mod\g{e}le \og{} id\'eal\fg{} pour l'\'evolution locale 
 sont r\'ef\'erenc\'ees ci-dessous.
 
 \par
-Comme nous allons le voir, les hypoth\g{e}ses relativement fortes de ce mod\g{e}le n'ont malheureusement pas permis, \g{a} l'aide des seules donn\'ees IRM au jour 0, %
-de d\'ecrire la dynamique de l'\'evolution du cerveau \'etudi\'e -on observe la coupe num\'ero 9 issue du premier examen du rat num\'ero 19, %
-c'est donc un jeu d'hypoth\g{e}ses plus faible qui sera retenu pour les simulations.
+Comme nous allons le voir, les hypoth\g{e}ses relativement fortes de ce mod\g{e}le n'ont malheureusement pas permis, %
+de pr\'edire la dynamique de l'\'evolution du cerveau \'etudi\'e \g{a} l'aide des seules donn\'ees IRM au jour 0.
+%-on observe la coupe num\'ero 9 issue du premier examen du rat num\'ero 19, %
+%c'est donc un jeu d'hypoth\g{e}ses plus faible qui sera retenu pour les simulations.
 
 
 \begin{modmerate}{Mod\g{e}le 1}{\textbf{(H\arabic*)}}
-\item\label{nprog} Non progressivit\'e : l'\'evolution de l'\'etat d'un voxel n'est pas affect\'ee par l'\'etat des voxels voisins.
-\item\label{var_comp} Pas de variable cach\'ee : Les modalit\'es ADC, BVf, etc d\'efinissent, seules, et localement l'\'etat du syst\g{e}me.
+\item\label{nprog} L'\'evolution de l'\'etat d'un voxel n'est pas affect\'ee par l'\'etat des voxels voisins.
+\item\label{var_comp} Les modalit\'es ADC, BVf, etc d\'efinissent, seules, et localement l'\'etat du syst\g{e}me.
 \item\label{auto} L'\'evolution du syst\g{e}me est autonome.
 %\item\label{bvf...}
 \end{modmerate}
-
-\begin{comment}
-%\begin{tabular}{|c|}
-%\hline
-%ffff
-%\\
-%\hline
-\begin{center}
-\begin{enumerate}
-\item\label{bbbbb} nnnnn
-\end{enumerate}
-\end{center}
-%\\
-%\hline
-%\end{tabular}
-\end{comment}
-
-%\begin{enumerate}[label=\textbf{(H\arabic*)}]
-%\item\label{nprog} blabla
-%\end{enumerate}
 
 L'hypoth\g{e}se \ref{nprog} distingue d'entr\'ee de jeu le mod\g{e}le de celui consid\'er\'e dans \cite{Duval_JCBFM_02} : %
 dans ce dernier, le coefficient de diffusion ADC diffuse lui-m\^eme \g{a} travers les pixels, et respecte l'\'equation disscr\g{e}te :
@@ -886,7 +862,7 @@ et un syst\g{e}me d'\'equations d'\'evolution.
 
 \par
 Celles-ci, \'ecrites comme des \'equations diff\'erentielles ordinaires mettant en jeu les diff\'erentes variables avec les unit\'es vues \g{a} la section pr\'ec\'edente, %
-seront impl\'emlent\'ees en rempla\c cant les d\'eriv\'ees par des taux d'accroissement, l'unit\'e de temps adopt\'ee pour les \'equations \'etant le jour ; %
+seront impl\'ement\'ees en rempla\c cant les d\'eriv\'ees par des taux d'accroissement, l'unit\'e de temps adopt\'ee pour les \'equations \'etant le jour ; %
 cette dur\'ee sera \'egalement l'unit\'e de temps \'el\'ementaire du mod\g{e}le discret, impl\'ement\'e dans la suite de ce travail.
 
 \etoile
@@ -905,14 +881,14 @@ revient \g{a} utiliser des automates pour le mod\g{e}le dynamique, et non des au
 \subsubsection{Formalisme des diff\'erents r\'egimes}
 
 \begin{description}
-\item[R\'egime cytotoxique :] Il correspond aux remi\g{e}res heures d'isch\'emie, telles qu'elles sont mod\'elis\'ees par exemple. %
+\item[R\'egime cytotoxique :] Il correspond aux premi\g{e}res heures d'isch\'emie. %
 On suppose qu'ici, la saturation des r\'egulations successives du CBF, puis de la CMRO2 a d\'ej\g{a} eu lieu, ce qui justifie des valeurs basses pour ces deux variables.
 
 \par
 Pour le besoin des simulations, un temps $T$, al\'eatoire, est d\'efini sur l'ensemble des pixels qui entrent dans ce premier \'etat isch\'emi\'e.
 
 \par
-Les valeurs anormalement basses d'ADC, qui ob\'eiront \g{a} l'\'equation de rappel% \ref{} ,
+Les valeurs anormalement basses d'ADC, qui ob\'eiront \g{a} l'\'equation de rappel % \ref{} ,
 signalent des n\'ecroses qui s'expliquent avec les \'etapes de la cascade isch\'emique vues \g{a} la section pr\'ec\'edente.
 
 \par
@@ -1037,7 +1013,7 @@ l'\'etat d'un pixel, et donc le r\'egime suivi par ses valeurs d'ADC, de BVf, CB
 ADC suit un nouveau r\'egime, dit $\Td$ : c'est l'\'equation qui suit, qui d\'ecrit notamment la dispersion rapide des valsurs d'ADC.
 
 CBF, SO2 et CMRO2 suivent le m\^eme r\'egime $\Ta$. Aucun lien de cause \g{a} effet n'est \g{a} privil\'egier, \g{a} la lumi\g{e}re des r\'esultats en \ref{19_suivi_clust_les}. %
-Les \'equations d\'evolution de ces trois variables sont les suivantes :
+Les \'equations d'\'evolution de ces trois variables sont les suivantes :
 \begin{equation}
 \dot{CBF}=5\times\left(CBF_{asy1}-CBF\right)
 \end{equation}
@@ -1059,7 +1035,7 @@ et une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
 La distribution statistique VSI est encore issue des observations -jour 15 ou 22.
 %%% Fin. %%%
 %
-\item[$CBF > 100$ : l\'esion num\'ero 2 ] L\'evolution du CBF influence significativement cele des autres variables, %
+\item[$CBF > 100$ : l\'esion num\'ero 2 ] L'\'evolution du CBF influence significativement celle des autres variables, %
 et la valeur de la SO2 est choisie pour caract\'eriser la transition vers le r\'egime asymptotique.
 %%% Equations : début. %%%
 \begin{equation}
@@ -1141,7 +1117,7 @@ les effets progressifs de changements d'\'etat des pixels se cantonnent aux prem
 les perturbations ressenties localement en dehors de la zone l\'es\'ee sont alors de nature exog\g{e}ne.
 
 \par
-Dans un souci de simplicit\'e, je distingue, dans le mod\g{e}le du tisu sain, %
+Dans un souci de simplicit\'e, je distingue, dans le mod\g{e}le du tissu sain, %
 un retour \g{a} des valeurs normales, puis des fluctuations autour de l'\'equilibre, pour le CBF.
 %%% Equations : début. %%%
 \begin{equation}
@@ -1210,7 +1186,7 @@ Les diff\'erents r\'egimes mis en \'evidence dans cette sous-section, et les \'e
 un jeu d'hypoth\g{e}ses plus faible que celui du mod\g{e}le 1 qui pr\'ec\g{e}de. En voici un r\'esum\'e :
 
 \begin{modmerate}{Mod\g{e}le 2}{\textbf{(H${}^{\ast}$\arabic*)}}
-\item Non-progressivit\'e, identique \g{a} \ref{nprog}.
+\item Identique \g{a} \ref{nprog}.
 \item\label{var_compf} Le mod\g{e}le d\'efini par les \'equations qui pr\'ec\g{e}dent, %
 qui contiennent en plus des six variables, \emph{une composante stochastique}, est bien pos\'e.
 \item\label{autof} Les \'equations du mod\g{e}le sont autonomes, sauf celles du r\'egime suivi par les pixels situ\'es sur la l\'esion initiale %
@@ -1218,6 +1194,7 @@ qui incorporent une dur\'ee fix\'ee initialement. %
 Dans le cadre des simpulations cette dur\'ee est d\'efinie al\'eatoirement sur les pixels qui sont entr\'es dans l'\'etat isch\'emi\'e.
 \end{modmerate}
 
+\begin{comment}
 \newpage
 \subsubsection{Constitution d'une base de donn\'ees pour les conditions initiales}
 
@@ -1231,7 +1208,7 @@ voir \g{a} ce tire la figure \ref{sim_ini}, partie gauche.
 
 \par
 En effet, la base de donn\'ees multiparam\'etrique est d\'efinie sur l'intersection des ensembles de pixels disponibles pour les six modalit\'es, %
-d'o\g{u} un manque de donn\'ees pour comencer les calculs.
+d'o\g{u} un manque de donn\'ees pour commencer les calculs.
 
 \par
 Afin de constituer une condition initiale utilisable \g{a} partir des donn\'ees du jour 0, j'ai compl\'et\'e les vecteurs contenant certaines variables %
@@ -1259,10 +1236,11 @@ les autres, en bleu, sont dans un \'etat perturb\'e.
 }
 \label{sim_ini}
 \end{figure}
+\end{comment}
 
-\subsubsection{Une alternative : le mod\g{e}le 3 demi}
+\subsubsection{Evolution \g{a} partir du jour 8.}
 
-Si l'on choisit de d\'emarrer les simulations au jour 8, pour lequel on dispose de donn\'es mesur\'ees ou calcul\'ees \g{a} partir d'un eamen IRM, %
+Si l'on choisit de d\'emarrer les simulations au jour 8, pour lequel on dispose de donn\'es mesur\'ees ou calcul\'ees \g{a} partir d'un examen IRM, %
 on peut renforcer la deuxi\g{e}me hypoth\g{e}se en laissant, comme seules variables autres que les six \'etudi\'ees, les bruits des \'equations $\Tb$.
 
 \par
@@ -1271,10 +1249,10 @@ En effet,
 \par
 L'\'etape isch\'emique transitoire du mod\g{e}le 2 est \'egalement superflue, %
 puisque l'\'evolution des pixels peut seulement transiter entre les \'etats l\'esion 1 d\'ebut, 1 asymptotique etc. %
-On peut ainsi reprendre la version forte \ref{auto} de l'hypoth\g{e}se d'autonomie du mod\^g{e}le.
+On peut ainsi reprendre la version forte \ref{auto} de l'hypoth\g{e}se d'autonomie du mod\g{e}le.
 
 \begin{modmerate}{Mod\g{e}le 1 bruit\'e, alias \og{} 3/2\fg{}}{\textbf{(H\arabic*)}}
-\item Non progressivit\'e : l'\'evolution de l'\'etat d'un voxel n'est pas affect\'ee par l'\'etat des voxels voisins.
+\item L'\'evolution de l'\'etat d'un voxel n'est pas affect\'ee par l'\'etat des voxels voisins.
 \item ${}_\mathbb{P}$ : pas de variable cach\'ee, seulement un bruit exog\g{e}ne.
 \item L'\'evolution du syst\g{e}me est autonome.
 %\item\label{bvf...}
@@ -1283,7 +1261,7 @@ On peut ainsi reprendre la version forte \ref{auto} de l'hypoth\g{e}se d'autonom
 Le jeu d'hypoth\g{e}ses qui pr\'ec\g{e}de, plus fort que celui du mod\g{e}le 2 mais moins que celui du mod\g{e}le 1, m\'erite la d\'enomination \og{} 3demi\fg{}.
 
 \etoile
-Bien s\^ur, les simulations fond\'ees sur ce mod\g{e}le n'ont pas d'int\'er\^et paratique comparable \g{a} celles qui commencent au jour 0. %
+Bien s\^ur, les simulations fond\'ees sur ce mod\g{e}le n'ont pas d'int\'er\^et pratique comparable \g{a} celles qui commencent au jour 0. %
 %Toutefois, 
 
 

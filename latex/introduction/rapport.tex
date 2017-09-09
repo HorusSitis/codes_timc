@@ -1,10 +1,17 @@
 \section{Introduction}
 
-\subsection{IRM, IRM augment\'ee}%State of the art, pour cette question plus générale que l'objet de ce stage.
+\begin{comment}
+Mon stage s'est d\'eroul\'e au laboratoire TIMC-IMAG (Techniques de l'Ingénierie M\'edicale et de la Complexit\'e - %
+Informatique, Mathématiques et Applications, Grenoble), sous la direction d'Angélique Stéphanou (CNRS). %
+Il s'inscrit dans le projet Imagerie par Résonnance Magn\'etique Augment\'ee (IRMA) qui vise \g{a} effectuer des pr\'edictions, %
+\g{a} partir d'images IRM, sur des param\g{e}tres qui ne sont pas directement mesurables comme la pression art\'erielle en dioxyg\g{e}ne $P_aO_2$ %
+ou avec une meilleure r\'esolution spatiotemporelle que celle des images brutes. %
+Un autre aspect de l'augmentation virtuelle de l'imagerie par résonnance magnétique est la simulation, \g{a} partir d'une image initiale, %
+de l'évolution de l'état d'un patient sur des \'echelles de temps plus ou moins longues. %
+C'est l'objet de ce travail, qui doit permettre de retracer l'\'evolution, sur plusieurs semaines, de l'\'etat d'un cerveau de rat isch\'emi\'e.
+\end{comment}
 
-
-%IRM : historique ? Jusqu'\g{a} l'IRM multiparam\'etrique.
-%Avantages et limitations, bri\g{e}vement.
+Augmentation virtuelle de l'IRM : un projet du TIMC et du GIN
 
 IRM augment\'ee : mettre au point des programmes informatiques permettant d'interpr\'eter syst\'ematiquement des images IRM.
 \begin{enumerate}
@@ -16,32 +23,56 @@ IRM augment\'ee : mettre au point des programmes informatiques permettant d'inte
 \item Calculer des grandeurs, comme la pression partielle en $O_2$, qui en sont pas mesurables directement \g{a} partir des images.
 \end{enumerate}
 
-%Sc\'ema : grille de pixels et de cellules.
-%Automate cellulaire.
+
+
+
+
+
+\subsection{Principe de l'IRM}%State of the art, pour cette question plus générale que l'objet de ce stage.
+
+
+%IRM : historique ? Jusqu'\g{a} l'IRM multiparam\'etrique.
+%Avantages et limitations, bri\g{e}vement.
+
+
+
+
+
+%\subsection{Une utilisation remarquable : L'IRM fonctionnelle (1991)}% spécifique au cerveau
+
+
+
+
+
+
+
+\subsection{Mesures effectu\'ees \g{a} l'aide d'un agent de contraste}
+
+%Pratiquée au GIN
+
+
+
+
+
+
+%QUITOXIC MRI pour la CMRO2 et l'OEF.
+
+\subsection{L'effet BOLD}
 
 %Effet BOLD
 
-%QUITOXIC MRI pout la CMRO2 et l'OEF.
 
 
 
-\subsection{L'accident vasculaire c\'er\'ebral isch\'emique}
+%SO2
+
+\cite{christen2012l}
 
 
-%Epidémiologie.
-
-%Pénombre, reperfusion, neuroprotection, fenêtre thérapeutique.
-
-%Modèle dynamique : reconstitution d'images acquises pendant plusieurs jours d'examen, prédictions.
-
-%Principales sources :
-% 1- Durukan_PBB_07 donné le 11 août pour la cascade ischémique et des traitements ;
-% 2- pin_RNAR_99 dans le dossier parent biblio ;
-% 3- Girard dans cours_biologie pour les nécroses éparses en zone de pénombre ischémique ;
-% 4- ...
+%\subsection{Une alternative : la tomographie par \'emission de positrons (TEP)}
 
 
 
 
-%%% Important : mentionner deux échelles de temps pour la cascade ischémique. %%%
-%% Oedème vasogénique, intervention du système immunitaire. %%
+%Sc\'ema : grille de pixels et de cellules.
+%Automate cellulaire.
