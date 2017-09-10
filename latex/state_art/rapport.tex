@@ -22,7 +22,8 @@ Atteinte neurologique, motrice aphasie \dots.
 Il existe deux sortes d'accidents vasculaires c\'er\'ebraux :
 \begin{description}
 \item[L'AVC h\'emorrhagique : ] c'est une cons\'equence de la rupture de la paroi d'un vaisseau sanguin \g{a} l'int\'erieur du cerveau, comme une rupture d'an\'evrisme ;
-\item[L'AVC isch\'emique : ] c'est une baisse de la perfusion sanguine dans une r\'egion du cerveau, qui survient quand un caillot sanguin vient obstruer une art\g{e}re qui alimente cette r\'egion.
+\item[L'AVC isch\'emique : ] c'est une baisse de la perfusion sanguine dans une r\'egion du cerveau, %
+qui survient quand un caillot sanguin vient obstruer une art\g{e}re qui alimente cette r\'egion.
 \end{description}
 
 C'est ce deuxi\g{e}me type d'AVC qui nous int\'eresse, il touchait 78633 personnes hospitalis\'ees en 2014 en France.
@@ -30,56 +31,225 @@ C'est ce deuxi\g{e}me type d'AVC qui nous int\'eresse, il touchait 78633 personn
 \par
 Notons que dans ce cas, 52,6\% des personnes hospitalis\'ees ont gard\'e des s\'equelles de leur AVC.
 
-\subsection{Premiers stades de l'AVC isch\'emique}
+%\subsubsection{Isch\'emie focale transitoire}
 
+\subsection{D\'eroulement de l'AVC isch\'emique}
 
+En premier lieu, remarquons que  que le cerveau est un organe particuli\g{e}rement sensible aux variations de son d\'ebit sanguin.
 
+\par
+En effet \cite{pat_neu}, il contient tr\g{e}s peu de r\'eserves \'energ\'etiques eu \'egard son importante consommation : %
+le cerveau consomme \g{a} lui seul 20 \% du dioxyg\g{e}ne de l'organisme.
 
+\par
+Ainsi, ses r\'eserves en glucose et en glycog\g{e}ne peuvent r\'epondre \g{a} ses besoins m\'etaboliques pendant seulement trois minutes.
 
+\par
+Enfin, comme nous allons le voir dans la sous-section \ref{casc}, un manque de dioxyg\g{e}ne et de glucose se traduit tr\g{e}s rapidement par la lib\'eration, %
+au sein du tissu c\'er\'ebral, de mol\'ecules cytotoxiques.
 
+\etoile
+La d\'ependance du cerveau aux apports de la cisculation sanguine est donc tr\g{e}s importante. %
+Deux m\'ecanismes de r\'egulation du d\'ebit sanguin c\'er\'ebral (CBF), puis du taux de dioxyg\g{e}ne m\'etabolis\'e (CMRO2), sont pr\'esnt\'es sans la sous-section suivante.
 
+\subsubsection{Baisse de la pression de perfusion sanguine}
 
+C'est la premi\g{e}re cons\'equence de l'interruption de la cisculation sanguine.
 
+\par
+La pression de perfusion sanguine $\Delta P$ est d\'efinie par : $\Delta P = P_a - P_v$, o\g{u} $P_a$ et $P_v$ sont respectivement les ressions sanguines art\'erielle et veineuse. %
+Elle est essentiellement fonction de la pression art\'erielle \cite{vib_dsc}.
 
+\par
+La pression de perfusion $\Delta_P$ et le d\'ebit sanguin c\'er\'ebral CBF satisfont l'\'equation, analogue \g{a} la loi d'Ohm en \'electrocin\'etique :
+\begin{equation}
+\Delta P = R\times CBF%
+\text{ cette derni\g{e}re grandeur est d\'efinie dans la section d'introduction.}
+\label{ohm}
+\end{equation}
 
+$R$ est naturellement appel\'ee la r\'esistance vasculaire c\'ebrale. D'apr\g{e}s \cite{vib_dsc}, elle d\'epend de :
+\begin{enumerate}
+\item La viscosit\'e du sang \g{a} laquelle est proportionnelle ;
+\item L'\'etat anatomique du r\'eseau vasculaire : elle est proportionnelle \g{a} la longueur des vaisseaux ;
+\item\label{reac_r_cbf} Le tonus vasculaire : elle est proportionnelle \g{a} la puissance quatri\g{e}me du rayon des vaisseaux ;
+\item La pression du liquide c\'ephalorachidien.
+\end{enumerate}
 
+On observe, dans un cerveau sain, une r\'egulation automatique du CBF : %
+le graphique suivant montre que, pour des variations de la pression de perfusion suffisamment basses, le CBF reste constant.
 
+%%% Figure
+\begin{figure}
+\includegraphics[width=0.8\linewidth,height=7cm]{../../images_rapport/regCBF_1.png}
+\caption{Le CBF ne change pas si $\Delta P\in \left[70\text{ mmHg};150\text{ mmHg}\right]$}
+\label{regcbf_1}
+\end{figure}
 
+La cause de cette r\'egulation est une variation de $R$ qui compense celle de $\Delta P$, d'apr\g{e}s l'\'equation \ref{ohm}.
+
+\par
+Cette variation, li\'ee au diam\g{e}tre des vaisseaux sanguins, peut \^etre d'origine humorale : ad\'enosine \cite{vib_dsc} ; %
+ou musculaire : r\'eflexe des muscles lisses qui se trouvent dans la paroi des vaisseaux.
+
+\par
+Les limites sup\'erieure et inf\'erieure de la r\'egulation peuvent \g{e}tre modifi\'ees par l'intervention du syst\g{e}me nerveux : voir la figure ci-dessous.
+
+%%% Figure
+\begin{figure}
+\includegraphics[width=0.8\linewidth,height=5.2cm]{../../images_rapport/regCBF_2.png}
+\caption{Effets de l'excitation, ou de l'inhibition du syst\g{e}me nerveux sympathique sur la r\'egulation du CBF}
+\label{regcbf_2}
+\end{figure}
+
+\etoile
+Dans le cas d'un accident c\'er\'ebral isch\'emique, la pression de perfusion c\'er\'ebrale devient trop basse pour que cette r\'egulation soit efficace : %
+le d\'ebit sanguin c\'er\'ebral baisse.
+
+\ligneinter
+Cette baisse ne se traduit pas imm\'ediatement par un dysfonctionnement des cellues nerveuses.
+
+\par
+En effet, la CMRO2, qui joue un r\^ole d\'ecisif dans la r\'eponse cellulaire \g{a} l'isch\'emie est li\'ee au CBF par l'\'equation suivante \cite{bufr97} :
+\begin{equation}
+OEF\times CBF\times [O_2]_a=CMRO2
+\label{cmro2_cbf}
+\end{equation}
+
+Si l'on suppose $[O_2]_a$ constant -c'est une hypoth\g{e}se du mod\g{e}le expos\'e dans \cite{Duval_JCBFM_02}, %
+cela signifie qu'une augmentation de OEF peut, seule, compenser une baisse du CBF %
+que la r\'egulation \'evoqu\'ee pr\'ec\'edemment n'aura pas pu \'eviter. 
+
+%\cite{Duval_JCBFM_02} r\'e\'ecrit cette \'equation :
+%\[a\times OEF\times CBF = CMRO2\]
+\par
+Afin d'\'elaborer leurs simulations, les auteurs de \cite{Duval_JCBFM_02} ont fix\'e \g{a} 90 \% le seuil d'extraction (OEF) au del\g{a} duquel celle-ci ne peut plus augmenter. %
+Si la baisse de CBF se poursuit apr\g{e}s que l'OEF ait d\'epass\'e 90\%, alors la CMRO2 baisse \g{a} son tour.
+
+\etoile
+La r\'egion du cerveau touch\'ee par une isch\'emie, apr\g{e}s les \'echecs successifs des deux r\'egulations qui pr\'ec\g{e}dent, %
+est donc caract\'eris\'ee par :
+\begin{itemize}
+\item Des valeurs basses du CBF ;
+\item Une CMRO2 faible.
+\end{itemize}
+
+La premi\g{e}re caract\'erisation ci-dessus sera utilis\'ee dans la section suivante pour d\'elimiter des r\'egions l\'es\'ees sur des images IRM, %
+les cons\'equences d'une baisse de la CMRO2 sont r\'esum\'ees ci-dessous.
+
+\subsubsection{Cascade isch\'emique}\label{casc}
+
+Voici les principales \'etapes de l'isch\'emie c\'er\'ebrale, telles qu'elles sont r\'esum\'ees dans \cite{Durukan_PBB_07} et \cite{lar_poly_09}:
+
+\begin{description}
+\item[Insuffisance \'energ\'etique :] un apport insuffisant en dioxyg\g{e}ne et en glucose %
+interrompt le fonctionnement des enzymes -$K^+ - Na^+-$ATP-ase et $Ca^{++}H-$ATPase situ\'ees \g{a} la surface des cellules nerveuses. %
+En cons\'equence, les concentrations intracellulaires en ions calcium, sodium et chlorure augmentent par effet d'osmose, %
+de plus le potentiel de membrane des cellules touch\'ees par l'isch\'emie chute.
+\item[Oed\g{e}me cytotoxique :] Les transferts ioniques d\'ecrits pr\'ec\'edemment, et l'entr\'ee d'eau qui accompagne les ions $Cl^-$, %
+$Ca^{++}$ et $Na^+$ \g{a} l'int\'erieur d'une cellule nerveuse, provoquent la rupture de la membrane de cette cellule, donc sa mort par n\'ecrose.
+\end{description}
+
+Les neurones et cellules gliales concern\'es constituent la \emph{zone d'infarct} de l'isch\'emie, %
+c'est-\g{a}-dire la r\'egion du tissu c\'er\'ebral l\'es\'ee de fa\c con irr\'eversible.
+
+\par
+Cette r\'egion est entour\'ee de cellules nerveuses expos\'ees \g{a} %
+un d\'eficit \'energ\'etique moins important que celui des cellules de la zone d'infarct. %
+Elles adaptent leur activit\'e aux apports \'energ\'etiques, et constituent la \emph{p\'enombre isch\'emique}.
+
+\begin{description}
+\item[D\'epression envahissante :] La d\'epolarisation membranaire caus\'ee par l'insuffisance \'energ\'etique au d\'ebut de l'isch\'emie se propage \g{a} travers les axones. %
+L'onde progressive qui s'ensuit est consommatrice d'\'energie, des cellules de la p\'enombre isch\'emique expos\'ees \g{a} ces ondes de fa\c con r\'ep\'et\'ee %
+sont susceptibles de mourir par apoptose ou par n\'ecrose.
+\item[G\'en\'eration de radicaux libres :] Elle est provoqu\'ee par l'arriv\'ee du calcium dans le milieu extracellulaire. %
+Le pouvoir destructeur de ces mol\'ecules est tr\g{e}s important : membranes cellulaires, ADN \dots %
+Certains radicaux libres comme l'oxyde d'azote (NO) modifient \'egalement les r\'eaction des cellules nerveuses \g{a} certains signaux :
+ainsi, les ondes de d\'epression corticale provoquent un r\'etr\'ecissement du diam\g{e}tre des vaisseaux en r\'egion isch\'emi\'ee. %
+Les migraines \g{a} aura sont un exemple de propagation d'ondes de d\'epolarisation qui, dans un tisu sain, entra\^inent une dilatation des vaisseaux sanguins.
+\end{description}
+
+%Dans son cours \ref{grdr1}, Emmanuel Grenier 
 %Pénombre, reperfusion, neuroprotection, fenêtre thérapeutique.
-
-
 %Mécanismes de régulation, saturations successives.
-
-
 %Modèle dynamique : reconstitution d'images acquises pendant plusieurs jours d'examen, prédictions.
-
 %Principales sources :
 % 1- Durukan_PBB_07 donné le 11 août pour la cascade ischémique et des traitements ;
 % 2- pin_RNAR_99 dans le dossier parent biblio ;
 % 3- Girard dans cours_biologie pour les nécroses éparses en zone de pénombre ischémique ;
 % 4- ...
-
 %%% Important : mentionner deux échelles de temps pour la cascade ischémique. %%%
 %% Oedème vasogénique, intervention du système immunitaire. %%
+%\cite{grdr1}%Onde de d\'epolarisation
 
-\cite{vib_dsc}% pour la régulation myogénique du CBF
-\cite{Duval_JCBFM_02}% pour l'absorption du déficit de CBF par l'OEF, ce qui stabilise la CMRO2
+Les \'etapes de la cascade isch\'emique qui pr\'ec\g{e}dent se d\'eroulent dans les premi\g{e}res heures qui suivent le d\'ebut de l'accident. %
+D'autres m\'ecanismes peuvent intervenir, quelques jours apr\g{e}s l'AVC. Citons, toujours d'apr\g{e}s \cite{Durukan_PBB_07} :
 
-\cite{Durukan_PBB_07}%cascade ischémique
+\begin{description}
+\item[Oed\g{e}me vasog\'enique :] Une reperfusion trop violente peut endommager la barri\g{e}re h\'ematoenc\'ephalique, et entra\^iner sa rupture. %
+Un oed\g{e}me, dit vasog\'enique, se forme avec l'infiltration de plasma dans le tissu c\'er\'ebral.
+\item[R\'eaction du syst\g{e}me immunitaire :] c'est l'arriv\'ee programm\'ee de macrophages et de leucocytes dans le tissu c\'er\'ebral, plusieurs jours apr\g{e}s l'AVC. %
+Malgr\'e leur r\^ole protecteur, ces cellules pourraient favoriser l'apoptose de cellules de la p\'enombre isch\'emique.
+\end{description}
 
+\subsection{Soins hospitaliers pour l'AVC isch\'emique}
+%
+%Dans toute la suite de ce travail, on consid\g{e}re et on mod\'elise des isch\'emies provoqu\'ees par l'obstruction 
 
-\subsection{Fen\^etre th\'erapeutique}
+\subsubsection{Traitement fibrinolytique}
 
+Il s'agit d'un traitement chimique, administr\'e par intraveineuse, qui dissout le caillot sanguin \g{a} l'origine de l'isch\'emie. %
+Cette intervention, bien connue du corps m\'edical, doit se pratiquer dans les heures qui suivent l'isch\'emie dasn une unit\'e neuro-vasculaire \cite{lar_poly_09}.
+
+\par
+Cette op\'eration r\'etablit une perfusion c\'er\'ebrale normale, n\'ecessaire, mais non suffisante, \g{a} la r\'emission du patient.
+
+\etoile
+Il est rare, mais possible, qu'un traitement fibrinolytique entra\^ine une grave complication de l'AVC : %
+la barri\g{e}re h\'ematoenc\'ephalique peut \^etre endommag\'ee par le traitement, ce qui provoque une h\'emorragie c\'er\'ebrale, %
+souvent mortelle ou fortement invalidante.
+
+\subsubsection{Neuroprotection}
 
 % Diagramme avec les flèches vertes ?
+Il s'agit de sauver les cellules qui se trouvent dans la zone de p\'enombre. Deux approches existent :
+\begin{itemize}
+\item Provoquer une hypothermie du tissu c\'erebral ;
+\item Utilisation des mol\'ecules neuroprotectrices, qui \'eliminent par exemple les radicaux libres \cite{Durukan_PBB_07}.
+\end{itemize}
 
-\subsection{Etat actuel des connaissances : traitements, mod\g{e}les, simulations}
+L'efficacit\'e des traitements pharmacologique d\'epend fortement du temps : %
+la dur\'ee pendant laquelle l'injection d'une mol\'ecule peut \^etre b\'en\'efique est appel\'ee fen\^etre th\'erapeutique. %
+L'utilisation combin\'ee de plusieurs traitements peut allonger cette dur\'ee selon \cite{Durukan_PBB_07}.
 
-\cite{Duval_JCBFM_02}
+\subsection{Pr\'edictions}
 
+Le probl\g{e}me pos\'e par la fen\^etre th\'erapeutique est difficile. %
+L'approche pr\'econis\'ee ici consiste \g{a} mod\'eliser l'\'evolution temporelle d'un tissu isch\'emi\'e, %
+puis d'impl\'ementer le mod\g{e}le afin de pouvoir effectuer des simulations.
+
+\subsubsection{Simulation des premi\g{e}res heures qui suivent l'isch\'emie}
+
+L'article \cite{Duval_JCBFM_02} donne un exemple de mod\'elisation, \g{a} l'\'echelle du voxel, %
+des premi\g{e}res heures qui suivent l'isch\'emie caract\'eris\'ee par une baisse du d\'ebit sanguin c\'er\'ebral.
+
+\par
+Ce mod\g{e}le des stades pr\'ecoces de l'isch\'emie incorpore la r\'egulation de la CMRO2 avec l'\'equation \ref{cmro2_cbf}, %
+et une diffusion de l'ADC suite \g{a} un oed\g{e}me cytotoxique.
 % Duval :
 % - Echelle de temps ;
 % - Progressivité : ADC ;
 % - ...
-
 %\subsection{A suivre : vers une nouvelle \'echelle de temps}
+
+\par
+Le mod\g{e}le est impl\'ement\'e sur une grille de $7\times 7$ pixels. %
+L\'etat de chaque pixel se r\'esume aux valeurs prises par six variables, parmi lesquelles figurent l'ADC, le CBf et la CMRO2. %
+L'une de ces variables, d\'efinie par les auteurs, caract\'erise l'\'etat du tissu \g{a} l'issue des six premi\g{e}res heures d'isch\'emie : %
+sain, sauvable (p\'enombre) ou n\'ecros\'ee. Les valeurs prises par cette variable \g{a} l'issue des simulations doit \^etre conforme aux r\'esultats exp\'erimentaux. %
+Ceux-ci concernent d'ailleurs des sujets humains.
+
+\subsubsection{Simulation sur plusieurs semaines}
+
+C'est l'objectif de ce travail. Plus pr\'ecis\'ement nous allons effectuer des simulations sur les pixels d'une coupe d'un cerveau de rat, %
+examin\'e en IRM aux jours 0, 3, 8, 15 et 22 qui suivent une isch\'emie focale transitoire.
