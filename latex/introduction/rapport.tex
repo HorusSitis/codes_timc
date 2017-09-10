@@ -1,44 +1,25 @@
 \section{Introduction}
 
-\begin{comment}
-Mon stage s'est d\'eroul\'e au laboratoire TIMC-IMAG (Techniques de l'Ingénierie M\'edicale et de la Complexit\'e - %
-Informatique, Mathématiques et Applications, Grenoble), sous la direction d'Angélique Stéphanou (CNRS). %
+\subsection{Contexte : stage au TIMC}
+
+Ce travail a \'et\'e r\'ealis\'e pendant mon stage de master 2, qui s'est d\'eroul\'e au laboratoire TIMC-IMAG %
+(Techniques de l'Ingénierie M\'edicale et de la Complexit\'e - Informatique, Mathématiques et Applications, Grenoble), %
+sous la direction d'Angélique Stéphanou (CNRS). 
+
+\par
 Il s'inscrit dans le projet Imagerie par Résonnance Magn\'etique Augment\'ee (IRMA) qui vise \g{a} effectuer des pr\'edictions, %
 \g{a} partir d'images IRM, sur des param\g{e}tres qui ne sont pas directement mesurables comme la pression art\'erielle en dioxyg\g{e}ne $P_aO_2$ %
-ou avec une meilleure r\'esolution spatiotemporelle que celle des images brutes. %
-Un autre aspect de l'augmentation virtuelle de l'imagerie par résonnance magnétique est la simulation, \g{a} partir d'une image initiale, %
-de l'évolution de l'état d'un patient sur des \'echelles de temps plus ou moins longues. %
-C'est l'objet de ce travail, qui doit permettre de retracer l'\'evolution, sur plusieurs semaines, de l'\'etat d'un cerveau de rat isch\'emi\'e.
-\end{comment}
+ou avec une meilleure r\'esolution spatiotemporelle que celle des images brutes.
 
-Augmentation virtuelle de l'IRM : un projet du TIMC et du GIN
-
-IRM augment\'ee : mettre au point des programmes informatiques permettant d'interpr\'eter syst\'ematiquement des images IRM.
+\par
+Les premi\g{e}res \'etapes du projet comprennent :
 \begin{enumerate}
-\item Effectuer des pr\'edictions : simuler l'\'evolution future de l'\'etat du tissu c\'er\'ebral chez un patient%
-%\begin{itemize}
-
-%\end{itemize}
-\item Am\'eliorer 
-\item Calculer des grandeurs, comme la pression partielle en $O_2$, qui en sont pas mesurables directement \g{a} partir des images.
+\item L'acquisition d'images IRM multiparam\'etriques sur des cerveaux de rats ;
+\item La construction d'un mod\g{e}le dynamique 
 \end{enumerate}
 
-
-
-
-
-
-\subsection{Principe de l'IRM}%State of the art, pour cette question plus générale que l'objet de ce stage.
-
-
-%IRM : historique ? Jusqu'\g{a} l'IRM multiparam\'etrique.
-%Avantages et limitations, bri\g{e}vement.
-
-
-
-
-
-%\subsection{Une utilisation remarquable : L'IRM fonctionnelle (1991)}% spécifique au cerveau
+Un tel mod\g{e}le doit \^etre capable de relier des m\'ecanismes physiologiques exsitant \g{a} l'\'echelle de la cellule nerveuse, %
+et les observations r\'ealis\'ees \g{a} l'\'echelle du voxel.
 
 
 
@@ -46,10 +27,42 @@ IRM augment\'ee : mettre au point des programmes informatiques permettant d'inte
 
 
 
-\subsection{Mesures effectu\'ees \g{a} l'aide d'un agent de contraste}
+\subsection{Imagerie par r\'esonnance magn\'etique}%State of the art, pour cette question plus générale que l'objet de ce stage.
 
-%Pratiquée au GIN
+L'imagerie par r\'esonnance magn\'etique consiste \g{a} placer un patient dans un champ magn\'etique intense : %
+un appareil classiqu
 
+
+
+
+\subsection{Principales modalit\'es}
+
+Ce sont les diff\'erentes sortes d'examens r\'ealisables avec un appareil IRM.
+
+\par
+Elles permettent de mesurer, ou de calculer, les valeurs prises par diff\'erentes variables : %
+coefficient de diffusion apparent de l'eau, saturation en oxyg\g{e}ne \dots %
+d\'efinies sur toute l'\'etendue du tissu c\'er\'ebral.
+
+\subsubsection{Relaxations T1, T2}
+
+
+
+
+\subsubsection{L'IRM de diffusion}
+
+
+
+
+
+
+
+\subsubsection{Agents de contraste}
+
+
+
+
+\subsubsection{Effet BOLD}
 
 
 
@@ -57,22 +70,14 @@ IRM augment\'ee : mettre au point des programmes informatiques permettant d'inte
 
 %QUITOXIC MRI pour la CMRO2 et l'OEF.
 
-\subsection{L'effet BOLD}
-
-%Effet BOLD
 
 
 
 
-%SO2
-
-\cite{christen2012l}
-
-
-%\subsection{Une alternative : la tomographie par \'emission de positrons (TEP)}
 
 
 
+\cite{christen2012l}%SO2
 
-%Sc\'ema : grille de pixels et de cellules.
-%Automate cellulaire.
+
+
