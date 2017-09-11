@@ -15,37 +15,81 @@ Remarque : pour renuméroter les sous-figures de la même manière
 
 \subsection{Mod\g{e}le exp\'erimental}
 
-Ces exp\'eriences ont \'et\'e men\'ees \g{a} l'Institut de Neurosciences de Grenoble (GIN) par Benjamin Lemasson.
+%Ces exp\'eriences ont \'et\'e men\'ees \g{a} l'Institut de Neurosciences de Grenoble (GIN) par Benjamin Lemasson.
 %, %
 %et m'ont \'et\'e transmises \g{a} la suite d'une r\'eunion \g{a} laquelle j'ai assist\'e au GIN %
 %avec Ang\'elique St\'ephanou, Emmanuel Barbier, et Benjamin Lemasson.
+\subsubsection{Chirurgie}
 
+Les donn\'ees exploit\'ees dans cette section sont issues d'une exp\'erience men\'ee au GIN (Grenoble Institude of Neurosciences) par Benjamin Lemasson, %
+sur des cerveaux de rats.
 
-
-
-
-
-
-
-
-
-\cite{Lem_PHD_10}
-
-\subsubsection{Chirurgie}% trop flou
-
-Occlusion intraluminale.
-
-% Sessions d'examen : jours 00, 03 etc.
+\par
+Les sujets ont d'abord subi une occlusion intraluminale d'une art\g{e}re c\'er\'ebrale post\'erieure -voir \cite{Durukan_PBB_07}. pour une illustration de la technique.
 
 %\par
-Chaque session d'examens consistait \g{a} produire $13$ images, en coupe frontale, de la t\^ete du sujet, %
-sur une longueur correspondant au cerveau du rat, et pour les modalit\'es qui suivent :
+%d'une art\g{e}re situ\'ee en aval du polygone de Willis. %
+%Des exemples d'occlusions intraluminale sont sch\'ematis\'es dans %
 
-\subsubsection{G\'en\'eration des images multiparam\'etriques}%, fiabilit\'e, probl\g{e}mes rencontr\'es}
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth, height = 6.8cm]{../../images_rapport/willis.png}
+\caption{Polygone de Willis, aliment\'e par les art\g{e}res carotides et du tronc basilaire.
+\\
+Il permet d'\'eviter une isch\'emie globale, en cas de dysfonctionnement d'une art\g{e}re situ\'ee en amont, %
+mais pas une isch\'emie focale en cas de probl\g{e}me sur une art\g{e}re post\'erieure.
+}
+\label{willis}
+\end{figure}
+
+\par
+Les rats subissent d'abord une anesth\'esie g\'en\'erale pendant 60 minutes. %
+Un filament en plastique est ensuite introduit dans le r\'eseau art\'eriel de chaque rat, %
+et remonte jusqu'\g{a} une art\g{e}re post\'erieure, en aval du polygone de Willis.
+
+\par
+Cette art\g{e}re est ainsi obstru\'ee, dans chaque cerveau de rat, pendant 90 minutes. %
+Ceci provoque une isch\'emie focale : celle-ci concerne seulement la partie du cerveau aliment\'ee par l'art\g{e}re, %
+contrairement \g{a} une isch\'emie focale qui touche l'ensemble du cerveau.
+
+\par
+L'isch\'emie provoqu\'ee, lors d'un AVC, par l'obstruction d'une art\g{e}re par un caillot sanguin est elle-m\^eme focale, %
+ce qui prouve la pertinence du mod\g{e}le exp\'erimental.
 
 
+\subsubsection{Suivi pour quatre rats}
 
+Les rats font l'objet d'un suivi : chaque rat subit une s\'erie d'examens IRM 30 minutes, 3 jours, 8 jours, 15 jours et 22 jours apr\g{e}s la fin de l'isch\'emie.
 
+\par
+Quatre rats, num\'erot\'es 11, 19, 26 et 30, ont v\'ecu suffisamment longtemps apr\g{e}s le d\'ebut de l'exp\'erience, %
+pour que ces examens soient pratiqu\'es.
+
+\par
+13 coupes frontales ont ainsi \'et\'e produites, chaque jour et pour chaque rat, %
+selon les modalit\'es \'evoqu\'ees en introduction.
+
+\par
+Des images en ADC, BVf, CBF, CMRO2, SO2, et en pond\'eration T1 et T2 ont \'et\'e obtenues. %
+Elles sont utilis\'ees, dans la suite de ce travail, pour effectuer un suivi temporel de r\'egions l\'es\'ees, ou saines, %
+du cerveau de chaque rat.
+
+\par
+Toutefois, le nombre d'images disponibles pour toutes les variables \'evoqu\'ees ci-dessus sont seulement disponibles pour un petit nombre de coupes : %
+trois coupes au maximum, pour un rat. Ceci n'emp\^eche ps d'obtenir des r\'esultats int\'eressants.
+
+\etoile
+Une derni\g{e}re variable, d\'efinie pour chaque coupe des cerveaux de rats examin\'es, est le diam\g{e}tre moyen des vaisseaux (Vessel Size index ou VSI). %
+Il est donn\'ee par l'\'equation \ref{vsi_adc}, que l'on trouve dans \cite{Lem_PHD_10} :
+
+\begin{equation}
+0,425\left(\frac{ADC}{\Delta_{\chi}B_0}\right)^{\frac{1}{2}}\left(\frac{\Delta R_2^{\ast}}{\Delta R_2}\right)^{\frac{3}{2}}
+\label{vsi_adc}
+\end{equation}
+
+Les notations $R_2$, $R_2^{\ast}$ -respectivement $\frac{1}{T_2}$ et $\frac{1}{T_2^{\ast}}$ - et $\Delta_{\chi}$ sont d\'efinies en introduction.
+
+\par
+Les images ci-dessous, dites multiparam\'etriques car elles concernent plusieurs variables, ont ainsi \'et\'e obtenues.
 
 \begin{figure}[!h]
 \begin{tabular}{|c|c|c|c|}
@@ -131,7 +175,7 @@ ou globalement sur les coupes enti\g{e}res ou des r\'egions d'int\'er\^et.
 &
 \subfloat[BVf]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/11-J00-BVf-Cropped-slice10.jpg}}
 &
-\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/11-J00-CBF-Cropped-slice10.jpg}}
+\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/11-J00-CBF-seg-slice10.jpg}}
 \\
 \hline
 \subfloat[CMRO2]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/11-J00-CMRO2-Cropped-slice10.jpg}}
@@ -159,7 +203,7 @@ ou globalement sur les coupes enti\g{e}res ou des r\'egions d'int\'er\^et.
 &
 \subfloat[BVf]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/19-J00-BVf-Cropped-slice9.jpg}}
 &
-\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/19-J00-CBF-Cropped-slice9.jpg}}
+\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/19-J00-segCBF-slice9.jpg}}
 \\
 \hline
 \subfloat[CMRO2]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/19-J00-CMRO2-Cropped-slice9.jpg}}
@@ -187,7 +231,7 @@ ou globalement sur les coupes enti\g{e}res ou des r\'egions d'int\'er\^et.
 &
 \subfloat[BVf]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/26-J00-BVf-Cropped-slice8.jpg}}
 &
-\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/26-J00-CBF-Cropped-slice8.jpg}}
+\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/26-J00-CBF-seg-slice8.jpg}}
 \\
 \hline
 \subfloat[CMRO2]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/26-J00-CMRO2-Cropped-slice8.jpg}}
@@ -215,7 +259,7 @@ ou globalement sur les coupes enti\g{e}res ou des r\'egions d'int\'er\^et.
 &
 \subfloat[BVf]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/30-J00-BVf-Cropped-slice11.jpg}}
 &
-\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/30-J00-CBF-Cropped-slice11.jpg}}
+\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/30-J00-CBF-seg-slice11.jpg}}
 \\
 \hline
 \subfloat[CMRO2]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/30-J00-CMRO2-Cropped-slice11.jpg}}
@@ -238,15 +282,19 @@ ou globalement sur les coupes enti\g{e}res ou des r\'egions d'int\'er\^et.
 Avec des choix judicieux de contraste, on peut discerner, \g{a} l'oeil, des r\'egions l\'es\'ees sur les coupes segment\'ees de cerveau. %
 Plus particuli\g{e}rement, et pour tous les rats, on discerne une aire sombre sur les images en CBF au jour 00, %
 c'est-\g{a}-dire produites par l'examen r\'ealis\'e 30 minutes apr\g{e}s la reperfusion. %
-Cette aire se situe sur l'h\'emisph\g{e}re visible \g{a} gauche, et on retrouve des r\'egions similaires, mais plus petites, %
-sur des images obtenues dans les autres modalit\'es, notamment l'ADC : %
-voir les figures \ref{11_dark_00}, \ref{19_dark_00}, \ref{26_dark_00} et \ref{30_dark_00}. %
-L'isch\'emie focale transitoire se traduit pr\'ecis\'ement par une baisse du d\'ebit sanguin c\'er\'ebral %et la reperfusion ?
-L'utilisation de cette r\'egion d'int\'er\^et est donc pertinente pour mod\'eliser l'ensemble des pixels initialement l\'es\'es.
+Cette aire se situe sur l'h\'emisph\g{e}re visible \g{a} gauche.
+
+\par
+On trouve d'ailleurs des r\'egions similaires, mais plus petites, pour d'autres variables comme l'ADC : %
+voir les figures \ref{11_dark_00}, \ref{19_dark_00}, \ref{26_dark_00} et \ref{30_dark_00}.
+
+\par
+La caract\'erisation de la r\'egion isch\'emi\'ee par des valeurs faibles du CBF a d'ailleurs \'et\'e discut\'ee \g{a} la section pr\'ec\'edente.
 
 \etoile
-Une technique similaire \g{a} celle utilis\'ee pr\'ec\'edemment a \'et\'e utilis\'ee pour la segmentation des cerveaux -voir la figure \ref{cbf_seg_19}, %
-afin de s\'electionner les r\'egions l\'es\'ees en CBF.
+Afin de d\'elimiter les parties isch\'emi\'ees sur les coupes disponibles, nous avons utilis\'e la m\^eme technique que pour les cerveaux : voir la figure \ref{cbf_seg_19}. %
+Les bordures trac\'ees sur les images en CBF one \'et\'e transf\'er\'ees sur les autres images, ce qui a permis d'isoler les pixels de l'isch\'emie. %
+Les valeurs prises, sur ces pixels, par ADC, BVf \dots T1map et VSI seront \'etudi\'ees \g{a} la sous-section suivante.
 
 \par
 Le tableau ci-dessous r\'ecapitule la taille, en nombre de pixels, des l\'esions ainsi d\'elimit\'ees sur les coupes suivables temporellement.
@@ -285,19 +333,123 @@ Rat 30&&&&&&88&139&83
 
 \newpage
 \FloatBarrier
-\subsection{Traitement statistique avec R}% Utilisation de R : statistiques sur les cerveaux segment\'es, h\'emisph\g{e}res sains.
+\subsection{Etude de la distribution des niveaux de gris : tissus sains, tissus l\'es\'es}% Utilisation de R : statistiques sur les cerveaux segment\'es, h\'emisph\g{e}res sains.
 
-Les donn\'ees ainsi collect\'ees ont \'et\'e utilis\'ees pour observer l'\'evolution, au cours de l'exp\'erience, %
-des diff\'erentes modalit\'es.
-
-\par
-Les diagrammes \ref{11_box_lch00}, \ref{19_box_lch00}, \ref{26_box_lch00} et \ref{30_box_lch00} permettent de lire facilement la r\'epartition des valeurs des diff\'erentes modalit\'es : ADC, BVf, CBF, CMRO2, SO2map et VSI. %
-Ces valeurs sont compar\'ees avec celles mesur\'ees sur le cerveau entier, et sur l'h\'emisph\g{e}re contralat\'eral -non desservi par l'art\g{e}re op\'er\'ee- le jour 0.
+On utilise pour cela le logiciel R.
 
 \par
-Notons au passage que ce dernier choix ne revient pas \g{a} comparer avec un tissu sain : bien que ne subissant pas de dysfonctionnement significatif, %
-l'\'emisph\g{e}re \og{}sain\fg{} subit \'egalement, notamment le permier jour, des r\'epercussions de l'intervention ou de la reperfusion. %
-L'\'evolution de l'\'etat de l'h\'emisph\g{e}re contralat\'eral est visible \g{a} la figure \ref{} et sera incorpor\'e au mod\g{e}le %\ref{}.
+L'utilisation d'ImageJ, expliqu\'ee \g{a} la sous-section pr\'ec\'edente, %
+a permis de d'enregistrer les valeurs prises par les variables ADC, \dots, VSI sur des coupes enti\g{e}res de cerveaux de rats, %
+ou sur des coupes de parties l\'es\'ees.
+
+\par
+A l'aide du logiciel R, on peut repr\'esenter graphiquement la r\'epartition des valeurs prises par une variable, %
+sur un tissu sain ou isch\'emi\'e.
+
+\par
+Les figures  \ref{11_dens_lch00} et \ref{19_dens_lch00} donnent, pour les variables ADC, CBF, SO2 et VSI, %
+la distribution des valeurs prises sur la partie l\'es\'ee (rouge), %
+sur l'h\'emisph\g{e}re contralat\'eral qui n'est pas touch\'e par l'isch\'emie (bleu), et sur le cerveau entier (gris).
+
+\par
+Les diagrammes en bo\^ites : \ref{11_box_lch00}, \ref{19_box_lch00}, \ref{26_box_lch00} et \ref{30_box_lch00}, %
+permettent repr\'esentent la r\'epartition des valeurs des six variables : ADC, BVf, CBF, CMRO2, SO2map et VSI. %
+Le code couleur est le m\^eme que pour la figure \ref{19_dens_lch00}.
+
+\par
+M\^eme s'ils donnent moins d'information que les courbes de densit\'e, les diagrammes en bo\^ite sont utiles quand on veut mod\'elier l'\'evolution d'un tissu. %
+En effet, les valeur prises par la m\'ediane ou les quartiles aux diff\'erents jours d'examen apportent une information partielle, %
+mais quantifi\'ee sur l'\'etat du tissu qui nous int\'eresse.
+
+\par
+Notons au passage que dans les figures qui illustrent cette section, except\'ee la derni\g{e}re \ref{19_suivi_clust_les}, %
+la distribution des niveaux de gris sur l'h\'emisph\g{e}re contralat\'eral ne concerne que le jour 0 de l'exp\'erience.
+
+\par
+Ce choix de repr\'esentation, qui permet de calibrer les courbes de densit\'e sur une valeur de r\'ef\'erence, %
+ne revient pas exactement \g{a} comparer l'\'etat d'un tissu l\'es\'e \g{a} celui d'un tissu sain.
+
+\par
+En effet, m\^eme les cellules de l'h\'emisph\g{e}re contralat\'eral ont une activit\'e normale pendant et par\g{e}s l'isch\'emie. %
+Toutefois, les valeurs observ\'ees pour le CBF chez le rat 19 -figure \ref{19_choix_clust_les}- sont plus basses 30 minutes apr\g{e}s la reperfusion -jour 0- %
+que pour les autres jours.
+
+
+\begin{figure}[!p]
+\begin{tabular}{|c|c|}
+\hline
+\subfloat[ADC, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-00.pdf}}
+&
+\subfloat[T1map, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-00.pdf}}
+\\
+\hline
+\subfloat[ADC, jour 03]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-03.pdf}}
+&
+\subfloat[T1map, jour 03]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-03.pdf}}
+\\
+\hline
+\subfloat[ADC, jour 08]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-08.pdf}}
+&
+\subfloat[T1map, jour 08]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-08.pdf}}
+\\
+\hline
+\subfloat[ADC, jour 15]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-15.pdf}}
+&
+\subfloat[T1map, jour 15]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-15.pdf}}
+\\
+\hline
+\subfloat[ADC, jour 22]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-22.pdf}}
+&
+\subfloat[T1map, jour 22]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-22.pdf}}
+\\
+\hline
+\end{tabular}
+\caption{Rat 11 : ADC et T1map.
+\\
+On remarque des similitudes entre les r\'epartitions des valeurs des deux variables, %
+que l'on retrouve dans tous les types de tissus \'etudi\g{e}s et chez tous les rats. %
+\\
+Nous nous int\'eresserons assez peu, par la suite, \g{a} la T1map.
+}
+\label{11_dens_lch00}
+\end{figure}
+
+
+\begin{figure}[!p]
+\begin{tabular}{|c|c|}
+\hline
+\subfloat[CBF, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-00.pdf}}
+&
+\subfloat[SO2map, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-00.pdf}}
+\\
+\hline
+\subfloat[CBF, jour 03]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-03.pdf}}
+&
+%\subfloat[T1map, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-03.pdf}}
+\\
+\hline
+\subfloat[CBF, jour 08]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-08.pdf}}
+&
+\subfloat[SO2map, jour 08]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-08.pdf}}
+\\
+\hline
+\subfloat[CBF, jour 15]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-15.pdf}}
+&
+\subfloat[SO2map, jour 15]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-15.pdf}}
+\\
+\hline
+\subfloat[CBF, jour 22]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-22.pdf}}
+&
+\subfloat[SO2map, jour 22]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-22.pdf}}
+\\
+\hline
+\end{tabular}
+\caption{Rat 19 : CBF et SO2map.}
+\label{19_dens_lch00}
+\end{figure}
+
+
+
 
 %\ligneinter
 
@@ -398,16 +550,19 @@ L'\'evolution de l'\'etat de l'h\'emisph\g{e}re contralat\'eral est visible \g{a
 \end{figure}
 
 %\FloatBarrier
-Les diagrammes \ref{11_box_lch00} \g{a} \ref{30_box_lch00} montrent syst\'ematiquement une baisse des valeurs d'ADC 30 minutes apr\g{e}s la reperfusion, %
+\ligneinter
+Les diagrammes de figures \ref{11_box_lch00} \g{a} \ref{30_box_lch00} montrent syst\'ematiquement une baisse des valeurs d'ADC 30 minutes apr\g{e}s la reperfusion, %
 ce qui correspond \g{a} un \'etat cytotoxique -oed\g{e}me- comme nous l'avons vu dans la section pr\'ec\'edente.
 
 \par
 Ces diagrammes indiquent aussi que les valeurs de BVf et de VSI sont, sauf pour le rat 11, corr\'el\'ees : %
-les tendances d'\'evolution en position ou en dispersion sont les m\^emes ; %
-rappelons qu'il s'agit l\g{a} respectivement de la proportion, en volume, de sang dans l'enc\'ephale et du diam\g{e}tre des vaisseaux sanguins.
+les tendances d'\'evolution en position ou en dispersion sont les m\^emes.
+
+\par
+Nous verrons une explication physiologique de cette corr\'elation dans la suite de cette section.
 
 \etoile
-La distribution des valeurs \ref{26_box_lch00}, pour toutes les modalit\'es, est peu variable chez le rat num\'ero 26, et presque plus \g{a} partir du jour 8.
+La distribution des valeurs, figure \ref{26_box_lch00}, pour toutes les modalit\'es, est peu variable chez le rat num\'ero 26, et presque plus \g{a} partir du jour 8.
 
 \par
 Les diagrammes de la figure \ref{30_box_lch00}, qui correspondent aux seuls jours 0, 8 et 15 de l'exp\'erience, %
@@ -439,39 +594,29 @@ En raison de cette diff\'erence inn\'ee entre le rat 11 et les autres rats, %
 j'ai choisi d'utiliser les donn\'ees disponibles sur le rat num\'ero 19 comme r\'ef\'erence pour mon mod\g{e}le pr\'edictif.
 
 \FloatBarrier
-\subsection{Classification avecle paquet R Mclust}% On peut utiliser sweaver
+\subsection{Classification avec la librairie Mclust}% On peut utiliser sweaver
 
-% Genèse de l'idée.
-%Nicolas Glade \'etait parti du constat suivant : pour certaines coupes examin\'ees, %
-%les valeurs calcul\'ees en ADC pour le jour 0 peuvent \^etre regroup\'ees suivant un m\'elange de lois gaussiennes, %
-
-
-%\par
-%Pour cela, il avait utilis\'e  
-
-A partir d'une base de donn\'ees g\'en\'er\'ee sur la segmentation des cerveaux de rats, Nicolas Glade a utilis\'e la fonction \'eponyme du paquet R Mclust %
-pour classifier les valeurs prises par l'ADC sur une coupe de cerveau, au premier jour d'examen.
+C'est une id\'ee de Nicolas Glade (TIMC). Elle consiste \g{a} classer les pixels d'une image IRM en niveaux de gris. %
+Ceux-ci doivent \^etre distribu\'es comme un m\'elange gaussien : %
+autrement dit, il doit exister plusieurs sous populations de pixels dont les niveaux de gris sont distribu\'ees comme des \'echantillons gaussiens.
 
 \par
-En effet, la librairie Mclust permet de classifier un ensemble de donn\'ees, que l'on suppose \^etre r\'eparties selon un m\'elange gaussien, %
-en utilisant une m\'ethode de maximum de vraisemblance.
-
+La finction mclust utilise pour cela la m\'ethode du maximum de vraisemblance.
 \par
-La figure \ref{exem_ADC_19} illustre, dans le cas tridimensionnel o\g{u} l'on effectue la classification sur plusieirs coupes, juxtapos\'ees, simultan\'ement, %
-le premier r\'esultat obtenu par Nicolas Glade.
+La figure \ref{exem_ADC_19} illustre la classification des niveaux de gris d'une IRM en ADC.
 
 \begin{figure}[H]
 \includegraphics[width=0.8\linewidth,height=13cm]{../../images_rapport/19-J00-ADC-cerveau_clhist_clust.pdf}
 \caption{Classification des valeurs d'ADC suivant un mod\g{e}le de m\'elange gaussien, avec quatre composantes.
-%\\
-%
+\\
+Les classes de pixels ainsi obtenues correspondent \g{a} une r\'ealit\'e physiologique.
 }
 \label{exem_ADC_19}
 \end{figure}
 
 \par
 Les deux premiers clusters, en bleu et en rouge, de la classification correspondent aux deux pics, bien visibles, sur l'histogramme de la figure \ref{exem_ADC_19}. %
-Les distributions d'ADC peuvent \g{e}tre r\'esum\'ees par les diagrammes en bo\^ite de la figure \ref{19_box_lch00}, %
+Les distributions d'ADC peuvent \^etre r\'esum\'ees par les diagrammes en bo\^ite de la figure \ref{19_box_lch00}, %
 et qui concernent respectivement la r\'egion l\'es\'ee et l'h\'emisph\g{e}re contralat\'eral.
 
 \par
@@ -479,14 +624,13 @@ L'emplacement et la forme du cluster en bleu \'evoque les zones sombres visibles
 et dont la derni\g{e}re a servi \g{a} d\'efinir la l\'esion -voir \ref{cbf_seg_19}.
 
 \par
-Le troisi\g{e}me cluster du m\'elange correspond, selon Nicolas Glade, \g{a} un m\'elange de diff\'erentes structures ; %
-en effet, l'existence de deux composantes connexes sur le graphique laisse penser que ce cluster pourrait \^etre encore d\'ecompos\'e. %
-Peut-\^etre touche-t-on d\g{e}s lors aux limites de la d\'ecomposition en densit\'es gaussiennes, ou que le nombre de clusters pourrait simplement \^etre plus important, %
-au d\'etriment d'une bonne lisibilit\'e de la figure.
+Le troisi\g{e}me cluster du m\'elange correspond \g{a} un m\'elange de diff\'erentes structures. %
+En effet, l'existence de deux composantes connexes sur le graphique laisse penser que ce cluster pourrait \^etre encore d\'ecompos\'e. %
+Peut-\^etre touche-t-on d\g{e}s lors aux limites de la d\'ecomposition en densit\'es gaussiennes, %
+ou que le nombre de clusters choisi pourrait \^etre plus important.
 
 \par
-Le dernier cluster est principalement compos\'e des pixels avec la diffusivit\'e la plus forte. %
-La signification physiologique de cette propri\'et\'e n'est pas un objectif de ce stage.
+Le dernier cluster est principalement compos\'e des pixels avec la diffusivit\'e la plus forte.
 
 \begin{figure}[!p]
 \begin{center}
@@ -526,9 +670,7 @@ Clusters vert et rouge difficiles \g{a} interpr\'eter.]{%
 \end{center}
 \caption{Exemples de classification par m\'elange gaussien.%
 \\%
-A gauche : bonnes performances.%
-\\%
-A droite : mauvaises performances.%
+A gauche : la r\'egion isch\'emi\'ee est visible.
 }
 \label{19_pour_contre}
 \end{figure}
@@ -538,27 +680,16 @@ A droite : mauvaises performances.%
 
 \subsubsection{Evaluation de la m\'ethode de classification}
 
-%% Pour ou contre : listes. %%
-
-% Jours autres que le premier : travail difficile pour l'oeil.
-% De bonnes choses en ADC pour la deuxième moitié du mois.
-% Mieux que l'oeil : distributions gaussiennes, composantes d'une décomposition putôt que simplement une région avec des valeurs plus faibles.
-
-
-%\begin{figure}[!p]
-%\end{figure}
-
-
-% On peut être tenté d'utiliser la classification avec mclust pour suivre l'évolution temporelle de l'étendue de la lésion.
-% Mieux : la classification ouvrirait une discussion sur la caractérisation de la lésion : quelle modalité est la plus pertinente ?
-
-Certains r\'esultats obtenus laissent penser que la classification des pixels sur la base des niveaux de gris avec Mclust %
-pourrait permettre d'obtenir de meilleurs r\'esultats que ceux de la sous-section pr\'ec\'edente, %
-o\g{u} la partie l\'es\'ee \'etait caract\'eris\'ee par la segmentation effectu\'ee manuellement sur ImageJ comme sur la figure \ref{cbf_seg_19}.
+Dans ce paragraphe, on compare l'efficacit\'e de deux m\'ethodes qui permettent de d\'elimiter un tissu isch\'emi\'e :
+\begin{itemize}
+\item La segmentation manuelle, effectu\'ee avec ImageJ -voir figure \ref{cbf_seg_19} ;
+\item La classification avec Mclust, comme dans le paragraphe pr\'ec\'edent.
+\end{itemize}
 
 \par
-L'image en bas \g{a} gauche du tableau, figure \ref{19_pour_contre}, est en effet favorable \g{a} une telle approche, %
-puisque les r\'egions l\'es\'ees sont tr\g{e}s difficiles \g{a} segmenter sur les images, en niveaux de gris, qui concernent des jours autres que 00.
+La figure \ref{pour_contre} regroupe, sous forme graphique, des r\'esultats de classification. %
+Des tissus isch\'emi\'es sont bien visibles pôur la colonne de gauche, pour les jours 0 et 22 ;
+ce n'est pas le cas pour les figures de la colonne de droite.
 
 \par
 On peut opposer plusiers arguments concernant l'avantage, ou non, %
@@ -790,6 +921,21 @@ Un tel mod\g{e}le existe pour la vascularisation d'une tumeur voir \cite{Kelly_P
 A l'aide des donn\'ees issues des paragraphes pr\'ec\'edents, nous allons mod\'eliser la plus petite quantit\'e de tissu isch\'emi\'e visible \g{a} l'IRM : le voxel. %
 Plus pr\'ecis\'ement, l'\'evolution des six variables AD \dots VSI , suivie \g{a} l'\'echelle tissulaire avec les diagrammes %
 des figures \ref{19_suivi_temp} et \ref{19_suivi_clust_les}, va \^etre reconstruite, pixel par pixel, dans des cas particuliers.
+
+\par
+Notons au passage que, sur toutes les repr\'esentations graphiques, les grandeurs BVf et VSI semblent corr\'el\'ees.
+
+\par
+Sur la plan physiologique, on suppose que la (BVf) d\'epend uniquement du volume %
+des vaisseaux sanguins pr\'esents au d\'ebut de l'AVC, donc du VSI. %
+Cette hypoth\g{e}se se fonde sur :
+\begin{itemize}
+\item L'absence de cr\'eation de nouveaux vaisseaux sanguins, contrairement au cas de l'angiogen\g{e}se provoqu\'ee par une tumeur ;
+\item L'absence d'h\'emorragie interne pendant l'AVC isch\'emique.
+\end{itemize}
+
+\par
+Dans toute la suite de cette section, les \'equations d'\'evolution de la BVf et du VSI seront li\'ees.
 
 \subsubsection{Hypoth\g{e}ses simplificatrices}
 
