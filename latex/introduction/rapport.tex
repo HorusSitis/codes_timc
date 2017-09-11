@@ -29,11 +29,14 @@ et les observations r\'ealis\'ees \g{a} l'\'echelle du voxel.
 
 \subsection{Imagerie par r\'esonnance magn\'etique}%State of the art, pour cette question plus générale que l'objet de ce stage.
 
-L'imagerie par r\'esonnance magn\'etique consiste \g{a} placer un patient dans un champ magn\'etique intense : %
-un appareil classiqu
+L'imagerie par r\'esonnance magn\'etique consiste \g{a} placer un patient dans un champ magn\'etique uniforme intense. %
+Typiquement, un appareil utilis\'e en clinique g\'en\g{e}re un champ de 1,5 Tesla : %
+\g{a} titre de comparaison, le champ magn\'etique terrestre a une intensit\'e de 47 microTesla en France.
 
-
-
+\par
+Cette technique d'imagerie pr\'esente avantage de ne pas utiliser de radiations ionisantes, %
+ce n'est pas le cas de la tomographie par \'emission de positrons par exemple. %
+En cons\'equence, plusieurs examens IRM peuvent \^etre pratiqu\'es sur un m\^eme patient, sans effets secondaires.
 
 \subsection{Principales modalit\'es}
 
@@ -46,25 +49,71 @@ d\'efinies sur toute l'\'etendue du tissu c\'er\'ebral.
 
 \subsubsection{Relaxations T1, T2}
 
+Le corps humain, et celui des autres animaux, contient de nombreux atomes d'hyrog\g{e}ne. %
+Or le noyau d'un atome d'hydrog\g{e}ne, un proton, est de spin non nul : aurement dit, il est aimant\'e.
+
+\par
+En pr\'esence d'un champ magn\'etique intense et uniforme $\vec{B}_0$, les spins des atomes d'hydrog\g{e}ne s'orentent dans la direction de ce champ.
+
+\par
+Un champ $\vec{B}_1$, tournant et perpendiculaire \g{a} $\vec{B}_0$ est ensuite appliqu\'e \g{a} ces protons. %
 
 
 
 \subsubsection{L'IRM de diffusion}
 
+La mobilit\'e des mol\'ecules d'eau dans un tissu d\'epend ed la structure de celui-ci. %
+Ainsi, les les parois des cellules dans un tissu sain freinent la diffusion des mol\'ecules d'eau. %
+Au contraire, celles-ci sont libres de leurs moouvements au voisinage de cellules n\'ecros\'ees : %
+une estimation de la diffusivit\'edes mol\'ecules d'eau permet, par exemple, de localiser un oed\g{e}me cytotoxique caus\'e par un AVC isch\'emique.3
 
+\par
+Toutefois, les structures physiologiques responsables de la mobilit\'e des mol\'ecules d'eau ne sont pas directement observables, %
+\g{a} cause de leur taille -\'echelle de la cellule. %
+Une cartographie du coefficient de diffusion apparent (ADC) des mol\'ecules d'eau peut toutefois \^etre calcul\'ee \g{a} partir de plusieurs images IRM du m\^eme tissu.
 
-
-
-
+\par
+Cette m\'ethode de construction d'images issues d'un examen IRM est appel\'ee IRM de diffusion.
 
 \subsubsection{Agents de contraste}
 
+Les performances de l'IRM peuvent \^etre augment\'ees par l'injection, en intraveineuse, d'un agent de contraste.
 
+\par
+De tels agents de contraste permettent par exemple de visualiser, sur des images irm, %
+le pourcentage du volume occup\'e par le sang dans un tissu (Blood volume fraction ou BVf).
 
+\par
+Cette grandeur est donn\'ee par la formule \cite{Lem_PHD_10} :
+\begin{equation}
+BVf=\frac{3}{4\pi}\frac{\Delta R_2^{\ast}}{\gamma \Delta_{\chi_0}B_0}
+\label{bvf_gd}
+\end{equation}
+
+o\g{u} $R_2^{\ast}$ est la diff\'erence des valeurs $\frac{1}{T_2^{\ast}}$ prises avant puis apr\g{e}s l'injection de l'agent de contraste, %
+et $\Delta_{\chi_0}$ la diff\'erence de susceptibilit\'e magn\'etique intra- et extravasculaire induite par l'injection de l'agent de contraste.
 
 \subsubsection{Effet BOLD}
 
+L'h\'emoglobine agit parfois comme un agent de contraste naturel : c'est l'effet BOLD (Blood oxygen Level Dependent).
 
+\par
+Plus pr\'ecis\'ement, c'est la diff\'rence de susceptibilit\'e magn\'etique entre l'h\'emoglobine satur\'ee en oxyg\g{e}ne %
+qui permet de mesurer directement la saturation tissulaire en dioxyg\g{e}ne d'un tissu vascularis\'e -$StO_2$.
+
+\par
+
+
+\par
+Compte tenu de l'effet BOLD, les auteurs de \cite{christen2012l} relient la $SO_2$, la BVf et le signal IRM $s$ par la formule :
+\begin{equation}
+s(t)=\exp\left(-\frac{1}{T_2}t-BVf\gamma\frac{4}{3}\pi\Delta_{\chi_0}H_{ct}(1-SO2)B_0t\right)
+\label{bold_so2}
+\end{equation}
+$H_{ct}$ est la concentration d'h\'ematocrites dans le r\'eseau microvasculaire.
+
+\subsubsection{Quitoxic MRI pour la fraction d'extraction de dioxyg\g{e}ne (OEF) %
+et le taux de dioxyg\g{e}ne m\'etabolis\'e (CMRO2).}
 
 
 
@@ -74,10 +123,10 @@ d\'efinies sur toute l'\'etendue du tissu c\'er\'ebral.
 
 
 
+\subsubsection{Mesure du d\'ebit sanguin c\'ebral (Cerebral Blood Flow ou CBF)}
 
 
 
-\cite{christen2012l}%SO2
 
 
 
