@@ -1451,7 +1451,7 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){# t : jour final
     #print(c_inc$Etat[1:10])
     # Calcul des états de cerveau_inc
     c_inc$Etat <- ifelse((c_inc$Etat=='per'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'sain',as.character(c_inc$Etat))
-    c_inc$Etat <- ifelse((c_inc$Etat=='les_1_deb'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'les_1_fin',as.character(c_inc$Etat))
+    #c_inc$Etat <- ifelse((c_inc$Etat=='les_1_deb'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'les_1_fin',as.character(c_inc$Etat))
     c_inc$Etat <- ifelse(c_inc$Etat=='les_2_deb'&(abs(c_inc$SO2map-so2_sain)<0.5*abs(bruit_mod$SO2map)),'les_2_fin',as.character(c_inc$Etat))
     #print(c_inc$Etat[1:10])
     
@@ -1464,8 +1464,6 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){# t : jour final
     
     # Fin de la boucle
   }
-  print(max(adc_asy1))
-  print(max(adc_asy2))
   #return(cerveau)
   nom_table_dyn <- sprintf("R%s/automate_3demi/cerveau%s_multi_dyn_Slices%s_fin%i.dat",rat,rat,suff,t)
   write.table(cerveau, nom_table_dyn, row.names=F, quote=F, sep='\t')
@@ -1587,8 +1585,6 @@ suivi_mod <- function(rat,liste_mod,liste_coupes,t,opt_1,opt_2,opt_3,opt_4){
     #
   }
 }
-
-
 
 # Option 1 : remlissage gaussien, dans le cas de l'automate 2
 # Option 2 : densités ou diagrammes en boîte pour la sortie

@@ -1343,20 +1343,98 @@ liste_mod_bruit <- list('ADC'=50,'BVf'=1,'CBF'=30,'CMRO2'=1,'SO2map'=10,'VSI'=1)
 
 # ---------------------------- Simulations : modèles 2 et 3demi ---------------------------- #
 
+liste_fonc <- list('CBF','CMRO2','SO2map','BVf','ADC','VSI')#
+vect_fonc <- c('CBF','CMRO2','SO2map','BVf','ADC','VSI')#
 
-vect_fonc <- c('CBF','SO2map','BVf','ADC','VSI','CMRO2')
-liste_fonc <- list('CBF','SO2map','BVf','ADC','VSI','CMRO2')
 #cerveau_trans_2(num_rat,list(9))
 
-alpha_1 <- 3
+alpha_1 <- 1
 alpha_2 <- 2
-tau_1 <- 100
-tau_2 <- 100
+tau_1 <- 100/(1100^2*4000)
+tau_2 <- 100/(1200*4000)
 
-cerveau_dyn_3demi(num_rat,list(9),2)
-cerveau_dyn_3demi(num_rat,list(10),2)
-cerveau_dyn_3demi(num_rat,list(9,10),2)
 
+
+
+cerveau_dyn_3demi(num_rat,list(9),10)
+
+cerveau_dyn_3demi(num_rat,list(9),12)
+
+cerveau_dyn_3demi(num_rat,list(9),15)
+cerveau_dyn_3demi(num_rat,list(10),15)
+cerveau_dyn_3demi(num_rat,list(9,10),15)
+
+cerveau_dyn_3demi(num_rat,list(9),22)
+
+
+
+suivi_mod(num_rat,liste_fonc,list(9),15,"automate_3demi","",'box','')
+suivi_mod(num_rat,liste_fonc,list(9),22,"automate_3demi","",'box','')
+
+suivi_mod(num_rat,liste_fonc,list(9),22,"automate_3demi","",'box','pdf')
+
+
+suivi_mod(num_rat,liste_fonc,list(9),10,"automate_3demi","",'box','')
+
+suivi_mod(num_rat,liste_fonc,list(9),12,"automate_3demi","",'box','')
+
+comp_mod_clust(num_rat,fr_hemi,liste_fonc,list(9),list(8,15,22),"",'box','')
+
+
+## Déboggage : fonctions cerveau_dyn_3demi, ... ##
+
+val_vect <- c(1:20)
+
+et_vect <- c(rep('et_1',10),rep('et_2',10))
+
+data <- as.data.frame(cbind(val_vect,et_vect),stringsAsFactors = TRUE)
+colnames(data) <- c('Valeur','Etat')
+
+const_et_3 <- rep('et_3',20)
+
+data$Etat <- ifelse(data$Valeur%%2==0,'et_3',data$Etat)
+
+
+
+
+nom_cerveau <- sprintf("R%s/automate_3demi/cerveau%s_multi_J%s_Slices%s.dat","19","19","08","-9")
+test <- read.table(nom_cerveau,header=T)
+l <- length(test$x)
+test <- as.data.frame(cbind(test,rep(8,l)))
+colnames(test) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour'))
+
+
+test_10 <- test[1:10,]
+test_10$VSI>5
+
+#test_10$Etat <- rep('permanent',10)
+test_10$Etat <- ifelse(test_10$VSI>5,'etat5',as.character(test_10$Etat))
+
+test_10$Etat <- ifelse(test_10$Etat==3&&test_10$ADC>1100,'etat8',test_10$Etat)
+
+
+test_10$Etat <- rep('per',10)# -> pas le même résultat qu'avec la valeur originale de test_10
+
+test_10$CBF <- ifelse(test_10$ADC>1100,200,test_10$CBF)
+
+test_10$CMRO2 <- ifelse(test_10$BVf>6.5,20,test_10$CMRO2)
+
+
+
+
+norm_test <- rnorm(10,3000,1000)
+
+
+
+cc <- c(1,2,3,4,5,6,7,8,9,10,11,12,13)
+
+length(cc)
+
+ll <- list(1,2,4,5,6)
+
+ll <- ll[ll%%2==0]
+
+ccc <- c(1:10)
 
 
 
