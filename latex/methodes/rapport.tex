@@ -33,7 +33,7 @@ Les sujets ont d'abord subi une occlusion intraluminale d'une art\g{e}re c\'er\'
 
 \begin{figure}[H]
 \includegraphics[width=0.8\linewidth, height = 6.8cm]{../../images_rapport/willis.png}
-\caption{Polygone de Willis, aliment\'e par les art\g{e}res carotides et du tronc basilaire.
+\caption{Polygone de Willis, aliment\'e par les art\g{e}res carotides et celle du tronc basilaire.
 \\
 Il permet d'\'eviter une isch\'emie globale, en cas de dysfonctionnement d'une art\g{e}re situ\'ee en amont, %
 mais pas une isch\'emie focale en cas de probl\g{e}me sur une art\g{e}re post\'erieure.
@@ -49,7 +49,7 @@ et remonte jusqu'\g{a} une art\g{e}re post\'erieure, en aval du polygone de Will
 \par
 Cette art\g{e}re est ainsi obstru\'ee, dans chaque cerveau de rat, pendant 90 minutes. %
 Ceci provoque une isch\'emie focale : celle-ci concerne seulement la partie du cerveau aliment\'ee par l'art\g{e}re, %
-contrairement \g{a} une isch\'emie focale qui touche l'ensemble du cerveau.
+contrairement \g{a} une isch\'emie globale qui touche l'ensemble du cerveau.
 
 \par
 L'isch\'emie provoqu\'ee, lors d'un AVC, par l'obstruction d'une art\g{e}re par un caillot sanguin est elle-m\^eme focale, %
@@ -82,37 +82,42 @@ Une derni\g{e}re variable, d\'efinie pour chaque coupe des cerveaux de rats exam
 Il est donn\'ee par l'\'equation \ref{vsi_adc}, que l'on trouve dans \cite{Lem_PHD_10} :
 
 \begin{equation}
-0,425\left(\frac{ADC}{\Delta_{\chi}B_0}\right)^{\frac{1}{2}}\left(\frac{\Delta R_2^{\ast}}{\Delta R_2}\right)^{\frac{3}{2}}
+VSI = 0,425\left(\frac{ADC}{\Delta_{\chi}B_0}\right)^{\frac{1}{2}}\left(\frac{\Delta R_2^{\ast}}{\Delta R_2}\right)^{\frac{3}{2}}
 \label{vsi_adc}
 \end{equation}
 
+Habituellement, on exprime le VSI en microm\g{e}tres.
+
+\par
 Les notations $R_2$, $R_2^{\ast}$ -respectivement $\frac{1}{T_2}$ et $\frac{1}{T_2^{\ast}}$ - et $\Delta_{\chi}$ sont d\'efinies en introduction.
 
 \par
 Les images ci-dessous, dites multiparam\'etriques car elles concernent plusieurs variables, ont ainsi \'et\'e obtenues.
 
-\begin{figure}[!h]
+\begin{figure}[!p]
+\begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
-\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}
+\subfloat[T2 anatomique]{\includegraphics[width=0.2\linewidth,height=3.5cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}}
 &
-\subfloat[ADC]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}}
+\subfloat[ADC]{\includegraphics[width=0.2\linewidth,height=3.5cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}}
 &
-\subfloat[BVf]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregBVf-slice-10.jpg}}
+\subfloat[BVf]{\includegraphics[width=0.2\linewidth,height=3.5cm]{../../images_rapport/11-J03-CoregBVf-slice-10.jpg}}
 &
-\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregCBF-slice-10.jpg}}
+\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=3.5cm]{../../images_rapport/11-J03-CoregCBF-slice-10.jpg}}
 \\
 \hline
-\subfloat[CMRO2]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregCMRO2-slice-10.jpg}}
+\subfloat[CMRO2]{\includegraphics[width=0.2\linewidth,height=3.5cm]{../../images_rapport/11-J03-CoregCMRO2-slice-10.jpg}}
 &
-\subfloat[SO2map]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregSO2map-slice-10.jpg}}
+\subfloat[SO2map]{\includegraphics[width=0.2\linewidth,height=3.5cm]{../../images_rapport/11-J03-CoregSO2map-slice-10.jpg}}
 &
-\subfloat[T1map]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregT1map-slice-10.jpg}}
+\subfloat[T1map]{\includegraphics[width=0.2\linewidth,height=3.5cm]{../../images_rapport/11-J03-CoregT1map-slice-10.jpg}}
 &
-\subfloat[VSI]{\includegraphics[width=0.2\linewidth,height=3cm]{../../images_rapport/11-J03-CoregVSI-slice-10.jpg}}
+\subfloat[VSI]{\includegraphics[width=0.2\linewidth,height=3.5cm]{../../images_rapport/11-J03-CoregVSI-slice-10.jpg}}
 \\
 \hline
 \end{tabular}
+\end{center}
 \caption{Images disponibles pour le rat 11, au jour 03, coupe num\'ero 10.
 \\%\par
 De gauche \g{a} droite, et de haut en bas : %
@@ -120,7 +125,7 @@ l'image brute en T2 \og{} Anatomique\fg{}, l'ADC, le BVf, le CBF, la CMRO2, la S
 \label{ex_irm_multipar}
 \end{figure}
 
-\FloatBarrier
+%\FloatBarrier
 \subsection{Segmentation des images avec ImageJ}
 
 Les images en niveau de gris ont été pr\'ealablement trait\'ees \g{a} l'aide du logisiel ImageJ couramment utilis\'e dans la manipulation d'images.
@@ -138,26 +143,33 @@ Ma d\'emarche a \'et\'e la suivante :
 \end{enumerate}
 
 %\newcounter{stock}
-\setcounter{stock}{\value{enumi}}
+%\setcounter{stock}{\value{enumi}}
 
-\begin{figure}[!h]%Ajouter les colonnes correspondant à anatomique, ADC sans contour ce ADC segmentée.
+\begin{figure}[H]%Ajouter les colonnes correspondant à anatomique, ADC sans contour ce ADC segmentée.
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
 \subfloat[Image en anatomique]{\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}}
-\hfill
+&%\hfill
 \subfloat[Image brute en ADC]{\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}}
-\hfill
+&%\hfill
 \subfloat[Image + contour]{\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-segADC-slice-10.jpg}}
-\hfill
+&%\hfill
 \subfloat[Image segment\'ee]{\includegraphics[width=0.2\linewidth,height=4cm]{../../images_rapport/11-J03-ADC-bg-slice10.jpg}}
-\caption{Segmentation du cerveau du rat num\'ero 11, jour 03, avec la modalit\'e ADC. On utilise les images anatomiques prises en ...}% en T2 ?
+\\
+\hline
+\end{tabular}
+\caption{Segmentation du cerveau du rat num\'ero 11, jour 03, avec la modalit\'e ADC.}
+\end{center}
 \label{cephcer}
 \end{figure}
 
-\FloatBarrier
-Des images ont ainsi \'et\'e obtenues, par coupe, pour toutes les modalit\'es, restreintes \g{a} l'enc\'ephale. L'\'etape finale pour l'exploitation des donn\'ees IRM a \'et\'e :
-\begin{enumerate}
-\setcounter{enumi}{\value{stock}}
-\item Regrouper les niveaux de gris, qui correspondent aux valeurs mesur\'ees ou calcul\'ees de chacune des images, dans un fichier texte exploitable sous R.
-\end{enumerate}
+%\FloatBarrier
+Des images ont ainsi \'et\'e obtenues, par coupe, pour toutes les modalit\'es, restreintes \g{a} l'enc\'ephale.% L'\'etape finale pour l'exploitation des donn\'ees IRM a \'et\'e :
+%\begin{enumerate}
+%\setcounter{enumi}{\value{stock}}
+%\item Regrouper les niveaux de gris, qui correspondent aux valeurs mesur\'ees ou calcul\'ees de chacune des images, dans un fichier texte exploitable sous R.
+%\end{enumerate}
 
 \etoile
 Les images aux coupes : 10 pour le rat num\'ero 11, 9 et 10 pour le rat 19, 6 \g{a} 8 pour le rat 26 et 11 \g{a} 13 pour le rat 30 sont disponibles pour toutes les modalit\'es, %
@@ -279,10 +291,13 @@ ou globalement sur les coupes enti\g{e}res ou des r\'egions d'int\'er\^et.
 
 %\FloatBarrier
 \par
-Avec des choix judicieux de contraste, on peut discerner, \g{a} l'oeil, des r\'egions l\'es\'ees sur les coupes segment\'ees de cerveau. %
-Plus particuli\g{e}rement, et pour tous les rats, on discerne une aire sombre sur les images en CBF au jour 00, %
-c'est-\g{a}-dire produites par l'examen r\'ealis\'e 30 minutes apr\g{e}s la reperfusion. %
-Cette aire se situe sur l'h\'emisph\g{e}re visible \g{a} gauche.
+Avec des choix judicieux de contraste, on peut voir %\g{a} l'oeil, %
+des r\'egions l\'es\'ees sur les coupes segment\'ees de cerveau. %
+Plus particuli\g{e}rement, et pour tous les rats, on remarque une aire sombre sur les images en CBF au jour 00.
+
+\par
+Rappelons que ces images ont \'et\'e produites 30 minutes apr\g{e}s la reperfusion.
+%Cette aire se situe sur l'h\'emisph\g{e}re visible \g{a} gauche.
 
 \par
 On trouve d'ailleurs des r\'egions similaires, mais plus petites, pour d'autres variables comme l'ADC : %
@@ -293,11 +308,13 @@ La caract\'erisation de la r\'egion isch\'emi\'ee par des valeurs faibles du CBF
 
 \etoile
 Afin de d\'elimiter les parties isch\'emi\'ees sur les coupes disponibles, nous avons utilis\'e la m\^eme technique que pour les cerveaux : voir la figure \ref{cbf_seg_19}. %
-Les bordures trac\'ees sur les images en CBF one \'et\'e transf\'er\'ees sur les autres images, ce qui a permis d'isoler les pixels de l'isch\'emie. %
+Les bordures trac\'ees sur les images en CBF one \'et\'e transf\'er\'ees sur les autres images, ce qui a permis d'isoler les pixels de l'isch\'emie.
+
+\par
 Les valeurs prises, sur ces pixels, par ADC, BVf \dots T1map et VSI seront \'etudi\'ees \g{a} la sous-section suivante.
 
 \par
-Le tableau ci-dessous r\'ecapitule la taille, en nombre de pixels, des l\'esions ainsi d\'elimit\'ees sur les coupes suivables temporellement.
+Le tableau ci-dessous donne nombre de pixels, sur chaque coupe suivable temporellement, des l\'esions ainsi d\'elimit\'ees.
 
 \begin{multicols}{2}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -329,18 +346,12 @@ Rat 30&&&&&&88&139&83
 \end{figure}
 \end{multicols}
 
-
-
 \newpage
 \FloatBarrier
 \subsection{Etude de la distribution des niveaux de gris : tissus sains, tissus l\'es\'es}% Utilisation de R : statistiques sur les cerveaux segment\'es, h\'emisph\g{e}res sains.
 
-On utilise pour cela le logiciel R.
-
-\par
-L'utilisation d'ImageJ, expliqu\'ee \g{a} la sous-section pr\'ec\'edente, %
-a permis de d'enregistrer les valeurs prises par les variables ADC, \dots, VSI sur des coupes enti\g{e}res de cerveaux de rats, %
-ou sur des coupes de parties l\'es\'ees.
+Gr\^ace \g{a} ImageJ, on dispose maintenant de la distribution des valeurs d'ADC, BVf, CBF, CMRO2, SO2, VSI, T1 et T2 pour des coupes frontales de cerveaux de rats, %
+et des coupes de tissus isch\'emi\'es.
 
 \par
 A l'aide du logiciel R, on peut repr\'esenter graphiquement la r\'epartition des valeurs prises par une variable, %
@@ -351,7 +362,33 @@ Les figures  \ref{11_dens_lch00} et \ref{19_dens_lch00} donnent, pour les variab
 la distribution des valeurs prises sur la partie l\'es\'ee (rouge), %
 sur l'h\'emisph\g{e}re contralat\'eral qui n'est pas touch\'e par l'isch\'emie (bleu), et sur le cerveau entier (gris).
 
+\etoile
+On remarque, sur les courbes des figures \ref{11_dens_lch00} et \ref{19_dens_lch00} :
+
+\begin{itemize}
+\item Une forte proportion de valeurs basses du CBF, dans la r\'egion isch\'emi\'ee du rat 19 ;
+\item Une forte proportion de valeurs basses de l'ADC, dans la partie isch\'emi\'ee du rat 11 ;
+\item Une r\'epartition des valeurs de SO2, dans le tissu l\'es\'e du rat 19, qui se rapproche de celle d'un tissu sain aux jours 15 et 22 ;
+\item Une grande variabilit\'e des valeurs d'ADC, sur la l\'esion du rat 11, \g{a} partir du jour 15.
+\end{itemize}
+
 \par
+Les deux premiers constats sont en accord avec les connaissances que nous avons du d\'ebut de l'isch\'emie : voir la section pr\'ec\'edente.
+
+\par
+Remarquons par ailleurs la forte ressemblance entre les distributions de valeurs d'ADC et de T1, %
+sur la coupe num\'ero 9 du cerveau du rat 11.
+
+\par
+On remarque ces allures communes entre les distributions d'ADC et de T1 pour toutes les coupes disponibles, %
+pour tous les rats et quel que soit le tissu analys\'e -l\'esion ou h\'emisph\g{e}re contralat\'eral par exemple.
+
+\par
+Ceci est surprenant car les modalit\'es d'obtention d'une image en T1, et d'une image en ADC sont tr\g{e}s diff\'erentes, %
+comme nous l'avons vu en introduction.
+
+%\par
+\ligneinter
 Les diagrammes en bo\^ites : \ref{11_box_lch00}, \ref{19_box_lch00}, \ref{26_box_lch00} et \ref{30_box_lch00}, %
 permettent repr\'esentent la r\'epartition des valeurs des six variables : ADC, BVf, CBF, CMRO2, SO2map et VSI. %
 Le code couleur est le m\^eme que pour la figure \ref{19_dens_lch00}.
@@ -376,80 +413,119 @@ que pour les autres jours.
 
 
 \begin{figure}[!p]
+\begin{center}
 \begin{tabular}{|c|c|}
 \hline
-\subfloat[ADC, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-00.pdf}}
+%\subfloat[ADC, jour 0]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-00.pdf}
+%}
 &
-\subfloat[T1map, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-00.pdf}}
+%\subfloat[T1map, jour 0]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-00.pdf}
+%}
 \\
 \hline
-\subfloat[ADC, jour 03]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-03.pdf}}
+%\subfloat[ADC, jour 03]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-03.pdf}
+%}
 &
-\subfloat[T1map, jour 03]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-03.pdf}}
+%\subfloat[T1map, jour 03]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-03.pdf}
+%}
 \\
 \hline
-\subfloat[ADC, jour 08]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-08.pdf}}
+%\subfloat[ADC, jour 08]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-08.pdf}
+%}
 &
-\subfloat[T1map, jour 08]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-08.pdf}}
+%\subfloat[T1map, jour 08]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-08.pdf}
+%}
 \\
 \hline
-\subfloat[ADC, jour 15]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-15.pdf}}
+%\subfloat[ADC, jour 15]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-15.pdf}
+%}
 &
-\subfloat[T1map, jour 15]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-15.pdf}}
+%\subfloat[T1map, jour 15]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-15.pdf}
+%}
 \\
 \hline
-\subfloat[ADC, jour 22]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-22.pdf}}
+%\subfloat[ADC, jour 22]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_ADC-22.pdf}
+%}
 &
-\subfloat[T1map, jour 22]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-22.pdf}}
+%\subfloat[T1map, jour 22]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/11_suivi_dens_slCBF_contra00_T1map-22.pdf}
+%}
 \\
 \hline
 \end{tabular}
+\end{center}
 \caption{Rat 11 : ADC et T1map.
-\\
-On remarque des similitudes entre les r\'epartitions des valeurs des deux variables, %
-que l'on retrouve dans tous les types de tissus \'etudi\g{e}s et chez tous les rats. %
-\\
-Nous nous int\'eresserons assez peu, par la suite, \g{a} la T1map.
+%\\
+%On remarque des similitudes entre les r\'epartitions des valeurs des deux variables, %
+%que l'on retrouve dans tous les types de tissus \'etudi\g{e}s et chez tous les rats. %
+%\\
+%Nous nous int\'eresserons assez peu, par la suite, \g{a} la T1map.
 }
 \label{11_dens_lch00}
 \end{figure}
 
 
 \begin{figure}[!p]
+\begin{center}
 \begin{tabular}{|c|c|}
 \hline
-\subfloat[CBF, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-00.pdf}}
+%\subfloat[CBF, jour 0]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-00.pdf}
+%}
 &
-\subfloat[SO2map, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-00.pdf}}
+%\subfloat[SO2map, jour 0]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-00.pdf}
+%}
 \\
 \hline
-\subfloat[CBF, jour 03]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-03.pdf}}
+%\subfloat[CBF, jour 03]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-03.pdf}
+%}
 &
 %\subfloat[T1map, jour 0]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-03.pdf}}
 \\
 \hline
-\subfloat[CBF, jour 08]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-08.pdf}}
+%\subfloat[CBF, jour 08]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-08.pdf}
+%}
 &
-\subfloat[SO2map, jour 08]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-08.pdf}}
+%\subfloat[SO2map, jour 08]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-08.pdf}
+%}
 \\
 \hline
-\subfloat[CBF, jour 15]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-15.pdf}}
+%\subfloat[CBF, jour 15]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-15.pdf}
+%}
 &
-\subfloat[SO2map, jour 15]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-15.pdf}}
+%\subfloat[SO2map, jour 15]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-15.pdf}
+%}
 \\
 \hline
-\subfloat[CBF, jour 22]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-22.pdf}}
+%\subfloat[CBF, jour 22]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-22.pdf}
+%}
 &
-\subfloat[SO2map, jour 22]{\includegraphics[width=0.4\linewidth, height = 4cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-22.pdf}}
+%\subfloat[SO2map, jour 22]{
+\includegraphics[width=0.4\linewidth, height = 4.8cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-22.pdf}
+%}
 \\
 \hline
 \end{tabular}
+\end{center}
 \caption{Rat 19 : CBF et SO2map.}
 \label{19_dens_lch00}
 \end{figure}
-
-
-
 
 %\ligneinter
 
@@ -550,13 +626,13 @@ Nous nous int\'eresserons assez peu, par la suite, \g{a} la T1map.
 \end{figure}
 
 %\FloatBarrier
-\ligneinter
-Les diagrammes de figures \ref{11_box_lch00} \g{a} \ref{30_box_lch00} montrent syst\'ematiquement une baisse des valeurs d'ADC 30 minutes apr\g{e}s la reperfusion, %
+\etoile
+Les diagrammes des figures \ref{11_box_lch00} \g{a} \ref{30_box_lch00} montrent syst\'ematiquement une baisse des valeurs d'ADC 30 minutes apr\g{e}s la reperfusion, %
 ce qui correspond \g{a} un \'etat cytotoxique -oed\g{e}me- comme nous l'avons vu dans la section pr\'ec\'edente.
 
 \par
 Ces diagrammes indiquent aussi que les valeurs de BVf et de VSI sont, sauf pour le rat 11, corr\'el\'ees : %
-les tendances d'\'evolution en position ou en dispersion sont les m\^emes.
+Les valeurs m\'edianes et les quartiles de ces deux variables \'evoluent en effet de la m\^eme mani\g{e}re.
 
 \par
 Nous verrons une explication physiologique de cette corr\'elation dans la suite de cette section.
@@ -566,8 +642,9 @@ La distribution des valeurs, figure \ref{26_box_lch00}, pour toutes les modalit\
 
 \par
 Les diagrammes de la figure \ref{30_box_lch00}, qui correspondent aux seuls jours 0, 8 et 15 de l'exp\'erience, %
-indiquent une croissance globale de toutes les modalit\'es pour le rat num\'ero 30, sans que l'on puisse voir de lien plus particulier entre deux variables ; %
-la CMRO2, seule, se stabilise d\g{e}s le jour 8 apr\g{e}s avoir pris des valeurs initiales basses.
+indiquent une croissance globale de toutes les modalit\'es pour le rat num\'ero 30, %
+sans lien particulier entre deux variables. %
+La CMRO2, seule, se stabilise d\g{e}s le jour 8 apr\g{e}s avoir pris des valeurs initiales basses.
 
 \par
 Pour l'\'elaboration, et la validation du mod\g{e}le qui va suivre, j'ai donc choisi d'\'ecarter les rats num\'eros 26 et 30. %
@@ -576,13 +653,13 @@ il est possible que les donn\'ees dont on dispose corresponde \g{a} une r\'egion
 
 \etoile
 Les rats 11 et 19 -figures \ref{11_box_lch00} et \ref{19_box_lch00}, pr\'esentent quelques similitudes : %
-outre le comportement de la SO2 d\'ej\g{a}mentionn\'e, on remarque une croissance et une grande dispersion des valeurs d'ADC de la l\'esion avec le temps.
+outre le comportement de la SO2 d\'ej\g{a}mentionn\'e, on remarque une croissance et une plus grande variabilit\'e des valeurs d'ADC de la l\'esion avec le temps.
 
 \par
 On constate aussi une chute des valeurs du CBF :
 \begin{itemize}
 \item le jour 8, chez le rat 11, elle accompagne une hausse de la BVf ;
-\item le jour 15, chez le rat 19, elle co\"incide avec des valeurs basses et peu dispers\'ees de la CMRO2.
+\item le jour 15, chez le rat 19, ses valeurs sont basses et varient peu comme celles de la CMRO2.
 \end{itemize}
 
 \etoile
@@ -747,9 +824,8 @@ Il est d'ailleurs possibles de demander à R d'inclure, dans une représentation
 les différentes valeurs de BIC associées à chaque possibilité de nombre de clusters.
 
 \par
-On peut ainsi visualiser la pertinence du choix d'un nombre de clusters particulier pour la classsification.
+On peut ainsi visualiser la pertinence du choix d'un nombre de clusters particulier pour la classification.
 %De telles représentations graphiques apparaissent dans les figures \ref{19_choix_clust_les}...
-
 
 \begin{figure}[!p]
 \begin{center}
@@ -915,18 +991,18 @@ On peut donc voir que les deux sous-r\'egions de la partie l\'es\'ee ont des tai
 Il est difficile, d'entr\'ee de jeu, de construire un mod\g{e}le physiologique de tissu isch\'emi\'e. %
 Un tel mod\g{e}le doit rendre compte, \g{a} partir de m\'ecanismes physiques et chimiques qui se d\'eroulent \g{a} l'\'echelle de la cellule, %
 de l'\'evolution dans le temps du tissu isch\'emi\'e. %
-Un tel mod\g{e}le existe pour la vascularisation d'une tumeur voir \cite{Kelly_PMB_06}.
+Un tel mod\g{e}le existe pour la vascularisation d'une tumeur, voir \cite{Kelly_PMB_06}.
 
 \par
 A l'aide des donn\'ees issues des paragraphes pr\'ec\'edents, nous allons mod\'eliser la plus petite quantit\'e de tissu isch\'emi\'e visible \g{a} l'IRM : le voxel. %
-Plus pr\'ecis\'ement, l'\'evolution des six variables AD \dots VSI , suivie \g{a} l'\'echelle tissulaire avec les diagrammes %
-des figures \ref{19_suivi_temp} et \ref{19_suivi_clust_les}, va \^etre reconstruite, pixel par pixel, dans des cas particuliers.
+Plus pr\'ecis\'ement, l'\'evolution des six variables ADC \dots VSI , suivie \g{a} l'\'echelle tissulaire avec les diagrammes %
+des figures \ref{19_suivi_temp} et \ref{19_suivi_clust_les}, va \^etre reconstruite pixel par pixel dans des cas particuliers.
 
 \par
 Notons au passage que, sur toutes les repr\'esentations graphiques, les grandeurs BVf et VSI semblent corr\'el\'ees.
 
 \par
-Sur la plan physiologique, on suppose que la (BVf) d\'epend uniquement du volume %
+Sur le plan physiologique, on suppose que la (BVf) d\'epend uniquement du volume %
 des vaisseaux sanguins pr\'esents au d\'ebut de l'AVC, donc du VSI. %
 Cette hypoth\g{e}se se fonde sur :
 \begin{itemize}
@@ -942,16 +1018,251 @@ Dans toute la suite de cette section, les \'equations d'\'evolution de la BVf et
 L'objet dont on \'etudie l'\'evolution est le pixel.
 \begin{description}
 \item[Etat d'un pixel :] L'\'etat d'un pixel est enti\g{e}rement d\'etermin\'e par les valeurs prises, en ce pixel, des six variables ADC, BVf, CBF, CMRO2, SO2 et VSI ;
-\item[Pixels voisins :] l'\'evolution de l'\'etat d'un pixel n'est pas influenc\'e par l'\'etat des autres pixels, y compris ses plus proches voisins ;
-\item[Autonomie :] Les \'equations qui r\'egissent l'\'evolution de l'\'etat d'un pixel ne d\'ependent pas du temps.
+\item[Pixels voisins :] L'\'evolution de l'\'etat d'un pixel n'est pas influenc\'e par l'\'etat des autres pixels, y compris ses plus proches voisins ;
+\item[Autonomie :] Les \'equations qui r\'egissent l'\'evolution de l'\'etat d'un pixel ne changent pas avec le temps.
 \end{description}
 
-La premi\g{e}re hypoth\g{e}se simplificatice exclut une perturbation exog\g{e}ne de l'\'etat d'un pixel. %
-De telles perturbations interviennent au niveau de l'h\'emisph\g{e}re contralat\'eral, comme dans 
+La premi\g{e}re hypoth\g{e}se simplificatice exclut une perturbation exog\g{e}ne de l'\'etat d'un pixel, %
+comme la r\'epercussion de la reperfusion post-isch\'emie sur un tissu sain. %
+Les diagrammes de la figure \ref{19_suivi_clust_les} semblent contredire cette hypoth\g{e}se, concernant le CBF dans l'h\'emisph\g{e}re contralat\'eral.
 
 \par
 La deuxi\g{e}me hypoth\g{e}se ne concerne pas les stades pr\'ecoces de l'isch\'emie : ondes de d\'epolarisation, diffusion de l'ADC avec l'oed\g{e}me cytotoxique. %
 D'ailleurs, les premi\g{e}res observations de cette exp\'erience sont effectu\'ees 30 minutes par\g{e}s la reperfusion.
+
+\begin{equation}
+\text{ADC}_{i,j}(t+1)=\frac{1}{9}\sum\limits_{\|k,l-i,j\|_{\infty}=1}\text{ADC}_{k,l}(t)%
+\text{ Version discr\g{e}te de l'\'equation de diffusion de l'ADC. D'apr\g{e}s \cite{Duval_JCBFM_02}}
+\end{equation}
+
+%Le membre de droite correspond \g{a} la moyenne ces valeurs d'ADC \g{a} un instant discret $t$ : %
+%celle du pixel consid\'er\'e $(i,j)$ et celles de ses $8$ voisins sont prises en compte, %
+%Le membre de gauche est la valeur d'ADC au temps $t+1$.
+
+\par
+En fin, les \'equations qui r\'egissent l'\'evolution d'un pixel changent dans les jours et semaines qui suivent l'isch\'emie, %
+ces changements sont conditionn\'es par les valeurs d'ADC, de BVf, \dots et de VSI.
+
+\subsubsection{Premier r\'egime d'isch\'emie}
+
+On distingue trois \'etapes pour l'\'evolution des valeurs d'ADC, \dots VSI sur les pixels du domaine \og{} l\'esion 1 \fg{}, %
+ces valeurs sont repr\'esent\'ees en rouge sur les diagrammes de la figure \ref{19_choix_clust_les}.
+
+\begin{enumerate}[label=\textbf{(L\'esion 1 - \arabic*)}]
+\item Cette \'etape est commune aux pixels des deux r\'egions isch\'emi\'ees.
+
+\par
+Au cours des trois premiers jours de l'exp\'erience, on remarque un retour des valeurs de CBF, %
+dont 75\% \'etaient inf\'erieures \g{a} 25 ml.min${}^{-1}$.(100g)${}^{-1}$, vers une distribution commune aux deux sous-r\'egions.
+
+\par
+Notons CBF${}_{trans}$ cette distribution transitoire. Nous supposerons par la suite, puur supplifier les calculs, %
+que cette distribution est gaussienne, et que ses m\'ediane et quartiles sont lisibles sur la figure \ref{19_suivi_clust_les}. %
+Dans le cadre de nos simulations, nous prendrons donc pour CBF${}_{trans}$ un \'echantillon de loi $\mathcal{N}(140,70)$.
+
+\par
+On mod\'elise le retour des valeurs de CBF \g{a} cette distribution par l'\'equation diff\'erentielle du premier ordre :
+\begin{equation}
+\der{CBF}=\frac{1}{\tau}\times \left(CBF_{trans}-CBF\right)% \Ta
+\label{cbf_is1}
+\end{equation}
+pour un certain temps caract\'eristique $\tau$, que l'on exprime en jours.
+
+\par
+On d\'etermine la valeur de ce coefficient de sorte que 3 jours suffisent au CBF pour retrouver la distribution CBF${}_{trans}$ :
+\begin{itemize}
+\item Pour chaque pixel, la valeur de CBF \g{a} un temps $t$ -que l'on exprim\'era en jours- est donn\'ee par : %
+$CBF=CBF_{trans}+e^{-\frac{t}{\tau}}\times\left(CBF_{trans}-CBF\right)$. La valeur $\tau$ est d\'efinie par l'in\'egalit\'e :
+\[|m^0(t)-m^3|\leq|m^3-Q_1^3|\]
+o\g{u} $m^0$ et $m^3$ sont respectivement les valeurs m\'edianes du CBF aux jours 0 et 3, lisibles sur la figure \ref{19_suivi_clust_les}, %
+$Q_1^3$ le premier quartile du CBF au jour 3, et $m^0(t)$ la valeur de CBF obtenue en r\'esolvant l'\'equation \ref{cbf_is1} avec la valeur initiale $m^0$.
+
+\par
+L\'in\'egalit\'e pr\'ec\'edente se traduit par : $\dfrac{3}{\tau}\leq\ln\left(\dfrac{m^3-m^0}{m^3-Q^3_1}\right)$, %
+le 3 de la premi\g{e}re fraction correspond au nombre de jours \'ecoul\'es.
+\item On pose donc : $\tau =\dfrac{1}{3}\times\ln\left(\dfrac{m^3-m^0}{m^3-Q^3_1}\right)$.
+\item Application num\'erique : $\tau \simeq 0.3 \text{(jour)}$.
+\end{itemize}
+De la m\^eme mani\g{e}re, on \'ecrit les \'equations satisfaites par SO2, CMRO2 et VSI :
+\begin{equation}
+\der{SO2}=2,5\times (SO2_{asy2}-SO2)% \Ta
+\label{so2_s_l2}
+\end{equation}
+et
+\begin{equation}
+\der{CMRO2}=0,25\times (CMRO2_{trans}-CMRO2)% \Ta
+\end{equation}
+A ce stade, les variables CBF et VSI semblent corr\'el\'ees : on pose donc
+\begin{equation}
+\der{VSI}=0,15\times\der{CBF}
+\label{vsi_is}
+\end{equation}
+pour pr\'edire l'\'evolution de VSI.
+
+\par
+Le coefficient 0,15 est choisi pour compenser la diff\'erence d'\'echelle des valeurs de CBF (de l'orde de 10${}^2$) et de VSI (1 \g{a} 10).
+
+\par
+Enfin, et conform\'ement au paragraphe pr\'ec\'edent, on relie l'\'evolution de la BVf et celle du VSI par :
+\begin{equation}
+\der{BVf}=\der{VSI}
+\label{bvf_is}
+\end{equation}
+Pas de changement d'\'echelle ici.
+
+\par
+Les conditions initiales $SO2_{asy2}$ et $CMRO2_{trans}$ sont d\'efinies de la m\^eme mani\g{e}re que $CBF_{trans}$ : %
+ce sont des distributions spatiales de CMRO2 et de SO2. %
+Pour nos simulations, on prendra des \'echantillons gaussiens de lois respectives $\mathcal{N}(75,15)$ et $\mathcal{N}(6,7)$.
+\item Apr\g{e}s un temps compris entre trois et huit jours, les \'equations satisfaites par les cinq variables ci-dessus changent : %
+par exemple, les valeurs du CBF ne sont plus distribu\'ees comme la variable transitoire CBF${}_{trans}$.
+
+\par
+L'\'evolution du CBF sera d'ailleurs diff\'erente entre les deux r\'egions l\'es\'ees.
+
+\par
+La distribution que le CBF doit atteindre de fa\c con transitoire est donn\'ee par le diagramme de la figure \ref{19_suivi_clust_les} : %
+voir la bo\^ite rouge au centre de la case \og{} CBF\fg{}. L'\'equation suivie par le CBF est :
+\begin{equation}
+\der{CBF}=0, 1\times \left(CBF_{trans1}-CBF\right)% \Ta
+\end{equation}
+CBF${}_{trans1}$ sera simul\'e selon la loi $\mathcal{N}(80,43)$.
+
+\par
+CMRO2, BVf et VSI \'evoluent de la m\^eme mani\g{e}re, au moment o\g{u} l'on commence \g{a} distinguer les deux r\'egions l\'es\'ees.
+
+\par
+Choisissons de mod\'eliser, en premier lieu, l'\'evolution de la CMRO2, qui est la plus facile \g{a} lire. %
+La m\'ediane et les quartiles de cette variable, prise au jour 8 sont, dans l'ordre : 3, 5 et 7.
+
+\par
+Avec la la m\'ethode d\'etaill\'ee pr\'ec\'edemment pour le CBF, on peut \'ecrire l'\'equation :
+\begin{equation}
+\der{CMRO2}=0, 1\times \left(CMRO2_{trans1}-CMRO2\right)% \Ta
+\end{equation}
+CMRO2${}_{trans1}$ sera simul\'e selon la loi $\mathcal{N}(5,3)$.
+
+VSI et BVf \'evoluent respectivement d'apr\g{e}s les \'equations :
+\begin{equation}
+\dot{VSI}=0,3\times\dot{CMRO2}
+\label{vsi_is1_tr}
+\end{equation}
+\begin{equation}
+\dot{BVf}=\dot{VSI}
+\label{bvf_is1_tr}
+\end{equation}
+
+\par
+\emph{Dans la suite de la section, on remplacera la notation $\der{V}$ par $\dot{V}$, pour une variable $V$ d\'ependant du temps.}
+\item C'est le r\'egime asymptotique que l'on peut observer pour les variables BVf, \dots VSI sur les diagrammes de la figure \ref{19_suivi_clust_les}. %
+Il concerne tous les pixels qui correspondent au jour 8, \g{a} des valeurs de CBF inf\'erieures \g{a} 100, et des valeurs de CMRO2 inf\'erieures \g{a} 10.
+
+\par
+En effet, on peut remarquer que la distribution des valeurs prises par ces variables sur la premi\g{e}re r\'egion l\'es\'ee se stabilise \g{a} partir du jour 15 (au moins).
+
+\par
+Les valeurs asymptotiques des variables BVf \dots VSI sont globalement inf\'erieures \g{a} celles qui caract\'erisent un tissu sain.
+
+\par
+BVf, CBF, CMRO2, SO2 et VSI satisfont les \'equations suivantes :
+\begin{equation}
+\dot{CBF}=5\times\left(CBF_{asy1}-CBF\right)
+\end{equation}
+\begin{equation}
+\dot{CMRO2}=0,15\times\left(CMRO2_{asy1}-CMRO2\right)
+\end{equation}
+\begin{equation}
+\dot{SO2}=1\times\left(SO2_{asy1}-SO2\right)
+\end{equation}
+
+Les deux variables VSI et BVf suivent un r\'egime commun, distinct de l'\'evolution des autres variables :
+\begin{equation}
+\dot{VSI}=0,2\times (VSI_{asy1}-VSI)
+\end{equation}
+et une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
+\begin{equation}
+\dot{BVf}=0,5\times\dot{VSI})
+\end{equation}
+Les m\'ethodes utilis\'ees pour obtenir ces \'equations sont les m\^emes que pr\'ec\'edemment, %
+elles s'appuient essentiellement sur une observation des m\'edianes et quartiles des variables BVf, %
+\dots VSI que l'on trouve sur les diagrammes de la figure \ref{19_suivi_clust_les}.
+
+\par
+$SO2_{asy1}$, $CBF_{asy1}$ et $VSI_{asy1}$ sont distribu\'es selon les lois $\mathcal{N}(75,25)$, $\mathcal{N}(50,40)$ et $\mathcal{N}(4,2)$.
+\end{enumerate}
+
+\subsubsection{Deuxi\g{e}me r\'egime d'isch\'emie}
+
+\begin{enumerate}[label=\textbf{(L\'esion 2 - \arabic*)}]
+\item Voir le paragraphe pr\'ec\'edent.
+\item Cette fois-ci, les valeurs de CBF augmentent globalement. % : d'apr\g{e}s les figures \ref{19_suivi_clust_les} et \ref{19_reg_clust_les}, %
+%CBF d\'epasse 100 ml.min${}^{-1}$.(100g)${}^{-1}$.
+
+On peut \'ecrire l'\'equation suivante pour le CBF :
+%on remplace simplement CBF${}_{trans1}$ par la variable spatiale CBF${}_{trans2}$. %
+%Dans le cadre des simulations, les valeurs de CBF${}_{trans2}$ seront donn\'ees par un \'echantillon gaussien de loi $\mathcal{N}(220,43)$.
+\begin{equation}
+\der{CBF}=0,3\times \left(CBF_{trans2}-CBF\right)% \Ta
+\label{cbf_is2}
+\end{equation}
+o\g{u} CBF${}_{trans1}$ par la variable spatiale CBF${}_{trans2}$. %
+Cette r\'epartition spatiale de CBF est encore suppos\'ee gaussienne, on prendra $\mathcal{N}(220,43)$ pour les simulations.
+
+\par
+L'\'evolution de CMRO2, BVf et VSI s'effectue dans le m\^eme sens, et \g{a} la m\^eme vitesse que celle de CBF. On utilisera les \'equations :
+\begin{equation}
+\dot{VSI}=0,15\times\dot{CBF}
+\label{vsi_is2_tr}
+\end{equation}
+\begin{equation}
+\dot{BVf}=\dot{VSI}
+\label{bvf_is2_tr}
+\end{equation}
+\begin{equation}
+\dot{CMRO2}=0,2\times\dot{CBF}
+\label{cmro2_is2_tr}
+\end{equation}
+\item %Le d\'epassement du seuil de CBF : 100 ml.min${}^{-1}$.(100g)${}^{-1}$, %
+%et du seuil de 10 pour la CMRO2, caract\'erisent les pixels de la deuxi\g{e}me r\'egion l\'es\'ee : %
+%voir la figure \ref{19_reg_clust_les}.
+%
+%\par
+Afin de rendre compte de l'\'evolution des variables BVf, CBF, \dots VSI apr\g{e}s le jour 8, on a besoin d'un nouveau syst\g{e}me d'\'equations. %
+Contrairement au cas pr\'ec\'edent, il ne s'agit visiblement pas d'un retour \g{a} l'\'equilibre.
+
+\par
+Par exemple, CBF et CMRO2 baissent entre les jours 8 et 15, et augmentent ensuite.
+
+\par
+Toujours avec la m\^eme m\'ethode, on construit les \'equations suivantes, %
+qui r\'egissent l'\'evolution de BVf, CBF, CMRO2, SO2 et VSI :
+\begin{equation}
+\dot{CBF}=-15\times\left(CBF_{trans3}-CBF\right)
+\end{equation}
+
+La densit\'e transitoire $CBF_{trans3}$ du CBF est d\'etermin\'ee par les r\'esultats de \ref{19_suivi_clust_les}. %
+Pour simplifier, on suppose qu'il s'agit d'un \'echantillon de loi $\mathcal{N}(120,40)$.
+
+\par
+On lie les \'equations d'evolution de CMRO2, VSI et BVf \g{a} celle du CBF :
+
+\begin{equation}
+\dot{CMRO2}=0,15\times\dot{CBF}
+\end{equation}
+\begin{equation}
+\dot{VSI}=0,3\times (VSI_{asy2}-VSI)
+\end{equation}
+et% une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
+\begin{equation}
+\dot{BVf}=2\times\dot{VSI})
+\end{equation}
+
+Ces \'equations concernent les pixels o\g{u} les valeurs de 100 ml.min${}^{-1}$.(100g)${}^{-1}$ pour le CBF, %
+et 10 pour la CMRO2, ont \'et\'e d\'epass\'ees.
+%\item mm
+\end{enumerate}
+
+
 
 \subsubsection{Retour \g{a} l'\'equilibre : CBF dans l'h\'emisph\g{e}re contralat\'eral}
 
@@ -960,55 +1271,27 @@ par exemple, la m\'ediane du CBF se situe en dessous de 100 ml min${}^{-1}$(100g
 Les valeurs du CBF aux jours suivants semblent osciller autour d'un \'equilibre.
 
 \par
-On peut d\'ecrire ce retour \g{a} la normale sans prendre en compte de m\'ecanisme physiologique comme ceux \'evoqu\'es \g{a} la section pr\'ec\'edente. %
-Pour cela, il suffit de s'appuyer sur les observations de la figure \ref{19_suivi_clust_les} pour d\'efinir :
-\begin{itemize}
-\item La distribution du CBF \g{a} l'\'etat sain, not\'ee CBF${}_{sain}$ ;
-\item La vitesse de ce retour \g{a} la normale, d\'etermin\'e par :
-\begin{itemize}
-\item b
-\item b
-\end{itemize}
-\end{itemize}
-
-La distribution retenue pour le CBF 
+Avec la m\'ethode utilis\'ee aux paragraphes pr\'ec\'edents, on \'ecrit l'\'equation suivante pour l'\'evolution du CBF, %
+en utilisant la figure \ref{19_suivi_clust_les}.
 
 \begin{equation}
 \dot{CBF}=3\times (CBF_{sain}-CBF)
 \end{equation}
 
-\par
-L'utilisation de la distribution des valeurs du CBF \g{a} l'\'equilibre CBF${}_{sain}$, comme une constante de l'\'equation 
 
-
-\par
-Toutes les autres \'equations du mod\g{e}le, sauf celles qui concernent l'ADC, seront construites de cette mani\g{e}re.
-
-\par
-Le d\'etail des calculs pour les autres variables, ou les autres tissus, ne sera pas n\'ecessairement donn\'e.
-
-\subsubsection{Premier r\'egime d'isch\'emie}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
 
-
-\subsubsection{Deuxi\g{e}me r\'egime d'isch\'emie}
-
-
-
-
-
-
-
-
+\begin{comment}
 L'hypoth\g{e}se \ref{nprog} distingue d'entr\'ee de jeu le mod\g{e}le de celui consid\'er\'e dans \cite{Duval_JCBFM_02} : %
 dans ce dernier, le coefficient de diffusion ADC diffuse lui-m\^eme \g{a} travers les pixels, et respecte l'\'equation disscr\g{e}te :
 \[\text{ADC}_{i,j}(t+1)=\frac{1}{9}\sum\limits_{\|k,l-i,j\|_{\infty}=1}\text{ADC}_{k,l}(t)\]
 
-Le membre de droite correspond \g{a} la moyenne ces valeurs d'ADC \g{a} un instant discret $t$ : %
-la valeur d'ADC du pixel consid\'er\'e et celles de ses $8$ voisins sont prises en compte, %
-le membre de gauche est la valeur d'ADC au temps $t+1$.
+
 
 \par
 L'hypoth\g{e}se \label{var_comp} doit \^etre affaibie pour deux raisons :
@@ -1048,213 +1331,12 @@ cette dur\'ee sera \'egalement l'unit\'e de temps \'el\'ementaire du mod\g{e}le 
 On note que l'hypoth\g{e}se de non progressivit\'e, que je conserve dans toute la sute de ce travail, %
 revient \g{a} utiliser des automates pour le mod\g{e}le dynamique, et non des automates cellulaires. %
 %Une critique de l'hypoth\g{e}se \ref{nprog} peut \^etre faite \g{a} la lumi\g{e}re de faits physiologiques reconnus.
+\end{comment}
 
-
-\subsubsection{Automates pour les pixels, d'apr\g{e}s le rat num\'ero 19}
-
-
-%%% Automates \g{a} dessiner : avec xymatrix %%%
-
-
-
-\subsubsection{Formalisme des diff\'erents r\'egimes}
-
+\begin{comment}
 \begin{description}
-\item[R\'egime cytotoxique :] Il correspond aux premi\g{e}res heures d'isch\'emie. %
-On suppose qu'ici, la saturation des r\'egulations successives du CBF, puis de la CMRO2 a d\'ej\g{a} eu lieu, ce qui justifie des valeurs basses pour ces deux variables.
 
-\par
-Pour le besoin des simulations, un temps $T$, al\'eatoire, est d\'efini sur l'ensemble des pixels qui entrent dans ce premier \'etat isch\'emi\'e.
-
-\par
-Les valeurs anormalement basses d'ADC, qui ob\'eiront \g{a} l'\'equation de rappel % \ref{} ,
-signalent des n\'ecroses qui s'expliquent avec les \'etapes de la cascade isch\'emique vues \g{a} la section pr\'ec\'edente.
-
-\par
-L'influence des valeurs de CBF et de CMRO2 sur l'\'evolution de l'ADC n'est ainsi pas visible dans l'\'equation d'\'evolution de cette variable, %
-mais elles d\'eterminent le choix du r\'egime, donc la validit\'e desdites \'equations.
-
-%%% Equations : début. %%%
-\begin{equation}
-\der{ADC}=0,25\left(ADC_{contra}-ADC\right) \Ta
-\label{adc_is1}
-\end{equation}
-L'ADC a tendance \g{a} se stabiliser autour des valeurs calcul\'ees sur l'h\'emisph\g{e}re contralat\'eral, en dehors du jour 0. %
-L'utilisation de cette distribution spatiale, asymptotique dans le temps, est encore inspir\'ee de \cite{Duval_JCBFM_02}.
-
-\begin{equation}
-\der{CBF}=0,5\left(CBF_{trans}-CBF\right) \Ta
-\label{cbf_is1}
-\end{equation}
-Cette \'equation d\'ecrit une croissance et une dispersion progressive du CBF. %
-Celle-ci est lisible, indistinctement du r\'egime de l\'esion adopt\'e \g{a} partir du jour 8, %
-sur le graphique de la figure \ref{19_suivi_clust_les}
-
-La saturation tissulaire en dioxyg\g{e}ne suit une \'equation, valable pour tous les r\'egimes en dehors de la \og{} l\'esion 1\fg{} :
-\begin{equation}
-\der{SO2}=2,5(SO2_{asy}-SO2) \Ta
-\label{so2_s_l2}
-\end{equation}
-La loi choisie dans ce mod\g{e}le pour la distribution asymptotique de SO2 est la loi normale $\mathcal{N}(75,35)$.
-
-\par
-La consommation de dioxyg\g{e}ne suit une \'equation analogue aux deux premi\g{e}res :
-\begin{equation}
-\der{CMRO2}=\frac{1}{4}(CMRO2_{trans}-CMRO2) \Ta
-\end{equation}
-La distribution choisie pour la CMRO2 suit une loi $\mathcal{N}(6,7)$. %
-Dans cette approche ph\'enom\'enologique, j'ai d\'ecid\'e de ne pas relier les \'equations r\'egissant les \'evolutions de CBF et de CMRO2, %
-malgr\'e les similitudes que l'on constate entre celles-ci, sur les donn\'ees r\'esum\'ees dans la figure \ref{19_suivi_clust_les}. %
-%L'impl\'ementation de ce mod\g{e}le serait de toute mani\g{e}re peu influenc\'ee 
-
-De m\^eme que pour la CMRO2, les donn\'ees manquent pour le VSI et la BVf au jour 3. %
-D'une mani\g{e}re g\'en\'erale, les \'equations r\'egissant l'\'evolution de ces deux variables seront reli\'ees dans tous les r\'egimes du mod\g{e}le, %
-qu'ils concernent, ou non, une partie l\'es\'ee ou non.
-
-\par
-Afin de retracer l\'evolution de ces deux variables aux premiers jours de l'exp\'erience, %
-on remarque une forte similitude entre celle-ci, et l'\'evolution sur les cinq jours d'examen du CBF.
-
-\par
-J'ai donc choisi des \'equations, pour la BVf et le VSI, li\'ees \g{a} \ref{cbf_is1}.
-\begin{equation}
-\der{VSI}=0,15\times\der{CBF}
-\label{vsi_is}
-\end{equation}
-\begin{equation}
-\der{BVf}=\der{VSI}
-\label{bvf_is}
-\end{equation}
-\emph{Pour simplifier les notations et dans toute la suite de ce travail, la d\'eriv\'ee temporelle $\der{V}$ sera not\'ee $\dot{V}$ pour la variable $V$.}
-%%% Fin. %%%
-\par
-A l'issue de ce r\'egime, d\'etermin\'ee par le temps al\'eatoire $T$ qui caract\'erise la survenue possible d'un oed\g{e}me vasog\'enique, %
-et l'infiltration programm\'ee de macrophages dans le parenchype c\'er\'ebral, l'\'etat d'un pixel est d\'etermin\'e par sa valeur de CBF :
-\begin{description}
-\item[$CBF > 100$ :] Premier r\'egime d'\'evolution de la partie l\'es\'ee, notament caract\'eris\'ee par une baisse du dit CBF ;
-\item[$CBF < 100$ :] Deuxi\g{e}me r\'egime, qui aboutit \g{a} un \'etat stationnaire, distinct de l'\'etat d'\'equilibre, suppos\'ement sain, de l'h\'emisph\g{e}re contralat\'eral.
-\end{description}
-\item[R\'egime isch\'emique transitoire] Il doit \^etre vu comme un sous-r\'egime du pr\'ec\'edent : %
-il est valable pour un pixel si, et seulement si celui-ci se trouve en r\'egime cytotoxique depuis un temps $T$ qui est d\'ecrit ci-apr\g{e}s.
-
-\par
-On ne peut donc pas parler de transition entre deux \'etats de l'automate m\^eme si certaines \'equations diff\g{e}rent entre les deux r\'egimes.
-%%% Equations : début. %%%
-L'equation ma\^itresse de cette transition concerne le CBF :
-\begin{equation}
-\dot{CBF} = \tau_{trans}\times\left(CBF_{mel}-CBF\right)
-\label{cbf_l_tr}
-\end{equation}
-
-%La validit\'e de cette \'equation est d\'etermin\'ee par 
 %
-La densit\'e $CBF_{mel}$ doit \^etre compatible avec le m\'elange gaussien issu des mesures au jour 8.
-
-\par
-La figure \ref{19_suivi_clust_les} montre qu'il est toutefois difficile de pr\'edire la r\'egion \g{a} laquelle appartiendra un pixel, %
-pour lequel les valeurs des six variables sont connues uniquement pour le jour 0 %
-- c'est l'objectif d'une simulation informatique dans la pratique m\'edicale !
-
-\par
-Ainsi, on se trouve devant le dilemme suivant :
-\begin{itemize}
-\item Tricher sur la simulation et incorporer une distribution $CBF_{mel}$ issue des r\'esultats exp\'erimentaux ;
-\item S\'electionner arbitrairement, ou al\'eatoirement $CBF_{mel}$ sans consid\'eration pour l'anatomie du cerveau mod\'elis\'e.
-\end{itemize}
-
-Cette deuxi\g{e}me approche est retenue pour le mod\g{e}le courant, on revient sur la premi\g{e}re, moins artificielle, %
-dans la section suivante.
-
-\par
-Les grandeurs $\dot{CBF}$, $\dot{CMRO2}$, $\dot{VSI}$ et $\dot{BVf}$ sont proportionnelles dans ce r\'egime, %
-les coefficients doivent \^etre ajust\'es pour s'accorder aux observations.
-
-\par
-La forme de l\'equation en SO2 ne change pas.%, seule la distribution asymptotique est modifi\'ee pour les pixels de la classe \og{} l\'esion 1\fg{}; %
-%dans les \'equations du mod\g{e}le, on notera $SO2_{Asy}$ cette deuxi\g{e}me distribution.
-
-\par
-L'ADC suit, dans ce r\'egime pr\'e-jour 8, une nouveau type d'\'evolution : %
-l'\'equation $\Td$ qui va suivre d\'ecrit l'augmentation rapide, et la dispersion des valeurs d'ADC.
-\begin{equation}
-\dot{ADC} = \tau_1\times ADC^{\alpha_1}
-\label{adc_is_tr}
-\end{equation}
-$\alpha_1$ est un r\'eel strictement positif qui doit permettre de r\'egler la dispersion, plus ou moins rapide, des valeurs d'ADC.
-%%% Fin. %%%
-%
-
-Apr\g{e}s le temps $T$, on utilise les hypoth\g{e}ses \ref{nprog}, \ref{auto} et \ref{var_compf} : %
-l'\'etat d'un pixel, et donc le r\'egime suivi par ses valeurs d'ADC, de BVf, CBF, CMRO2, SO2 et VSI est d\'efini par une condition en CBF :
-%
-\item[$CBF > 100$ : l\'esion num\'ero 1 ] cet \'etat d'automate est d\'efini par les \'equations qui suivent.
-%%% Equations : début. %%%
-ADC suit un nouveau r\'egime, dit $\Td$ : c'est l'\'equation qui suit, qui d\'ecrit notamment la dispersion rapide des valsurs d'ADC.
-
-CBF, SO2 et CMRO2 suivent le m\^eme r\'egime $\Ta$. Aucun lien de cause \g{a} effet n'est \g{a} privil\'egier, \g{a} la lumi\g{e}re des r\'esultats en \ref{19_suivi_clust_les}. %
-Les \'equations d'\'evolution de ces trois variables sont les suivantes :
-\begin{equation}
-\dot{CBF}=5\times\left(CBF_{asy1}-CBF\right)
-\end{equation}
-\begin{equation}
-\dot{CMRO2}=0,15\times\left(CMRO2_{asy1}-CMRO2\right)
-\end{equation}
-\begin{equation}
-\dot{SO2}=1\times\left(SO2_{asy1}-SO2\right)
-\end{equation}
-
-Les deux variables VSI et BVf suivent un r\'egime commun, distinct de l'\'evolution des autres variables :
-\begin{equation}
-\dot{VSI}=0,2\times (VSI_{asy1}-VSI)
-\end{equation}
-et une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
-\begin{equation}
-\dot{BVf}=0,5\times\dot{VSI})
-\end{equation}
-La distribution statistique VSI est encore issue des observations -jour 15 ou 22.
-%%% Fin. %%%
-%
-\item[$CBF > 100$ : l\'esion num\'ero 2 ] L'\'evolution du CBF influence significativement celle des autres variables, %
-et la valeur de la SO2 est choisie pour caract\'eriser la transition vers le r\'egime asymptotique.
-%%% Equations : début. %%%
-\begin{equation}
-\dot{CBF}=-15\times\left(CBF_{trans2}-CBF\right)
-\end{equation}
-
-La densit\'e $CBF_{trans2}$ est d\'etermin\'ee par les r\'esultats de \ref{19_suivi_clust_les}, %
-et diff\g{e}re de l'\'etat sain par sa dispersion, principalement.
-
-\par
-L'\'evolution de la CMRO2 est ici reli\'ee \g{a} celle du CBF :
-\begin{equation}
-\dot{CMRO2}=0,15\times\dot{CBF}
-\end{equation}
-
-L'ADC suit une \'equation similaire \g{a} celle du r\'egime pr\'ec\'edent :
-\begin{equation}
-\dot{ADC} = \tau_1\times ADC^{\alpha_2} \Td
-\label{adc_is_tr}
-\end{equation}
-Une autre valeur $\alpha_2$, plus faible que la premi\g{e}re, doit \^etre choisie en prenant en compte \ref{19_suivi_clust_les}.
-
-VSI et BVf suivent, quand \g{a} elles un r\'egime $\Ta$, elles sont reli\'ees de la m\^eme mani\g{e}re que pour la l\'esion 1.
-\begin{equation}
-\dot{VSI}=0,3\times (VSI_{asy2}-VSI)
-\end{equation}
-et% une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
-\begin{equation}
-\dot{BVf}=2\times\dot{VSI})
-\end{equation}
-%%% Fin. %%%
-%
-\item[L\'esion 1 : r\'egime asymptotique] Les variables CBF, CMRO2, SO2, VSI et BVf \'evoluent toutes selon une \'equation $\Tb$. %
-Les param\g{e}tres correspondants sont choisis au moment des simulations.
-
-\par
-L'ADC suit encore l'\'equation $\Td$ :
-\begin{equation}
-\dot{ADC}=\tau_1ADC^{\alpha_1}
-\end{equation}
 %
 \item[L\'esion 2 : \'evolution finale. ] Elle est d\'ecr\'et\'ee par le retour \g{a} la normale de la SO2.
 %%% Equations : début. %%%
@@ -1311,52 +1393,6 @@ Dans le cas du tissu sain, le bruit est particuli\g{e}rment important pour la pl
 La simplification d\'ecid\'ee ci-dessus est discutable, eu \'egard l'\'evolution de la CMRO2.
 \end{description}
 
-\ligneinter%\newpage ?
-Les \'equations qui pr\'ec\g{e}dent sont r\'eparties en trois types :
-
-\fbox{%
-\begin{minipage}{\textwidth}
-\begin{description}
-\item[$\Tb$ :] c'est l'\'equation, stochastique : $\dot{V}=\mathcal{B}$ o\g{u} $\mathcal{B}$ est un bruit blanc, param\'etr\'e avec les observations, %
-et qui d\'ecrit un r\'egime \g{a} l'\'equilibre.
-
-\par
-Elle n'\'etablit pas de lien entre les variables.
-%
-\item[$\Ta$ :] c'est l'\'equation diff\'erentielle du premier ordre $\dot{V}=\tau\times\left(V^{asy}-V\right)$, %
-qui d\'ecrit le retour de la variable $V$ vers une distribution asymptotique $V^{asy}$.
-
-\par
-Ces \'equations peuvent \^etre li\'ees entre elles, comme pour le BVf et le VSI ; %
-le coefficient $\tau$ est obtenu \g{a} l'aide des observations de la figure \ref{19_suivi_clust_les} %
-Elles sont en principe transitoires, et pr\'ec\g{e}dent un retour au r\'egime $\mathbf{T0_{\mathbb{P}}}$.
-%Distribution spatiale ? Voir encore \cite{Duval_JCBFM_02}
-%
-\item[$\Td$ :] c'est l'\'equation qui r\'egit l'\'evolution de l'ADC dans les r\'egions l\'es\'ees, apr\g{e}s la premi\g{e}re semaine.
-
-\par
-Elle traduit une h\'et\'erog\'en\'eit\'e des structures examin\'ees et une forte diffusivit\'e des mol\'ecules d'eau, %
-soit possiblement les cons\'equences de n\'ecroses massives ou d'un oed\g{e}me vasog\'enique.
-
-\par
-Les param\g{e}tres $\alpha_1$ et $\alpha_2$ doivent servir \g{a} ajuster les \'equations du mod\g{e}le : je n'ai pas choisi de valeurs.
-\end{description}%
-\end{minipage}
-}
-
-
-%Cas continu : les seconds membres \mathcal{E} seraient remplac\'es par des bruits blancs.
-%Ici il s'agit de processus gaussiens à temps discret.
-
-\etoile
-Il faut noter que les \'equations qui pr\'ec\g{e}dent, qui sont \'ecrites commme un syst\g{e}me d'un temps continu $t$ exprim\'e en jours, %
-seront remplac\'ees par des \'equations discr\g{e}tes pour l'impl\'ementation :
-\begin{itemize}
-\item Les op\'erateurs $\dfrac{\text{d}}{\text{dt}}$ sont remplac\'es par l'op\'erateur discret $\Box_{t+1}-\Box_t$ %
-qui porte sur la variable toutes choses \'etant par ailleurs \'egales ;
-\item Le second membre $\mathcal{E}(m,\sigma)_t$, analogue au bruit blanc des processus \g{a} temps continu, %
-est ici une suite de variables al\'eatoires gaussiennes, simul\'ees chaque jour sur l'ensemble des pixels, avec une esp\'erance $m$ et un \'ecart-type $\sigma$.
-\end{itemize}
 
 \ligneinter
 Les diff\'erents r\'egimes mis en \'evidence dans cette sous-section, et les \'equations qui les d\'efinissent satisfont %
@@ -1370,6 +1406,7 @@ qui contiennent en plus des six variables, \emph{une composante stochastique}, e
 qui incorporent une dur\'ee fix\'ee initialement. %
 Dans le cadre des simpulations cette dur\'ee est d\'efinie al\'eatoirement sur les pixels qui sont entr\'es dans l'\'etat isch\'emi\'e.
 \end{modmerate}
+\end{comment}
 
 \begin{comment}
 \newpage
@@ -1415,6 +1452,7 @@ les autres, en bleu, sont dans un \'etat perturb\'e.
 \end{figure}
 \end{comment}
 
+\begin{comment}
 \subsubsection{Evolution \g{a} partir du jour 8.}
 
 Si l'on choisit de d\'emarrer les simulations au jour 8, pour lequel on dispose de donn\'es mesur\'ees ou calcul\'ees \g{a} partir d'un examen IRM, %
@@ -1458,13 +1496,5 @@ Bien s\^ur, les simulations fond\'ees sur ce mod\g{e}le n'ont pas d'int\'er\^et 
 \caption{Condition initiale pour le mod\g{e}le 3demi : donn\'ees brutes au jour 08. Tranches 9 et 10.}
 \label{sim_ini_18}
 \end{figure}
-
-
-
-
-
-
-
-
-
+\end{comment}
 %\fbox{\rule[-0.4cm]{0cm}{1cm} Une boite créée avec \verb!fbox! et aérée avec \verb!rule!.}
