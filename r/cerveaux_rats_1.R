@@ -1028,6 +1028,11 @@ ngris_box_fonc(num_rat,fr_hemi,'CBFdark00',liste_suivi_slice,'pdf')
 ngris_box_clust(num_rat, fr_hemi, c(1,3), liste_min_fonc, 'CBFdark00', liste_suivi_slice, '')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'CBFdark00', liste_suivi_slice, 'pdf')
 
+dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(10),"00","")
+dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(10),"22","")
+
+dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(10),"00","pdf")
+
 comp_clust_vol00(num_rat,liste_suivi_slice,c(1,2),liste_min_fonc,'CBFdark00','')
 
 ngris_box_fonc_cl_les(num_rat,fr_hemi,'CBFdark00',"15",'CBF',liste_min_fonc,liste_suivi_slice,'')
@@ -1046,6 +1051,8 @@ dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(9),"00","")
 dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(9),"22","")
 ngris_box_fonc(num_rat,fr_hemi,'CBFdark00',liste_suivi_slice,'')
 ngris_box_fonc(num_rat,fr_hemi,'CBFdark00',liste_suivi_slice,'pdf')
+
+dgris_temp_fonc(num_rat,fr_hemi,'CBFdark00',list(9),"00","pdf")
 
 ngris_box_clust(num_rat, fr_hemi, c(1,3), liste_min_fonc, 'CBFdark00', liste_suivi_slice, '')
 ngris_box_clust(num_rat, fr_hemi, c(1,2), liste_min_fonc, 'CBFdark00', liste_suivi_slice, 'pdf')
@@ -1380,63 +1387,101 @@ suivi_mod(num_rat,liste_fonc,list(9),12,"automate_3demi","",'box','')
 
 comp_mod_clust(num_rat,fr_hemi,liste_fonc,list(9),list(8,15,22),"",'box','')
 
+# Exécution de carre_dyn :
+liste_fonc <- list('CBF','CMRO2','SO2map','BVf','VSI')#,'ADC'
+vect_fonc <- c('CBF','CMRO2','SO2map','BVf','VSI')#,'ADC'
+
+
+
+carre_dyn("19",list(9),c(40,60),5,'les_1',10,'_fill_norm')
+carre_dyn("19",list(9),c(40,40),5,'les_2',10,'_fill_norm')
+
+carre_dyn("19",list(9),c(40,60),5,'les_1',30,'_fill_norm')
+carre_dyn("19",list(9),c(40,40),5,'les_2',30,'_fill_norm')
+
+aff_suivi_pixels("19",'CBF',list(9),c(40,60),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'CBF',list(9),c(40,40),5,'les_2',30,'hist','')
+
+aff_suivi_pixels("19",'CBF',list(9),c(40,60),5,'les_1',30,'dens','')
+aff_suivi_pixels("19",'CBF',list(9),c(40,40),5,'les_2',30,'dens','')
+
+
+aff_suivi_pixels("19",'CMRO2',list(9),c(40,60),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'CMRO2',list(9),c(40,40),5,'les_2',30,'hist','')
+
+
+aff_suivi_pixels("19",'SO2map',list(9),c(40,60),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'SO2map',list(9),c(40,40),5,'les_2',30,'hist','')
+
+##############################################################################
+
+carre_dyn("19",list(9),c(45,60),10,'les_1',30,'_fill_norm')
+aff_suivi_pixels("19",'SO2map',list(9),c(45,60),10,'les_1',30,'hist','')
+aff_suivi_pixels("19",'SO2map',list(9),c(45,60),10,'les_1',30,'dens','')
+aff_suivi_pixels("19",'CBF',list(9),c(45,60),10,'les_1',30,'dens','')
+
+
+carre_dyn("19",list(9),c(45,60),5,'les_1',30,'_fill_norm')
+carre_dyn("19",list(9),c(30,45),5,'les_1',30,'_fill_norm')
+carre_dyn("19",list(9),c(40,45),5,'les_2',30,'_fill_norm')
+carre_dyn("19",list(9),c(25,45),5,'les_2',30,'_fill_norm')
+
+
+aff_suivi_pixels("19",'SO2map',list(9),c(45,60),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'SO2map',list(9),c(30,45),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'SO2map',list(9),c(40,45),5,'les_2',30,'hist','')
+aff_suivi_pixels("19",'SO2map',list(9),c(25,45),5,'les_2',30,'hist','')
+
+aff_suivi_pixels("19",'CMRO2',list(9),c(45,60),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'CMRO2',list(9),c(30,45),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'CMRO2',list(9),c(40,45),5,'les_2',30,'hist','')
+aff_suivi_pixels("19",'CMRO2',list(9),c(25,45),5,'les_2',30,'hist','')
+
+aff_suivi_pixels("19",'BVf',list(9),c(45,60),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'BVf',list(9),c(30,45),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'BVf',list(9),c(40,45),5,'les_2',30,'hist','')
+aff_suivi_pixels("19",'BVf',list(9),c(25,45),5,'les_2',30,'hist','')
+
+
+
+
+
+#aff_suivi_pixels("19",'CBF',list(9),c(45,60),5,'les_1',30,'dens','')
+aff_suivi_pixels("19",'CBF',list(9),c(30,45),5,'les_1',30,'dens','')
+#aff_suivi_pixels("19",'CBF',list(9),c(40,45),5,'les_2',30,'dens','')
+aff_suivi_pixels("19",'CBF',list(9),c(25,45),5,'les_2',30,'dens','')
+
+#aff_suivi_pixels("19",'BVf',list(9),c(45,60),5,'les_1',30,'dens','')
+aff_suivi_pixels("19",'BVf',list(9),c(30,45),5,'les_1',30,'dens','')
+#aff_suivi_pixels("19",'BVf',list(9),c(40,45),5,'les_2',30,'dens','')
+aff_suivi_pixels("19",'BVf',list(9),c(25,45),5,'les_2',30,'dens','')
+
+
+
+#aff_suivi_pixels("19",'CBF',list(9),c(45,60),5,'les_1',30,'dens','')
+aff_suivi_pixels("19",'CBF',list(9),c(30,45),5,'les_1',30,'hist','')
+#aff_suivi_pixels("19",'CBF',list(9),c(40,45),5,'les_2',30,'dens','')
+aff_suivi_pixels("19",'CBF',list(9),c(25,45),5,'les_2',30,'hist','')
+
+#aff_suivi_pixels("19",'BVf',list(9),c(45,60),5,'les_1',30,'dens','')
+aff_suivi_pixels("19",'BVf',list(9),c(30,45),5,'les_1',30,'hist','')
+#aff_suivi_pixels("19",'BVf',list(9),c(40,45),5,'les_2',30,'dens','')
+aff_suivi_pixels("19",'BVf',list(9),c(25,45),5,'les_2',30,'hist','')
+
+
+aff_suivi_pixels("19",'CMRO2',list(9),c(30,45),5,'les_1',30,'hist','')
+aff_suivi_pixels("19",'CMRO2',list(9),c(25,45),5,'les_2',30,'hist','')
+
+aff_suivi_pixels("19",'CMRO2',list(9),c(30,45),5,'les_1',30,'dens','')
+aff_suivi_pixels("19",'CMRO2',list(9),c(30,45),5,'les_1',30,'dens','pdf')
+
+
+aff_suivi_pixels("19",'CMRO2',list(9),c(25,45),5,'les_2',30,'dens','')
+aff_suivi_pixels("19",'CMRO2',list(9),c(25,45),5,'les_2',30,'dens','pdf')
+
+
 
 ## Déboggage : fonctions cerveau_dyn_3demi, ... ##
-
-val_vect <- c(1:20)
-
-et_vect <- c(rep('et_1',10),rep('et_2',10))
-
-data <- as.data.frame(cbind(val_vect,et_vect),stringsAsFactors = TRUE)
-colnames(data) <- c('Valeur','Etat')
-
-const_et_3 <- rep('et_3',20)
-
-data$Etat <- ifelse(data$Valeur%%2==0,'et_3',data$Etat)
-
-
-
-
-nom_cerveau <- sprintf("R%s/automate_3demi/cerveau%s_multi_J%s_Slices%s.dat","19","19","08","-9")
-test <- read.table(nom_cerveau,header=T)
-l <- length(test$x)
-test <- as.data.frame(cbind(test,rep(8,l)))
-colnames(test) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour'))
-
-
-test_10 <- test[1:10,]
-test_10$VSI>5
-
-#test_10$Etat <- rep('permanent',10)
-test_10$Etat <- ifelse(test_10$VSI>5,'etat5',as.character(test_10$Etat))
-
-test_10$Etat <- ifelse(test_10$Etat==3&&test_10$ADC>1100,'etat8',test_10$Etat)
-
-
-test_10$Etat <- rep('per',10)# -> pas le même résultat qu'avec la valeur originale de test_10
-
-test_10$CBF <- ifelse(test_10$ADC>1100,200,test_10$CBF)
-
-test_10$CMRO2 <- ifelse(test_10$BVf>6.5,20,test_10$CMRO2)
-
-
-
-
-norm_test <- rnorm(10,3000,1000)
-
-
-
-cc <- c(1,2,3,4,5,6,7,8,9,10,11,12,13)
-
-length(cc)
-
-ll <- list(1,2,4,5,6)
-
-ll <- ll[ll%%2==0]
-
-ccc <- c(1:10)
-
-
 
 ##############################################################################################
 ###----------------- Même modèle, essai avec les données des autres rats. -----------------###

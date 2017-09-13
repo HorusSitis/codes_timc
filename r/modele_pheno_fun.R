@@ -2082,7 +2082,8 @@ carre_dyn <- function(rat,liste_coupes,sommet,mesure,zone,t,opt){
   
   
   #return(pixels)
-  nom_carre_dyn <- sprintf("R%s/automate_2/carre%s_%s_Slices%s_J0_fin%i.dat",rat,mesure,zone,suff,t)
+  nom_sommet <- paste(as.character(sommet[1]),as.character(sommet[2]),sep='')
+  nom_carre_dyn <- sprintf("R%s/automate_2/%scarre%s_%s_Slices%s_J0_fin%i.dat",rat,nom_sommet,mesure,zone,suff,t)
   write.table(pixels, nom_carre_dyn, row.names=F, quote=F, sep='\t')
 }
 
@@ -2100,7 +2101,8 @@ aff_suivi_pixels <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt_1,op
   }
   zone <- paste(zone,"1",sep='_')
   
-  d <- read.table(sprintf("R%s/automate_2/carre%s_%s_Slices%s_J0_fin%s.dat",rat,mesure,zone,suff,t),header=T)
+  nom_sommet <- paste(as.character(sommet[1]),as.character(sommet[2]),sep='')
+  d <- read.table(sprintf("R%s/automate_2/%scarre%s_%s_Slices%s_J0_fin%s.dat",rat,nom_sommet,mesure,zone,suff,t),header=T)
   
   liste_jr <- liste_jfr[[fonc]]
   jours <- liste_jr[[rat]]
@@ -2143,13 +2145,8 @@ aff_suivi_pixels <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt_1,op
   }
   else if (opt_1=='dens'){
     if (opt_2=='pdf'){
-      # histogrammes renvoyés en pdf
-    }
-    else{
-      # histogrammes affichés : valeurs des modalités sur le carré.
-      #get( getOption( "device" ) )()
-      plot.new()
-      par(mfrow=c(2,njours))
+      #plot.new()
+      #par(mfrow=c(2,3))
       
       # On représente les valeurs simulées ...
       for (jour in jours){
@@ -2178,8 +2175,7 @@ aff_suivi_pixels <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt_1,op
         l <- length(e$x)
         liste.nan <- is.na(e[,4])
         e <- e[!liste.nan,]
-        e <- e[liste_sel,]
-        #print(e[1:5,])
+        print(e[1:5,])
         # puis au carré de pixels.
         cpiexp <- {
           l <- length(e$x)
@@ -2202,6 +2198,87 @@ aff_suivi_pixels <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt_1,op
         
         title="Densités"
         subtitle=sprintf("Jour %s",jour)
+        
+        
+        if (length(e)!=0){
+          pdf(file = sprintf("R%s/automate_2/cmro2demo_%s.pdf",rat,jour))
+          plot(dste$x,dste$y,type="n",main=title,sub=subtitle,
+               ylim = c(-0.01*max(dste$y),5*max(dstp$y)))
+          lines(dstp$x, dstp$y, lwd = 2, col = "darkred")
+          lines(dste$x, dste$y, lwd = 2, lty = 2, col = "darkblue")
+          #lines(dst$x, dst$y, lwd = 3, col="gray70")
+          
+          legend("topright", inset = 0.01, 
+                 legend = c("Prévisions",
+                            #paste("Hémisphère sain, J",opt_3),
+                            "Expérience"),
+                 col = c("darkred","darkblue"),
+                 #"gray70"),
+                 lty = c(1, 2),#, 1),
+                 lwd = 2, pt.cex = 2)
+          #print(p)
+          dev.off()
+        }
+      }
+      #title(sprintf("Expérience vs prévisions : rat %s, modalité %s",rat,fonc),outer=TRUE)
+    }
+    else{
+      # histogrammes affichés : valeurs des modalités sur le carré.
+      #get( getOption( "device" ) )()
+      plot.new()
+      par(mfrow=c(2,3))
+      
+      # On représente les valeurs simulées ...
+      for (jour in jours){
+        # on extrait une sous-dataframe e correspondant au jour courant
+        l <- length(d$x)
+        liste_sel <- rep(TRUE,l)
+        liste_sel <- ifelse(d$Jour==as.numeric(jour),liste_sel,FALSE)
+        f <- d[liste_sel,]
+        f <- f[[fonc]]
+        
+        # Chargement des résultats espérimentaux, calibrage pour les représentations graphiques
+        name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",fonc,rat,jour,fonc,'bg')
+        cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+        
+        val_max <- max(cerveau_fonc[,4],na.rm=TRUE)
+        val_min <- min(cerveau_fonc[,4],na.rm=TRUE)
+        
+        l <- length(cerveau_fonc$x)
+        liste_cp <- rep(FALSE,l)
+        for (cp in liste_coupes){
+          liste_cp <- ifelse(cerveau_fonc$Slice==cp,TRUE,liste_cp)
+        }
+        
+        e <- cerveau_fonc[liste_cp,]
+        # on retire les valeurs manquantes
+        l <- length(e$x)
+        liste.nan <- is.na(e[,4])
+        e <- e[!liste.nan,]
+        print(e[1:5,])
+        # puis au carré de pixels.
+        cpiexp <- {
+          l <- length(e$x)
+          liste_l <- rep(FALSE,l)
+          xc <- sommet[1]
+          yc <- sommet[2]
+          for (i in c(1:mesure)){
+            for (j in c(1:mesure)){
+              ix <- xc + i-1
+              iy <- yc + j-1
+              liste_l <- ifelse(ix==e$x&iy==e$y,TRUE,liste_l)
+            }
+          }
+          e <- e[liste_l,]
+        }
+        e <- e[[fonc]]
+        
+        dstp <- density(f)
+        if (length(e)!=0){dste <- density(e)}
+        
+        title="Densités"
+        subtitle=sprintf("Jour %s",jour)
+        
         
         if (length(e)!=0){
           plot(dste$x,dste$y,type="n",main=title,sub=subtitle,
@@ -2275,8 +2352,7 @@ aff_suivi_pixels <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt_1,op
         l <- length(e$x)
         liste.nan <- is.na(e[,4])
         e <- e[!liste.nan,]
-        e <- e[liste_sel,]
-        #print(e[1:5,])
+        print(e[1:5,])
         # puis au carré de pixels.
         cpiexp <- {
           l <- length(e$x)
@@ -2295,7 +2371,7 @@ aff_suivi_pixels <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt_1,op
         # on paramètre et on trace l'histogramme
         print(e[1:5,])
         vol <- mesure*mesure
-        #e.fonc <- e[,4]
+        e.fonc <- e[,4]
         
         if (length(e$x)!=0){
           FONC.breaks <- seq(min(e.fonc)-0.1*min(e.fonc), max(e.fonc)+0.1*max(e.fonc), length.out=100)
