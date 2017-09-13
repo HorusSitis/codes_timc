@@ -1081,17 +1081,31 @@ $Q_1^3$ le premier quartile du CBF au jour 3, et $m^0(t)$ la valeur de CBF obten
 \par
 L\'in\'egalit\'e pr\'ec\'edente se traduit par : $\dfrac{3}{\tau}\leq\ln\left(\dfrac{m^3-m^0}{m^3-Q^3_1}\right)$, %
 le 3 de la premi\g{e}re fraction correspond au nombre de jours \'ecoul\'es.
+%
 \item On pose : $\tau =3\times\ln\left(\dfrac{m^3-m^0}{m^3-Q^3_1}\right)$.
+%
 \item Application num\'erique : $\tau \simeq 2,7 \text{ (jours)}$.
 \end{itemize}
-De la m\^eme mani\g{e}re, on \'ecrit les \'equations satisfaites par SO2, CMRO2 et VSI :
+%
+On observe, sur la figure \ref{19_suivi_clust_les}, que les valeurs du CBF et de la CMRO2 sont r\'eparties de la m\^eme mani\g{e}re, %
+aux jours 0 et 8.
+
+\par
+Afin de mod\'eliser l'\'evolution des valeurs de la CMRO2 en fonction du  temps, on utilise l'\'equation :
 \begin{equation}
-\der{SO2}=2,5\times (SO2_{asy2}-SO2)% \Ta
+\der{CMRO2}=0,1\times\der{CBF}
+\label{cbf_cmro2_l12}
+\end{equation}
+Le coefficient 0,1 est obtenu par changement d'\'echelle : $CBF\simeq 10\times CMRO2$ en g\'en\'eral.
+%
+De la m\^eme mani\g{e}re que pour CBF, on \'ecrit l'\'equation satisfaite par SO2 :
+\begin{equation}
+\der{SO2}=2,5\times (SO2_{asy1}-SO2)% \Ta
 \label{so2_s_l2}
 \end{equation}
-et
+Celle-ci ne variera pas, sauf pour la derli\g{e}re \'etape du deuxi\g{e}me r\'egime d'isch\'emie.
 \begin{equation}
-\der{CMRO2}=0,25\times (CMRO2_{trans}-CMRO2)% \Ta
+\der{CMRO2}=0,1\times \der{CBF}% \Ta
 \end{equation}
 A ce stade, les variables CBF et VSI semblent corr\'el\'ees : on pose donc
 \begin{equation}
@@ -1113,8 +1127,11 @@ Pas de changement d'\'echelle ici.
 
 \par
 Les conditions initiales $SO2_{asy2}$ et $CMRO2_{trans}$ sont d\'efinies de la m\^eme mani\g{e}re que $CBF_{trans}$ : %
-ce sont des distributions spatiales de CMRO2 et de SO2. %
-Pour nos simulations, on prendra des \'echantillons gaussiens de lois respectives $\mathcal{N}(75,15)$ et $\mathcal{N}(6,7)$.
+ce sont des distributions spatiales de CMRO2 et de SO2.
+
+\par
+Pour nos simulations, nous prendrons des \'echantillons gaussiens de lois respectives $\mathcal{N}(75,15)$ et $\mathcal{N}(6,7)$.
+%
 \item Apr\g{e}s un temps compris entre trois et huit jours, les \'equations satisfaites par les cinq variables ci-dessus changent : %
 par exemple, les valeurs du CBF ne sont plus distribu\'ees comme la variable transitoire CBF${}_{trans}$.
 
@@ -1127,21 +1144,34 @@ voir la bo\^ite rouge au centre de la case \og{} CBF\fg{}. L'\'equation suivie p
 \begin{equation}
 \der{CBF}=0, 1\times \left(CBF_{trans1}-CBF\right)% \Ta
 \end{equation}
-CBF${}_{trans1}$ sera simul\'e selon la loi $\mathcal{N}(80,43)$.
+CBF${}_{trans1}$ sera simul\'e avec la loi $\mathcal{N}(80,43)$.
 
 \par
 CMRO2, BVf et VSI \'evoluent de la m\^eme mani\g{e}re, au moment o\g{u} l'on commence \g{a} distinguer les deux r\'egions l\'es\'ees.
 
 \par
-Choisissons de mod\'eliser, en premier lieu, l'\'evolution de la CMRO2, qui est la plus facile \g{a} lire. %
-La m\'ediane et les quartiles de cette variable, prise au jour 8 sont, dans l'ordre : 3, 5 et 7.
+On garde, pour la CMRO2, une \'equation d'\'evolution li\'ee au CBF : \ref{cbf_cmro2_l12}
+\begin{comment}
+\par
+On mod\'elise, en premier lieu, l'\'evolution de la CMRO2, qui est la plus facile \g{a} lire. %
+La m\'ediane et les quartiles de cette variable, prise au jour 8 sont, dans l'ordre : 3, 5 et 7. %
+On choisit donc, comme distribution des valeurs de CMRO2 sur la premi\g{e}re r'egion l\'es\'ee au jour 8, %
+un \'echantillon gaussien CMRO2${}_{trans1}$ de loi $\mathcal{N}(5,3)$.
 
 \par
-Avec la la m\'ethode d\'etaill\'ee pr\'ec\'edemment pour le CBF, on peut \'ecrire l'\'equation :
+On utilise la m\'ethode vue pour le CBF pour obtenir une \'equation en CMRO2 : %
+supposons en effet que cette variable satisfasse l\'equation :
+\[\der{CMRO2}=\tau_{CMRO2}\times \left(CMRO2_{trans1}-CMRO2\right)\]
+On note que la valeur m\'ediane de la CMRO2 n'est pas connue pour les jours 4 \g{a} 7. %
+on remplace donc la diff\'erence de m\'edianes \og{}$m^3-m^0$\fg{} par 5, valeur m\'ediane de la CMRO2${}_{trans1}$. %
+L'\'evolution de la CMRO2 sera donc suffisamment rapide pour que cette variable prenne les valeurs mesur\'ees au jour 8.
+
+\par
+On pose donc : $\tau_{CMRO2}=5\times\ln\left(\frac{5}{2}\right)$, ce qui nous donne pour l'\'evolution de la CMRO2 :
 \begin{equation}
-\der{CMRO2}=0, 1\times \left(CMRO2_{trans1}-CMRO2\right)% \Ta
+\der{CMRO2}=4, 6\times \left(CMRO2_{trans1}-CMRO2\right)% \Ta
 \end{equation}
-CMRO2${}_{trans1}$ sera simul\'e selon la loi $\mathcal{N}(5,3)$.
+\end{comment}
 
 VSI et BVf \'evoluent respectivement d'apr\g{e}s les \'equations :
 \begin{equation}
@@ -1238,7 +1268,7 @@ Par exemple, CBF et CMRO2 baissent entre les jours 8 et 15, et augmentent ensuit
 Toujours avec la m\^eme m\'ethode, on construit les \'equations suivantes, %
 qui r\'egissent l'\'evolution de BVf, CBF, CMRO2, SO2 et VSI :
 \begin{equation}
-\dot{CBF}=-15\times\left(CBF_{trans3}-CBF\right)
+\dot{CBF}=7,7\times\left(CBF_{trans3}-CBF\right)
 \end{equation}
 
 La densit\'e transitoire $CBF_{trans3}$ du CBF est d\'etermin\'ee par les r\'esultats de \ref{19_suivi_clust_les}. %
@@ -1255,7 +1285,7 @@ On lie les \'equations d'evolution de CMRO2, VSI et BVf \g{a} celle du CBF :
 \end{equation}
 et% une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
 \begin{equation}
-\dot{BVf}=2\times\dot{VSI})
+\dot{BVf}=2\times\dot{VSI}
 \end{equation}
 
 Ces \'equations concernent les pixels o\g{u} les valeurs de 100 ml.min${}^{-1}$.(100g)${}^{-1}$ pour le CBF, %

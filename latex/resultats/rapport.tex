@@ -1,46 +1,179 @@
 \section{R\'esultats des simulations}
 
-\subsection{Calculs \g{a} partir du jour 0}
+\subsection{Principe}
+
+Dans cette section, on pr\'esente le principe de deux algorithmes de sipmulation, %
+inspir\'es des \'equations de la section pr\'ec\'edente.
+
+\par
+Chacun de ces deux algorithmes prend en entrées :
+\begin{itemize}
+\item Un carr\'e de $5\times 5$ pixels des IRM disponibles au jour 0, pour le rat num\'ero 19 ;
+\item Un nom correspondant \g{a} leur emplacement dans la l\'esion ;
+\item Le nombre de jours que dure la simulation : dans les simulations qui vont suivre, 5, 10, 20 ou 30 jours.
+\end{itemize}
+
+Le sc\'ema ci-dessous r\'esume le d\'eroulement des simulations :
+
+%\begin{comment}
+\[%
+\xymatrixcolsep{1.5cm}%
+\xymatrix{%
+&%
+\fbox{\text{\textbf{L\'esion 1-2}}}\ar[r]^{\scriptstyle CBF<100}_{\scriptstyle CMRO2<10}&%
+\fbox{\text{\textbf{L\'esion 1-3}}}%  R\'egime asymptotique}%
+%&
+%
+\\
+\fbox{\text{\textbf{R\'egime commun}}}\ar[ru]^{T_{\chi}}\ar[rd]_{T_{\chi}}&%
+&%
+%&
+%
+\\
+&%
+\fbox{\text{\textbf{L\'esion 2-2}}}\ar[r]^{\scriptstyle CBF>100}_{\scriptstyle CMRO2>10}&%
+\fbox{\text{\textbf{L\'esion 2-3}}}%
+%\ar[d]^{SO2\dots}&
+%\mbox{\textbf{L\'esion 2-4}}
+}
+\]
+%\end{comment}
+
+Les encarts repr\'esentent chacun des syst\g{e}mes d'\'equations pr\'esent\'es \g{a} la section pr\'ec\'edente.
+
+\par
+Les fl\g{e}ches sont index\'ees avec les \'ev\g{e}nements qui, %
+lorsqu'ils se produisent, entra\^inent un changement dans les \'equations qui r\'egissent l'\'evolution du voxel concern\'e.
+
+\par
+Ainsi, le crit\g{e}re qui marque la fin des r\'egimes : %
+\og{} l\'esion 1.2\fg{} et \og{} l\'esion 2.2\fg{} est le franchissement, par le CBF et par la CMRO2, %
+des valeurs seuil de 100 et 10 respectivement.
+
+\etoile
+On note que les valeurs des diff\'erentes variables aux jours 0 et 3 ne permettent pas, seules, %
+de distinguer les pixels qui vont \'evoluer vers un type de l\'esion donn\'e.
+
+\par
+On se propose, pour nos simulations, de quitter le r\'egime initial apr\g{e}s un temps $T_{\chi}$ al\'eatoire, %
+avec une distribution centr\'ee en 5 : $\mathcal{N}(5,2)$. %
+Nous avons vu dans une section pr\'ec\'edente que certains m\'ecanismes physiologiques, %
+caus\'es par l'isch\'emie, interviennent tardivement (dans les premiers jours qui suivent l'AVC).
+
+\ligneinter
+Le logiciel utilis\'e pur les simulations est R.
+
+\par
+Pour avoir une condition initiale, on enregistre les valeurs des cinq variables BVf, CBF, CMRO2, SO2 et VSI sur les pixels de la coupe 9 du rat 19.
+
+\par
+On choisit ensuite, sur cette coupe, une grille carr\'ee de $5\times 5$ pixels. %
+Dans les exemples qui vont suivre, la grille est choisie au sein de la partie l\'es\'ee.
+
+\par
+On indique \'egalement \g{a} l'algorithme le type d'\'evolution que l'on souhaite simuler : l\'esion 1, l\'esion 2.
+
+\par
+La simulation s'effectue sur un temps discret : on calcule, sur un mois, l'\'etat de la grille chaque jour. %
+On comparera ensuite les r\'esultats obtenus aux jours 3, 8, 15 et 22 aux donn\'ees exp\'erimentales.
+
+\etoile
+Les \'equations d'\'evolution des cinq variables BVf, \dots , VSI ne sont pas impl\'ement\'ees %
+telles quelles pour cette simulation \g{a} temps discret. %
+Pour fixer les id\'ees, on remplace l'\'equation :
+\[\der{CBF}=\frac{1}{\tau}\times \left(CBF_{trans}-CBF\right)\]
+
+par :
+\[\text{CBF}_{trans}-\text{CBF}(t+1)=q\left(\text{CBF}_{trans}-\text{CBF}(t)\right)\]
+Un calcul analogue \g{a} celui du cas continu donne : %
+$q =\left(\dfrac{m^3-m^0}{m^3-Q^3_1}\right)^{\frac{1}{3}}$ soit $q\simeq 0,6$.
 
 
-\subsection{Calculs \g{a} partir du jour 8}
+\subsection{Deux exemples avec la CMRO2}
 
+
+Afin de bien s\'electionner les pixels sur lesquels on effectue des simulation, on se reporte au diagramme ci-dessous :
+
+\includegraphics[width=0.6\textwidth,height=11cm]{../../images_rapport/19-J08-CBF_clust_lesion.pdf}
+
+On d\'efinit deux carr\'es de $5\times 5$ pixels, par la position de leurs sommets inf\'erieurs gauches $S_1$ et $S_2$ :
+\begin{enumerate}[label=(Carre\arabic*)]
+\item $S_1$ est le pixel (30,45). Le carr\'e ainsi d\'efini se situe \g{a} gauche de la r\'egion d\'elimit\'ee en bleu ;
+\item $S_2$ est le pixel (30,45). Le carr\'e ainsi d\'efini se situe \g{a} l'extr\^eme gauche de la figure, %
+dans la r\'egion d\'elimit\'ee en rouge.
+\end{enumerate}
+
+Les deux figures qui suivent repr\'esentent les distributions des valeurs simul\'ees (courbes rouges) %
+et mesur'ees (bleu pointillé) de la CMRO2 sur la coupe 9 du rat num\'ero 9. 
 
 \begin{figure}[!p]
 \begin{center}
 \begin{tabular}{|c|c|}
 \hline
-%\subfloat[BVf : d\'elimitation approximative, parasites.]{%
-\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/cerveau19_ADCbox_dyn_Slices-9_fin22.pdf}
-%}
+\includegraphics[width=0.4\textwidth,height=6cm]{../../images_rapport/cmro2demo_00.pdf}
 &
-%\subfloat[T1map : structures visibles, %
-%mais sans lien avec la l\'esion.]{%
-\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/cerveau19_BVfbox_dyn_Slices-9_fin22.pdf}
-%}
+\includegraphics[width=0.4\textwidth,height=6cm]{../../images_rapport/cmro2demo_08.pdf}
 \\
 \hline
-%\subfloat[CBF : pas mieux que l'oeil.. %
-%Clusters vert et rouge difficiles \g{a} interpr\'eter.]{%
-\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/cerveau19_CBFbox_dyn_Slices-9_fin22.pdf}
-%}
+\includegraphics[width=0.4\textwidth,height=6cm]{../../images_rapport/cmro2demo_15.pdf}
 &
-%\subfloat[CMRO2 : mauvaise qualit\'e, taches bleues que l'h\'emisph\g{e}re contralat\'eral.]{%
-\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/cerveau19_CMRO2box_dyn_Slices-9_fin22.pdf}
-%}
-\\
-\hline
-%\subfloat[ADC : r\'esultat encourageant]{%
-\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/cerveau19_SO2mapbox_dyn_Slices-9_fin22.pdf}
-%}
-&
-%\subfloat[CBF : pas exploitable pour distinguer la r\'egion l\'es\'ee, sur le cerveau entier.]{%
-\includegraphics[height=6.9cm,width=0.4\linewidth]{../../images_rapport/cerveau19_VSIbox_dyn_Slices-9_fin22.pdf}
-%}
+\includegraphics[width=0.4\textwidth,height=6cm]{../../images_rapport/cmro2demo_22.pdf}
 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Simulations pour le rat 19 : les six modalit\'es. Suivi des jours 8 \g{a} 22.}
-\label{19_sim_822}
+\caption{Comparaison : valeurs prévues vs mesurées pour la CMRO2.%
+\\
+Carr\'e : 1}
+\label{les1simc}
 \end{figure}
+
+\begin{figure}[!p]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\includegraphics[width=0.4\textwidth,height=6cm]{../../images_rapport/Cmro2demo_00.pdf}
+&
+\includegraphics[width=0.4\textwidth,height=6cm]{../../images_rapport/Cmro2demo_08.pdf}
+\\
+\hline
+\includegraphics[width=0.4\textwidth,height=6cm]{../../images_rapport/Cmro2demo_15.pdf}
+&
+\includegraphics[width=0.4\textwidth,height=6cm]{../../images_rapport/Cmro2demo_22.pdf}
+\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Comparaison : valeurs prévues vs mesurées pour la CMRO2.%
+\\
+Carr\'e : 2}
+\label{les2simC}
+\end{figure}
+
+%\FloatBarrier
+\subsection{Pour conclure \dots}
+
+Les observations des figures \ref{les1simc} et \ref{les2simC}, qui concernant les pr\'edistions de CMRO2, %
+montrent que le mod\g{e}le doit \^etre corrig\'e.
+
+\par
+En effet, la distribution asymptotique de la CMRO2, dans le premier cas qui concerne la l\'esin 1, %
+est d\'ecal\'ee par rapport aux r\'esultats exp\'erimentaux.
+
+\par
+Les pr\'edictions effectu\'ees sur les deuxi\g{e}me carr\'e, et qui concernent la deuxi\g{e}me r\'egion l\'es\'ee, %
+sont proches des r\'esultats exp\'erimentaux, sauf pour le jour 15.
+
+\etoile
+Remarquons toutefois que les valeurs de CMRO2 mesur\'ees sur les deux carr\'es de pixels sont h\'et\'erog\g{e}nes. %
+Cela peut signifier que la partition \og{} l\'esion1-l\'esion 2\fg{} doit \^etre affin\'ee, %
+ou que les carr\'es empi\g{e}tent sur chacune des deux zones.
+
+\par
+D'une mani\g{e}re g\'en\'erale, il est difficile de s\'electionner, m\^eme pour un petit nombre de pixels, %
+un \'echantillon de tissu homog\g{e}ne.
+
+\par
+En outre, il est fr\'equent que les valeurs des diff\'erentes variables ne soient pas toutes disponibles, pour un pixel donn\'e; %
+les \'echantillons de pixels utilisables sont donc assez rares.
+
