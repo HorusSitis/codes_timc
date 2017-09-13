@@ -1304,7 +1304,7 @@ affichage_etats_cerveau <- function(rat,automate,liste_tranches,jour,opt_1,opt_2
 ## - Coefficients pour les équations - ##
 
 tau_cont <- function(delta_ini,var_seuil,n_jours){
-  return(n_jours/log(delta_ini/var_seuil))
+  return(n_jours*log(delta_ini/var_seuil))
 }
 
 q_dis <- function(delta_ini,var_seuil,n_jours){
@@ -1358,6 +1358,7 @@ cerveau_dyn_3demi <- function(rat,liste_coupes,t){# t : jour final
   q_vsi_asy2 <- q_dis(3,2,7)#rnorm(l,5,4.3)
   q_so2_asy2 <- q_dis(20,15,7)#rnorm(l,75,30)
   q_so2_sain <- q_dis(30,10,7)#rnorm(l,75,25)
+  
   
   q_cbf_sain <- q_dis(50,30,5)#rnorm(l,130,30)
   
@@ -1868,27 +1869,28 @@ comp_mod_clust <- function(rat,hemi,liste_mod,liste_coupes,liste_t,opt_1,opt_2,o
 
 ## Evolution d'un carr\'e de voxels : suivi sur 22 jours
 
-carre_dyn <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt){
-  #jour <- "08"
-  #num_jour <- 8
+carre_dyn <- function(rat,liste_coupes,sommet,mesure,zone,t,opt){
+  jour <- "00"
+  num_jour <- 0
   suff <- ""
   for (cp in liste_coupes){
     suff <- paste(suff,"-",cp,sep='')
   }
   
-  zone <- paste(zone,"-","1",sep='')
+  zone <- paste(zone,"1",sep='_')
   
   # Chargement du cerveau dont les données seront utilisées
   cer00 <- {
-    nom_cerveau <- sprintf("R%s/automate_3demi/cerveau%s_multi_J%s%s_Slices%s.dat",rat,rat,jour,opt,suff)
+    nom_cerveau <- sprintf("R%s/automate_2/cerveau%s_multi_J%s%s_Slices%s.dat",rat,rat,jour,opt,suff)
     cerveau <- read.table(nom_cerveau,header=T)
     l <- length(cerveau$x)
     cerveau <- as.data.frame(cbind(cerveau,rep(num_jour,l)))
+    cerveau <- cerveau[,colnames(cerveau)!='ADC']
     colnames(cerveau) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour'))
   }
   # Constitution du carré de pixels : état zone J00. Pas d'ADC.
   cpix <- {
-    pixels <- cerveau[,-cerveau$ADC]
+    pixels <- cerveau#[,-cerveau$ADC]
     pixels$Etat <- rep(zone,l)
     liste_l <- rep(FALSE,l)
     xc <- sommet[1]
@@ -1900,55 +1902,57 @@ carre_dyn <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt){
         liste_l <- ifelse(ix==pixels$x&iy==pixels$y,TRUE,liste_l)
       }
     }
-    pixels <- pixels[liste_tr,]
+    pixels <- pixels[liste_l,]
   }
   # Ajout du temps caractéristique de différentiation des zones
   lp <- length(pixels$Etat)
   T_diff <- rnorm(lp,5,2)
   pixels <- as.data.frame(cbind(pixels,T_diff))
-  colnames(pixels) <- c(colnames(pixels),'Tchar')
+  colnames(pixels) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour','Tchar'))
   
   # Constitution de la base de données : constantes du modèle
   ## Distributions asymptotiques
   distr <- {
-    cbf_asy1 <- rnorm(l,50,40)
-    cmro2_asy1 <- rnorm(l,5,1.5)
-    so2_asy1 <- rnorm(l,75,25)
-    vsi_asy1 <- rnorm(l,4,2)
-    cbf_trans3 <- rnorm(l,120,40)
-    vsi_asy2 <- rnorm(l,5,2)
-    so2_asy2 <- rnorm(l,75,15)
-    so2_sain <- rnorm(l,75,10)
-    
-    cbf_sain <- rnorm(l,130,30)
-    
-    adc_asy1 <- rnorm(l,3000,1000)
-    adc_asy2 <- rnorm(l,2500,700)
+    cmro2_trans <- rnorm(lp,5,1.5)
+    cmro2_asy1 <- rnorm(lp,5,1.5)
+    #
+    #so2_sain <- rnorm(lp,75,10)
+    so2_asy1 <- rnorm(lp,75,25)
+    so2_asy2 <- rnorm(lp,75,15)
+    #
+    vsi_asy1 <- rnorm(lp,4,2)
+    vsi_asy2 <- rnorm(lp,5,2)
+    #
+    cbf_sain <- rnorm(lp,130,30)
+    cbf_trans <- rnorm(lp,140,70)
+    cbf_trans1 <- rnorm(lp,31,43)
+    cbf_trans2 <- rnorm(lp,220,43)
+    cbf_trans3 <- rnorm(lp,120,40)
+    cbf_asy1 <- rnorm(lp,50,40)
+    #
+    #
   }
-  const <- as.data.frame(cbind(cbf_asy1,cmro2_asy1,so2_asy1,cbf_trans2,vsi_asy2,so2_asy2,so2_sain,cbf_sain))
-  colnames(const)=c("CBF_asy1","CMRO2_asy1","SO2_asy1","CBF_trans2","VSI_asy2","SO2_asy2","SO2_sain","CBF_sain")
+  #const <- as.data.frame(cbind(cbf_asy1,cmro2_asy1,so2_asy1,cbf_trans2,vsi_asy2,so2_asy2,so2_sain,cbf_sain))
+  #colnames(const)=c("CBF_asy1","CMRO2_asy1","SO2_asy1","CBF_trans2","VSI_asy2","SO2_asy2","SO2_sain","CBF_sain")
   
   ## Coefficients multiplicateurs
   qqdis <- {
     q_cbf_trans <- q_dis(120,40,3)
-    q_cbf_asy1 <- q_dis(50,40,7)#rnorm(l,50,50)
-    q_cmro2_asy1 <- q_dis(8,1.5,7)#rnorm(l,5,5.5)
-    q_so2_asy1 <- q_dis(35,25,10)#rnorm(l,75,35)
-    q_vsi_asy1 <- q_dis(3,2,7)#rnorm(l,4,2.8)
-    q_cbf_trans2 <- q_dis(50,40,7)#rnorm(l,120,50)
-    q_vsi_asy2 <- q_dis(3,2,7)#rnorm(l,5,4.3)
-    q_so2_asy2 <- q_dis(20,15,7)#rnorm(l,75,30)
-    q_so2_sain <- q_dis(30,10,7)#rnorm(l,75,25)
+    q_cbf_asy1 <- q_dis(50,40,7)
+    q_cmro2_asy1 <- q_dis(8,1.5,7)
+    q_so2_asy1 <- q_dis(35,25,10)
+    q_vsi_asy1 <- q_dis(3,2,7)
+    q_cbf_trans2 <- q_dis(50,40,7)
+    q_vsi_asy2 <- q_dis(3,2,7)
+    q_so2_asy2 <- q_dis(20,15,7)
+    q_so2_sain <- q_dis(30,10,7)
     q_cbf_trans1 <- q_dis(60,20,5)
+    q_cbf_trans3 <- q_dis(120,40,7)
     
     q_cbf_sain <- q_dis(50,30,5)#rnorm(l,130,30)
     ## Avec les formules du rapport.
-    # l1
-    q_cmro2_trans1 <- 0.1#q_dis(,5)
-    # l2
-    q_cbf_trans2 <- 0.3
-    q_cbf_trans3 <- -15
-    #q_vsi_asy3 <- ...
+    q_cmro2_trans <- q_dis(5,2,5)
+    #q_cmro2_trans1 <- q_dis(5,2,5)
     
   }
   
@@ -1960,7 +1964,7 @@ carre_dyn <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt){
     c_inc$Jour <- rep(num_jour,lp)
     # Accroissement des modalités, en un jour
     c_t <- data.frame(matrix(ncol = 5, nrow = lp))
-    colnames(c_t) <- c('BVf','CBF','CMRO2','SO2map','VSI')
+    colnames(c_t) <- vect_fonc
     # On initialise c_t à 2, il st systématiquement modifié d'après l'option zone.
     for (fonc in colnames(c_t)){
       c_t[[fonc]] <- rep(0,lp)
@@ -1970,49 +1974,72 @@ carre_dyn <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt){
     # On commence par l'état d'équilibre sain, perturbé non lésé, lésé 1 début, lésé 1 fin etc.
     # Il existe des niveaux de priorités entre les modalités
     ## SO2
+    # Premier régime
+    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_1'|c_inc$Etat=='les_2_1',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
+  
     # Lésion 1
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_1_1',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
     c_t$SO2map <- ifelse(c_inc$Etat=='les_1_2',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
     c_t$SO2map <- ifelse(c_inc$Etat=='les_1_3',(1-q_so2_asy1)*(so2_asy1-c_inc$SO2map),c_t$SO2map)
     
     # Lésion 2
-    c_t$SO2map <- ifelse(c_inc$Etat=='les_2_1',(1-q_so2_sain)*(so2_sain-c_inc$SO2map),c_t$SO2map)
     c_t$SO2map <- ifelse(c_inc$Etat=='les_2_2',(1-q_so2_asy2)*(so2_asy2-c_inc$SO2map),c_t$SO2map)
     c_t$SO2map <- ifelse(c_inc$Etat=='les_2_3',(1-q_so2_asy2)*(so2_asy2-c_inc$SO2map),c_t$SO2map)
     
     ## CBF
+    # Premier régime
+    c_t$CBF <- ifelse(c_inc$Etat=='les_1_1'|c_inc$Etat=='les_2_1',(1-q_cbf_trans)*(cbf_trans-c_inc$CBF),c_t$CBF)
+    
     # Lésion 1
-    c_t$CBF <- ifelse(c_inc$Etat=='les_1_deb',(1-q_cbf_asy1)*(cbf_asy1-c_inc$CBF),c_t$CBF)
-    c_t$CBF <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$CBF,c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_1_2',(1-q_cbf_trans1)*(cbf_asy1-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_1_3',(1-q_cbf_asy1)*(cbf_asy1-c_inc$CBF),c_t$CBF)
     # Lésion 2
-    c_t$CBF <- ifelse(c_inc$Etat=='les_2_deb',(1-q_cbf_trans2)*(cbf_trans2-c_inc$CBF),c_t$CBF)
-    c_t$CBF <- ifelse(c_inc$Etat=='les_2_fin',-10*c_t$SO2map,c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_2_2',(1-q_cbf_trans2)*(cbf_trans2-c_inc$CBF),c_t$CBF)
+    c_t$CBF <- ifelse(c_inc$Etat=='les_2_3',(1-q_cbf_trans3)*(cbf_trans3-c_inc$CBF),c_t$CBF)
+    #
     # Tissu sain (contra..)
     c_t$CBF <- ifelse(c_inc$Etat=='per',(1-q_cbf_sain)*(cbf_sain-c_inc$CBF),c_t$CBF)
     
     ## CMRO2
+    # Premier régime
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_1'|c_inc$Etat=='les_2_1',
+                        0.1*c_t$CBF,
+                        #(1-q_cmro2_trans)*(cmro2_trans-c_inc$CMRO2),
+                        c_t$CMRO2)
+    
     # Lésion 1
-    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_deb',(1-q_cmro2_asy1)*(cmro2_asy1-c_inc$CMRO2),c_t$CMRO2)
-    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$CMRO2,c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_2',
+                        0.1*c_t$CBF,
+                        #(1-q_cmro2_trans1)*(cmro2_trans1-c_inc$CMRO2),
+                        c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_1_3',(1-q_cmro2_asy1)*(cmro2_asy1-c_inc$CMRO2),c_t$CMRO2)
     # Lésion 2
-    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_2_deb',c_t$SO2map,c_t$CMRO2)
-    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_2_fin',-1*c_t$SO2map,c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_2_2',0.2*c_t$CBF,c_t$CMRO2)
+    c_t$CMRO2 <- ifelse(c_inc$Etat=='les_2_3',0.15*c_t$CBF,c_t$CMRO2)
+    #
     
     ## VSI
+    # Premier régime
+    c_t$VSI <- ifelse(c_inc$Etat=='les_1_1'|c_inc$Etat=='les_2_1',0.15*c_t$CBF,c_t$VSI)
+    
     # Lésion 1
-    c_t$VSI <- ifelse(c_inc$Etat=='les_1_deb',(1-q_vsi_asy1)*(vsi_asy1-c_inc$VSI),c_t$VSI)
-    c_t$VSI <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$VSI,c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_1_2',0.3*c_t$CMRO2,c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_1_3',(1-q_vsi_asy1)*(vsi_asy1-c_inc$VSI),c_t$VSI)
     # Lésion 2
-    c_t$VSI <- ifelse(c_inc$Etat=='les_2_deb',(1-q_vsi_asy2)*(vsi_asy2-c_inc$VSI),c_t$VSI)
-    c_t$VSI <- ifelse(c_inc$Etat=='les_2_fin',bruit_mod$VSI,c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_2_2',0.15*c_t$CBF,c_t$VSI)
+    c_t$VSI <- ifelse(c_inc$Etat=='les_2_3',(1-q_vsi_asy2)*(vsi_asy2-c_inc$VSI),c_t$VSI)
+    #
     
     ## BVf
+    # Premier régime
+    c_t$BVf <- ifelse(c_inc$Etat=='les_1_1'|c_inc$Etat=='les_2_1',c_t$VSI,c_t$BVf)
+    
     # Lésion 1
-    c_t$BVf <- ifelse(c_inc$Etat=='les_1_deb',0.5*c_t$VSI,c_t$BVf)
-    c_t$BVf <- ifelse(c_inc$Etat=='les_1_fin',bruit_mod$BVf,c_t$BVf)
+    c_t$BVf <- ifelse(c_inc$Etat=='les_1_2',c_t$VSI,c_t$BVf)
+    c_t$BVf <- ifelse(c_inc$Etat=='les_1_3',0.5*c_t$VSI,c_t$BVf)
     # Lésion 2
-    c_t$BVf <- ifelse(c_inc$Etat=='les_2_deb',2*c_t$VSI,c_t$BVf)
-    c_t$BVf <- ifelse(c_inc$Etat=='les_2_fin',bruit_mod$BVf,c_t$BVf)
+    c_t$BVf <- ifelse(c_inc$Etat=='les_2_2',c_t$VSI,c_t$BVf)
+    c_t$BVf <- ifelse(c_inc$Etat=='les_2_3',2*c_t$VSI,c_t$BVf)
+    #
     
     # Calcul de la valeurs courante de cerveau_inc : modalités
     for (fonc in liste_fonc){
@@ -2025,14 +2052,17 @@ carre_dyn <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt){
     }
     
     # Calcul des états de cerveau_inc
-    c_inc$Etat <- ifelse((c_inc$Etat=='per'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'sain',as.character(c_inc$Etat))
+    ## Cas d'un tissu sain
+    c_inc$Etat <- ifelse((c_inc$Etat=='per'&(abs(c_inc$CBF-cbf_sain)<15#*abs(bruit_mod$CBF)
+                                             ))
+                                             ,'sain',as.character(c_inc$Etat))
     #c_inc$Etat <- ifelse((c_inc$Etat=='les_1_deb'&(abs(c_inc$CBF-cbf_sain)<0.5*abs(bruit_mod$CBF))),'les_1_fin',as.character(c_inc$Etat))
-    c_inc$Etat <- ifelse(c_inc$Etat=='les_2_deb'&(abs(c_inc$SO2map-so2_sain)<0.5*abs(bruit_mod$SO2map)),'les_2_fin',as.character(c_inc$Etat))
+    #c_inc$Etat <- ifelse(c_inc$Etat=='les_2_deb'&(abs(c_inc$SO2map-so2_sain)<0.5*abs(bruit_mod$SO2map)),'les_2_fin',as.character(c_inc$Etat))
     
-    # Changements d'états pour les pixels de la première lignée
+    ## Changements d'états pour les pixels de la première lignée
     c_inc$Etat <- ifelse((c_inc$Etat=='les_1_1')&c_inc$Jour > c_inc$Tchar,'les_1_2',c_inc$Etat)
     c_inc$Etat <- ifelse((c_inc$Etat=='les_1_2')&c_inc$CMRO2<10,'les_1_3',c_inc$Etat)
-    # Changements d'états pour les pixels de la deuxième lignée
+    ## Changements d'états pour les pixels de la deuxième lignée
     c_inc$Etat <- ifelse((c_inc$Etat=='les_2_1')&c_inc$Jour > c_inc$Tchar,'les_2_2',c_inc$Etat)
     c_inc$Etat <- ifelse((c_inc$Etat=='les_2_2')&(c_inc$CBF>100|c_inc$CMRO2>10),'les_2_3',c_inc$Etat)
     #c_inc$Etat <- ifelse((c_inc$Etat=='les_2_3')&(abs(c_inc$SO2map-so2_sain)<...),'les_2_4',c_inc$Etat)
@@ -2040,22 +2070,19 @@ carre_dyn <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt){
     
     
     # Jour courant pour cerveau_inc
-    c_inc$Jour <- rep(num_jour,l)
+    c_inc$Jour <- rep(num_jour,lp)
     
     # Concaténation
     pixels <- as.data.frame(rbind(pixels,c_inc))
-    #colnames(cerveau) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour'))
+    colnames(pixels) <- c(c('x','y','z','Slice'),vect_fonc,c('Etat','Jour','Tchar'))
     
     # Fin de la boucle
   }
   
   
-  
-  
-  
   #return(pixels)
-  nom_carre_dyn <- sprintf("R%s/automate_3demi/carre%s_multi_dyn_Slices%s_fin%i.dat",rat,rat,suff,t)
-  write.table(cerveau, nom_table_dyn, row.names=F, quote=F, sep='\t')
+  nom_carre_dyn <- sprintf("R%s/automate_2/carre%s_%s_Slices%s_J0_fin%i.dat",rat,mesure,zone,suff,t)
+  write.table(pixels, nom_carre_dyn, row.names=F, quote=F, sep='\t')
 }
 
 
