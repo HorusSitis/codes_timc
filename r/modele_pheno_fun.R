@@ -1868,6 +1868,7 @@ comp_mod_clust <- function(rat,hemi,liste_mod,liste_coupes,liste_t,opt_1,opt_2,o
 }
 
 ## Evolution d'un carr\'e de voxels : suivi sur 22 jours
+# Option : entrée, remplissage gaussien
 
 carre_dyn <- function(rat,liste_coupes,sommet,mesure,zone,t,opt){
   jour <- "00"
@@ -2085,7 +2086,235 @@ carre_dyn <- function(rat,liste_coupes,sommet,mesure,zone,t,opt){
   write.table(pixels, nom_carre_dyn, row.names=F, quote=F, sep='\t')
 }
 
+## Affichage
+# Option 1 : graphique demandé
+# Option 2 : sortie
 
+aff_suivi_pixels <- function(rat,fonc,liste_coupes,sommet,mesure,zone,t,opt_1,opt_2){
+  # Constantes, chargement des prévisions
+  jour <- "00"
+  num_jour <- 0
+  suff <- ""
+  for (cp in liste_coupes){
+    suff <- paste(suff,"-",cp,sep='')
+  }
+  zone <- paste(zone,"1",sep='_')
+  
+  d <- read.table(sprintf("R%s/automate_2/carre%s_%s_Slices%s_J0_fin%s.dat",rat,mesure,zone,suff,t),header=T)
+  
+  liste_jr <- liste_jfr[[fonc]]
+  jours <- liste_jr[[rat]]
+  njours <- length(jours)
+  
+  if (opt_1=='pixels'){
+    if (opt_2=='pdf'){}
+    else{
+      #get( getOption( "device" ) )()
+      plot.new()
+      par(mfrow=c(2,njours))
+      
+      for (type in c('Mesures','Prévisions')){
+        for (jour in jours){
+          l <- length(d[,3])
+          liste_sel <- rep(TRUE,l)
+          liste_sel <- ifelse(d$Type==type,liste_sel,FALSE)
+          liste_sel <- ifelse(d$Jour==jour,liste_sel,FALSE)
+          e <- d[liste_sel,]
+          
+          # on crée un vecteur des niveaux de gris du carré de voxels
+          vol <- mesure*mesure
+          col_vec <- rep("",vol)
+          
+          for (m in c(1:vol)){
+            col_vec[m] <- niveau_rel_gris(d[m,3],val_min,val_max)
+          }
+          
+          plot(e$x, e$y,
+               col=col_vec,
+               pch=20,
+               cex=3,#*(1-d.clust$uncertainty)^4, 
+               xlab='x', ylab='y',
+               main=sprintf("J%s, %s",jour,type)
+          )
+        }
+      }
+      title(sprintf("Mesures vs prévisions : rat %s, modalité %s",rat,fonc),outer=TRUE)
+    }
+  }
+  else if (opt_1=='dens'){
+    if (opt_2=='pdf'){
+      # histogrammes renvoyés en pdf
+    }
+    else{
+      # histogrammes affichés : valeurs des modalités sur le carré.
+      #get( getOption( "device" ) )()
+      plot.new()
+      par(mfrow=c(2,njours))
+      
+      # On représente les valeurs simulées ...
+      for (jour in jours){
+        # on extrait une sous-dataframe e correspondant au jour courant
+        l <- length(d$x)
+        liste_sel <- rep(TRUE,l)
+        liste_sel <- ifelse(d$Jour==as.numeric(jour),liste_sel,FALSE)
+        f <- d[liste_sel,]
+        f <- f[[fonc]]
+        
+        # Chargement des résultats espérimentaux, calibrage pour les représentations graphiques
+        name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",fonc,rat,jour,fonc,'bg')
+        cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+        
+        val_max <- max(cerveau_fonc[,4],na.rm=TRUE)
+        val_min <- min(cerveau_fonc[,4],na.rm=TRUE)
+        
+        l <- length(cerveau_fonc$x)
+        liste_cp <- rep(FALSE,l)
+        for (cp in liste_coupes){
+          liste_cp <- ifelse(cerveau_fonc$Slice==cp,TRUE,liste_cp)
+        }
+        
+        e <- cerveau_fonc[liste_cp,]
+        # on retire les valeurs manquantes
+        l <- length(e$x)
+        liste.nan <- is.na(e[,4])
+        e <- e[!liste.nan,]
+        e <- e[liste_sel,]
+        #print(e[1:5,])
+        # puis au carré de pixels.
+        cpiexp <- {
+          l <- length(e$x)
+          liste_l <- rep(FALSE,l)
+          xc <- sommet[1]
+          yc <- sommet[2]
+          for (i in c(1:mesure)){
+            for (j in c(1:mesure)){
+              ix <- xc + i-1
+              iy <- yc + j-1
+              liste_l <- ifelse(ix==e$x&iy==e$y,TRUE,liste_l)
+            }
+          }
+          e <- e[liste_l,]
+        }
+        e <- e[[fonc]]
+        
+        dstp <- density(f)
+        if (length(e)!=0){dste <- density(e)}
+        
+        title="Densités"
+        subtitle=sprintf("Jour %s",jour)
+        
+        if (length(e)!=0){
+          plot(dste$x,dste$y,type="n",main=title,sub=subtitle,
+               ylim = c(-0.01*max(dste$y),3*max(dste$y)))
+          lines(dstp$x, dstp$y, lwd = 2, col = "darkred")
+          lines(dste$x, dste$y, lwd = 2, lty = 2, col = "darkblue")
+          #lines(dst$x, dst$y, lwd = 3, col="gray70")
+          
+          legend("topright", inset = 0.01, 
+                 legend = c("Prévisions",
+                            #paste("Hémisphère sain, J",opt_3),
+                            "Expérience"),
+                 col = c("darkred","darkblue"),
+                 #"gray70"),
+                 lty = c(1, 2),#, 1),
+                 lwd = 2, pt.cex = 2)
+          #print(p)
+          #dev.off()
+        }
+      }
+      title(sprintf("Expérience vs prévisions : rat %s, modalité %s",rat,fonc),outer=TRUE)
+    }
+  }
+  else if (opt_1=='hist'){
+    if (opt_2=='pdf'){
+      # histogrammes renvoyés en pdf
+    }
+    else{
+      # histogrammes affichés : valeurs des modalités sur le carré.
+      #get( getOption( "device" ) )()
+      plot.new()
+      par(mfrow=c(2,njours))
+      
+      # On représente les valeurs simulées ...
+      for (jour in jours){
+        # on extrait une sous-dataframe e correspondant au jour courant
+        l <- length(d$x)
+        liste_sel <- rep(TRUE,l)
+        liste_sel <- ifelse(d$Jour==as.numeric(jour),liste_sel,FALSE)
+        e <- d[liste_sel,]
+        # on paramètre et on trace l'histogramme
+        vol <- mesure*mesure
+        e.fonc <- e[[fonc]]
+        FONC.breaks <- seq(min(e.fonc)-0.1*min(e.fonc), max(e.fonc)+0.1*max(e.fonc), length.out=100)
+        e.hist <- hist(e.fonc,
+                       breaks=FONC.breaks,
+                       ylim=c(0,0.3*vol),
+                       xlab="",
+                       ylab="Nombre de voxels",
+                       col='grey50',
+                       main="Prévisions",sub=sprintf("%s, jour %s",fonc,jour)
+        )
+      }
+      # ... puis celles obtenues expérimentalement.
+      for (jour in jours){
+        # Chargement des résultats espérimentaux, calibrage pour les représentations graphiques
+        name_cerveau_fonc <- sprintf("R%s/%s/%s/%s-J%s-%s-%s-all.dat",rat,"fonctionnel_gris",fonc,rat,jour,fonc,'bg')
+        cerveau_fonc <- read.table(name_cerveau_fonc,header=T)
+        
+        val_max <- max(cerveau_fonc[,4],na.rm=TRUE)
+        val_min <- min(cerveau_fonc[,4],na.rm=TRUE)
+        
+        l <- length(cerveau_fonc$x)
+        liste_cp <- rep(FALSE,l)
+        for (cp in liste_coupes){
+          liste_cp <- ifelse(cerveau_fonc$Slice==cp,TRUE,liste_cp)
+        }
+        
+        e <- cerveau_fonc[liste_cp,]
+        # on retire les valeurs manquantes
+        l <- length(e$x)
+        liste.nan <- is.na(e[,4])
+        e <- e[!liste.nan,]
+        e <- e[liste_sel,]
+        #print(e[1:5,])
+        # puis au carré de pixels.
+        cpiexp <- {
+          l <- length(e$x)
+          liste_l <- rep(FALSE,l)
+          xc <- sommet[1]
+          yc <- sommet[2]
+          for (i in c(1:mesure)){
+            for (j in c(1:mesure)){
+              ix <- xc + i-1
+              iy <- yc + j-1
+              liste_l <- ifelse(ix==e$x&iy==e$y,TRUE,liste_l)
+            }
+          }
+          e <- e[liste_l,]
+        }
+        # on paramètre et on trace l'histogramme
+        print(e[1:5,])
+        vol <- mesure*mesure
+        #e.fonc <- e[,4]
+        
+        if (length(e$x)!=0){
+          FONC.breaks <- seq(min(e.fonc)-0.1*min(e.fonc), max(e.fonc)+0.1*max(e.fonc), length.out=100)
+          e.hist <- hist(e.fonc,
+                         breaks=FONC.breaks,
+                         ylim=c(0,0.3*vol),
+                         xlab="",
+                         ylab="Nombre de voxels",
+                         col='grey50',
+                         main="Expériences",sub=sprintf("%s, jour %s",fonc,jour)
+          )
+        }
+      }
+      title(sprintf("Expérience vs prévisions : rat %s, modalité %s",rat,fonc),outer=TRUE)
+    }
+  }
+  
+  #
+}
 
 
 
