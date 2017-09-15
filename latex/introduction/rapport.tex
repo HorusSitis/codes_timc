@@ -7,7 +7,7 @@ Ce travail a \'et\'e r\'ealis\'e pendant mon stage de master 2, qui s'est d\'ero
 sous la direction d'Angélique Stéphanou (CNRS). 
 
 \par
-Il s'inscrit dans le projet Imagerie par Résonnance Magn\'etique Augment\'ee (IRMA) qui vise \g{a} effectuer des pr\'edictions, %
+Il s'inscrit dans le projet Imagerie par Résonance Magn\'etique Augment\'ee (IRMA) qui vise \g{a} effectuer des pr\'edictions, %
 \g{a} partir d'images IRM, sur des param\g{e}tres qui ne sont pas directement mesurables comme la pression art\'erielle en dioxyg\g{e}ne $P_aO_2$ %
 ou avec une meilleure r\'esolution spatiotemporelle que celle des images brutes.
 
@@ -18,7 +18,7 @@ Les premi\g{e}res \'etapes du projet comprennent :
 \item La construction d'un mod\g{e}le dynamique 
 \end{enumerate}
 
-Un tel mod\g{e}le doit \^etre capable de relier des m\'ecanismes physiologiques exsitant \g{a} l'\'echelle de la cellule nerveuse, %
+Un tel mod\g{e}le doit \^etre capable de relier des m\'ecanismes physiologiques existant \g{a} l'\'echelle de la cellule nerveuse, %
 et les observations r\'ealis\'ees \g{a} l'\'echelle du voxel.
 
 \par
@@ -26,36 +26,36 @@ Le travail pr\'esent\'e ici consiste \g{a} simuler l'\'evolution d'un tissu isch
 on \'etudie les suites d'un AVC isch\'emique sur un cerveau de rat. %
 Pour atteindre notre objectif, nous utiliserons la m\^eme d\'emarche que celle d\'etaill\'ee pr\'ec\'edemment.
 
-\subsection{Imagerie par r\'esonnance magn\'etique}%State of the art, pour cette question plus générale que l'objet de ce stage.
+\subsection{Imagerie par r\'esonance magn\'etique}%State of the art, pour cette question plus générale que l'objet de ce stage.
 
-L'imagerie par r\'esonnance magn\'etique consiste \g{a} placer un patient dans un champ magn\'etique uniforme intense. %
+L'imagerie par r\'esonance magn\'etique consiste \g{a} placer un patient dans un champ magn\'etique uniforme intense. %
 Actuellement, un appareil utilis\'e en clinique g\'en\g{e}re un champ de 1,5 \g{a} 3 Tesla : %
 \g{a} titre de comparaison, le champ magn\'etique terrestre a une intensit\'e de 47 microTesla en France.
 
 \par
-Cette technique d'imagerie pr\'esente avantage de ne pas utiliser de radiations ionisantes, %
+Cette technique d'imagerie pr\'esente l'avantage de ne pas utiliser de radiations ionisantes, %
 ce n'est pas le cas de la tomographie par \'emission de positrons par exemple. %
 En cons\'equence, plusieurs examens IRM peuvent \^etre pratiqu\'es sur un m\^eme patient, sans effets secondaires.
 
 \subsection{Principales modalit\'es}
 
-Ce sont les diff\'erentes sortes d'examens r\'ealisables avec un appareil IRM.
+Ce sont les diff\'erents modes d'acquisition d'images r\'ealisables avec un appareil IRM.
 
 \par
-Elles permettent de mesurer, ou de calculer, les valeurs prises par diff\'erentes variables : %
+Ces modes permettent de calculer diff\'erentes variables : %
 coefficient de diffusion apparent de l'eau, saturation en oxyg\g{e}ne \dots %
-d\'efinies sur toute l'\'etendue du tissu c\'er\'ebral.
+\'evalu\'ees sur toute l'\'etendue du tissu c\'er\'ebral.
 
 \par
-Dans ce document, le mot variable d\'esigne une grandeur physique intensive, qui prend une valeur num\'erique en chaque point de l'espace.
+Dans ce document, le mot variable d\'esigne une grandeur physiolgique, qui prend une valeur num\'erique en voxel de l'espace.
 
 \subsubsection{Relaxations T1, T2}
 
-Le corps humain, et celui des autres animaux, contient de nombreux atomes d'hyrog\g{e}ne. %
-Or le noyau d'un atome d'hydrog\g{e}ne, un proton, est de spin non nul : c'est l'analogue quantique d'une aimantation.
+%Le corps humain, et celui des autres animaux, contient de nombreux atomes d'hyrog\g{e}ne. %
+%Or le noyau d'un atome d'hydrog\g{e}ne, un proton, est de spin non nul : c'est l'analogue quantique d'une aimantation.
 
-\par
-En pr\'esence d'un champ magn\'etique intense et uniforme $\vec{B}_0$, les spins des atomes d'hydrog\g{e}ne s'orentent dans la direction de ce champ.
+%\par
+En pr\'esence d'un champ magn\'etique intense et uniforme $\vec{B}_0$, les spins des noyaux atomiques s'orientent dans la direction de ce champ.
 
 \par
 Un champ $\vec{B}_1$, tournant et perpendiculaire \g{a} $\vec{B}_0$ est ensuite appliqu\'e \g{a} ces protons. %
@@ -65,16 +65,16 @@ Les spins de ces noyaux atomiques atteignent ainsi un \'etat d'excitation -figur
 \includegraphics[width=0.8\linewidth, height=14cm]{../../images_rapport/rmn_ensc.png}
 \caption{Trois \'etapes pour cr\'eer un signal RMN.
 \\
-Ces images sont disponibles sur le site culturesciences.chimie.ens.fr}
+culturesciences.chimie.ens.fr}
 \label{irm_b01}
 \end{figure}
 
 \par
 Le retour \g{a} un alignement sur le champ magn\'etique $\vec{B}_0$ g\'en\g{e}re un signal qui peut \^etre mesur\'e : %
-la r\'esonnance magn\'etique nucl\'eaire (RMN).
+la r\'esonance magn\'etique nucl\'eaire (RMN).
 
 \par
-C'est ce signal qui est utilis\'e en IRM. En pratique, les phases d'excitation-d\'esexcitation sont r\'ep\'ees plusieurs fois. %
+C'est ce signal qui est utilis\'e en IRM. En pratique, les phases d'excitation-d\'esexcitation sont r\'ep\'et\'ees plusieurs fois. %
 Les intervalles de temps (temps d'\'echo, temps de r\'ep\'etition) varient selon le ph\'enom\g{e}ne \g{a} observer.
 
 \etoile
@@ -92,7 +92,7 @@ il suffit de calculer la vitesse initiale avec laquelle les grandeurs $M_z$ et $
 
 \par
 Les grandeurs $T_1^{\ast}$ et $T_2^{\ast}$, que l'on rencontrera par la suite, sont analogues \g{a} $T_1$ et $T_2$. %
-Elles sont obtenues en changeant les modalit\'es de l'examen -\'echo, temps de r\'emp\'etition etc.
+Elles sont obtenues en changeant les modalit\'es de l'examen -\'echo, temps de r\'ep\'etition etc.
 
 \etoile
 Dans la suite de ce travail et dans la litt\'erature scientifique, %
@@ -101,21 +101,21 @@ les grandeurs $\frac{1}{T_1}$, \dots $\frac{1}{T_2^{\ast}}$ sont not\'ees $R_1$,
 \FloatBarrier
 \subsubsection{L'IRM de diffusion}
 
-La mobilit\'e des mol\'ecules d'eau dans un tissu d\'epend ed la structure de celui-ci. %
+La mobilit\'e des mol\'ecules d'eau dans un tissu d\'epend de la structure de celui-ci. %
 Ainsi, les les parois des cellules dans un tissu sain freinent la diffusion des mol\'ecules d'eau. %
-Au contraire, celles-ci sont libres de leurs moouvements au voisinage de cellules n\'ecros\'ees : %
-une estimation de la diffusivit\'edes mol\'ecules d'eau permet, par exemple, de localiser un oed\g{e}me cytotoxique caus\'e par un AVC isch\'emique.3
+Au contraire, celles-ci sont libres de leurs mouvements au voisinage de cellules n\'ecros\'ees : %
+une estimation de la diffusivit\'e des mol\'ecules d'eau permet, par exemple, de localiser un oed\g{e}me cytotoxique caus\'e par un AVC isch\'emique.
 
 \par
-Toutefois, les structures physiologiques responsables de la mobilit\'e des mol\'ecules d'eau ne sont pas directement observables, %
-\g{a} cause de leur taille -\'echelle de la cellule. %
+Toutefois, les structures physiologiques responsables de la mobilit\'e des mol\'ecules d'eau ne sont pas directement observables. %, %
+%\g{a} cause de leur taille -\'echelle de la cellule. %
 Une cartographie du coefficient de diffusion apparent (ADC) des mol\'ecules d'eau peut toutefois \^etre calcul\'ee \g{a} partir de plusieurs images IRM du m\^eme tissu.
 
 \par
 Cette m\'ethode de construction d'images issues d'un examen IRM est appel\'ee IRM de diffusion.
 
 \par
-L'ADC, homog\g{e}ne au coefficient $\lambda$ de l'\'equation de diffusion issue de la loi de Fick : $\partial_t [H_2O]=\lambda \partial_{xx,yy,zz} [H_20]$, %
+L'ADC, homog\g{e}ne au coefficient $\lambda$ de l'\'equation de diffusion issue de la loi de Fick : $\partial_t [H_2O]=\lambda \nabla^2 [H_20]$, %
 s'exprime le plus souvent en mm${}^2$ par seconde.
 
 \subsubsection{Agents de contraste}
@@ -152,7 +152,7 @@ elle est reli\'ee, dans \cite{christen2012l}, aux variables BVf et $T_2$ par l'\
 s(t)=\exp\left(-\frac{1}{T_2}t-BVf\gamma\frac{4}{3}\pi\Delta_{\chi_0}H_{ct}(1-SO2)B_0t\right)
 \label{bold_so2}
 \end{equation}
-$H_{ct}$ est la concentration d'h\'ematocrites dans le r\'eseau microvasculaire.
+L'\'ematocrite $H_{ct}$ est la concentration d'h\'ematies dans le sang.
 
 \par
 Les valeurs de SO2 sont encore des pourcentages : la variable est sans dimension.
@@ -160,15 +160,15 @@ Les valeurs de SO2 sont encore des pourcentages : la variable est sans dimension
 \subsubsection{Quixoticic pour la mesure de l'OEF (oxygen extraction fraction) %
 et de la CMRO2 (cerebral metabolic rate of oxygen).}
 
-Les auteurs de \cite{quixotic} proposent une technique, sous l'acronyme QUIXOTIC, permettant de mesurer successivement l'OEF et la lla CMRO2.
+Les auteurs de \cite{quixotic} proposent une technique, sous l'acronyme QUIXOTIC, permettant de mesurer successivement l'OEF et la CMRO2.
 
 \par
-Les diff\'erentes modalit\'es IRM utilis\'ees dans l'exp\'erience expliqu\'ee \g{a} la section : m\'ethodes, %
+Les diff\'erentes modalit\'es IRM utilis\'ees dans l'exp\'erience expliqu\'ee \g{a} la section m\'ethodes, %
 incluent une mesure de la CMRO2.
 
 \subsubsection{Mesure du d\'ebit sanguin c\'ebral (Cerebral Blood Flow ou CBF)}
 
-Les auteurs de \cite{cbf_alz} Ont pr\'esent\'e en 2014 une modalit\'e d'IRM qui permet de me surer le d\'ebit sangin c\'er\'ebral (cerebral blood flow ou CBF). %
+Les auteurs de \cite{cbf_alz} ont pr\'esent\'e en 2014 une modalit\'e d'IRM qui permet de mesurer le d\'ebit sangin c\'er\'ebral (cerebral blood flow ou CBF). %
 La mesure de CBF est, 
 
 \par

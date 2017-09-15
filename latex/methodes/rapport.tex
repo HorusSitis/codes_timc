@@ -1,5 +1,7 @@
 \section{M\'ethodes}
 
+
+\begin{comment}
 %%%% debut macro %%%%
 \makeatletter
 \renewcommand{\thefigure}{\ifnum \c@section>\z@ \thesection.\fi
@@ -7,7 +9,6 @@
 \@addtoreset{figure}{section}
 \makeatother
 %%%% fin macro %%%%
-\begin{comment}
 Remarque : pour renuméroter les sous-figures de la même manière
            (avec le package 'subfigure'), il suffit de rajouter
 	   la ligne \let\p@subfigure\thefigure dans le préambule.
@@ -75,7 +76,7 @@ du cerveau de chaque rat.
 
 \par
 Toutefois, le nombre d'images disponibles pour toutes les variables \'evoqu\'ees ci-dessus sont seulement disponibles pour un petit nombre de coupes : %
-trois coupes au maximum, pour un rat. Ceci n'emp\^eche ps d'obtenir des r\'esultats int\'eressants.
+trois coupes au maximum, pour un rat. Ceci n'emp\^eche pas d'obtenir des r\'esultats exploitables.
 
 \etoile
 Une derni\g{e}re variable, d\'efinie pour chaque coupe des cerveaux de rats examin\'es, est le diam\g{e}tre moyen des vaisseaux (Vessel Size index ou VSI). %
@@ -134,7 +135,7 @@ Les images en niveau de gris ont été pr\'ealablement trait\'ees \g{a} l'aide d
 A partir des images, au format .tif, %transmises par Benjamin Lemasson, %
 ImageJ a \'et\'e untilis\'e pour d\'elimiter les r\'egions correspondant au cerveau, pour toutes les modalit\'es -voir figure \ref{cephcer}.
 \par
-Ma d\'emarche a \'et\'e la suivante :
+La d\'emarche adopt\'ee \'etait la suivante :
 \begin{enumerate}
 \item Tracer manuellement le contour des cerveaux sur les coupes anatomiques, prises en T2, figure \ref{cephcer} ;
 \item Charger individuellement ces contours sur les images correspondant aux autres modalit\'es, ici l'ADC : les deux images centrales de la figure ;
@@ -159,8 +160,8 @@ Ma d\'emarche a \'et\'e la suivante :
 \\
 \hline
 \end{tabular}
-\caption{Segmentation du cerveau du rat num\'ero 11, jour 03, avec la modalit\'e ADC.}
 \end{center}
+\caption{Segmentation du cerveau du rat num\'ero 11, jour 03, avec la modalit\'e ADC.}
 \label{cephcer}
 \end{figure}
 
@@ -174,7 +175,7 @@ Des images ont ainsi \'et\'e obtenues, par coupe, pour toutes les modalit\'es, r
 \etoile
 Les images aux coupes : 10 pour le rat num\'ero 11, 9 et 10 pour le rat 19, 6 \g{a} 8 pour le rat 26 et 11 \g{a} 13 pour le rat 30 sont disponibles pour toutes les modalit\'es, %
 pour tous les jours d'examens. %
-Ces coupes sont donc utilisables pour effectuer un suivi temporel des valeurs mesur\'ees ou calcul\'ees, pixel par pixel, %
+Ces coupes sont donc utilisables pour effectuer un suivi temporel des valeurs mesur\'ees ou calcul\'ees, voxel par voxel, %
 ou globalement sur les coupes enti\g{e}res ou des r\'egions d'int\'er\^et.
 
 \begin{figure}[!p]
@@ -308,13 +309,13 @@ La caract\'erisation de la r\'egion isch\'emi\'ee par des valeurs faibles du CBF
 
 \etoile
 Afin de d\'elimiter les parties isch\'emi\'ees sur les coupes disponibles, nous avons utilis\'e la m\^eme technique que pour les cerveaux : voir la figure \ref{cbf_seg_19}. %
-Les bordures trac\'ees sur les images en CBF one \'et\'e transf\'er\'ees sur les autres images, ce qui a permis d'isoler les pixels de l'isch\'emie.
+Les bordures trac\'ees sur les images en CBF one \'et\'e transf\'er\'ees sur les autres images, ce qui a permis d'isoler les voxels correspondant \g{a} l'isch\'emie.
 
 \par
-Les valeurs prises, sur ces pixels, par ADC, BVf \dots T1map et VSI seront \'etudi\'ees \g{a} la sous-section suivante.
+Les valeurs prises, sur ces voxels, par ADC, BVf \dots T1map et VSI seront \'etudi\'ees \g{a} la sous-section suivante.
 
 \par
-Le tableau ci-dessous donne nombre de pixels, sur chaque coupe suivable temporellement, des l\'esions ainsi d\'elimit\'ees.
+Le tableau ci-dessous donne nombre de voxels, sur chaque coupe suivable temporellement, des l\'esions ainsi d\'elimit\'ees.
 
 \begin{multicols}{2}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -394,7 +395,7 @@ permettent repr\'esentent la r\'epartition des valeurs des six variables : ADC, 
 Le code couleur est le m\^eme que pour la figure \ref{19_dens_lch00}.
 
 \par
-M\^eme s'ils donnent moins d'information que les courbes de densit\'e, les diagrammes en bo\^ite sont utiles quand on veut mod\'elier l'\'evolution d'un tissu. %
+M\^eme s'ils donnent moins d'information que les courbes de densit\'e, les diagrammes en bo\^ite sont utiles quand on veut mod\'eliser l'\'evolution d'un tissu. %
 En effet, les valeur prises par la m\'ediane ou les quartiles aux diff\'erents jours d'examen apportent une information partielle, %
 mais quantifi\'ee sur l'\'etat du tissu qui nous int\'eresse.
 
@@ -407,7 +408,7 @@ Ce choix de repr\'esentation, qui permet de calibrer les courbes de densit\'e su
 ne revient pas exactement \g{a} comparer l'\'etat d'un tissu l\'es\'e \g{a} celui d'un tissu sain.
 
 \par
-En effet, m\^eme les cellules de l'h\'emisph\g{e}re contralat\'eral ont une activit\'e normale pendant et par\g{e}s l'isch\'emie. %
+En effet, m\^eme les cellules de l'h\'emisph\g{e}re contralat\'eral ont une activit\'e normale pendant et apr\g{e}s l'isch\'emie. %
 Toutefois, les valeurs observ\'ees pour le CBF chez le rat 19 -figure \ref{19_choix_clust_les}- sont plus basses 30 minutes apr\g{e}s la reperfusion -jour 0- %
 que pour les autres jours.
 
@@ -649,11 +650,11 @@ La CMRO2, seule, se stabilise d\g{e}s le jour 8 apr\g{e}s avoir pris des valeurs
 \par
 Pour l'\'elaboration, et la validation du mod\g{e}le qui va suivre, j'ai donc choisi d'\'ecarter les rats num\'eros 26 et 30. %
 Compte tenu de la position : ant\'erieure \g{a} $8$ pour le rat 26, post\'erieure \g{a} $11$ pour le rat 30, %
-il est possible que les donn\'ees dont on dispose corresponde \g{a} une r\'egion p\'eriph\'erique de la l\'esion.
+il est possible que les donn\'ees dont on dispose correspondent \g{a} une r\'egion p\'eriph\'erique de la l\'esion.
 
 \etoile
 Les rats 11 et 19 -figures \ref{11_box_lch00} et \ref{19_box_lch00}, pr\'esentent quelques similitudes : %
-outre le comportement de la SO2 d\'ej\g{a}mentionn\'e, on remarque une croissance et une plus grande variabilit\'e des valeurs d'ADC de la l\'esion avec le temps.
+outre le comportement de la SO2 d\'ej\g{a} mentionn\'e, on remarque une croissance et une plus grande variabilit\'e des valeurs d'ADC de la l\'esion avec le temps.
 
 \par
 On constate aussi une chute des valeurs du CBF :
@@ -673,9 +674,9 @@ j'ai choisi d'utiliser les donn\'ees disponibles sur le rat num\'ero 19 comme r\
 \FloatBarrier
 \subsection{Classification avec la librairie Mclust}% On peut utiliser sweaver
 
-C'est une id\'ee de Nicolas Glade (TIMC). Elle consiste \g{a} classer les pixels d'une image IRM en niveaux de gris. %
+C'est une id\'ee de Nicolas Glade (TIMC). Elle consiste \g{a} classer les voxels d'une image IRM en niveaux de gris. %
 Ceux-ci doivent \^etre distribu\'es comme un m\'elange gaussien : %
-autrement dit, il doit exister plusieurs sous populations de pixels dont les niveaux de gris sont distribu\'ees comme des \'echantillons gaussiens.
+autrement dit, il doit exister plusieurs sous populations de voxels dont les niveaux de gris sont distribu\'ees comme des \'echantillons gaussiens.
 
 \par
 La fonction mclust utilise pour cela la m\'ethode du maximum de vraisemblance.
@@ -687,7 +688,7 @@ La figure \ref{exem_ADC_19} illustre la classification des niveaux de gris d'une
 \includegraphics[width=0.8\linewidth,height=13cm]{../../images_rapport/19-J00-ADC-cerveau_clhist_clust.pdf}
 \caption{Classification des valeurs d'ADC suivant un mod\g{e}le de m\'elange gaussien, avec quatre composantes.
 \\
-Les classes de pixels ainsi obtenues correspondent \g{a} une r\'ealit\'e physiologique.
+Les classes de voxels ainsi obtenues correspondent \g{a} une r\'ealit\'e physiologique.
 }
 \label{exem_ADC_19}
 \end{figure}
@@ -708,7 +709,7 @@ Peut-\^etre touche-t-on d\g{e}s lors aux limites de la d\'ecomposition en densit
 ou que le nombre de clusters choisi pourrait \^etre plus important.
 
 \par
-Le dernier cluster est principalement compos\'e des pixels avec la diffusivit\'e la plus forte.
+Le dernier cluster est principalement compos\'e des voxels avec la diffusivit\'e la plus forte.
 
 \begin{figure}[!p]
 \begin{center}
@@ -754,7 +755,7 @@ A gauche : la r\'egion isch\'emi\'ee est visible.
 \end{figure}
 
 \etoile
-\ref{19_CBF-BVf_3d00}
+%\ref{19_CBF-BVf_3d00}
 
 \subsubsection{Evaluation de la m\'ethode de classification}
 
@@ -766,7 +767,7 @@ Dans ce paragraphe, on compare l'efficacit\'e de deux m\'ethodes qui permettent 
 
 \par
 La figure \ref{pour_contre} regroupe, sous forme graphique, des r\'esultats de classification. %
-Des tissus isch\'emi\'es sont bien visibles pôur la colonne de gauche, pour les jours 0 et 22 ;
+Des tissus isch\'emi\'es sont bien visibles pour la colonne de gauche, pour les jours 0 et 22 ;
 ce n'est pas le cas pour les figures de la colonne de droite.
 
 \par
@@ -789,12 +790,12 @@ Voici des arguments qui s'opposent \g{a} l'utilisation de Mclust pour caract\'er
 \begin{enumerate}[label=\textbf{(Contre\arabic*)}]
 \item Beaucoup d'images sont de mauvaise qualit\'e : voir le CBF ou la CMRO2 sur la figure \ref{19_pour_contre} ;
 %
-\item Les composantes d'une classification peuvent correspondre \g{a} des structures anatomiques comme nous l'avons vu dasn le premier graphique de cette sous-section, %
+\item Les composantes d'une classification peuvent correspondre \g{a} des structures anatomiques comme nous l'avons vu dans le premier graphique de cette sous-section, %
 mais celles-ci ne correspondent pas n\'ecessairement \g{a} la partie l\'es\'ee : %
 voir \g{a} ce titre la classification des valeurs mesur\'ees en T1, pour le rat num\'ero 19 au jour 00. %
 Ceci va \g{a} l'encontre de l'argument \ref{phy_gau}, comme \'etant en faveur de l'utiliation de Mclust.
 %
-\item La classification automatique, non supervis\'ee, regroupe des pixels correspondant peu ou prou \g{a} la partie isch\'emi\'ee et des pixels de l'h\'emisph\g{e}re contralat\'eral. %
+\item La classification automatique, non supervis\'ee, regroupe des voxels correspondant peu ou prou \g{a} la partie isch\'emi\'ee et des voxels de l'h\'emisph\g{e}re contralat\'eral. %
 Ici encore, le jugement humain est plus pertient.
 \end{enumerate}
 
@@ -808,20 +809,20 @@ pour d\'elimiter la r\'egion l\'es\'ee du cerveau de l'un des rats de l'exp\'eri
 %comparativement \g{a} ceux de la sous-section pr\'ec\'edente qui \'etaient issus d'une segmentation \g{a} l'oeil.
 
 \par
-Toutefois, la classification des niveaux de gris, restreinte \g{a} l'image de a partie l\'es\'ee, donne des r\'esultats int\'eressants.
+Toutefois, la classification des niveaux de gris, restreinte \g{a} l'image de la partie l\'es\'ee, donne des r\'esultats int\'eressants.
 
 \FloatBarrier
-\subsubsection{Classification des pixels de la l\'esion}
+\subsubsection{Classification des voxels de la l\'esion}
 
-Notons ici que la fonction mclust prend en argument, outre la base de données à classifier,
+Notons ici que la fonction mclust prend en argument, outre les de données à classifier,
 un vecteur constitué d'entiers positifs qui paramètre une famille de modèles que mclust se propose de calculer.
 
 \par
 Ainsi, la fonction calcule \emph{plusieurs} mélanges gaussiens, un pour chacun des entiers du vecteur pris en argument,
-puis sélectionne le meilleur modèle avec le critère BIC.
+puis sélectionne le meilleur modèle avec le critère BIC (Bayesian Information Criterion).
 
 \par
-Il est d'ailleurs possibles de demander à R d'inclure, dans une représentation graphique,
+Il est d'ailleurs possible d'inclure, dans une représentation graphique,
 les différentes valeurs de BIC associées à chaque possibilité de nombre de clusters.
 
 \par
@@ -915,7 +916,7 @@ Sur la figure \ref{19_reg_clust_les}, on repr\'esente la classification \g{a} de
 pour des images en CBF, CMRO2 et SO2map de la l\'esion du rat num\'ero 19.
 
 \par
-On trouve des formes identiques, et un nombre important de pixels en commun, entre les clusters correspondant \g{a} un m\^eme jour et deux variables diff\'erentes %
+On trouve des formes identiques, et un nombre important de voxels en commun, entre les clusters correspondant \g{a} un m\^eme jour et deux variables diff\'erentes %
 -except\'ee la SO2 au jour 22 car peu de donn\'ees sont disponibles.
 
 \par
@@ -933,19 +934,19 @@ sur trois r\'egions diff\'erentes de la coupe num\'ero 9 du cerveau du rat 19 :
 
 et deux sous-ensembles de la r\'egion segment\'ee :
 \begin{itemize}
-\item Les pixels pour lesquels le CBF, au jour 8, est inf\'erieur \g{a} 100 mL.min${}^{-1}$.(100g)${}^{-1}$ ;
-\item Les pixels pour lesquels le CBF, au jour 8, est sup\'erieur \g{a} 100 mL.min${}^{-1}$.(100g)${}^{-1}$.
+\item Les voxels pour lesquels le CBF, au jour 8, est inf\'erieur \g{a} 100 mL.min${}^{-1}$.(100g)${}^{-1}$ ;
+\item Les voxels pour lesquels le CBF, au jour 8, est sup\'erieur \g{a} 100 mL.min${}^{-1}$.(100g)${}^{-1}$.
 \end{itemize}
 
-Ces deux sous-r\'egions de la partie isch\'emi\'ee sont respectivement appel\'es l\'esion 1 et l\'esion 2 sur la l\'egende des graphiques, %
-les diagrammes en bo\^ite qui leur correspondent sont respectvement rouges et jaunes.
+Ces deux sous-r\'egions de la partie isch\'emi\'ee sont respectivement appel\'ees l\'esion 1 et l\'esion 2 sur la l\'egende des graphiques, %
+les diagrammes en bo\^ite qui leur correspondent sont respectivement rouges et jaunes.
 
 \par
 Remarquons que la largeur des bo\^ites dans les graphiques de la figure \ref{19_suivi_clust_les} %
-est proportionnelle au nombre de pixels de chacune des trois r\'egions d\'efinies pr\'ec\'edemment.
+est proportionnelle au nombre de voxels de chacune des trois r\'egions d\'efinies pr\'ec\'edemment.
 
 \par
-On peut donc voir que les deux sous-r\'egions de la partie l\'es\'ee ont des tailles voisines, en nombre de pixels.
+On peut donc voir que les deux sous-r\'egions de la partie l\'es\'ee ont des tailles voisines, en nombre de voxels.
 
 \begin{figure}[!p]
 \begin{center}
@@ -987,7 +988,7 @@ On peut donc voir que les deux sous-r\'egions de la partie l\'es\'ee ont des tai
 \end{figure}
 
 \FloatBarrier
-\subsection{Mod\g{e}le ph\'enom\'enologique : \'etat d'un pixel en fonction du temps.}
+\subsection{Mod\g{e}le ph\'enom\'enologique : \'etat d'un voxel en fonction du temps.}
 
 Il est difficile, d'entr\'ee de jeu, de construire un mod\g{e}le physiologique de tissu isch\'emi\'e. %
 Un tel mod\g{e}le doit rendre compte, \g{a} partir de m\'ecanismes physiques et chimiques qui se d\'eroulent \g{a} l'\'echelle de la cellule, %
@@ -997,7 +998,7 @@ Un tel mod\g{e}le existe pour la vascularisation d'une tumeur, voir \cite{Kelly_
 \par
 A l'aide des donn\'ees issues des paragraphes pr\'ec\'edents, nous allons mod\'eliser la plus petite quantit\'e de tissu isch\'emi\'e visible \g{a} l'IRM : le voxel. %
 Plus pr\'ecis\'ement, l'\'evolution des six variables ADC \dots VSI , suivie \g{a} l'\'echelle tissulaire avec les diagrammes %
-des figures \ref{19_suivi_temp} et \ref{19_suivi_clust_les}, va \^etre reconstruite pixel par pixel dans des cas particuliers.
+des figures \ref{19_suivi_temp} et \ref{19_suivi_clust_les}, va \^etre reconstruite voxel par voxel dans des cas particuliers.
 
 \par
 Notons au passage que, sur toutes les repr\'esentations graphiques, les grandeurs BVf et VSI semblent corr\'el\'ees.
@@ -1016,20 +1017,20 @@ Dans toute la suite de cette section, les \'equations d'\'evolution de la BVf et
 
 \subsubsection{Hypoth\g{e}ses simplificatrices}
 
-L'objet dont on \'etudie l'\'evolution est le pixel.
+L'objet dont on \'etudie l'\'evolution est le voxel.
 \begin{description}
-\item[Etat d'un pixel :] L'\'etat d'un pixel est enti\g{e}rement d\'etermin\'e par les valeurs prises, en ce pixel, des six variables ADC, BVf, CBF, CMRO2, SO2 et VSI ;
-\item[Pixels voisins :] L'\'evolution de l'\'etat d'un pixel n'est pas influenc\'e par l'\'etat des autres pixels, y compris ses plus proches voisins ;
-\item[Autonomie :] Les \'equations qui r\'egissent l'\'evolution de l'\'etat d'un pixel ne changent pas avec le temps.
+\item[Etat d'un voxel :] L'\'etat d'un voxel est enti\g{e}rement d\'etermin\'e par les valeurs prises, en ce voxel, des six variables ADC, BVf, CBF, CMRO2, SO2 et VSI ;
+\item[Pixels voisins :] L'\'evolution de l'\'etat d'un voxel n'est pas influenc\'ee par l'\'etat des autres voxels, y compris ses plus proches voisins ;
+\item[Autonomie :] Les \'equations qui r\'egissent l'\'evolution de l'\'etat d'un voxel ne changent pas avec le temps.
 \end{description}
 
-La premi\g{e}re hypoth\g{e}se simplificatice exclut une perturbation exog\g{e}ne de l'\'etat d'un pixel, %
+La premi\g{e}re hypoth\g{e}se simplificatice exclut une perturbation exog\g{e}ne de l'\'etat d'un voxel, %
 comme la r\'epercussion de la reperfusion post-isch\'emie sur un tissu sain. %
 Les diagrammes de la figure \ref{19_suivi_clust_les} semblent contredire cette hypoth\g{e}se, concernant le CBF dans l'h\'emisph\g{e}re contralat\'eral.
 
 \par
 La deuxi\g{e}me hypoth\g{e}se ne concerne pas les stades pr\'ecoces de l'isch\'emie : ondes de d\'epolarisation, diffusion de l'ADC avec l'oed\g{e}me cytotoxique. %
-D'ailleurs, les premi\g{e}res observations de cette exp\'erience sont effectu\'ees 30 minutes par\g{e}s la reperfusion.
+D'ailleurs, les premi\g{e}res observations de cette exp\'erience sont effectu\'ees 30 minutes apr\g{e}s la reperfusion.
 
 \begin{equation}
 \text{ADC}_{i,j}(t+1)=\frac{1}{9}\sum\limits_{\|k,l-i,j\|_{\infty}=1}\text{ADC}_{k,l}(t)%
@@ -1041,23 +1042,23 @@ D'ailleurs, les premi\g{e}res observations de cette exp\'erience sont effectu\'e
 %Le membre de gauche est la valeur d'ADC au temps $t+1$.
 
 \par
-En fin, les \'equations qui r\'egissent l'\'evolution d'un pixel changent dans les jours et semaines qui suivent l'isch\'emie, %
+En fin, les \'equations qui r\'egissent l'\'evolution d'un voxel changent dans les jours et semaines qui suivent l'isch\'emie, %
 ces changements sont conditionn\'es par les valeurs d'ADC, de BVf, \dots et de VSI.
 
 \subsubsection{Premier r\'egime d'isch\'emie}
 
-On distingue trois \'etapes pour l'\'evolution des valeurs d'ADC, \dots VSI sur les pixels du domaine \og{} l\'esion 1 \fg{}, %
+On distingue trois \'etapes pour l'\'evolution des valeurs d'ADC, \dots VSI sur les voxels du domaine \og{} l\'esion 1 \fg{}, %
 ces valeurs sont repr\'esent\'ees en rouge sur les diagrammes de la figure \ref{19_choix_clust_les}.
 
 \begin{enumerate}[label=\textbf{(L\'esion 1 - \arabic*)}]
-\item Cette \'etape est commune aux pixels des deux r\'egions isch\'emi\'ees.
+\item Cette \'etape est commune aux voxels des deux r\'egions isch\'emi\'ees.
 
 \par
 Au cours des trois premiers jours de l'exp\'erience, on remarque un retour des valeurs de CBF, %
 dont 75\% \'etaient inf\'erieures \g{a} 25 ml.min${}^{-1}$.(100g)${}^{-1}$, vers une distribution commune aux deux sous-r\'egions.
 
 \par
-Notons CBF${}_{trans}$ cette distribution transitoire. Nous supposerons par la suite, puur supplifier les calculs, %
+Notons CBF${}_{trans}$ cette distribution transitoire. Nous supposerons par la suite, pour supplifier les calculs, %
 que cette distribution est gaussienne, et que ses m\'ediane et quartiles sont lisibles sur la figure \ref{19_suivi_clust_les}. %
 Dans le cadre de nos simulations, nous prendrons donc pour CBF${}_{trans}$ un \'echantillon de loi $\mathcal{N}(140,70)$.
 
@@ -1072,14 +1073,14 @@ pour un certain temps caract\'eristique $\tau$, que l'on exprime en jours.
 \par
 On d\'etermine la valeur de ce coefficient de sorte que 3 jours suffisent au CBF pour retrouver la distribution CBF${}_{trans}$ :
 \begin{itemize}
-\item Pour chaque pixel, la valeur de CBF \g{a} un temps $t$ -que l'on exprim\'era en jours- est donn\'ee par : %
+\item Pour chaque voxel, la valeur de CBF \g{a} un temps $t$ -que l'on exprim\'era en jours- est donn\'ee par : %
 $CBF=CBF_{trans}+e^{-\frac{t}{\tau}}\times\left(CBF_{trans}-CBF\right)$. La valeur $\tau$ est d\'efinie par l'in\'egalit\'e :
 \[|m^0(t)-m^3|\leq|m^3-Q_1^3|\]
 o\g{u} $m^0$ et $m^3$ sont respectivement les valeurs m\'edianes du CBF aux jours 0 et 3, lisibles sur la figure \ref{19_suivi_clust_les}, %
 $Q_1^3$ le premier quartile du CBF au jour 3, et $m^0(t)$ la valeur de CBF obtenue en r\'esolvant l'\'equation \ref{cbf_is1} avec la valeur initiale $m^0$.
 
 \par
-L\'in\'egalit\'e pr\'ec\'edente se traduit par : $\dfrac{3}{\tau}\leq\ln\left(\dfrac{m^3-m^0}{m^3-Q^3_1}\right)$, %
+L'in\'egalit\'e pr\'ec\'edente se traduit par : $\dfrac{3}{\tau}\leq\ln\left(\dfrac{m^3-m^0}{m^3-Q^3_1}\right)$, %
 le 3 de la premi\g{e}re fraction correspond au nombre de jours \'ecoul\'es.
 %
 \item On pose : $\tau =3\times\ln\left(\dfrac{m^3-m^0}{m^3-Q^3_1}\right)$.
@@ -1103,7 +1104,7 @@ De la m\^eme mani\g{e}re que pour CBF, on \'ecrit l'\'equation satisfaite par SO
 \der{SO2}=2,5\times (SO2_{asy1}-SO2)% \Ta
 \label{so2_s_l2}
 \end{equation}
-Celle-ci ne variera pas, sauf pour la derli\g{e}re \'etape du deuxi\g{e}me r\'egime d'isch\'emie.
+Celle-ci ne variera pas, sauf pour la deri\g{e}re \'etape du deuxi\g{e}me r\'egime d'isch\'emie.
 \begin{equation}
 \der{CMRO2}=0,1\times \der{CBF}% \Ta
 \end{equation}
@@ -1126,7 +1127,7 @@ Enfin, et conform\'ement au paragraphe pr\'ec\'edent, on relie l'\'evolution de 
 Pas de changement d'\'echelle ici.
 
 \par
-Les conditions initiales $SO2_{asy2}$ et $CMRO2_{trans}$ sont d\'efinies de la m\^eme mani\g{e}re que $CBF_{trans}$ : %
+Les conditions initiales $SO2_{asy1}$ et $CMRO2_{trans}$ sont d\'efinies de la m\^eme mani\g{e}re que $CBF_{trans}$ : %
 ce sont des distributions spatiales de CMRO2 et de SO2.
 
 \par
@@ -1186,7 +1187,7 @@ VSI et BVf \'evoluent respectivement d'apr\g{e}s les \'equations :
 \par
 \emph{Dans la suite de la section, on remplacera la notation $\der{V}$ par $\dot{V}$, pour une variable $V$ d\'ependant du temps.}
 \item C'est le r\'egime asymptotique que l'on peut observer pour les variables BVf, \dots VSI sur les diagrammes de la figure \ref{19_suivi_clust_les}. %
-Il concerne tous les pixels qui correspondent au jour 8, \g{a} des valeurs de CBF inf\'erieures \g{a} 100, et des valeurs de CMRO2 inf\'erieures \g{a} 10.
+Il concerne tous les voxels qui correspondent au jour 8, \g{a} des valeurs de CBF inf\'erieures \g{a} 100, et des valeurs de CMRO2 inf\'erieures \g{a} 10.
 
 \par
 En effet, on peut remarquer que la distribution des valeurs prises par ces variables sur la premi\g{e}re r\'egion l\'es\'ee se stabilise \g{a} partir du jour 15 (au moins).
@@ -1236,7 +1237,7 @@ On peut \'ecrire l'\'equation suivante pour le CBF :
 \der{CBF}=0,3\times \left(CBF_{trans2}-CBF\right)% \Ta
 \label{cbf_is2}
 \end{equation}
-o\g{u} CBF${}_{trans1}$ par la variable spatiale CBF${}_{trans2}$. %
+o\g{u} CBF${}_{trans1}$ est remplac\'ee par la variable spatiale CBF${}_{trans2}$. %
 Cette r\'epartition spatiale de CBF est encore suppos\'ee gaussienne, on prendra $\mathcal{N}(220,43)$ pour les simulations.
 
 \par
@@ -1288,7 +1289,7 @@ et% une derni\g{e}re \'equation, li\'ee \g{a} la pr\'ec\'edente :
 \dot{BVf}=2\times\dot{VSI}
 \end{equation}
 
-Ces \'equations concernent les pixels o\g{u} les valeurs de 100 ml.min${}^{-1}$.(100g)${}^{-1}$ pour le CBF, %
+Ces \'equations concernent les voxels o\g{u} les valeurs de 100 ml.min${}^{-1}$.(100g)${}^{-1}$ pour le CBF, %
 et 10 pour la CMRO2, ont \'et\'e d\'epass\'ees.
 %\item mm
 \end{enumerate}
