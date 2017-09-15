@@ -766,7 +766,7 @@ Dans ce paragraphe, on compare l'efficacit\'e de deux m\'ethodes qui permettent 
 \end{itemize}
 
 \par
-La figure \ref{pour_contre} regroupe, sous forme graphique, des r\'esultats de classification. %
+La figure \ref{19_pour_contre} regroupe, sous forme graphique, des r\'esultats de classification. %
 Des tissus isch\'emi\'es sont bien visibles pour la colonne de gauche, pour les jours 0 et 22 ;
 ce n'est pas le cas pour les figures de la colonne de droite.
 
@@ -779,7 +779,7 @@ d'une d\'elimitation syst\'ematique de la r\'egion l\'es\'ee sur une image obten
 tandis que l'oeil lit seulement des valeurs particuli\g{e}rement basses de la variable \'etudi\'ee.
 \end{enumerate}
 
-Le point \ref{suivi_temp} laisse esp\'erer, avec un choix judicieux de variable -CBF, ADC ?- %
+Le point \ref{19_suivi_temp} laisse esp\'erer, avec un choix judicieux de variable -CBF, ADC ?- %
 que l'utilisation de Mclust pourrait permettre de suivre l'\'evolution spatiale de la r\'egion l\'es\'ee. %
 Toutefois, la situation que l'on peut lire en bas \g{a} gauche du tableau \ref{19_pour_contre} reste exceptionnelle, %
 de plus, elle ne donne pas une caract\'erisation de la partie l\'es\'ee significativement diff\'erente de celle effectu\'ee au d\'ebut de cette section.
@@ -1317,54 +1317,6 @@ en utilisant la figure \ref{19_suivi_clust_les}.
 
 
 
-
-\begin{comment}
-L'hypoth\g{e}se \ref{nprog} distingue d'entr\'ee de jeu le mod\g{e}le de celui consid\'er\'e dans \cite{Duval_JCBFM_02} : %
-dans ce dernier, le coefficient de diffusion ADC diffuse lui-m\^eme \g{a} travers les pixels, et respecte l'\'equation disscr\g{e}te :
-\[\text{ADC}_{i,j}(t+1)=\frac{1}{9}\sum\limits_{\|k,l-i,j\|_{\infty}=1}\text{ADC}_{k,l}(t)\]
-
-
-
-\par
-L'hypoth\g{e}se \label{var_comp} doit \^etre affaibie pour deux raisons :
-\begin{itemize}
-\item J'ai d\'ecid\'e de prendre en compte des perturbations exog\g{e}nes des valeurs prises par les diff\'erentes variables, %
-en particulier dans les r\'egimes d\'equilibre r\'egis par des \'equations stochastiques.
-\item Sur les figures \ref{19_suivi_clust_les}, on note qu'il n'est pas possible de discerner les distributions de valeurs prises par les six variables choisies, %
-sur les deux composantes d\'efinies par les valeurs de CBF au jour 8.
-\end{itemize}
-
-\par
-Le dernier point qui pr\'ec\g{e}de donnera lieu \g{a} un affaiblissement de l'hypoth\g{e}se d'autonomie \ref{auto} : %
-chaque pixel se trouvant initialement dans un \'etat correspondant \g{a} l'isch\'emie subira un changement d'\'etat, %
-se produisant \g{a} un temps al\'eatoire compris entre les jours 3 et 8 de la simulation.
-
-\par
-Une telle \'echelle de temps, suivant laquelle les observations effectu\'ees sur le rat num\'ero 19 %
-sugg\g{e}rent l'existence de deux r\'egipes diff\'erents pour les pixels repr\'esentant la l\'esion, %
-co\"incide avec celle qui r\'egit les m\'ecanismes de formation d'oed\g{e}mes vasog\'eniques, %
-et l'infiltration de cellules immunitaires parfois d\'el\'et\g{e}res dans le parenchyme c\'er\'ebral. %
-L'approche qui consiste \g{a} introduire dans le mod\g{e}le de ce facteur temporel me para\^it conc pertinente, %
-m\^eme si le lien avec les diff\'erentes \'etapes de la cascade isch\'emique n'est pas \'elucid\'e \g{a} ce stade.
-
-\ligneinter
-Je distingue ainsi sept \'etats : cinq pour les pixels isch\'emi\'es, deux pour les autres, possibles pour l'\'evolution.
-
-\par
-Chacun de ces \'etats est caract\'eris\'e par un ensemble de valeurs possibles pour les valeurs des six variables, %
-et un syst\g{e}me d'\'equations d'\'evolution.
-
-\par
-Celles-ci, \'ecrites comme des \'equations diff\'erentielles ordinaires mettant en jeu les diff\'erentes variables avec les unit\'es vues \g{a} la section pr\'ec\'edente, %
-seront impl\'ement\'ees en rempla\c cant les d\'eriv\'ees par des taux d'accroissement, l'unit\'e de temps adopt\'ee pour les \'equations \'etant le jour ; %
-cette dur\'ee sera \'egalement l'unit\'e de temps \'el\'ementaire du mod\g{e}le discret, impl\'ement\'e dans la suite de ce travail.
-
-\etoile
-On note que l'hypoth\g{e}se de non progressivit\'e, que je conserve dans toute la sute de ce travail, %
-revient \g{a} utiliser des automates pour le mod\g{e}le dynamique, et non des automates cellulaires. %
-%Une critique de l'hypoth\g{e}se \ref{nprog} peut \^etre faite \g{a} la lumi\g{e}re de faits physiologiques reconnus.
-\end{comment}
-
 \begin{comment}
 \begin{description}
 
@@ -1430,14 +1382,6 @@ La simplification d\'ecid\'ee ci-dessus est discutable, eu \'egard l'\'evolution
 Les diff\'erents r\'egimes mis en \'evidence dans cette sous-section, et les \'equations qui les d\'efinissent satisfont %
 un jeu d'hypoth\g{e}ses plus faible que celui du mod\g{e}le 1 qui pr\'ec\g{e}de. En voici un r\'esum\'e :
 
-\begin{modmerate}{Mod\g{e}le 2}{\textbf{(H${}^{\ast}$\arabic*)}}
-\item Identique \g{a} \ref{nprog}.
-\item\label{var_compf} Le mod\g{e}le d\'efini par les \'equations qui pr\'ec\g{e}dent, %
-qui contiennent en plus des six variables, \emph{une composante stochastique}, est bien pos\'e.
-\item\label{autof} Les \'equations du mod\g{e}le sont autonomes, sauf celles du r\'egime suivi par les pixels situ\'es sur la l\'esion initiale %
-qui incorporent une dur\'ee fix\'ee initialement. %
-Dans le cadre des simpulations cette dur\'ee est d\'efinie al\'eatoirement sur les pixels qui sont entr\'es dans l'\'etat isch\'emi\'e.
-\end{modmerate}
 \end{comment}
 
 \begin{comment}

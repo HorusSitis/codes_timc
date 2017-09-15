@@ -7,8 +7,8 @@
 \usepackage[english,french]{babel}
 \usepackage{amsmath,amsfonts,amssymb,graphicx}
 %\usepackage{amsthm}
-\usepackage{framed}
-\usepackage[amsthm,thmmarks,framed]{ntheorem}
+%\usepackage{framed}
+%\usepackage[amsthm,thmmarks,framed]{ntheorem}
 \usepackage[dvipsnames]{pstricks}
 %\usepackage{pstricks-add,pst-plot,pst-node}
 \usepackage{pstricks,pst-plot,pst-text,pst-tree}%,pst-eps,pst-fill,pst-node,pst-math,pstricks-add,pst-xkey}
@@ -20,7 +20,8 @@
 \usepackage[lofdepth,lotdepth]{subfig}
 % Entre autres, pour sauter des lignes dans un titre de figure.
 \usepackage{caption}%[hang,small]
-
+\usepackage{float}
+% Pour des figures non flottantes par exemple : placer une figure où je veux.
 
 %\usepackage{color} %(black, white, red, green, blue, yellow, magenta et cyan)
 \usepackage[dvipsnames]{xcolor}
@@ -40,23 +41,12 @@
 \usepackage{parskip}
 \setlength{\parindent}{0cm}
 
-\usepackage{float}
-% Pour des figures non flottantes par exemple : placer une figure où je veux.
-
-%Je veux une mise en page pour les théorèmes lemmes preuves, définitions etc, suffisamment aérée. Est-il possible de commander un encadrement systématique ?
-
 \newcommand{\g}[1]{\`#1}%\g{lettre}
 
 \providecommand{\abs}[1]{\lvert#1\rvert}
 
 %Pour tout le m\'emoire !
 
-
-
-%Annotations d'un m\'emoire en cours de r\'edaction :
-\newcommand{\tr}{\textbf{\textcolor{red}{D\'emonstration \g{a} trouver }}}
-\newcommand{\re}{\textbf{\textcolor{NavyBlue}{D\'emonstration \g{a} recopier }}}
-\newcommand{\es}{\textbf{\textcolor{OliveGreen}{Esquisse de d\'emonstration }}}
 
 %Pour les formules alg\'ebriques casse-pieds :
 
@@ -86,133 +76,14 @@
 \vspace{7pt}
 }
 
-{
-\theoremstyle{break}
-\theoremprework{\vspace{0.2cm}\begin{minipage}{\textwidth}} %Pris en compte uniquement pour le premier newtheorem
-\theorempostwork{\ligneinter\end{minipage}} %Même chose
-\theoremheaderfont{\scshape}
-\theorembodyfont{\itshape}
-\theoremseparator{ :\newline\vspace{0.2cm}}
-\newtheorem{defi}{D\'efinition}%[section]
-%\newtheorem{prop}{Proposition}[section]
-%\newtheorem{lemm}{Lemme}[section]
-} 
-
-{%
-\theoremstyle{break}
-\theoremprework{\vspace{0.2cm}\begin{minipage}{\textwidth}} %Pris en compte uniquement pour le premier newtheorem
-\theorempostwork{\ligneinter\end{minipage}} %Même chose
-\theoremheaderfont{\bfseries}
-\theorembodyfont{\itshape}
-\theoremseparator{ :\newline\vspace{0.2cm}}
-%\newtheorem{lemm}{Lemme}[section]
-\newtheorem{prop}{Proposition}[section]
-}
-
-{%
-\theoremstyle{break}
-\theoremprework{\vspace{0.2cm}\begin{minipage}{\textwidth}} %Pris en compte uniquement pour le premier newtheorem
-\theorempostwork{\etoile\end{minipage}} %Même chose
-\theoremheaderfont{\bfseries}
-\theorembodyfont{\itshape}
-\theoremseparator{ :\newline\vspace{0.2cm}}
-%\newtheorem{lemm}{Lemme}[section]
-\newtheorem{pref}{Proposition-d\'efinition}[section]
-}
-
-{%
-\theoremstyle{break}
-%\theoremprework{\begin{tabular}{|p{\textwidth}|}\hline}
-%\theorempostwork{\\ \hline\end{tabular}}
-\theoremheaderfont{\scshape}
-\theorembodyfont{\normalfont}
-\theoremseparator{ :\newline\vspace{0.2cm}}
-%\newtheorem{lemm}{Lemme}[section]
-\newframedtheorem{theo}{Théor\`eme}[section]
-}
-
-{%
-\theoremstyle{break}
-\theoremprework{\vspace{0.2cm}\begin{minipage}{\textwidth}}
-\theorempostwork{\ligneinter\end{minipage}}
-\theoremheaderfont{\scshape}
-\theorembodyfont{\itshape}
-\theoremseparator{ :\newline\vspace{0.2cm}}
-\newtheorem{lemm}{Lemme}[theo]
-}
-  
-{%
-\theoremstyle{break}
-%\theoremprework{\begin{tabular}{|p{\textwidth}|}\hline}
-%\theorempostwork{\\ \hline\end{tabular}}
-\theoremheaderfont{\scshape}
-\theorembodyfont{\itshape}
-\theoremseparator{ :\newline\vspace{0.2cm}}
-%\newtheorem{lemm}{Lemme}[section]
-\newframedtheorem{coro}{Corollaire}[theo]
-}
-
-
-
-{
-\theoremstyle{break}
-\theoremprework{\vspace{0.5cm}}
-\theorempostwork{\vspace{0.5cm}\ligneinter}
-\theoremheaderfont{\scshape}
-\theorembodyfont{\normalfont\small}
-\theoremseparator{ :\newline\vspace{0.2cm}}
-\newtheorem{exem}{Exemple}[section]
-} 
-
-{
-\theoremstyle{break}
-\theoremprework{\vspace{0.5cm}\begin{minipage}{\textwidth}}
-\theorempostwork{\end{minipage}\ligneinter}
-\theoremheaderfont{\scshape}
-\theorembodyfont{\small}
-\theoremseparator{ :\newline\vspace{0.2cm}}
-\newtheorem{rema}{Remarque}[section]
-} 
-
 %%% Quelques environnements bien comodes %%%
 
-\newenvironment{modmerate}[2]%
-  {%
-  \renewcommand{\arraystretch}{2.1}
-  \begin{tabular}{|c|}
-  \hline
-  %\hrule%[0.2cm]{1mm}{\linewidth}
-  %\paragraph{#1}
-  \textbf{#1}
-  \\
-  \hline
-  %\hrule%[0.2cm]{1mm}{\linewidth}
-  \begin{minipage}{0.8\linewidth}
-  \begin{enumerate}[label=#2]
-  }
-  %
-  %%% Début ... et fin. %%%
-  %
-  {\end{enumerate}
-  \end{minipage}
-  \\
-  %\hrule%[0.2cm]{1mm}{\linewidth}
-  \hline
-  \end{tabular}
-  }
 
 %Pour de belles EDO.
 \newcommand{\der}[1]{\frac{\text{d}}{\text{d}t}#1}
 
-% Pour les types d'équations d'évolution, modèles 2 et 3demi.
-\newcommand{\Tb}{\ \mathbf{Type 0_{\mathbb{P}}}}
-\newcommand{\Ta}{\ \mathbf{Type 1}}
-\newcommand{\Td}{\ \mathbf{Type 2}}
-
 %Pour stocker des valeurs enumi par exemple, si l'on quitte provisoirement l'environnement eummerate.
-\newcounter{stock}
-
-%\newcommand{\Tm}{T1}
+%\newcounter{stock}
 
 %\setcounter{section}{-1}
 %\renewcommand{\thesection}{\Roman{section}}
