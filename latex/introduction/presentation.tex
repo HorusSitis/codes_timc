@@ -1,0 +1,129 @@
+\section{Introduction}
+
+\subsection{Contexte du stage}
+
+\subsubsection{Projet IRMA}
+
+\begin{frame}
+\begin{block}{Objectifs}
+%\pause
+\begin{enumerate}
+\item<+-> Effectuer des pr\'edictions sur des variables qui ne sont pas directement mesurables ;
+\item<+-> Am\'eliorer la r\'esolution spatiotemprelle de l'IRM.
+\end{enumerate}
+\end{block}
+\includegraphics[width=0.8\linewidth,height=3.8cm]{../../images_rapport/ech_voxel.png}<+->
+\end{frame}
+
+\begin{frame}
+\begin{block}{Premi\g{e}res \'etapes}
+\begin{enumerate}
+\item<+-> L'acquisition d'images IRM multiparam\'etriques sur des cerveaux de rats ;
+\item<+-> La construction d'un mod\g{e}le dynamique 
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\subsubsection{AVC isch\'emique chez le rat}
+
+\begin{frame}{Objectifs}
+\begin{itemize}
+\item<+-> Pr\'edire l'\'evolution temporelle d'un tissu isch\'emi\'e ;
+\item<+-> Echelle spatiale : le voxel ;
+\item<+-> La d\'emarche est la m\^eme que celle d\'etaill\'ee pr\'ec\'edemment.
+\end{itemize}
+\end{frame}
+
+
+
+
+\subsection{L'imagerie par r\'esonnance magn\'etique}
+
+
+
+\begin{frame}
+\frametitle{R\'esonance magn\'etique nucl\'eaire}
+\includegraphics[width=0.8\linewidth, height=8.6cm]{../../images_rapport/rmn_ensc.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{Modalit\'es T1, T2}
+\begin{itemize}
+\item<+-> On mesure le temps caract\'eristique de retour \g{a} l'\'equilible de l'aimantation $M$.
+\item<+-> \[M_z(t)=M_z(0)\left(1-e^{-\frac{t}{T_1}}\right)\text{ et }M_{xy}(t)=M_{xy}(0)\times e^{-\frac{t}{T_2}}\]
+\item<+-> Deux modalit\'es :
+\begin{itemize}
+\item<+-> $T1$, pour la composante longitudinale $M_z$ ;
+\item<+-> $T2$, pour la composante transversale $M_{xy}$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\subsubsection{IRM de diffusion}
+\begin{frame}
+\begin{itemize}
+\item<+-> La mobilit\'e des mol\'ecules d'eau dans un tissu d\'epend de la structure de celui-ci.
+\item<+-> Les parois des cellules dans un tissu sain freinent la diffusion des mol\'ecules d'eau.
+\item<+-> Au contraire, celles-ci sont libres de leurs mouvements au voisinage de cellules n\'ecros\'ees.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Coefficient de diffusion apparent}
+
+\begin{block}{Diffusion des mol\'ecules d'eau}
+\begin{itemize}
+\item<+-> Premi\g{e}re loi de Fick : $\vec{j}=-D\nabla n$
+\item<+-> Valable en milieu homog\g{e}ne et isotrope.
+\end{itemize}
+\end{block}
+
+\begin{block}{Fluctuations de $\vec{B}_0$}<+->
+\begin{itemize}
+\item<+-> Le signal IRM est sensible \g{a} la mobilit\'e des mol\'ecules d'eau ;
+\item<+-> $S=S_0\exp\left(-bD\right)$
+\item<+-> $b$ d\'epend de l'acquisition du signal.
+\end{itemize}
+\end{block}
+
+\begin{block}{Milieu non homog\g{e}ne et isotrope}<+->
+\begin{itemize}
+\item<+-> $S=S_0\exp\left(-bADC\right)$
+\item<+-> Unit\'e de mesure : mm${}^2$.s${}^{-1}$.
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsubsection{Agents de contraste}
+\begin{frame}
+\begin{itemize}
+\item<+-> Technique semi-invasive ;
+\item<+-> Mesure de la fraction volumique en oxyg\g{e}ne :
+\item<+-> $BVf=\frac{3}{4\pi}\frac{\Delta R_2^{\ast}}{\gamma \Delta_{\chi_0}B_0}$.
+\end{itemize}
+\end{frame}
+
+\subsubsection{Autres modalit\'es}
+
+\begin{frame}
+\begin{block}{SO2 et l'effet BOLD}<+->
+\begin{itemize}
+\item<+-> Oxy-h\'emoglogine versus d\'esoxy-h\'emoglobine ;
+\item<+-> Saturation tissulaire en Oxyg\g{e}ne(2) SO2 :
+\item<+-> \[s(t)=s_0\exp\left(-\frac{1}{T_2}t-BVf\gamma\frac{4}{3}\pi\Delta_{\chi_0}H_{ct}(1-SO2)B_0t\right)\]
+\end{itemize}
+\end{block}
+
+\begin{block}{CMRO2}<+->
+Les auteurs de \cite{quixotic} (2011) proposent une m\'ethode pour mesurer la consommation c\'er\'ebrale m\'etabolique en oxyg\g{e}ne (CMRO2).
+\end{block}
+
+\end{frame}
+
+
+\begin{block}{CBF}<+->
+\begin{itemize}
+\item<+-> 2014 : modalit\'e IRM pur mesurer le d\'ebit sanguin c\'er\'ebral (CBF).
+\item<+-> Unit\'e de mesure : ml.min${}^{-1}$.(100g)${}^{-1}$.
+\end{itemize}
+\end{block}
