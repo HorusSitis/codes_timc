@@ -1,0 +1,79 @@
+\section{Simulations}
+
+\subsection{Principe}
+
+\begin{frame}
+%\begin{block}
+\begin{itemize}
+%\item<+-> Le logiciel utilis\'e pur les simulations est R.
+\item<+-> On enregistre les valeurs de BVf, CBF, CMRO2, SO2 et VSI sur les voxels de la coupe 9 du rat 19 ;
+\item<+-> On choisit ensuite, sur cette coupe, une grille carr\'ee de $5\times 5$ pixels.
+\item<+-> La simulation s'effectue sur un temps discret : on calcule, sur un mois, l'\'etat de la grille chaque jour ;
+\item<+-> Equations discr\g{e}tes : $\text{CBF}_{trans}-\text{CBF}(t+1)=q\left(\text{CBF}_{trans}-\text{CBF}(t)\right)$
+\end{itemize}
+%\end{block}
+\end{frame}
+
+\subsection{Exemples : avec la CMRO2}
+
+\begin{frame}
+\includegraphics[width=0.6\textwidth,height=4cm]{../../images_rapport/19-J08-CBF_clust_lesion.pdf}
+
+On d\'efinit deux carr\'es de $5\times 5$ pixels, par la position de leurs sommets inf\'erieurs gauches $S_1$ et $S_2$ :
+\begin{enumerate}%[label=(Carre\arabic*)]
+\item<+-> $S_1$ est le pixel (30,45) ;
+\item<+-> $S_2$ est le pixel (30,45) .
+\end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{L\'esion 1}
+
+\begin{tabular}{|c|c|}
+\hline
+\includegraphics[width=0.4\textwidth,height=3cm]{../../images_rapport/cmro2demo_00.pdf}
+&
+\includegraphics[width=0.4\textwidth,height=3cm]{../../images_rapport/cmro2demo_08.pdf}
+\\
+\hline
+\includegraphics[width=0.4\textwidth,height=3cm]{../../images_rapport/cmro2demo_15.pdf}
+&
+\includegraphics[width=0.4\textwidth,height=3cm]{../../images_rapport/cmro2demo_22.pdf}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{L\'esion 2}
+
+\begin{tabular}{|c|c|}
+\hline
+\includegraphics[width=0.4\textwidth,height=3cm]{../../images_rapport/Cmro2demo_00.pdf}
+&
+\includegraphics[width=0.4\textwidth,height=3cm]{../../images_rapport/Cmro2demo_08.pdf}
+\\
+\hline
+\includegraphics[width=0.4\textwidth,height=3cm]{../../images_rapport/Cmro2demo_15.pdf}
+&
+\includegraphics[width=0.4\textwidth,height=3cm]{../../images_rapport/Cmro2demo_22.pdf}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+
+%\subsection{}
+
+\begin{frame}
+\frametitle{Mises en garde pour la suite}
+\begin{itemize}
+\item<+-> Les param\g{e}tres du mod\g{e}le doivent \^etre ajust\'es ;
+\item<+-> Il est difficile de s\'electionner un \'echantillon de tissu homog\g{e}ne ;
+\item<+-> Pour un voxel donn\'e : les valeurs de certaines variables peuvent manquer.
+\end{itemize}
+\end{frame}
