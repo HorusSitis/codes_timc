@@ -1,0 +1,656 @@
+\section{M\'ethodes}
+
+
+\subsection{Mod\g{e}le exp\'erimental}
+
+
+\subsubsection{Chirurgie}
+
+
+\begin{frame}
+\frametitle{Le polygone de Willis}
+\includegraphics[width=0.9\textwidth]{../../images_rapport/willis.png}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Le polygone de Willis}
+\includegraphics[width=0.57\linewidth, height = 3.6cm]{../../images_rapport/willis.png}
+
+%\pause
+\begin{block}{Isch\'emie focale}%<+->
+\begin{itemize}
+\item<+-> L'occlusion intraluminale d'une art\g{e}re c\'er\'ebrale post\'erieure provoque une isch\'emie focale ;
+\item<+-> Celle-ci touche seulement une partie du cerveau.
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+%\begin{frame}
+%\frametitle{Occlusion intraluminale}
+
+%\includegraphics[width=0.7\linewidth,height=7cm]{../../images_rapport/chirurgie.png}
+%\cite{Durukan_PBB_07}
+%\end{frame}
+
+\begin{frame}
+\frametitle{Occlusion intraluminale chez des rats}
+\begin{itemize}
+\item<+-> Anesth\'esie g\'en\'erale : 60 minutes ;
+\item<+-> Occlusion intraluminale : 90 minutes ;
+\item<+-> Reperfusion 30 minutes apr\g{e}s la fin de l'anesth\'esie.
+\end{itemize}
+\end{frame}
+
+
+\subsubsection{Suivi pour quatre rats}
+
+\begin{frame}
+%
+\begin{block}{Suivi temporel}
+Chaque rat subit une s\'erie d'examens IRM 30 minutes, 3 jours, 8 jours,
+
+\par
+15 jours et 22 jours apr\g{e}s la fin de l'isch\'emie.
+\end{block}
+
+\pause
+\begin{block}{Rats suivis}
+Quatre rats ayant surv\'ecu assez longtemps, num\'erot\'es 11, 19, 26 et 30.
+\end{block}
+
+\pause
+\begin{block}{Images disponibles}
+\begin{itemize}
+\item<+-> Treize coupes frontales par cerveau et par jour, pour chaque modalit\'e d'examen ;
+\item<+-> En r\'ealit\'e, peu de coupes disponibles pour un suivi temporel (une \g{a} trois par rat).
+\end{itemize}
+\end{block}
+%
+\end{frame}
+
+%\subsubsection{Le diam\g{e}tre vasculaire mooyen (VSI)}
+
+\begin{frame}
+\frametitle{IRM multiparam\'etrique}
+Avec les modalit\'es d\'etaill\'ees \g{a} la section pr\'ec\'edente, on mesure les variables :
+
+\pause
+\begin{itemize}
+\item<+-> T1, T2, ADC, BVf, CBF, SO2, CMRO2 ;
+\item<+-> Le diam\g{e}tre moyen vasculaire (Vessel Size Index, VSI) :
+\begin{itemize}
+\item<+-> Calcul\'e avec l'ADC en utilisant un agent de contraste ;
+\item<+-> $VSI = 0,425\left(\frac{ADC}{\Delta_{\chi}B_0}\right)^{\frac{1}{2}}\left(\frac{\Delta R_2^{\ast}}{\Delta R_2}\right)^{\frac{3}{2}}$ \cite{Lem_PHD_10}.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+Exemple : rat num\'ero 11.
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+%\subfloat[T2 anatomique]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}
+%}
+&
+%\subfloat[ADC]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}
+%}
+&
+%\subfloat[BVf]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-CoregBVf-slice-10.jpg}
+%}
+&
+%\subfloat[CBF]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-CoregCBF-slice-10.jpg}
+%}
+\\
+\hline
+%\subfloat[CMRO2]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-CoregCMRO2-slice-10.jpg}
+%}
+&
+%\subfloat[SO2map]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-CoregSO2map-slice-10.jpg}
+%}
+&
+%\subfloat[T1map]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-CoregT1map-slice-10.jpg}
+%}
+&
+%\subfloat[VSI]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-CoregVSI-slice-10.jpg}
+%}
+\\
+\hline
+\end{tabular}
+
+\pause
+\begin{block}{Variables}
+De gauche \g{a} droite, et de haut en bas :
+\begin{itemize}
+\item<+-> l'image brute en T2 anatomique, l'ADC, le BVf, le CBF ;
+\item<+-> la CMRO2, la SO2, l'image en T1 et le VSI.
+\end{itemize}
+\end{block}
+
+
+\end{frame}
+
+
+
+\subsection{Segmentation des images avec ImageJ}
+
+
+\begin{frame}
+\frametitle{Segmentation des cerveaux : rat 11}
+\begin{tabular}{|c|c|c|c|}
+\hline
+%\subfloat[Image en anatomique]{%
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-Coreg01_Anat-masked-slice-10.jpg}
+%}
+&%\hfill
+%\subfloat[Image brute en ADC]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-CoregADC-slice-10.jpg}
+%}
+&%\hfill
+%\subfloat[Image + contour]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-segADC-slice-10.jpg}
+%}
+&%\hfill
+%\subfloat[Image segment\'ee]{
+\includegraphics[width=0.2\linewidth,height=2cm]{../../images_rapport/11-J03-ADC-bg-slice10.jpg}
+%}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\frametitle{Segmentation du tissu isch\'emi\'e : rats 11 et 19}
+\begin{tabular}{|c|c|c|c|}
+\hline
+%\subfloat[Anatomique]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/11-J00-Coreg01_Anat-masked-Cropped-slice10.jpg}
+%}
+&
+%\subfloat[ADC]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/11-J00-ADC-Cropped-slice10.jpg}
+%}
+&
+%\subfloat[BVf]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/11-J00-BVf-Cropped-slice10.jpg}
+%}
+&
+%\subfloat[CBF]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/11-J00-CBF-seg-slice10.jpg}
+%}
+\\
+\hline
+%\subfloat[CMRO2]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/11-J00-CMRO2-Cropped-slice10.jpg}
+%}
+&
+%\subfloat[SO2map]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/11-J00-SO2map-Cropped-slice10.jpg}
+%}
+&
+%\subfloat[T1map]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/11-J00-T1map-Cropped-slice10.jpg}
+%}
+&
+%\subfloat[VSI]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/11-J00-VSI-Cropped-slice10.jpg}
+%}
+\\
+\hline
+\end{tabular}
+%%%
+\pause
+\begin{tabular}{|c|c|c|c|}
+\hline
+%\subfloat[Anatomique]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/19-J00-Coreg01_Anat-masked-Cropped-slice9.jpg}
+%}
+&
+%\subfloat[ADC]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/19-J00-ADC-Cropped-slice9.jpg}
+%}
+&
+%\subfloat[BVf]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/19-J00-BVf-Cropped-slice9.jpg}
+%}
+&
+%\subfloat[CBF]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/19-J00-segCBF-slice9.jpg}
+%}
+\\
+\hline
+%\subfloat[CMRO2]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/19-J00-CMRO2-Cropped-slice9.jpg}
+%}
+&
+%\subfloat[SO2map]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/19-J00-SO2map-Cropped-slice9.jpg}
+%}
+&
+%\subfloat[T1map]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/19-J00-T1map-Cropped-slice9.jpg}
+%}
+&
+%\subfloat[VSI]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/19-J00-VSI-Cropped-slice9.jpg}
+%}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\frametitle{Segmentation du tissu isch\'emi\'e : rats 26 et 30}
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+%\subfloat[Anatomique]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/26-J00-Coreg01_Anat-masked-Cropped-slice8.jpg}
+%}
+&
+%\subfloat[ADC]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/26-J00-ADC-Cropped-slice8.jpg}
+%}
+&
+%\subfloat[BVf]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/26-J00-BVf-Cropped-slice8.jpg}
+%}
+&
+%\subfloat[CBF]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/26-J00-CBF-seg-slice8.jpg}
+%}
+\\
+\hline
+%\subfloat[CMRO2]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/26-J00-CMRO2-Cropped-slice8.jpg}
+%}
+&
+%\subfloat[SO2map]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/26-J00-SO2map-Cropped-slice8.jpg}
+%}
+&
+%\subfloat[T1map]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/26-J00-T1map-Cropped-slice8.jpg}
+%}
+&
+%\subfloat[VSI]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/26-J00-VSI-Cropped-slice8.jpg}
+%}
+\\
+\hline
+\end{tabular}
+
+\pause
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+%\subfloat[Anatomique]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/30-J00-Coreg01_Anat-masked-Cropped-slice11.jpg}
+%}
+&
+%\subfloat[ADC]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/30-J00-ADC-Cropped-slice11.jpg}
+%}
+&
+%\subfloat[BVf]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/30-J00-BVf-Cropped-slice11.jpg}
+%}
+&
+%\subfloat[CBF]{\includegraphics[width=0.2\linewidth,height=2.3cm]{../../images_rapport/30-J00-CBF-seg-slice11.jpg}
+%}
+\\
+\hline
+%\subfloat[CMRO2]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/30-J00-CMRO2-Cropped-slice11.jpg}
+%}
+&
+%\subfloat[SO2map]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/30-J00-SO2map-Cropped-slice11.jpg}
+%}
+&
+%\subfloat[T1map]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/30-J00-T1map-Cropped-slice11.jpg}
+%}
+&
+%\subfloat[VSI]{
+\includegraphics[width=0.2\linewidth,height=1.3cm]{../../images_rapport/30-J00-VSI-Cropped-slice11.jpg}
+%}
+\\
+\hline
+\end{tabular}
+
+\end{frame}
+
+\subsection{Distribution des niveaux de gris : tissus sains, tissus l\'es\'es}
+
+\begin{frame}
+\frametitle{Choix du rat num\'ero 19}
+\begin{itemize}
+\item<+-> On \'ecarte les rats 26 et 30 : lisibilit\'e des donn\'ees ;
+\item<+-> Rat num\'ero 11 : VSI plus important que celui des autres rats ;
+\item<+-> On retient donc, pour construire un mod\g{e}le, les IRM du rat num\'ero 19.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Rat 19 : ADC}
+\begin{tabular}{|c|c|c|}
+\hline
+%\subfloat[ADC]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_ADC-00.pdf}
+%}
+&%
+%\subfloat[BVf]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_ADC-03.pdf}
+%}
+&%
+%\subfloat[CBF]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_ADC-08.pdf}
+%}
+\\
+\hline
+%\subfloat[CMRO2]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_ADC-15.pdf}
+%}
+&%
+%\subfloat[SO2map]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_ADC-22.pdf}
+%}
+&%
+%\subfloat[VSI]{
+%\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_box_volCBFdark00_VSI.pdf}
+%}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+
+\begin{frame}{Rat 19 : CBF}
+\begin{tabular}{|c|c|c|}
+\hline
+%\subfloat[ADC]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-00.pdf}
+%}
+&%
+%\subfloat[BVf]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-03.pdf}
+%}
+&%
+%\subfloat[CBF]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-08.pdf}
+%}
+\\
+\hline
+%\subfloat[CMRO2]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-15.pdf}
+%}
+&%
+%\subfloat[SO2map]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_CBF-15.pdf}
+%}
+&%
+%\subfloat[VSI]{
+%\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_box_volCBFdark00_VSI.pdf}
+%}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Rat 19 : SO2map}
+\begin{tabular}{|c|c|}
+\hline
+%\subfloat[ADC]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-00.pdf}
+%}
+&%
+%\subfloat[BVf]{
+%\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-08.pdf}
+%}
+%&%
+%\subfloat[CBF]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-08.pdf}
+%}
+\\
+\hline
+%\subfloat[CMRO2]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-15.pdf}
+%}
+&%
+%\subfloat[SO2map]{
+\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_dens_slCBF_contra00_SO2map-22.pdf}
+%}
+%&%
+%\subfloat[VSI]{
+%\includegraphics[width=0.3\linewidth,height=3cm]{../../images_rapport/19_suivi_box_volCBFdark00_VSI.pdf}
+%}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+\subsection{Classification avec la librairie Mclust}
+
+\begin{frame}
+\frametitle{Utilisation d'un m\'elange gaussien}
+\includegraphics[width=0.8\linewidth,height=8cm]{../../images_rapport/19-J00-ADC-cerveau_clhist_clust.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation de la m\'ethode de classification}
+\begin{tabular}{|c|c|c|}
+\hline
+%\subfloat[BVf : segmentation de la l\'esion en bleu, %
+%parasites sur l'h\'emisph\g{e}re contralat\'eral.]{%
+\includegraphics[height=3cm,width=0.25\linewidth]{../../images_rapport/19-J00-BVf-cerveau_clust.pdf}%bon
+%}
+&
+%\subfloat[CBF : le cluster bleu correspond \g{a} la r\'egion segment\'ee de la figure \ref{cbf_seg_19}. %
+%Clusters vert et rouge difficiles \g{a} interpr\'eter.]{%
+\includegraphics[height=3cm,width=0.25\linewidth]{../../images_rapport/19-J00-CBF-cerveau_clust.pdf}%bon
+%}
+&
+%\subfloat[ADC : l\'esion d\'elimit\'ee au jour 22]{%
+\includegraphics[height=3cm,width=0.25\linewidth]{../../images_rapport/19-J22-ADC-cerveau_clust.pdf}%bon
+%}
+\\
+\hline
+%\subfloat[T1map : structures visibles, %
+%mais sans lien avec la l\'esion.]{%
+\includegraphics[height=3cm,width=0.25\linewidth]{../../images_rapport/19-J00-T1map-cerveau_clust.pdf}%
+%}
+
+&
+%\subfloat[CMRO2 : mauvaise qualit\'e, taches bleues que l'h\'emisph\g{e}re contralat\'eral.]{%
+\includegraphics[height=3cm,width=0.25\linewidth]{../../images_rapport/19-J00-CMRO2-cerveau_clust.pdf}%
+%}
+%\\
+%\hline
+&
+%\subfloat[ADC : pas de l\'esion d\'elimit\'ee pour le nour 3.]{%
+\includegraphics[height=3cm,width=0.25\linewidth]{../../images_rapport/19-J03-ADC-cerveau_clust.pdf}%
+%}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{S\'election de mod\g{e}le : tissu l\'es\'e}
+
+\begin{tabular}{|c|c|c|}
+\hline
+%\subfloat[CBF : donn\'ees manquantes, trois clusters]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J00-CBF_clust1-3_lesion.pdf}
+%}
+&
+%\subfloat[CBF : deux clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J03-CBF_clust1-3_lesion.pdf}
+%}
+&
+%\subfloat[CBF : deux clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J08-CBF_clust1-3_lesion.pdf}
+%}
+\\
+\hline
+%\subfloat[BVf : trois clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J00-BVf_clust1-3_lesion.pdf}
+%}
+&
+&
+%\subfloat[BVf : trois clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J08-BVf_clust1-3_lesion.pdf}
+%}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\frametitle{Deux clusters pour la r\'egion l\'es\'ee (rat 19)}
+
+\begin{tabular}{|c|c|c|}
+\hline
+%\subfloat[CBF : donn\'ees manquantes, trois clusters]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J08-CBF_clust_lesion.pdf}
+%}
+&
+%\subfloat[CBF : deux clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J15-CBF_clust_lesion.pdf}
+%}
+&
+%\subfloat[CBF : deux clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J22-CBF_clust_lesion.pdf}
+%}
+\\
+\hline
+%\subfloat[CBF : deux clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J15-SO2map_clust_lesion.pdf}
+%}
+&
+%\subfloat[BVf : deux clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J22-SO2map_clust_lesion.pdf}
+%}
+&
+%\subfloat[BVf : trois clusters.]{%
+\includegraphics[height=2cm,width=0.25\linewidth]{../../images_rapport/19-J08-CMRO2_clust_lesion.pdf}
+%}
+\\
+\hline
+\end{tabular}
+\end{frame}
+
+
+
+\subsection{Mod\'elisation pour le tissu l\'es\'e}
+
+\begin{frame}
+\frametitle{R\'egimes du mod\g{e}le}
+
+\[%
+\xymatrixcolsep{1.5cm}%
+\xymatrix{%
+&%
+\fbox{\text{\textbf{L\'esion 1-2}}}\ar[r]^{\scriptstyle CBF<100}_{\scriptstyle CMRO2<10}&%
+\fbox{\text{\textbf{L\'esion 1-3}}}%  R\'egime asymptotique}%
+%&
+%
+\\
+\fbox{\text{\textbf{R\'egime commun}}}\ar[ru]^{T_{\chi}}\ar[rd]_{T_{\chi}}&%
+&%
+%&
+%
+\\
+&%
+\fbox{\text{\textbf{L\'esion 2-2}}}\ar[r]^{\scriptstyle CBF>100}_{\scriptstyle CMRO2>10}&%
+\fbox{\text{\textbf{L\'esion 2-3}}}%
+%\ar[d]^{SO2\dots}&
+%\mbox{\textbf{L\'esion 2-4}}
+}
+\]
+\begin{itemize}
+\item<+-> Chaque encart correspond \g{a} un syst\g{e}me d'\'equations ;
+\item<+-> Les deux sous-parties de la r\'egion l\'es\'ee sont repr\'esent\'ees.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{R\'egime commun : premiers jours d'isch\'emie}
+\begin{block}{Evolution du CBF et mesures ex\'erimentales}
+\begin{itemize}
+\item<+-> $\der{CBF}=\frac{1}{\tau}\times \left(CBF_{trans}-CBF\right)$ ;
+\item<+-> $CBF_{trans}$ : distribu\'ee en $\mathcal{N}(140,70)$
+\item<+-> $\tau \simeq 2,7 \text{ (jours)}$.
+\end{itemize}
+\end{block}
+
+\begin{block}{Syst\g{e}me : interd\'ependance des variables}
+\begin{description}
+\item[SO2]<+-> $\der{SO2}=2,5\times (SO2_{asy1}-SO2)$ ;
+\item[CMRO2]<+-> $\der{CMRO2}=0,1\times \der{CBF}$ - $CBF\simeq 10\times CMRO2$ ;
+\item[VSI]<+-> $\der{VSI}=0,15\times\der{CBF}$ - m\^eme principe ;
+\item[BVf]<+-> $\der{BVf}=\der{VSI}$.
+\end{description}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{L\'esion 1-2 : r\'egime transitoire}
+\begin{description}
+\item[CBF]<+-> $\dot{CBF}=0, 1\times \left(CBF_{trans1}-CBF\right)$ ;
+\item[SO2]<+-> Voir r\'egime pr\'ec\'edent ;
+\item[CMRO2]<+-> Voir r\'egime pr\'ec\'edent ;
+\item[VSI]<+-> $\dot{VSI}=0,3\times\dot{CMRO2}$ ;
+\item[BVf]<+-> $\dot{BVf}=\dot{VSI}$.
+\end{description}
+\end{frame}
+
+\begin{frame}
+\frametitle{L\'esion 1-3 : r\'egime asymptotique}
+\begin{description}
+\item[CBF]<+-> $\dot{CBF}=5\times\left(CBF_{asy1}-CBF\right)$ ;
+\item[SO2]<+-> $\dot{SO2}=1\times\left(SO2_{asy1}-SO2\right)$ ;
+\item[CMRO2]<+-> $\dot{CMRO2}=0,15\times\left(CMRO2_{asy1}-CMRO2\right)$ ;
+\item[VSI]<+-> $\dot{VSI}=0,2\times (VSI_{asy1}-VSI)$ ;
+\item[BVf]<+-> $\dot{BVf}=0,5\times\dot{VSI})$.
+\end{description}
+\end{frame}
+
+\begin{frame}
+\frametitle{L\'esion 2-2 : r\'egime transitoire}
+\begin{description}
+\item[CBF]<+-> $\der{CBF}=0,3\times \left(CBF_{trans2}-CBF\right)$ ;
+\item[SO2]<+-> M\^eme chose que pour le r\'egime initial ;
+\item[CMRO2]<+-> $\dot{CMRO2}=0,2\times\dot{CBF}$ ;
+\item[VSI]<+-> $\dot{VSI}=0,15\times\dot{CBF}$ ;
+\item[BVf]<+-> $\dot{BVf}=\dot{VSI}$.
+\end{description}
+\end{frame}
+
+\begin{frame}
+\frametitle{L\'esion 2-3}
+\begin{description}
+\item[CBF]<+-> $\dot{CBF}=7,7\times\left(CBF_{trans3}-CBF\right)$ ;
+\item[SO2]<+-> $\dot{SO2}=0,88\times\left(SO2_{asy2}-SO2\right)$ ;
+\item[CMRO2]<+-> $\dot{CMRO2}=0,15\times\dot{CBF}$ ;
+\item[VSI]<+-> $\dot{VSI}=0,3\times (VSI_{asy2}-VSI)$ ;
+\item[BVf]<+-> $\dot{BVf}=2\times\dot{VSI}$.
+\end{description}
+\end{frame}
