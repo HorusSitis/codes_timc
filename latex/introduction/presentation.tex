@@ -2,10 +2,10 @@
 
 \subsection{Contexte du stage}
 
-\subsubsection{Projet IRMA}
+%\subsubsection{Projet IRMA}
 
 \begin{frame}
-\begin{block}{Objectifs}
+\begin{block}{Objectifs : projet IRMA}
 %\pause
 \begin{enumerate}
 \item<+-> Effectuer des pr\'edictions sur des variables qui ne sont pas directement mesurables ;
@@ -16,7 +16,7 @@
 \end{frame}
 
 \begin{frame}
-\begin{block}{Premi\g{e}res \'etapes}
+\begin{block}{IRMA : premi\g{e}res \'etapes}
 \begin{enumerate}
 \item<+-> L'acquisition d'images IRM multiparam\'etriques sur des cerveaux de rats ;
 \item<+-> La construction d'un mod\g{e}le dynamique 
@@ -24,9 +24,9 @@
 \end{block}
 \end{frame}
 
-\subsubsection{AVC isch\'emique chez le rat}
+%\subsubsection{}
 
-\begin{frame}{Objectifs}
+\begin{frame}{Objectifs : AVC isch\'emique chez le rat}
 \begin{itemize}
 \item<+-> Pr\'edire l'\'evolution temporelle d'un tissu isch\'emi\'e ;
 \item<+-> Echelle spatiale : le voxel ;
@@ -43,7 +43,7 @@
 
 \begin{frame}
 \frametitle{R\'esonance magn\'etique nucl\'eaire}
-\includegraphics[width=0.8\linewidth, height=8.6cm]{../../images_rapport/rmn_ensc.png}
+\includegraphics[height=0.9\textheight]{../../images_rapport/rmn_ensc.png}
 \end{frame}
 
 \begin{frame}
@@ -61,6 +61,7 @@
 
 \subsubsection{IRM de diffusion}
 \begin{frame}
+\frametitle{Diffusion des mol\'ecules d'eau}
 \begin{itemize}
 \item<+-> La mobilit\'e des mol\'ecules d'eau dans un tissu d\'epend de la structure de celui-ci.
 \item<+-> Les parois des cellules dans un tissu sain freinent la diffusion des mol\'ecules d'eau.
@@ -68,8 +69,8 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Coefficient de diffusion apparent}
-
+\begin{frame}
+\frametitle{Coefficient de diffusion apparent (ADC)}
 \begin{block}{Diffusion des mol\'ecules d'eau}
 \begin{itemize}
 \item<+-> Premi\g{e}re loi de Fick : $\vec{j}=-D\nabla n$
@@ -91,31 +92,28 @@
 \item<+-> Unit\'e de mesure : mm${}^2$.s${}^{-1}$.
 \end{itemize}
 \end{block}
-
 \end{frame}
 
-\subsubsection{Agents de contraste}
 \begin{frame}
+\begin{block}{BVf : agent de contraste}
 \begin{itemize}
 \item<+-> Technique semi-invasive ;
-\item<+-> Mesure de la fraction volumique en oxyg\g{e}ne :
-\item<+-> $BVf=\frac{3}{4\pi}\frac{\Delta R_2^{\ast}}{\gamma \Delta_{\chi_0}B_0}$.
+\item<+-> Mesure de la fraction volumique en oxyg\g{e}ne (BVf).
+%\item<+-> $BVf=\frac{3}{4\pi}\frac{\Delta R_2^{\ast}}{\gamma \Delta_{\chi_0}B_0}$.
 \end{itemize}
-\end{frame}
+\end{block}
 
-\subsubsection{Autres modalit\'es}
-
-\begin{frame}
 \begin{block}{SO2 et l'effet BOLD}<+->
 \begin{itemize}
 \item<+-> Oxy-h\'emoglogine versus d\'esoxy-h\'emoglobine ;
-\item<+-> Saturation tissulaire en Oxyg\g{e}ne(2) SO2 :
-\item<+-> \[s(t)=s_0\exp\left(-\frac{1}{T_2}t-BVf\gamma\frac{4}{3}\pi\Delta_{\chi_0}H_{ct}(1-SO2)B_0t\right)\]
+\item<+-> Saturation tissulaire en diOxyg\g{e}ne SO2.
+%\item<+-> \[s(t)=s_0\exp\left(-\frac{1}{T_2}t-BVf\gamma\frac{4}{3}\pi\Delta_{\chi_0}H_{ct}(1-SO2)B_0t\right)\]
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
+\frametitle{Autres techniques}
 \begin{block}{Quixotic pour la CMRO2}<+->
 Les auteurs de \cite{quixotic} (2011) proposent une m\'ethode (QUIXOTIC) pour mesurer la consommation c\'er\'ebrale m\'etabolique en oxyg\g{e}ne (CMRO2).
 \end{block}

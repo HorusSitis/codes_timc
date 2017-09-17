@@ -46,10 +46,9 @@
 \end{itemize}
 \end{frame}
 
-\subsubsection{Baisse de la perfusion sanguine}
 
 \begin{frame}
-\frametitle{D\'ebit sangin c\'ebral et AVC}
+\frametitle{Perfusion sanguine}
 \begin{block}{Perfusion sanguine $\Delta P$}
 \begin{itemize}
 \item<+-> C'est elle qui chute en cas d'obstruction d'une art\g{e}re ;
@@ -59,23 +58,10 @@
 \end{block}
 \end{frame}
 
-\subsubsection{R\'egulation du CBF}
+
 
 \begin{frame}
-%\frametitle{R\'egulation du CBF}
-\begin{block}{R\'esistance vasculaire c\'er\'ebrale \cite{vib_dsc}}
-Elle d\'epend de :
-%
-\begin{enumerate}
-\item<+-> La viscosit\'e du sang ;
-\item<+-> L'\'etat anatomique du r\'eseau vasculaire : elle est proportionnelle \g{a} la longueur des vaisseaux ;
-\item<+-> Le tonus vasculaire : elle est proportionnelle \g{a} la puissance quatri\g{e}me du rayon des vaisseaux ;
-\item<+-> La pression du liquide c\'ephalorachidien.
-\end{enumerate}
-\end{block}
-\end{frame}
-
-\begin{frame}
+\frametitle{R\'egulation du CBF : r\'esistance vasculaire}
 \begin{tabular}{|c|c|}
 \hline
 \includegraphics[width=0.4\linewidth,height=3cm]{../../images_rapport/regCBF_1.png}
@@ -89,6 +75,10 @@ Elle d\'epend de :
 \hline
 \end{tabular}
 %\pause
+\begin{itemize}
+\item<+-> R\'egulation d'origine musculaire ;
+\item<+-> Peut \^etre influenc\'ee par des messages du syst\g{e}me nerveux.
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -100,10 +90,10 @@ Elle d\'epend de :
 \end{block}
 \end{frame}
 
-\subsubsection{R\'egulation de la CMRO2}
+%\subsubsection{R\'egulation de la CMRO2}
 
 \begin{frame}
-%
+\frametitle{R\'egulation de la CMRO2}
 \begin{block}{CBF et CMRO2}
 \begin{itemize}
 \item $OEF\times CBF\times [O_2]_a=CMRO2$
@@ -134,11 +124,11 @@ Elle d\'epend de :
 
 
 
-\subsubsection{Cascade isch\'emique}
 
 \begin{frame}
+\frametitle{Cascade isch\'emique}
 \begin{description}
-\item[Insuffisance \'energ\'etique :]<+-> Baissse de la CMRO2 et de CMRGlu :
+\item[Insuffisance \'energ\'etique :]<+-> Baisse de la CMRO2 et de CMRGlu :
 \begin{itemize}
 \item<+-> Baisse de la production d'ATP ;
 \item<+-> Les enzymes -ATP-ase et $H-$ATPase ne fonctionnent plus ;
@@ -151,14 +141,15 @@ Elle d\'epend de :
 \end{frame}
 
 \begin{frame}
+\frametitle{Cascade isch\'emique, suite}
 \begin{description}
 \item[D\'epression envahissante :]<+-> La chute du potentiel membranaire se propage \g{a} travers les axones :
 \begin{itemize}
-\item<+-> Consomation d'\'energie ;
+\item<+-> Consommation d'\'energie ;
 \item<+-> Morts par n\'ecrose et par apoptose.
 \end{itemize}
 %
-\item[G\'en\'eration de radicaux libres :]<+-> Provoqu\'ee par l'augmentation de $[Ca^{++}]_{inrtacellulaire}$.
+\item[G\'en\'eration de radicaux libres :]<+-> Provoqu\'ee par l'augmentation de $[Ca^{++}]_{intracellulaire}$.
 \begin{itemize}
 \item<+-> Mol\'ecules nocives ;
 \item<+-> Modifient la r\'eactivit\'e du cerveau \g{a} certains signaux (ondes \'electriques corticales).
@@ -166,15 +157,13 @@ Elle d\'epend de :
 \end{description}
 \end{frame}
 
-
 \subsection{Soins}
 
-\subsubsection{Soins hospitaliers}
-
 \begin{frame}
+\frametitle{Soins hospitaliers}
 \begin{block}{Traitement fibrinolytique}
 \begin{itemize}
-\item<+-> Traitement pharacologique qui dissout le caillot sanguin \g{a} l'origine de l'AVC ;
+\item<+-> Traitement pharmacologique qui dissout le caillot sanguin \g{a} l'origine de l'AVC ;
 \item<+-> Doit \^etre pratiqu\'e en urgence.
 \end{itemize}
 \end{block}
@@ -193,22 +182,18 @@ Elle d\'epend de :
 \includegraphics[width=0.7\linewidth,height = 6.8cm]{../../images_rapport/chimio.png}
 \end{frame}
 
-\subsubsection{Enjeu de la mod\'elisation}
-
 \begin{frame}
+\begin{block}{Enjeu de la mod\'elisation}
 \begin{description}
 \item[Fen\^etre th\'erapeutique]<+-> Dur\'ee pendant laquelle l'injection d'une mol\'ecule est b\'en\'efique ;
-\item[Solution : ]<+-> pr\'edire l'\'evolution du tissu c\'ebral.
+\item[Solution : ]<+-> pr\'edire l'\'evolution du tissu c\'er\'ebral.
 \end{description}
-\end{frame}
+\end{block}
 
-\begin{frame}
+\begin{block}{Etat de l'art}
 \begin{itemize}
 \item<+-> \cite{Duval_JCBFM_02} : les auteurs ont simul\'e l'\'evolution d'un tissu isch\'emi\'e dans les trois heures qui suivent un AVC isch\'emique ;
 \item<+-> Travail actuel : simulation de l'\'evolution d'un tissu sur plusieurs semaines.
 \end{itemize}
+\end{block}
 \end{frame}
-
-
-
-
