@@ -46,19 +46,169 @@
 \end{itemize}
 \end{frame}
 
+\subsubsection{Baisse de la perfusion sanguine}
+
 \begin{frame}
 \frametitle{D\'ebit sangin c\'ebral et AVC}
 \begin{block}{Perfusion sanguine $\Delta P$}
 \begin{itemize}
 \item<+-> C'est elle qui chute en cas d'obstruction d'une art\g{e}re ;
-\item<+-> Lien avec le CBF : $\Delta P = R\times CBF$
+\item<+-> Lien avec le CBF : $\Delta P = R\times CBF$ \cite{vib_dsc}
+\item<+-> $R$ : r\'esistance vasculaire c\'er\'ebrale
+\end{itemize}
+\end{block}
+\end{frame}
+
+\subsubsection{R\'egulation du CBF}
+
+\begin{frame}
+%\frametitle{R\'egulation du CBF}
+\begin{block}{R\'esistance vasculaire c\'er\'ebrale \cite{vib_dsc}}
+Elle d\'epend de :
+%
+\begin{enumerate}
+\item<+-> La viscosit\'e du sang ;
+\item<+-> L'\'etat anatomique du r\'eseau vasculaire : elle est proportionnelle \g{a} la longueur des vaisseaux ;
+\item<+-> Le tonus vasculaire : elle est proportionnelle \g{a} la puissance quatri\g{e}me du rayon des vaisseaux ;
+\item<+-> La pression du liquide c\'ephalorachidien.
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{tabular}{|c|c|}
+\hline
+\includegraphics[width=0.4\linewidth,height=3cm]{../../images_rapport/regCBF_1.png}
+&
+%\\
+%\hline
+%\par
+\pause
+\includegraphics[width=0.4\linewidth,height=3cm]{../../images_rapport/regCBF_2.png}%<+->
+\\
+\hline
+\end{tabular}
+%\pause
+\end{frame}
+
+\begin{frame}
+\begin{block}{Baisse du CBF}
+\begin{itemize}
+\item<+-> AVC isch\'emique : $\Delta P$ est trop faible pour que le CBF soit stable.
+\item<+-> Ceci se traduit par une baisse du CBF.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\subsubsection{R\'egulation de la CMRO2}
+
+\begin{frame}
+%
+\begin{block}{CBF et CMRO2}
+\begin{itemize}
+\item $OEF\times CBF\times [O_2]_a=CMRO2$
+\item<+-> $[O_2]_a$ constante :
+\item<+-> Seule une augemtation de l'OEF peut compenser la baisse du CBF.
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{R\'egulation}
+%
+\begin{block}{Baisse de la CMRO2}<+->
+\begin{itemize}
+\item<+-> Dans \cite{Duval_JCBFM_02}, le maximum d'OEF est fix\'e \g{a} 90 \% .
+\item<+-> Au del\g{a} de cette limite, la CMRO2 baisse.
+\end{itemize}
+\end{block}
 
-
-
+%\par
+\begin{block}{Isch\'emie : caract\'erisation}<+->
+\begin{itemize}
+\item<+-> Des valeurs basses du CBF ;
+\item<+-> Une CMRO2 faible.
+\end{itemize}
+\end{block}
+%
 \end{frame}
+
+
+
+\subsubsection{Cascade isch\'emique}
+
+\begin{frame}
+\begin{description}
+\item[Insuffisance \'energ\'etique :]<+-> Baissse de la CMRO2 et de CMRGlu :
+\begin{itemize}
+\item<+-> Baisse de la production d'ATP ;
+\item<+-> Les enzymes -ATP-ase et $H-$ATPase ne fonctionnent plus ;
+\item<+-> Les concentrations intracellulaires en ions calcium, sodium et chlorure augmentent ;
+\item<+-> Chute du potentiel de membrane des cellules nerveuse.
+\end{itemize}
+%
+\item[Oed\g{e}me cytotoxique :]<+-> Rupture de la membrane de la cellule nerveuse, puis mort par n\'ecrose : infarctus c\'er\'ebral.
+\end{description}
+\end{frame}
+
+\begin{frame}
+\begin{description}
+\item[D\'epression envahissante :]<+-> La chute du potentiel membranaire se propage \g{a} travers les axones :
+\begin{itemize}
+\item<+-> Consomation d'\'energie ;
+\item<+-> Morts par n\'ecrose et par apoptose.
+\end{itemize}
+%
+\item[G\'en\'eration de radicaux libres :]<+-> Provoqu\'ee par l'augmentation de $[Ca^{++}]_{inrtacellulaire}$.
+\begin{itemize}
+\item<+-> Mol\'ecules nocives ;
+\item<+-> Modifient la r\'eactivit\'e du cerveau \g{a} certains signaux (ondes \'electriques corticales).
+\end{itemize}
+\end{description}
+\end{frame}
+
+
+\subsection{Soins}
+
+\subsubsection{Soins hospitaliers}
+
+\begin{frame}
+\begin{block}{Traitement fibrinolytique}
+\begin{itemize}
+\item<+-> Traitement pharacologique qui dissout le caillot sanguin \g{a} l'origine de l'AVC ;
+\item<+-> Doit \^etre pratiqu\'e en urgence.
+\end{itemize}
+\end{block}
+%
+\begin{block}{Neuroprotection}<+->
+\begin{itemize}
+\item<+-> Hypothermie du tissu c\'er\'ebral ;
+\item<+-> Traitements pharmacologiques.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pistes pour des traitements pharmacologique}
+
+\includegraphics[width=0.7\linewidth,height = 6.8cm]{../../images_rapport/chimio.png}
+\end{frame}
+
+\subsubsection{Enjeu de la mod\'elisation}
+
+\begin{frame}
+\begin{description}
+\item[Fen\^etre th\'erapeutique]<+-> Dur\'ee pendant laquelle l'injection d'une mol\'ecule est b\'en\'efique ;
+\item[Solution : ]<+-> pr\'edire l'\'evolution du tissu c\'ebral.
+\end{description}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item<+-> \cite{Duval_JCBFM_02} : les auteurs ont simul\'e l'\'evolution d'un tissu isch\'emi\'e dans les trois heures qui suivent un AVC isch\'emique ;
+\item<+-> Travail actuel : simulation de l'\'evolution d'un tissu sur plusieurs semaines.
+\end{itemize}
+\end{frame}
+
+
+
+
