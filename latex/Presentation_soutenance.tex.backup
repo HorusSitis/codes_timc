@@ -1,0 +1,46 @@
+\documentclass[handout]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage{default}
+
+\input{preambules/presentations.tex}
+%\includeonly{methodes/presentation}
+
+\title[Mod\'elisation des suites d'un AVC isch\'emique chez le rat]{Mod\'elisation des suites d'un AVC isch\'emique chez le rat : \'evolution sur trois semaines}
+\author{Antoine Moreau}
+%\institute{Master \og{} Math en Action \fg{}}
+\date{Lundi 18 septembre 2017}
+
+
+
+\begin{document}
+
+
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+
+%\section{Introduction}
+\include{introduction/presentation}
+
+%\section{L'accident vasculaire c\'er\'ebral isch\'emique}
+\include{state_art/presentation}
+
+%\section{M\'ethodes}
+\include{methodes/presentation}
+
+%\section{R\'esultats}
+%\include{resultats/presentation}
+
+%\section{Annexes}
+\include{annexes/presentation.tex}
+
+\begin{frame}
+\frametitle{References}
+\bibliography{Biblio}
+\bibliographystyle{alpha}
+\end{frame}
+
+\end{document}
